@@ -203,6 +203,9 @@ History
 1-09-04 : Version 0.54 : S Letz
 		Distinguish kAudioDevicePropertyActualSampleRate and kAudioDevicePropertyNominalSampleRate.
 		kAudioDevicePropertyActualSampleRate is rerurned only when the driver is running.
+
+1-09-04 : Version 0.55 : S Letz
+		Correct use of AudioHardwareStreamsCreated and AudioHardwareStreamsDied functions (they are using an array of streamIDs)
         
 TODO :
     
@@ -253,7 +256,7 @@ struct stereoList
 };
 typedef struct stereoList stereoList;
 
-//#define PRINTDEBUG 1
+#define PRINTDEBUG 1
 
 //------------------------------------------------------------------------
 static void JARLog(char *fmt,...) 
@@ -1055,7 +1058,7 @@ OSStatus TJackClient::DeviceStop(AudioHardwarePlugInRef inSelf, AudioDeviceID in
 OSStatus TJackClient::DeviceRead(AudioHardwarePlugInRef inSelf, AudioDeviceID inDevice, const AudioTimeStamp* inStartTime, AudioBufferList* outData)
 {
     JARLog("--------------------------------------------------------\n");
-    JARLog ("DeviceRead : not yet implemented\n");
+    JARLog("DeviceRead : not yet implemented\n");
     return kAudioHardwareUnsupportedOperationError;
 }
 
@@ -1063,7 +1066,7 @@ OSStatus TJackClient::DeviceRead(AudioHardwarePlugInRef inSelf, AudioDeviceID in
 OSStatus TJackClient::DeviceGetCurrentTime(AudioHardwarePlugInRef inSelf,AudioDeviceID inDevice, AudioTimeStamp* outTime)
 {
     if (TJackClient::fJackClient){
-        JARLog ("DeviceGetCurrentTime : %ld\n",TJackClient::fJackClient->GetTime());
+        JARLog("DeviceGetCurrentTime : %ld\n",TJackClient::fJackClient->GetTime());
         
         outTime->mSampleTime = TJackClient::fJackClient->GetTime();
         outTime->mHostTime = AudioGetCurrentHostTime();
@@ -1081,7 +1084,7 @@ OSStatus TJackClient::DeviceTranslateTime(AudioHardwarePlugInRef inSelf,
                                         const AudioTimeStamp* inTime,
                                         AudioTimeStamp* outTime)
 {
-	JARLog ("DeviceTranslateTime : not yet implemented\n");
+	JARLog("DeviceTranslateTime : not yet implemented\n");
 	return kAudioHardwareUnsupportedOperationError;
 }
 
@@ -1317,7 +1320,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 
 	if (inDevice != TJackClient::fDeviceID)
 	{
-		JARLog ("DeviceGetProperty called for invalid device ID\n");
+		JARLog("DeviceGetProperty called for invalid device ID\n");
  		return kAudioHardwareBadDeviceError;
 	}
 	
@@ -1326,7 +1329,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 	if (outPropertyData == NULL)
 	{
     #if PRINTDEBUG
-		JARLog ("DeviceGetProperty received NULL pointer\n");
+		JARLog("DeviceGetProperty received NULL pointer\n");
     #endif
 		return kAudioHardwareBadPropertySizeError;
 	}
@@ -1614,17 +1617,17 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                     AudioStreamBasicDescription* desc = (AudioStreamBasicDescription*) outPropertyData;
                     bool res = true;
                     
-                    JARLog ("Sample Rate:        %f\n", desc->mSampleRate);
-                    JARLog ("Encoding:           %d\n", (int)desc->mFormatID);
-                    JARLog ("FormatFlags:        %d\n", (int)desc->mFormatFlags);
+                    JARLog("Sample Rate:        %f\n", desc->mSampleRate);
+                    JARLog("Encoding:           %d\n", (int)desc->mFormatID);
+                    JARLog("FormatFlags:        %d\n", (int)desc->mFormatFlags);
                     /*
-                    JARLog ("Encoding:           %d\n", (int)desc->mFormatID);
-                    JARLog ("FormatFlags:        %d\n", (int)desc->mFormatFlags);
-                    JARLog ("Bytes per Packet:   %d\n", (int)desc->mBytesPerPacket);
-                    JARLog ("Frames per Packet:  %d\n", (int)desc->mFramesPerPacket);
-                    JARLog ("Bytes per Frame:    %d\n", (int)desc->mBytesPerFrame);
-                    JARLog ("Channels per Frame: %d\n", (int)desc->mChannelsPerFrame);
-                    JARLog ("Bits per Channel:   %d\n", (int)desc->mBitsPerChannel);
+                    JARLog("Encoding:           %d\n", (int)desc->mFormatID);
+                    JARLog("FormatFlags:        %d\n", (int)desc->mFormatFlags);
+                    JARLog("Bytes per Packet:   %d\n", (int)desc->mBytesPerPacket);
+                    JARLog("Frames per Packet:  %d\n", (int)desc->mFramesPerPacket);
+                    JARLog("Bytes per Frame:    %d\n", (int)desc->mBytesPerFrame);
+                    JARLog("Channels per Frame: %d\n", (int)desc->mChannelsPerFrame);
+                    JARLog("Bits per Channel:   %d\n", (int)desc->mBitsPerChannel);
                     */
                 
                     *ioPropertyDataSize = sizeof(AudioStreamBasicDescription);
@@ -1661,17 +1664,17 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					JARLog("DeviceGetProperty::kAudioDevicePropertyStreamFormatMatch \n");
 					AudioStreamBasicDescription* desc = (AudioStreamBasicDescription*) outPropertyData;
                         
-					JARLog ("Sample Rate:        %f\n", desc->mSampleRate);
-					JARLog ("Encoding:           %d\n", (int)desc->mFormatID);
-					JARLog ("FormatFlags:        %d\n", (int)desc->mFormatFlags);
+					JARLog("Sample Rate:        %f\n", desc->mSampleRate);
+					JARLog("Encoding:           %d\n", (int)desc->mFormatID);
+					JARLog("FormatFlags:        %d\n", (int)desc->mFormatFlags);
 					/*
-					JARLog ("Encoding:           %d\n", (int)desc->mFormatID);
-					JARLog ("FormatFlags:        %d\n", (int)desc->mFormatFlags);
-					JARLog ("Bytes per Packet:   %d\n", (int)desc->mBytesPerPacket);
-					JARLog ("Frames per Packet:  %d\n", (int)desc->mFramesPerPacket);
-					JARLog ("Bytes per Frame:    %d\n", (int)desc->mBytesPerFrame);
-					JARLog ("Channels per Frame: %d\n", (int)desc->mChannelsPerFrame);
-					JARLog ("Bits per Channel:   %d\n", (int)desc->mBitsPerChannel);
+					JARLog("Encoding:           %d\n", (int)desc->mFormatID);
+					JARLog("FormatFlags:        %d\n", (int)desc->mFormatFlags);
+					JARLog("Bytes per Packet:   %d\n", (int)desc->mBytesPerPacket);
+					JARLog("Frames per Packet:  %d\n", (int)desc->mFramesPerPacket);
+					JARLog("Bytes per Frame:    %d\n", (int)desc->mBytesPerFrame);
+					JARLog("Channels per Frame: %d\n", (int)desc->mChannelsPerFrame);
+					JARLog("Bits per Channel:   %d\n", (int)desc->mBitsPerChannel);
 					*/
 			   
 					*ioPropertyDataSize = sizeof(AudioStreamBasicDescription);
@@ -2124,19 +2127,19 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
 {
 
         JARLog("--------------------------------------------------------\n");
-        JARLog ("DeviceSetProperty inSelf %ld\n",(long)inSelf);
+        JARLog("DeviceSetProperty inSelf %ld\n",(long)inSelf);
         CheckRunning(inSelf);
 
 		Print4CharCode ("DeviceSetProperty ",inPropertyID);
         OSStatus err = kAudioHardwareNoError;
         
         if (inDevice != TJackClient::fDeviceID){
-            JARLog ("DeviceSetProperty called for invalid device ID\n");
+            JARLog("DeviceSetProperty called for invalid device ID\n");
             return kAudioHardwareBadDeviceError;
         }
 		
 		if (TJackClient::fJackClient == NULL) {
-			JARLog ("DeviceSetProperty called when then Jack server is not running \n");
+			JARLog("DeviceSetProperty called when then Jack server is not running \n");
 			return kAudioHardwareBadDeviceError;
 		}
 
@@ -2182,14 +2185,14 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
                case  kAudioDevicePropertyStreamFormat:
                {
                     AudioStreamBasicDescription* streamDesc = (AudioStreamBasicDescription*) inPropertyData;
-                    JARLog ("Sample Rate:        %f\n", streamDesc->mSampleRate);
-                    JARLog ("Encoding:           %d\n", (int)streamDesc->mFormatID);
-                    JARLog ("FormatFlags:        %d\n", (int)streamDesc->mFormatFlags);
-                    JARLog ("Bytes per Packet:   %d\n", (int)streamDesc->mBytesPerPacket);
-                    JARLog ("Frames per Packet:  %d\n", (int)streamDesc->mFramesPerPacket);
-                    JARLog ("Bytes per Frame:    %d\n", (int)streamDesc->mBytesPerFrame);
-                    JARLog ("Channels per Frame: %d\n", (int)streamDesc->mChannelsPerFrame);
-                    JARLog ("Bits per Channel:   %d\n", (int)streamDesc->mBitsPerChannel);
+                    JARLog("Sample Rate:        %f\n", streamDesc->mSampleRate);
+                    JARLog("Encoding:           %d\n", (int)streamDesc->mFormatID);
+                    JARLog("FormatFlags:        %d\n", (int)streamDesc->mFormatFlags);
+                    JARLog("Bytes per Packet:   %d\n", (int)streamDesc->mBytesPerPacket);
+                    JARLog("Frames per Packet:  %d\n", (int)streamDesc->mFramesPerPacket);
+                    JARLog("Bytes per Frame:    %d\n", (int)streamDesc->mBytesPerFrame);
+                    JARLog("Channels per Frame: %d\n", (int)streamDesc->mChannelsPerFrame);
+                    JARLog("Bits per Channel:   %d\n", (int)streamDesc->mBitsPerChannel);
 					// steph 13/01/04
 					err = kAudioHardwareUnknownPropertyError;
 					break;
@@ -2322,7 +2325,7 @@ OSStatus TJackClient::StreamGetPropertyInfo(AudioHardwarePlugInRef inSelf,
 {
         OSStatus err = kAudioHardwareNoError;
         JARLog("--------------------------------------------------------\n");
-        JARLog ("StreamGetPropertyInfo inSelf inPropertyID %ld \n",(long)inSelf);
+        JARLog("StreamGetPropertyInfo inSelf inPropertyID %ld \n",(long)inSelf);
         CheckRunning(inSelf);
         Print4CharCode("StreamGetPropertyInfo ", inPropertyID);
 	
@@ -2445,7 +2448,7 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
 {
         OSStatus err = kAudioHardwareNoError;
         JARLog("--------------------------------------------------------\n");
-        JARLog ("StreamGetProperty inSelf %ld\n",(long)inSelf);
+        JARLog("StreamGetProperty inSelf %ld\n",(long)inSelf);
         CheckRunning(inSelf);
 		Print4CharCode("StreamGetProperty ", inPropertyID);
               
@@ -2731,9 +2734,9 @@ OSStatus TJackClient::StreamSetProperty(AudioHardwarePlugInRef inSelf,
 {
         OSStatus err = kAudioHardwareNoError;
         JARLog("--------------------------------------------------------\n");
-        JARLog ("StreamSetProperty inSelf %ld\n",(long)inSelf);
+        JARLog("StreamSetProperty inSelf %ld\n",(long)inSelf);
         CheckRunning(inSelf);
-        JARLog ("StreamSetProperty\n");
+        JARLog("StreamSetProperty\n");
         Print4CharCode("StreamSetProperty request:", inPropertyID);
          
         switch(inPropertyID) {
@@ -2829,7 +2832,7 @@ OSStatus TJackClient::DeviceStartAtTime(AudioHardwarePlugInRef inSelf,
                                         UInt32 inFlags)
 {
     JARLog("--------------------------------------------------------\n");
-    JARLog ("DeviceStartAtTime : not yet implemented\n");
+    JARLog("DeviceStartAtTime : not yet implemented\n");
 	return kAudioHardwareNoError;
 }
                                             
@@ -2840,7 +2843,7 @@ OSStatus TJackClient::DeviceGetNearestStartTime (AudioHardwarePlugInRef inSelf,
                                                 UInt32 inFlags)
 {
     JARLog("--------------------------------------------------------\n");
-    JARLog ("DeviceGetNearestStartTime : not yet implemented\n");
+    JARLog("DeviceGetNearestStartTime : not yet implemented\n");
 	return kAudioHardwareUnsupportedOperationError;
 }
 
@@ -2963,7 +2966,7 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
     OSStatus err = kAudioHardwareNoError;
     char* id_name = bequite_getNameFromPid((int)getpid());
 
-    JARLog ("Initialize [inSelf, name] : %ld %s \n", (long)inSelf, id_name);
+    JARLog("Initialize [inSelf, name] : %ld %s \n", (long)inSelf, id_name);
 	
 	// Reject "jackd" as a possible client (to be impoved if other clients need to be rejected)
 	if (strcmp (id_name,"jackd") == 0){
@@ -3027,15 +3030,12 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
     {
 		for (int i = 0; i < TJackClient::fOutputChannels + TJackClient::fInputChannels; i++) {
 			err = AudioHardwareClaimAudioStreamID(inSelf, TJackClient::fDeviceID, &fStreamIDList[i]);
-			JARLog("AudioHardwareClaimAudioStreamID %ld\n", (long)&TJackClient::fStreamIDList[i]);
-			if (err == kAudioHardwareNoError) {
-				err = AudioHardwareStreamsCreated(inSelf, TJackClient::fDeviceID, i+1, &TJackClient::fStreamIDList[i]);
-				JARLog("AudioHardwareStreamsCreated %ld\n", (long)&TJackClient::fStreamIDList[i]);
-				if (err != kAudioHardwareNoError) return err;
-			}else
-				return err;
+			JARLog("AudioHardwareClaimAudioStreamID %ld\n", (long)TJackClient::fStreamIDList[i]);
+			if (err != kAudioHardwareNoError) return err;
 		}
 		
+		err = AudioHardwareStreamsCreated(inSelf, TJackClient::fDeviceID, TJackClient::fOutputChannels + TJackClient::fInputChannels, &TJackClient::fStreamIDList[0]);
+		if (err != kAudioHardwareNoError) return err;
 		TJackClient::fConnected2HAL = true;
     }
     
@@ -3064,20 +3064,20 @@ OSStatus TJackClient::Teardown(AudioHardwarePlugInRef inSelf)
 {
     char* id_name = bequite_getNameFromPid((int)getpid());
 	
-	JARLog ("Teardown [inSelf, name] : %ld %s \n", (long)inSelf, id_name);
+	JARLog("Teardown [inSelf, name] : %ld %s \n", (long)inSelf, id_name);
 	OSStatus err; 
 
-    for (int i = 0; i<TJackClient::fOutputChannels + TJackClient::fInputChannels; i++) {
-        err = AudioHardwareStreamsDied(inSelf, TJackClient::fDeviceID, i+1, &fStreamIDList[i]);
- 		printError(err);
-	}
+	err = AudioHardwareStreamsDied(inSelf, TJackClient::fDeviceID, TJackClient::fOutputChannels + TJackClient::fInputChannels, &TJackClient::fStreamIDList[0]);
+	JARLog("Teardown : AudioHardwareStreamsDied\n");
+	printError(err);
     
     if (TJackClient::fConnected2HAL) {
     	err = AudioHardwareDevicesDied(inSelf, 1, &TJackClient::fDeviceID);
-        JARLog ("Teardown : connection to HAL\n");
+		JARLog("Teardown : AudioHardwareDevicesDied\n");
         printError(err);
+		JARLog("Teardown : connection to HAL\n");
     }else{
- 		JARLog ("Teardown : no connection to HAL\n");
+ 		JARLog("Teardown : no connection to HAL\n");
     }
 
     return kAudioHardwareNoError;
