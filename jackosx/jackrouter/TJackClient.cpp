@@ -259,7 +259,7 @@ History
 		Independant management of VST and AU plug-ins so that both types can be used at the same time. 
 		
 16-02-05 : Version 0.72 : S Letz
-		Management of a set of "blacklisted" clients.
+		Management of a set of "blacklisted" clients. Fix plug-in port naming bug.
 		 
 TODO :
     
@@ -931,9 +931,9 @@ TJackClient::~TJackClient()
 //------------------------------------------------------------------------
 bool TJackClient::AllocatePlugInPortVST(int num)
 {
-    JARLog("AllocatePlugInPortVST %ld\n", num);
+    JARLog("AllocatePlugInPortVST %ld\n", num  + 1);
 	char name[256];
-	sprintf(name, "VSTsend%d", num);
+	sprintf(name, "VSTsend%d", num + 1);
 	jack_port_t* port = jack_port_register(fClient, name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
 	if (!port) return false;
 	
@@ -948,9 +948,9 @@ bool TJackClient::AllocatePlugInPortVST(int num)
 //------------------------------------------------------------------------
 bool TJackClient::AllocatePlugInPortAU(int num)
 {
-    JARLog("AllocatePlugInPortAU %ld\n", num);
+    JARLog("AllocatePlugInPortAU %ld\n", num + 1);
 	char name[256];
-	sprintf(name, "AUsend%d", num);
+	sprintf(name, "AUsend%d", num + 1);
 	jack_port_t* port = jack_port_register(fClient, name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
 	if (!port) return false;
 	
