@@ -100,7 +100,7 @@
 				HEADER_SEARCH_PATHS = "";
 				INSTALL_PATH = "/Library/Audio/Plug-Ins/HAL";
 				LIBRARY_SEARCH_PATHS = "";
-				OPTIMIZATION_CFLAGS = "-O0";
+				OPTIMIZATION_CFLAGS = "-O3";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-framework Jack -framework CoreFoundation";
 				OTHER_REZFLAGS = "";
@@ -125,7 +125,7 @@
 	<key>CFBundleExecutable</key>
 	<string>JackRouter</string>
 	<key>CFBundleGetInfoString</key>
-	<string>JackRouter 0.7.0, @2004-2005 Grame</string>
+	<string>JackRouter 0.7.1, @2004-2005 Grame</string>
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
@@ -141,7 +141,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>0.7.0</string>
+	<string>0.7.1</string>
 	<key>CFPlugInDynamicRegisterFunction</key>
 	<string></string>
 	<key>CFPlugInDynamicRegistration</key>

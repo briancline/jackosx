@@ -254,7 +254,9 @@ History
 
 15-02-05 : Version 0.70 : S Letz
 		To solve dirty buffer problems : new management of audio buffers for plug-ins: they are now allocated and managed on JAR side. 
- 
+
+16-02-05 : Version 0.71 : S Letz
+		independant management of VST and AU plug-ins so that both types can be used at the same time.
 		 
 TODO :
     
@@ -610,7 +612,6 @@ void TJackClient::Shutdown (void *arg)
 {
     TJackClient::fDeviceRunning = false;
     JARLog("Shutdown\n");
-    //ClearJackClient();
     KillJackClient();
     OSStatus err = AudioHardwareDevicePropertyChanged(TJackClient::fPlugInRef,
                    TJackClient::fDeviceID,
@@ -864,9 +865,16 @@ int TJackClient::Process(jack_nframes_t nframes, void* arg)
         }
     }
 	
-	// Copy temp buffers from plug-ins into the jack buffers
 	map<int, pair<float*, jack_port_t*> >::const_iterator it;
-	for (it = client->fPlugInPorts.begin(); it != client->fPlugInPorts.end(); it++) {
+	
+	// Copy temp buffers from VST plug-ins into the Jack buffers
+	for (it = client->fPlugInPortsVST.begin(); it != client->fPlugInPortsVST.end(); it++) {
+		pair<float*, jack_port_t*> obj = it->second;
+		memcpy((float*)jack_port_get_buffer(obj.second, nframes), obj.first, nframes * sizeof(float));
+		memset(obj.first, 0, nframes * sizeof(float));
+	}
+	// Copy temp buffers from AU plug-ins into the Jack buffers
+	for (it = client->fPlugInPortsAU.begin(); it != client->fPlugInPortsAU.end(); it++) {
 		pair<float*, jack_port_t*> obj = it->second;
 		memcpy((float*)jack_port_get_buffer(obj.second, nframes), obj.first, nframes * sizeof(float));
 		memset(obj.first, 0, nframes * sizeof(float));
@@ -925,7 +933,15 @@ bool TJackClient::AllocatePlugInPortVST(int num)
     JARLog("AllocatePlugInPortVST %ld\n", num);
 	char name[256];
 	sprintf(name, "VSTsend%d", num);
-	return AllocatePlugInPort(num, name);
+	jack_port_t* port = jack_port_register(fClient, name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
+	if (!port) return false;
+	
+	float* buffer = (float*)malloc(sizeof(float) * TJackClient::fBufferSize);
+	if (!buffer) return false;
+	
+	memset(buffer, 0, TJackClient::fBufferSize * sizeof(float));
+	fPlugInPortsVST[num] = make_pair(buffer, port);
+	return true;
 }
 
 //------------------------------------------------------------------------
@@ -934,43 +950,59 @@ bool TJackClient::AllocatePlugInPortAU(int num)
     JARLog("AllocatePlugInPortAU %ld\n", num);
 	char name[256];
 	sprintf(name, "AUsend%d", num);
-	return AllocatePlugInPort(num, name);
-}
-
-//------------------------------------------------------------------------
-bool TJackClient::AllocatePlugInPort(int num, char* name)
-{
-    jack_port_t* port = jack_port_register(fClient, name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
+	jack_port_t* port = jack_port_register(fClient, name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
 	if (!port) return false;
 	
 	float* buffer = (float*)malloc(sizeof(float) * TJackClient::fBufferSize);
 	if (!buffer) return false;
 	
 	memset(buffer, 0, TJackClient::fBufferSize * sizeof(float));
-	fPlugInPorts[num] = make_pair(buffer, port);
+	fPlugInPortsAU[num] = make_pair(buffer, port);
 	return true;
 }
 
 //------------------------------------------------------------------------
-float* TJackClient::GetPlugInPort(int num)
+float* TJackClient::GetPlugInPortVST(int num)
 {
-	JARLog("GetPlugInPort %ld\n", num);
+	JARLog("GetPlugInPortVST %ld\n", num);
 	
-	pair<float*, jack_port_t*> obj = fPlugInPorts[num];
+	pair<float*, jack_port_t*> obj = fPlugInPortsVST[num];
 	return obj.first;
 }
 
 //------------------------------------------------------------------------
-void TJackClient::ReleasePlugInPort(int num)
+float* TJackClient::GetPlugInPortAU(int num)
 {
-	JARLog("ReleasePlugInPort %ld\n", num);
+	JARLog("GetPlugInPortAU %ld\n", num);
 	
-	pair<float*, jack_port_t*> obj = fPlugInPorts[num];
+	pair<float*, jack_port_t*> obj = fPlugInPortsAU[num];
+	return obj.first;
+}
+
+//------------------------------------------------------------------------
+void TJackClient::ReleasePlugInPortVST(int num)
+{
+	JARLog("ReleasePlugInPortVST %ld\n", num);
+	
+	pair<float*, jack_port_t*> obj = fPlugInPortsVST[num];
 	assert(obj.first);
 	assert(obj.second);
 	free(obj.first);
 	jack_port_unregister(fClient, obj.second);
-	fPlugInPorts.erase(num); /// TO CHECK : RT access ??
+	fPlugInPortsVST.erase(num); /// TO CHECK : RT access ??
+}
+
+//------------------------------------------------------------------------
+void TJackClient::ReleasePlugInPortAU(int num)
+{
+	JARLog("ReleasePlugInPortAU %ld\n", num);
+	
+	pair<float*, jack_port_t*> obj = fPlugInPortsAU[num];
+	assert(obj.first);
+	assert(obj.second);
+	free(obj.first);
+	jack_port_unregister(fClient, obj.second);
+	fPlugInPortsAU.erase(num); /// TO CHECK : RT access ??
 }
 
 //------------------------------------------------------------------------
@@ -1209,10 +1241,6 @@ bool TJackClient::Activate()
         } else {
             RestoreConnections();
         }
-        /*
-              if (!RestoreConnections())
-                  AutoConnect();
-        */ 
         return true;
     }
 }
@@ -1900,7 +1928,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                     /*
                     FINAL Cut pro *incorrectly* ask for this property with a two small "ioPropertyDataSize". 
                     The kAudioHardwareBadPropertySizeError value was thus returned but then cause a crash in FCP
-                    Now the date size that can be safely written the is returned without any error.....
+                    Now the date size that can be safely written is returned without any error.....
                     */
                     AudioStreamID* streamIDList = (AudioStreamID*)outPropertyData;
                     int streams = *ioPropertyDataSize / sizeof(AudioStreamID);
@@ -2010,7 +2038,6 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                 }
                 break;
             }
-
 
         case kAudioDevicePropertyDeviceCanBeDefaultSystemDevice:
         case kAudioDevicePropertyDeviceCanBeDefaultDevice: {
@@ -2205,8 +2232,13 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
             }
 			
 			// Special Property to allocate Jack port from plug-in code
-        case kAudioDevicePropertyGetJackPort: {
-                *(float**)outPropertyData = GetJackClient()->GetPlugInPort(*ioPropertyDataSize);
+        case kAudioDevicePropertyGetJackPortVST: {
+                *(float**)outPropertyData = GetJackClient()->GetPlugInPortVST(*ioPropertyDataSize);
+                break;
+            }
+			
+		 case kAudioDevicePropertyGetJackPortAU: {
+                *(float**)outPropertyData = GetJackClient()->GetPlugInPortAU(*ioPropertyDataSize);
                 break;
             }
 		
@@ -2330,7 +2362,6 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
                                         UInt32 inPropertyDataSize,
                                         const void* inPropertyData)
 {
-
     JARLog("--------------------------------------------------------\n");
     JARLog("DeviceSetProperty inSelf %ld\n", (long)inSelf);
     CheckRunning(inSelf);
@@ -2363,8 +2394,14 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
             }
 	
 		      // Special Property to release Jack port from plug-in code
-        case kAudioDevicePropertyReleaseJackPort: {
-                GetJackClient()->ReleasePlugInPort(inPropertyDataSize);
+        case kAudioDevicePropertyReleaseJackPortVST: {
+                GetJackClient()->ReleasePlugInPortVST(inPropertyDataSize);
+                break;
+            }
+			
+		      // Special Property to release Jack port from plug-in code
+        case kAudioDevicePropertyReleaseJackPortAU: {
+                GetJackClient()->ReleasePlugInPortAU(inPropertyDataSize);
                 break;
             }
 
@@ -2517,7 +2554,6 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
             Print4CharCode("DeviceSetProperty unkown request:", inPropertyID);
             err = kAudioHardwareUnknownPropertyError;
             break;
-
     }
 
     return err;
@@ -2649,7 +2685,6 @@ OSStatus TJackClient::StreamGetPropertyInfo(AudioHardwarePlugInRef inSelf,
             Print4CharCode("StreamGetPropertyInfo unkown request:", inPropertyID);
             err = kAudioHardwareUnknownPropertyError;
             break;
-
     }
     return err;
 }
@@ -2896,7 +2931,6 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
             Print4CharCode("StreamGetProperty unkown request:", inPropertyID);
             err = kAudioHardwareUnknownPropertyError;
             break;
-
     }
     return err;
 }
