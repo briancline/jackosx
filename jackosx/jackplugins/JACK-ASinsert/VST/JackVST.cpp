@@ -26,7 +26,7 @@ jack_client_t* JackVST::fJackClient = NULL;
 list<JackVST*> JackVST::fPlugInList;
 
 //-------------------------------------------------------------------------------------------------------
-bool JackVST::CkeckClient() 
+bool JackVST::CheckClient() 
 {
 	if (JackVST::fJackClient) {
 		return true;
@@ -58,7 +58,7 @@ JackVST::JackVST (audioMasterCallback audioMaster)
 //-------------------------------------------------------------------------------------------------------
 bool JackVST::Open()
 {
-	if (CkeckClient()) {
+	if (CheckClient()) {
 	
 		fInPorts = (jack_port_t**)malloc(sizeof(jack_port_t*)*MAX_PORTS);
 		fOutPorts = (jack_port_t**)malloc(sizeof(jack_port_t*)*MAX_PORTS);

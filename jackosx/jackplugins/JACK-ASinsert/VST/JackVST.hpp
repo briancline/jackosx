@@ -80,13 +80,13 @@ class JackVST : public AudioEffectX
 	
 	    
 	private:
-		bool CkeckClient();
+	
+		bool CheckClient();
 		
 		// Global state
-		static list<JackVST*> fPlugInList;
-        static int JackProcess(jack_nframes_t nframes, void *arg);
-        static jack_client_t * fJackClient;
-		static int fInstances;
+		static list<JackVST*>   fPlugInList;
+        static jack_client_t*   fJackClient;
+		static int				fInstances;
       	
 		float* fRBufferIn[MAX_PORTS];
         float* fRBufferOut[MAX_PORTS];
@@ -96,15 +96,16 @@ class JackVST : public AudioEffectX
 		
         long fBufferSize;
 		
-        jack_port_t ** fInPorts;
-        jack_port_t ** fOutPorts;
-        int fInPortsNum,fOutPortsNum;
-        bool fJackIsOn;
-		int fStatus;
-		float fGain;
-		char fProgramName[32];
+        jack_port_t **  fInPorts;
+        jack_port_t **  fOutPorts;
+        int				fInPortsNum;
+		int				fOutPortsNum;
+        bool			fJackIsOn;
+		int				fStatus;
+		float			fGain;
+		char			fProgramName[32];
 		
-       
- };
+		static int JackProcess(jack_nframes_t nframes, void *arg);
+  };
 
 
