@@ -63,6 +63,7 @@
 - (IBAction)saveScheme: (id)sender;
 - (IBAction)loadScheme: (id)sender;
 -(void) setupTimer;
+-(void)stopTimer;
 - (void)fillPortsArray;
 -(void) reloadTimer;
 +(JackConnections*)getSelf;

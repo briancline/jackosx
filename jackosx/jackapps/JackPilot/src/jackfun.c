@@ -105,10 +105,14 @@ int checkJack(void)
     int quanti;
     quanti = quantiProc();
     int i;
-    for (i=0; i < quanti; i++) {
+    for (i = 0; i < quanti; i++) {
+		
         int test;
         test = strcmp("jackd",ottieniNome(i));
-        if (test==0) { flag = ottieniFlag(i); return ottieniPid(i); }
+		if (test == 0) { 
+			flag = ottieniFlag(i); 
+			return ottieniPid(i); 
+		}
     }
     
     return 0;

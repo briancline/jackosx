@@ -32,9 +32,9 @@ int nConnections = 0;
 	JPLog("Setting Jack Graph CallBacks.\n");
 	int res = 0;
 	res = jack_set_port_registration_callback(getClient(),JackPortRegistration,self);
-	if(res!=0) JPLog("Cannot: jack_set_port_registration_callback.\n");
+	if (res != 0) JPLog("Cannot: jack_set_port_registration_callback.\n");
 	jack_set_graph_order_callback(getClient(),JackGraphOrder,self);
-	if(res!=0) JPLog("Cannot: jack_set_graph_order_callback.\n");
+	if (res != 0) JPLog("Cannot: jack_set_graph_order_callback.\n");
 }
 
 -(void)awakeFromNib {
@@ -43,14 +43,14 @@ int nConnections = 0;
 
 - (IBAction)orderFront:(id)sender
 {
-    if(getStatus()==1) { 
+    if (getStatus() == 1) { 
         [colonnaSource setEditable:NO];
         
         [colonnaDest setEditable:NO];
         
         [self fillPortsArray];
         
-        if(datiTab!=nil) [datiTab release];
+        if (datiTab != nil) [datiTab release];
         datiTab = [tableData alloc];
         [datiTab setWhatKind:0];
         [datiTab writeData:sender text:&quantePConnCli text2:&portSelected[0] text3:&needsReload];
@@ -59,7 +59,7 @@ int nConnections = 0;
         [tabellaPorte setDoubleAction:@selector(removCon:)];
         [tabellaPorte setTarget:self];
         
-        if(datiTab2!=nil) [datiTab2 release];
+        if (datiTab2 != nil) [datiTab2 release];
         datiTab2 = [tableDataB alloc];
         [datiTab2 setWhatKind:1];
         [datiTab2 writeData:sender text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected];
@@ -68,7 +68,7 @@ int nConnections = 0;
         [tabellaSend setDoubleAction:@selector(makeCon:)];
         [tabellaSend setTarget:self];
         
-        if(datiTab3!=nil) [datiTab3 release];
+        if (datiTab3 != nil) [datiTab3 release];
         datiTab3 = [tableDataC alloc];
         [datiTab3 setWhatKind:1];
         [datiTab3 writeData:sender text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected];
@@ -99,36 +99,38 @@ int nConnections = 0;
     oldSel2 = [tabellaConnect selectedRow];
     [self selectFrom:sender];
     [self selectTo:sender];
-    if(kind1!=1) [[daText stringValue] getCString:daCh];
+    if (kind1 != 1) 
+		[[daText stringValue] getCString:daCh];
     else {
         lista1 = [datiTab2 getPorteSelected];
     }
-    if(kind2!=1) [[aText stringValue] getCString:aCh];
+    if (kind2 != 1) 
+		[[aText stringValue] getCString:aCh];
     else {
         lista2 = [datiTab3 getPorteSelected];
     } 
    
-    if(kind1==1 && kind2==0) {
-    int n,i;
-    n = [lista1 count];
-    for(i=0;i<n;i++) {
-        [[lista1 objectAtIndex:i] getCString:daCh];
-        [[aText stringValue] getCString:aCh];
-        
-        int test = connectPorts(&daCh[0],&aCh[0]);
-        if(test!=0) test = connectPorts(&aCh[0],&daCh[0]);
-        if(test!=0) test = disconnectPorts(&daCh[0],&aCh[0]);
-        if(test!=0) test = disconnectPorts(&aCh[0],&daCh[0]);
-        
-        /*if(tipoStringa1==666) disconnectPorts(&daCh,&aCh);
-        if(tipoStringa1==333) {
-            int test = connectPorts(&daCh,&aCh);
-            if(test!=0) test = connectPorts(&aCh,&daCh);
-        }*/
-    }
+    if (kind1 == 1 && kind2 == 0) {
+		int n,i;
+		n = [lista1 count];
+		for(i = 0; i < n; i++) {
+			[[lista1 objectAtIndex:i] getCString:daCh];
+			[[aText stringValue] getCString:aCh];
+			
+			int test = connectPorts(&daCh[0],&aCh[0]);
+			if (test != 0) test = connectPorts(&aCh[0],&daCh[0]);
+			if (test != 0) test = disconnectPorts(&daCh[0],&aCh[0]);
+			if (test != 0) test = disconnectPorts(&aCh[0],&daCh[0]);
+			
+			/*if(tipoStringa1==666) disconnectPorts(&daCh,&aCh);
+			if(tipoStringa1==333) {
+				int test = connectPorts(&daCh,&aCh);
+				if(test!=0) test = connectPorts(&aCh,&daCh);
+			}*/
+		}
     }
     
-    if(kind1==0 && kind2==0) {
+    if (kind1 == 0 && kind2 == 0) {
         [[daText stringValue] getCString:daCh];
         [[aText stringValue] getCString:aCh];
         //JPLog("CHI: %d , tipo1: %d , tipo2: %d\n",chiSelected,tipoStringa1,tipoStringa2);
@@ -147,7 +149,7 @@ int nConnections = 0;
         }*/
     }
     
-    if(kind1==1 && kind2==1) {
+    if (kind1 == 1 && kind2 == 1) {
         int n,i;
         n = [lista1 count];
         for(i=0;i<n;i++) {
@@ -169,7 +171,7 @@ int nConnections = 0;
         }
     }
     
-    if(kind1==0 && kind2==1) {
+    if (kind1 == 0 && kind2 == 1) {
         int n,i;
         n = [lista2 count];
         for(i=0;i<n;i++) {
@@ -211,17 +213,17 @@ int nConnections = 0;
 
 -(IBAction) reload3:(int)sender {
     [self fillPortsArray];
-    if(sender == 22) {
+    if (sender == 22) {
         [datiTab2 flush:nil];
         [datiTab2 writeData:self text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected]; 
         [tabellaSend reloadData]; 
     }
-    if(sender == 21) { 
+    if (sender == 21) { 
         [datiTab3 flush:nil];
         [datiTab3 writeData:self text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected]; 
         [tabellaConnect reloadData]; 
     }
-    if(sender==50) {
+    if (sender == 50) {
         [datiTab2 flush:nil];
         [datiTab2 writeData:self text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected]; 
         [tabellaSend reloadData];
@@ -244,16 +246,16 @@ int nConnections = 0;
     NSEnumerator *rows = [tabellaPorte selectedRowEnumerator];
     id object;
     
-    if(chiSelected==21) {
+    if (chiSelected == 21) {
         [self selectTo:sender];
-        if(kind2==1) {
+        if(kind2 == 1) {
             NSMutableArray *lista1;
             lista1 = [datiTab3 getPorteSelected];
             int quante = [lista1 count];
             NSArray *listaPorte = [rows allObjects];
             int i,ia;
-            for(i=0;i<quante;i++) {
-                for(ia=0;ia<[listaPorte count];ia++) {
+            for(i = 0; i < quante;i ++) {
+                for(ia = 0; ia < [listaPorte count]; ia++) {
                     NSString *chi;
                     chi = [datiTab getCHisono:[[listaPorte objectAtIndex:ia] intValue]];
                     [chi getCString:daCh];
@@ -271,7 +273,7 @@ int nConnections = 0;
                 }
             }
         }
-        if(kind2==0) {
+        if (kind2 == 0) {
             char *buf;
             buf = (char*)alloca(256*sizeof(char));
             [[aText stringValue] getCString:buf];
@@ -286,7 +288,7 @@ int nConnections = 0;
         }
     }
     
-    if(chiSelected==22) {
+    if (chiSelected == 22) {
         [self selectFrom:sender];
         if(kind1==1) {
             NSMutableArray *lista1;
@@ -313,7 +315,7 @@ int nConnections = 0;
                 }
             }
         }
-        if(kind1==0) {
+        if (kind1 == 0) {
             char *buf;
             buf = (char*)alloca(256*sizeof(char));
             [[daText stringValue] getCString:buf];
@@ -337,10 +339,9 @@ int nConnections = 0;
     NSString *chi;
     chi = [datiTab2 getCHisono:chisono];
     tipoStringa1 = [datiTab2 getTipoString];
-    if(chi==nil) { kind1=1; return; }
+    if (chi == nil) { kind1=1; return; }
     kind1 = 0;
     [daText setStringValue:chi];
-    
 }
 
 - (IBAction)selectTo: (id)sender
@@ -349,7 +350,7 @@ int nConnections = 0;
     NSString *chi;
     chi = [datiTab3 getCHisono:chisono];
     tipoStringa2 = [datiTab3 getTipoString];
-    if(chi==nil) { kind2=1; return; }
+    if( chi == nil) { kind2=1; return; }
     kind2 = 0;
     [aText setStringValue:chi];
 }
@@ -371,7 +372,8 @@ int nConnections = 0;
         if(!(filename = [sp filename])) {
             NSBeep();
         }
-    }else return;
+    }else 
+		return;
     
     char namefile[256];
     [filename getCString:namefile];
@@ -390,13 +392,13 @@ int nConnections = 0;
 		char **str;
 		str = (char**)calloc(128,sizeof(char*));
 		int rip;
-		for(rip=0;rip<128;rip++) {
+		for(rip = 0; rip < 128; rip++) {
 			str[rip] = (char*)calloc(256,sizeof(char));
 		}
 	   
 		fprintf(schemeFile,"\t%d",(chisono2/2)); 
 	   
-		for(i = 0;i<chisono;i++) {
+		for(i = 0; i < chisono; i++) {
 			char strDA[256],strA[256];
 			
 			NSString *chi;
@@ -407,12 +409,12 @@ int nConnections = 0;
 			[chi2 getCString:strA];
 			int test;
 			test = getTipoByName(&strDA[0]);
-			if(test==22 || test == 2) {
+			if(test == 22 || test == 2) {
 			int res;
 			res = connessionePerNumero2(i,str);
-				if(res!=0) {
+				if(res != 0) {
 					int a;
-					for(a=0;a<res;a++) {
+					for(a = 0; a < res; a++) {
 						NSString *daStr = [NSString stringWithCString:strA];
 						NSString *aStr = [NSString stringWithCString:str[a]];
 						NSArray *lista1 = [daStr componentsSeparatedByString:@" "];
@@ -438,13 +440,13 @@ int nConnections = 0;
 							JPLog("JackPilot is saving: %s -> %s\n",strA,str[a]);
 							fprintf(schemeFile,"\t%s\t%d\t%s\t%d",strA, -1,str[a],-1);
 						}
-						if([lista1 count]!=1 && [lista2 count]!=1) {
+						if ([lista1 count] != 1 && [lista2 count] != 1) {
 							int cici;
 							char *buf1,*buf2;
 							buf1 = (char*)calloc(256,sizeof(char));
 							buf2 = (char*)calloc(256,sizeof(char));
 							
-							for(cici=0;cici<[lista1 count];cici++) {
+							for(cici = 0; cici < [lista1 count]; cici++) {
 								NSString *pre = [lista1 objectAtIndex:cici];
 								[pre getCString:buf1];
 								strcat(buf2,buf1);
@@ -457,7 +459,7 @@ int nConnections = 0;
 							buf3 = (char*)calloc(256,sizeof(char));
 							buf4 = (char*)calloc(256,sizeof(char));
 							
-							for(cici=0;cici<[lista2 count];cici++) {
+							for(cici = 0; cici <[lista2 count]; cici++) {
 								NSString *pre = [lista2 objectAtIndex:cici];
 								[pre getCString:buf3];
 								strcat(buf4,buf3);
@@ -469,7 +471,7 @@ int nConnections = 0;
 							fprintf(schemeFile,"\t%s\t%d\t%s\t%d",strA, -1,str[a],-1);
 						}
 						
-						if([lista1 count]==1 && [lista2 count]!=1) {
+						if ([lista1 count] == 1 && [lista2 count] != 1) {
 							int cici;
 							char *buf1,*buf2;
 							buf1 = (char*)calloc(256,sizeof(char));
@@ -830,13 +832,21 @@ int nConnections = 0;
 
 -(void) setupTimer
 {
-    if(update_timer!=nil) [update_timer release];
+    if (update_timer != nil) 
+		[update_timer release];
     update_timer = [[NSTimer scheduledTimerWithTimeInterval: 1.0 target: self selector: @selector(reloadTimer) userInfo:nil repeats:YES] retain];
     [[NSRunLoop currentRunLoop] addTimer: update_timer forMode: NSDefaultRunLoopMode];
 }
 
+-(void) stopTimer
+{
+    [update_timer invalidate];
+    [update_timer release];
+    update_timer= nil;
+}
+
 -(void) reloadTimer {
-    if(needsReload==22) { 
+    if (needsReload == 22) { 
         JPLog("NEEDS RELOAD\n");
         needsReload = 0;
         int i;
@@ -905,10 +915,9 @@ int nConnections = 0;
         [tabellaConnect selectRow:rigo2 byExtendingSelection:NO];
         
         oldChi=chiSelected;
-        needsReloadColor=0;
+        needsReloadColor = 0;
         doubleClick = NO;
-        
-        return;
+		return;
     }
 }
 

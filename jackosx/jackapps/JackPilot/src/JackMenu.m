@@ -6,6 +6,8 @@
 #import "JPPlugin.h"
 #import "JackCon1.3.h"
 
+#include <CoreFoundation/CFNotificationCenter.h>
+
 OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean isInput) 
 {
     OSStatus			err = noErr;
@@ -879,11 +881,30 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
 	free(channels); 
 	free(in_channels); 
 	free(interface); 
+	
+	// Send notification to be used in the Jack Router
+	CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(),
+										CFSTR("com.grame.jackserver.start"),
+										CFSTR("com.grame.jackserver"),
+										NULL,
+										true);
+  
 }
 
 - (IBAction) closeJackDeamon:(id) sender {
 	[managerWin orderOut:sender];
-	if(checkJack()!=0) {    
+	
+	// steph 
+	[[JackConnections getSelf] stopTimer];
+	
+	// Send notification to be used in the Jack Router
+	CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(),
+										CFSTR("com.grame.jackserver.stop"),
+										CFSTR("com.grame.jackserver"),
+										NULL,
+										true);
+	
+	if (checkJack() != 0) {    
 		[self sendJackStatusToPlugins:NO];
 		id pannelloDiAlert = NSGetAlertPanel(LOCSTR(@"Please Wait..."),LOCSTR(@"Jack server is closing..."),nil,nil,nil);
 		NSModalSession modalSession = [NSApp beginModalSessionForWindow:pannelloDiAlert];
