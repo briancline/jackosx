@@ -42,13 +42,16 @@ enum {
 
 class JARInsert {
 	public:
+		enum {
+			kNoErr,kErrNoClient,kErrCoreAudio,kErrInvalidBSize
+		};
 		JARInsert(long host_buffer_size,int hostType);
 		JARInsert(int hostType);
 		~JARInsert();
 		bool OpenAudioClient();
 		void Flush();
 		int GetError() { return c_error; }
-		int Process(float **in_buffer,float **out_buffer);
+		int Process(float **in_buffer,float **out_buffer,long host_nframes);
 		bool AllocBSizeAlign(long host_buffer_size);
 		bool CanProcess() { return c_canProcess; }
 	private:

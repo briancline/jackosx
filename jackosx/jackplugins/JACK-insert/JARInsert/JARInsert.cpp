@@ -27,8 +27,8 @@ extern "C" void JARILog(char *fmt,...) {
 #ifdef DEBUG
     va_list ap;
     va_start(ap, fmt);
-    fprintf(stderr,"JARInsert Log: ");
-    vfprintf(stderr, fmt, ap);
+    fprintf(stdout,"JARInsert Log: ");
+    vfprintf(stdout, fmt, ap);
     va_end(ap);
 #endif
 }
@@ -36,7 +36,7 @@ extern "C" void JARILog(char *fmt,...) {
 int JARInsert::c_instances = 0;
 
 JARInsert::JARInsert(long host_buffer_size,int hostType) 
-	: c_error(0),c_client(NULL),c_isRunning(false),c_rBufOn(false),c_needsDeactivate(false),c_hBufferSize(host_buffer_size)
+	: c_error(kNoErr),c_client(NULL),c_isRunning(false),c_rBufOn(false),c_needsDeactivate(false),c_hBufferSize(host_buffer_size)
 {	
 	if(!OpenAudioClient()) { 
 		JARILog("Cannot find jack client.\n");
@@ -87,14 +87,14 @@ JARInsert::JARInsert(long host_buffer_size,int hostType)
 		c_bsAO1 = new BSizeAlign(c_jBufferSize,c_hBufferSize);
 		c_bsAO2 = new BSizeAlign(c_jBufferSize,c_hBufferSize);
 		if(c_bsAI1->Ready() && c_bsAI2->Ready() && c_bsAO1->Ready() && c_bsAO2->Ready()) c_rBufOn = true;
-		else { c_error = -94; Flush(); return; }
+		else { c_error = kErrInvalidBSize; Flush(); return; }
 	}
 	
 	c_canProcess = true;
 }
 
 JARInsert::JARInsert(int hostType) 
-	: c_error(0),c_client(NULL),c_isRunning(false),c_rBufOn(false),c_needsDeactivate(false),c_hBufferSize(0)
+	: c_error(kNoErr),c_client(NULL),c_isRunning(false),c_rBufOn(false),c_needsDeactivate(false),c_hBufferSize(0)
 {
 	if(!OpenAudioClient()) { 
 		JARILog("Cannot find jack client.\n");
@@ -143,7 +143,7 @@ JARInsert::JARInsert(int hostType)
 }
 
 JARInsert::~JARInsert() {
-	if(c_error == 0) Flush();
+	if(c_error == kNoErr) Flush();
 }
 
 bool JARInsert::AllocBSizeAlign(long host_buffer_size) {
@@ -154,7 +154,7 @@ bool JARInsert::AllocBSizeAlign(long host_buffer_size) {
 		c_bsAO1 = new BSizeAlign(c_jBufferSize,c_hBufferSize);
 		c_bsAO2 = new BSizeAlign(c_jBufferSize,c_hBufferSize);
 		if(c_bsAI1->Ready() && c_bsAI2->Ready() && c_bsAO1->Ready() && c_bsAO2->Ready()) c_rBufOn = true;
-		else { c_error = -165; Flush(); return false; }
+		else { c_error = kErrInvalidBSize; Flush(); return false; }
 	}
 	c_canProcess = true;
 	if(c_rBufOn) JARILog("Using BSizeAlign.\n");
@@ -162,7 +162,11 @@ bool JARInsert::AllocBSizeAlign(long host_buffer_size) {
 	return true;
 }
 
-int JARInsert::Process(float **in_buffer,float **out_buffer) {
+int JARInsert::Process(float **in_buffer,float **out_buffer,long host_nframes) {
+	if(c_hBufferSize!=host_nframes) {
+		JARILog("CRITICAL ERROR: Host Buffer Size mismatch, NOT PROCESSING!!.\n");
+		return 1;
+	}
 	if(c_rBufOn) {
 		float *out1 = (float*) jack_port_get_buffer(c_outPorts[0],(jack_nframes_t)c_jBufferSize);
 		float *out2 = (float*) jack_port_get_buffer(c_outPorts[1],(jack_nframes_t)c_jBufferSize);
@@ -200,7 +204,7 @@ bool JARInsert::OpenAudioClient() {
     Boolean isWritable;
     
     err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices,&size,&isWritable);
-	if(err!=noErr) { c_error = -211; return false; }
+	if(err!=noErr) { c_error = kErrCoreAudio; return false; }
     
     int nDevices = size/sizeof(AudioDeviceID);
 	
@@ -208,7 +212,7 @@ bool JARInsert::OpenAudioClient() {
 
     AudioDeviceID *device = (AudioDeviceID*)calloc(nDevices,sizeof(AudioDeviceID));
     err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices,&size,device);
-	if(err!=noErr) { c_error = -219; return false; }
+	if(err!=noErr) { c_error = kErrCoreAudio; return false; }
     
     for(int i=0;i<nDevices;i++) {
 	
@@ -224,17 +228,17 @@ bool JARInsert::OpenAudioClient() {
 				c_jackDevID=device[i]; 
 				if(device!=NULL) free(device); 
 				err = AudioDeviceGetProperty(c_jackDevID,0,true,kAudioDevicePropertyGetJackClient,&size,&c_client);
-				if(err!=noErr) { c_error = -235; return false; }
+				if(err!=noErr) { c_error = kErrNoClient; return false; }
 				#if 0
 				err = AudioDeviceGetProperty(c_jackDevID,0,true,kAudioDevicePropertyDeviceIsRunning,&size,&c_isRunning);
-				if(err!=noErr) { c_error = -238; return false; }
+				if(err!=noErr) { c_error = kErrNoClient; return false; }
 				#endif
-				if(c_client!=NULL) { c_error = 0; return true; }
+				if(c_client!=NULL) { c_error = kNoErr; return true; }
 				else return false;
 			}
 		}
     }
-	c_error = -245;
+	c_error = kErrNoClient;
 	return false;
 }
 

@@ -27,7 +27,7 @@ COMPONENT_ENTRY(ElCAJAS);
 AUChannelInfo	ElCAJAS::m_aobSupportedNumChannels[ ElCAJAS::kNumSupportedNumChannels ] = 
     { {1,2},{2,2} };
 
-ElCAJAS::ElCAJAS(AudioUnit component) : AUEffectBase(component),c_jar(NULL),c_error(0)
+ElCAJAS::ElCAJAS(AudioUnit component) : AUEffectBase(component),c_jar(NULL),c_error(JARInsert::kNoErr)
 {
     CreateElements();
 }
@@ -93,7 +93,7 @@ ComponentResult	ElCAJAS::GetParameterInfo( AudioUnitScope			inScope,									Aud
     {
 
         case 0:
-            if(c_error==0) strcpy( pcName, "Jack is ONLINE" );
+            if(c_error==JARInsert::kNoErr) strcpy( pcName, "Jack is ONLINE" );
             else strcpy( pcName, "Jack is OFFLINE" );
             outParameterInfo.unit = kAudioUnitParameterUnit_Indexed;
             outParameterInfo.minValue = 4;
@@ -121,7 +121,7 @@ OSStatus	ElCAJAS::ProcessBufferLists( AudioUnitRenderActionFlags &	ioActionFlags
 	if(outBuffer.mNumberBuffers==1 && outBuffer.mBuffers[0].mNumberChannels>1) outIsInterleaved = true;
 		
 	if(!inIsInterleaved && !outIsInterleaved) {
-		if(c_error == 0 && c_jar) {
+		if(c_error == JARInsert::kNoErr && c_jar) {
 			float *inBuf[2];
 			float *outBuf[2];
 			for(i=0;i<2  && i<(int)inBuffer.mNumberBuffers;i++) {
@@ -130,10 +130,10 @@ OSStatus	ElCAJAS::ProcessBufferLists( AudioUnitRenderActionFlags &	ioActionFlags
 			}
 			if(inBuffer.mNumberBuffers==1) memcpy(inBuf[1],inBuf[0],sizeof(float)*inFramesToProcess);
 			if(!c_jar->CanProcess()) c_jar->AllocBSizeAlign(inFramesToProcess);
-			c_jar->Process(inBuf,outBuf);
+			c_jar->Process(inBuf,outBuf,inFramesToProcess);
 		} else for(i=0;i<(int)outBuffer.mNumberBuffers;i++) memset(outBuffer.mBuffers[i].mData,0x0,outBuffer.mBuffers[i].mDataByteSize);
 	} else {
-		if(c_error == 0 && c_jar) {
+		if(c_error == JARInsert::kNoErr && c_jar) {
 			float *buffer = (float*)inBuffer.mBuffers[0].mData;
 			float inBufs[2][inFramesToProcess];
 			for(i=0;i<2 && i<(int)inBuffer.mBuffers[0].mNumberChannels;i++) {
@@ -156,7 +156,7 @@ OSStatus	ElCAJAS::ProcessBufferLists( AudioUnitRenderActionFlags &	ioActionFlags
 				}
 			}
 			if(!c_jar->CanProcess()) c_jar->AllocBSizeAlign(inFramesToProcess);
-			c_jar->Process((float**)inBufs,(float**)outBufs);
+			c_jar->Process((float**)inBufs,(float**)outBufs,inFramesToProcess);
 		} else for(i=0;i<(int)outBuffer.mNumberBuffers;i++) memset(outBuffer.mBuffers[i].mData,0x0,outBuffer.mBuffers[i].mDataByteSize);
 	}
          

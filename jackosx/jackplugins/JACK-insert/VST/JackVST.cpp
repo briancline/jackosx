@@ -22,7 +22,7 @@
 
 //-------------------------------------------------------------------------------------------------------
 JackVST::JackVST (audioMasterCallback audioMaster)
-	: AudioEffectX (audioMaster, 1, 1),c_jar(NULL),c_error(0)// 1 program, 1 parameter only
+	: AudioEffectX (audioMaster, 1, 1),c_jar(NULL),c_error(JARInsert::kNoErr)// 1 program, 1 parameter only
 {
 	fGain = 1.;				// default to 0 dB
 	setNumInputs (2);		// stereo in
@@ -69,7 +69,7 @@ float JackVST::getParameter (long index)
 //-----------------------------------------------------------------------------------------
 void JackVST::getParameterName (long index, char *label)
 {
-    if(c_error == 0) strcpy (label, "ONLINE");
+    if(c_error == JARInsert::kNoErr) strcpy (label, "ONLINE");
     else strcpy (label, "OFFLINE");
 }
 
@@ -115,9 +115,9 @@ void JackVST::process (float **inputs, float **outputs, long sampleFrames)
 //-----------------------------------------------------------------------------------------
 void JackVST::processReplacing (float **inputs, float **outputs, long sampleFrames)
 {
-	if(c_error == 0 && c_jar) {
+	if(c_error == JARInsert::kNoErr && c_jar) {
 		if(!c_jar->CanProcess()) c_jar->AllocBSizeAlign(sampleFrames);
-		c_jar->Process(inputs,outputs);
+		c_jar->Process(inputs,outputs,sampleFrames);
 	} else for(int i=0;i<2;i++) memset(outputs[i],0x0,sizeof(float)*sampleFrames);
 }
 
