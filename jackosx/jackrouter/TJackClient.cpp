@@ -190,7 +190,7 @@ History
 
 24-01-04 : Version 0.51 : S Letz  Johnny Petrantoni
         Implement kAudioDevicePropertyIOProcStreamUsage. Implement kAudioDevicePropertyUsesVariableBufferFrameSizes in in DeviceGetProperty.
-        This solve the iMovie 3.03 crash. Improve debug code using Johnny's code. 
+        This solve the iMovie 3.03 crash. Improve debug code using Johnny's code.  Reject "jackd" as a possible client.
         
 TODO :
     
@@ -279,7 +279,6 @@ static void printError(OSStatus err)
             break;
         case kAudioHardwareUnspecifiedError:
             printf("error code : kAudioHardwareUnspecifiedError\n");
-            JARLog;
         case kAudioHardwareUnknownPropertyError:
             JARLog("error code : kAudioHardwareUnknownPropertyError\n");
             break;
@@ -307,7 +306,6 @@ static void printError(OSStatus err)
     }
 #endif
 }
-
 
 //------------------------------------------------------------------------
 void TJackClient::SaveConnections()
@@ -2944,14 +2942,20 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
     char* id_name = ottieniNomeFromPid((int)getpid());
 
     JARLog ("Initialize [inSelf, name] : %ld %s \n", (long)inSelf, id_name);
+	
+	// Reject "jackd" as a possible client (to be impoved if other clients need to be rejected)
+	if (strcmp (id_name,"jackd") == 0){
+		JARLog("Rejected client : %s\n",id_name);
+		return noErr;
+	}
     
 #ifdef kAudioHardwarePlugInInterface2ID  
-        UInt32 theSize = 0;
-        UInt32 outData = 0;
-        err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyProcessIsMaster, &theSize, NULL);
-		JARLog("kAudioHardwarePropertyProcessIsMaster err theSize %ld %ld\n",err,theSize);
-        err = AudioHardwareGetProperty(kAudioHardwarePropertyProcessIsMaster, &theSize, &outData);
-        JARLog("kAudioHardwarePropertyProcessIsMaster err outData %ld %ld\n",err,outData);
+	UInt32 theSize = 0;
+	UInt32 outData = 0;
+	err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyProcessIsMaster, &theSize, NULL);
+	JARLog("kAudioHardwarePropertyProcessIsMaster err theSize %ld %ld\n",err,theSize);
+	err = AudioHardwareGetProperty(kAudioHardwarePropertyProcessIsMaster, &theSize, &outData);
+	JARLog("kAudioHardwarePropertyProcessIsMaster err outData %ld %ld\n",err,outData);
 #endif
 
     jack_client_t * client; 

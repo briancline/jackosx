@@ -28,7 +28,6 @@
 #include <string.h>
 #include <jack/jack.h>
 #include <map>
-#include <set>
 #include <list>
 #include <string>
 #include "bequite.h"
@@ -110,7 +109,7 @@ class TJackClient {
         static string fDeviceManufacturer;
         static bool fDeviceRunning;
         static bool fConnected2HAL;
-        
+	     
         static AudioDeviceID fDeviceID;
         static AudioStreamID fStreamIDList[128];
         
