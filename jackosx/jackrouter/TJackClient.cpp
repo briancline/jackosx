@@ -221,7 +221,7 @@ History
 		Redirect kAudioDevicePropertySafetyOffset and kAudioDevicePropertyLatency properties on the real driver.
 
 26-10-04 : Version 0.60 : S Letz
-		Previous connection state takes precedence over autoconnections state.
+		Previous connection state takes precedence over auto-connection state.
 		 
 TODO :
     
@@ -910,7 +910,7 @@ bool TJackClient::Activate()
 		JARLog("cannot activate client");
 		return false;
     }else{
-		// Previous connection state takes precedence over autoconnections state
+		// Previous connection state takes precedence over auto-connection state
 		if (!RestoreConnections()) 
 			AutoConnect();
 		return true;
