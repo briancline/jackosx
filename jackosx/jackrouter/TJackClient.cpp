@@ -1308,7 +1308,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
     CheckRunning(inSelf);
          
     JARLog("--------------------------------------------------------\n");
-    JARLog("DeviceGetProperty inSelf isInput%ld  %ld\n",(long)inSelf,isInput);
+    JARLog("DeviceGetProperty inSelf isInput inDevice %ld %ld %ld\n",(long)inSelf,isInput,inDevice);
 	Print4CharCode("DeviceGetProperty ", inPropertyID);
 
 	if (inDevice != TJackClient::fDeviceID)
@@ -3000,23 +3000,23 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
     err = AudioHardwareClaimAudioDeviceID(inSelf, &TJackClient::fDeviceID);
     if (err == kAudioHardwareNoError)
     {
-            err = AudioHardwareDevicesCreated(inSelf, 1, &TJackClient::fDeviceID);
+		JARLog("AudioHardwareClaimAudioDeviceID %ld\n", TJackClient::fDeviceID);
+		err = AudioHardwareDevicesCreated(inSelf, 1, &TJackClient::fDeviceID);
     }
     if (err == kAudioHardwareNoError)
     {
-            for (int i = 0; i<TJackClient::fOutputChannels + TJackClient::fInputChannels; i++) {
-                err = AudioHardwareClaimAudioStreamID(inSelf, TJackClient::fDeviceID, &fStreamIDList[i]);
-                JARLog("AudioHardwareClaimAudioStreamID %ld\n", (long)&TJackClient::fStreamIDList[i]);
-                if (err == kAudioHardwareNoError)
-                {
-                    err = AudioHardwareStreamsCreated(inSelf, TJackClient::fDeviceID, i+1, &TJackClient::fStreamIDList[i]);
-                    JARLog("AudioHardwareStreamsCreated %ld\n", (long)&TJackClient::fStreamIDList[i]);
-                    if (err != kAudioHardwareNoError) return err;
-                }else
-                    return err;
-            }
-            
-            TJackClient::fConnected2HAL = true;
+		for (int i = 0; i<TJackClient::fOutputChannels + TJackClient::fInputChannels; i++) {
+			err = AudioHardwareClaimAudioStreamID(inSelf, TJackClient::fDeviceID, &fStreamIDList[i]);
+			JARLog("AudioHardwareClaimAudioStreamID %ld\n", (long)&TJackClient::fStreamIDList[i]);
+			if (err == kAudioHardwareNoError) {
+				err = AudioHardwareStreamsCreated(inSelf, TJackClient::fDeviceID, i+1, &TJackClient::fStreamIDList[i]);
+				JARLog("AudioHardwareStreamsCreated %ld\n", (long)&TJackClient::fStreamIDList[i]);
+				if (err != kAudioHardwareNoError) return err;
+			}else
+				return err;
+		}
+		
+		TJackClient::fConnected2HAL = true;
     }
     
     TJackClient::fPlugInRef = inSelf;
