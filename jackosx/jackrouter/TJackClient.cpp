@@ -211,7 +211,7 @@ History
 		Correct DeviceSetProperty: some properties can be "set" event there is no Jack client running other like kAudioDevicePropertyIOProcStreamUsage not.
 
 14-09-04 : Version 0.57 : S Letz
-		Improve the external (Jack plugins) management : now internal and external "clients" are distinguished.
+		Improve the external (Jack plugins) management : now internal and external "clients" are distinguished. Correct Save/Restore connections bug.
 		 
 TODO :
     
@@ -452,7 +452,7 @@ void TJackClient::DecRefInternal()
 {
     assert(TJackClient::fJackClient);
     TJackClient::fJackClient->fInternalClientNum--;
-    JARLog("DecRef : %ld\n",TJackClient::fJackClient->fInternalClientNum);
+    JARLog("DecRefInternal : %ld\n",TJackClient::fJackClient->fInternalClientNum);
 	if (TJackClient::fJackClient->fInternalClientNum == 0) 
 		TJackClient::fJackClient->DisposePorts();
     CheckLastRef();
@@ -739,6 +739,7 @@ error:
 void TJackClient::DisposePorts()
 {
     JARLog("DisposePorts\n");
+	SaveConnections();
 
 	for (long i = 0; i<TJackClient::fInputChannels; i++) {
 		if (fInputPortList[i]) {
@@ -778,7 +779,7 @@ void TJackClient::Close()
 {
     JARLog("Close\n");
 
-	DisposePorts();
+	//DisposePorts();
 	
 	if (fClient) {
 		if (jack_client_close(fClient)) {
@@ -950,9 +951,7 @@ bool TJackClient::Activate()
 //------------------------------------------------------------------------
 bool TJackClient::Desactivate()
 {
-    SaveConnections();
-    
-    if (jack_deactivate (fClient)) {
+    if (jack_deactivate(fClient)) {
 		JARLog("cannot deactivate client");
 		return false;
     }
