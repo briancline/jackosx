@@ -35,7 +35,7 @@ extern "C" void JARILog(char *fmt,...) {
 
 int JARInsert::c_instances = 0;
 
-JARInsert::JARInsert(long host_buffer_size) 
+JARInsert::JARInsert(long host_buffer_size,int hostType) 
 	: c_error(0),c_client(NULL),c_isRunning(false),c_rBufOn(false),c_needsDeactivate(false),c_hBufferSize(host_buffer_size)
 {	
 	if(!OpenAudioClient()) { 
@@ -56,13 +56,15 @@ JARInsert::JARInsert(long host_buffer_size)
 	char *newName = (char*)calloc(256,sizeof(char));
         
 	for(int i=0;i<c_nInPorts;i++) {
-		sprintf(newName,"AUreturn%d",JARInsert::c_instances+i+1);
+		if(hostType=='vst ') sprintf(newName,"VSTreturn%d",JARInsert::c_instances+i+1);
+		else sprintf(newName,"AUreturn%d",JARInsert::c_instances+i+1);
 		c_inPorts[i] = jack_port_register(c_client,newName,JACK_DEFAULT_AUDIO_TYPE,JackPortIsInput,0);
 		JARILog("Port: %s created\n",newName);
 	}
         
 	for(int i=0;i<c_nOutPorts;i++) {
-		sprintf(newName,"AUsend%d",JARInsert::c_instances+i+1);
+		if(hostType=='vst ') sprintf(newName,"VSTsend%d",JARInsert::c_instances+i+1);
+		else sprintf(newName,"AUsend%d",JARInsert::c_instances+i+1);
 		c_outPorts[i] = jack_port_register(c_client,newName,JACK_DEFAULT_AUDIO_TYPE,JackPortIsOutput,0);
 		JARILog("Port: %s created\n",newName);
 	}
@@ -91,7 +93,7 @@ JARInsert::JARInsert(long host_buffer_size)
 	c_canProcess = true;
 }
 
-JARInsert::JARInsert() 
+JARInsert::JARInsert(int hostType) 
 	: c_error(0),c_client(NULL),c_isRunning(false),c_rBufOn(false),c_needsDeactivate(false),c_hBufferSize(0)
 {
 	if(!OpenAudioClient()) { 
@@ -112,13 +114,15 @@ JARInsert::JARInsert()
 	char *newName = (char*)calloc(256,sizeof(char));
         
 	for(int i=0;i<c_nInPorts;i++) {
-		sprintf(newName,"AUreturn%d",JARInsert::c_instances+i+1);
+		if(hostType=='vst ') sprintf(newName,"VSTreturn%d",JARInsert::c_instances+i+1);
+		else sprintf(newName,"AUreturn%d",JARInsert::c_instances+i+1);
 		c_inPorts[i] = jack_port_register(c_client,newName,JACK_DEFAULT_AUDIO_TYPE,JackPortIsInput,0);
 		JARILog("Port: %s created\n",newName);
 	}
         
 	for(int i=0;i<c_nOutPorts;i++) {
-		sprintf(newName,"AUsend%d",JARInsert::c_instances+i+1);
+		if(hostType=='vst ') sprintf(newName,"VSTsend%d",JARInsert::c_instances+i+1);
+		else sprintf(newName,"AUsend%d",JARInsert::c_instances+i+1);
 		c_outPorts[i] = jack_port_register(c_client,newName,JACK_DEFAULT_AUDIO_TYPE,JackPortIsOutput,0);
 		JARILog("Port: %s created\n",newName);
 	}

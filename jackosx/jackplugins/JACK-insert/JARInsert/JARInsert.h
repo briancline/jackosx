@@ -29,10 +29,12 @@
 #include "BSizeAlign.h"
 
 #define SHOWALERT(err_str_) \
-printf("JARInsert Critical Log: error = %d.\n",c_error); \
+printf("JARInsert Critical Log: error = %d.\n",c_error);
+/*
 CFStringRef str = CFStringCreateWithCString(NULL,err_str_,NULL); \
 CFUserNotificationDisplayNotice(0,kCFUserNotificationCautionAlertLevel,NULL,NULL,NULL,\
 CFSTR("JACK-insert"),str,CFSTR("Ok"));
+*/
 
 enum {
     kAudioDevicePropertyGetJackClient  = 'jasg', kAudioDevicePropertyReleaseJackClient  = 'jasr'
@@ -40,8 +42,8 @@ enum {
 
 class JARInsert {
 	public:
-		JARInsert(long host_buffer_size);
-		JARInsert();
+		JARInsert(long host_buffer_size,int hostType);
+		JARInsert(int hostType);
 		~JARInsert();
 		bool OpenAudioClient();
 		void Flush();
