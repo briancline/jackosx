@@ -525,13 +525,15 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
 		[message appendString:mess];
         a = NSRunAlertPanel(LOCSTR(@"Are you sure?"),message,LOCSTR(@"No"),LOCSTR(@"Yes"),nil);
     } else {
-        a = NSRunAlertPanel(LOCSTR(@"Are you sure?"),LOCSTR(@"There are no clients running."),LOCSTR(@"No"),LOCSTR(@"Yes"),nil);
+		a = 0;
     }
     
     switch(a) {
         case 0:
-            if(jackdStartMode) [self stopJack:sender];
-            else [self closeJackDeamon:sender];
+            if(jackdStartMode) 
+				[self stopJack:sender];
+            else 
+				[self closeJackDeamon:sender];
             break;
         case -1:
             return;
@@ -787,6 +789,7 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
     [aboutWin orderOut:sender];
 }
 
+
 - (IBAction) launchJackDeamon:(id) sender {
         
     char *driver;
@@ -834,7 +837,7 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
 		if(strncmp(interface,name,strlen(interface))==0) {  
 			vDevice = devices[i];
 		}
-	}
+	}	
 
 	NSString *deviceIDStr = [[NSNumber numberWithLong:vDevice] stringValue];
 	[deviceIDStr getCString:interface];
@@ -869,7 +872,13 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
     [NSApp endModalSession:modalSession];
     NSReleaseAlertPanel(pannelloDiAlert);
     
-    free(stringa); free(driver); free(samplerate); free(buffersize); free(channels); free(in_channels); free(interface); 
+    free(stringa); 
+	free(driver); 
+	free(samplerate); 
+	free(buffersize); 
+	free(channels); 
+	free(in_channels); 
+	free(interface); 
 }
 
 - (IBAction) closeJackDeamon:(id) sender {
@@ -985,6 +994,7 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
 	[inputChannels removeAllItems];
     [samplerateText removeAllItems];
     [bufferText removeAllItems];
+	[bufferText addItemWithTitle:@"32"];
     [bufferText addItemWithTitle:@"64"]; [bufferText addItemWithTitle:@"128"]; 
 	[bufferText addItemWithTitle:@"256"]; [bufferText addItemWithTitle:@"512"]; 
 	[bufferText addItemWithTitle:@"1024"]; [bufferText addItemWithTitle:@"2048"]; 
@@ -1135,7 +1145,10 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
     JPLog("got actual buffersize ok\n");
     
     UInt32 theSize = sizeof(UInt32);
-    UInt32 newBufSize = 64;
+	UInt32 newBufSize = 32;
+    err = AudioDeviceSetProperty(vDevice,NULL,0,false,kAudioDevicePropertyBufferFrameSize,theSize,&newBufSize);
+    if(err!=noErr) { [bufferText removeItemWithTitle:@"32"]; }
+    newBufSize = 64;
     err = AudioDeviceSetProperty(vDevice,NULL,0,false,kAudioDevicePropertyBufferFrameSize,theSize,&newBufSize);
     if(err!=noErr) { [bufferText removeItemWithTitle:@"64"]; }
     newBufSize = 128;
