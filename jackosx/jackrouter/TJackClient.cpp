@@ -226,6 +226,9 @@ History
 15-11-04 : Version 0.61 : S Letz
 		Correct kAudioStreamPropertyPhysicalFormat setting problems. This finally solve the NI applications issue...
 		Correct DeviceGetPropertyInfo and StreamGetPropertyInfo for properties that can be set. Debug activated with pref file.
+
+29-11-04 : Version 0.62 : S Letz
+		Correct internal output/input port connections bug : output ports are no more cleared. CoreAudio and PortAudio drivers are corrected also.
 		 
 TODO :
     
@@ -544,12 +547,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
     // One IOProc
     if (client->GetProcNum() == 1) {
 	
-		// Clear output ports in all cases
-		for (int i = 0; i<TJackClient::fOutputChannels; i++) {
-			memset((float *)jack_port_get_buffer(client->fOutputPortList[i], nframes), 0, nframes*sizeof(float));
-		}
-   
-        pair<AudioDeviceIOProc,TProcContext> val = *client->fAudioIOProcList.begin();
+		pair<AudioDeviceIOProc,TProcContext> val = *client->fAudioIOProcList.begin();
         TProcContext context = val.second;
        
         if (context.fStatus) { // If proc is started
@@ -600,8 +598,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
     }else if (client->GetProcNum() > 1) { // Several IOProc : need mixing  
 	
 		for (int i = 0; i<TJackClient::fOutputChannels; i++) {
-			memset((float *)jack_port_get_buffer(client->fOutputPortList[i], nframes), 0, nframes*sizeof(float));
-            // Use an intermediate mixing buffer
+			// Use an intermediate mixing buffer
             memset(client->fOuputListMixing[i], 0, nframes*sizeof(float));
 		}
     
