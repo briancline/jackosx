@@ -760,7 +760,7 @@
 	<key>CFBundleExecutable</key>
 	<string>JackPilot</string>
 	<key>CFBundleGetInfoString</key>
-	<string>JackPilot 1.5.4, @2003-2004 Johnny Petrantoni.</string>
+	<string>JackPilot 1.5.5, @2003-2005 Johnny Petrantoni.</string>
 	<key>CFBundleIconFile</key>
 	<string>jackpilot.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -776,7 +776,7 @@
 	<key>CFBundleSignature</key>
 	<string>ElCa</string>
 	<key>CFBundleVersion</key>
-	<string>1.5.4</string>
+	<string>1.5.5</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>

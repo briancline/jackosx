@@ -607,7 +607,23 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
 						[verboseBox state]==NSOnState ? 1 : 0,
 						(int)selDevID)==22) [self error:@"Cannot save JAS preferences."];
     }
-    
+	
+	// Save the preferences in a format jack clients can use when using the jack_client_open API
+	char filename[255];
+	snprintf(filename, 255, "%s/.jackdrc", getenv("HOME"));
+	FILE* file = fopen(filename,"w");
+	if (file) {
+		fprintf(file,"/usr/local/bin/jackd \n");
+		fprintf(file,"-R \n");
+		fprintf(file, "-d %s \n",[[driverBox titleOfSelectedItem]cString]);
+		fprintf(file, "-p %s \n",[[bufferText titleOfSelectedItem]cString]);
+		fprintf(file, "-r %s \n",[[samplerateText titleOfSelectedItem]cString]);
+		fprintf(file, "-i %s \n",[[inputChannels titleOfSelectedItem]cString]);
+		fprintf(file, "-o %s \n",[[channelsTest titleOfSelectedItem]cString]);
+		fprintf(file, "-I %ld \n",selDevID); 
+		fclose(file);
+	}
+   
     NSMutableArray *toFile;
     
     toFile = [NSMutableArray array];
