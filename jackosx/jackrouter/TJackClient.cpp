@@ -3089,6 +3089,7 @@ bool TJackClient::ReadPref()
     OSErr err;
     char buf[256];
     char path[256];
+	bool res = false;
 
     err = FSFindFolder(kUserDomain, kPreferencesFolderType, kDontCreateFolder, &prefFolderRef);
     if (err == noErr) {
@@ -3122,6 +3123,7 @@ bool TJackClient::ReadPref()
                        TJackClient::fInputChannels, TJackClient::fOutputChannels, TJackClient::fAutoConnect);
                 JARLog("Reading Preferences fDefaultInput: %ld fDefaultOutput: %ld fDefaultSystem: %ld fDeviceID: %ld\n",
                        TJackClient::fInputChannels, TJackClient::fOutputChannels, TJackClient::fAutoConnect, TJackClient::fCoreAudioDriver);
+				res = true;
             }
 		}
     }
@@ -3136,10 +3138,9 @@ bool TJackClient::ReadPref()
 			TJackClient::fBlackList.insert(client_name);
 			JARLog("Blacklisted client %s\n", client_name); 
 		}
-		return true;
 	}
 	
-    return false;
+    return res;
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
