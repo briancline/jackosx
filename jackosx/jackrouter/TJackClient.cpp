@@ -866,6 +866,11 @@ void TJackClient::Start(AudioDeviceIOProc proc)
 //------------------------------------------------------------------------
 void TJackClient::Stop(AudioDeviceIOProc proc) 
 {
+	// clear ouput buffers
+	for (int i = 0; i<TJackClient::fOutputChannels; i++) {
+		memset((float *)jack_port_get_buffer(fOutputPortList[i], TJackClient::fBufferSize), 0, TJackClient::fBufferSize*sizeof(float));
+	}
+
 	if (proc == NULL) { // is supposed to stop the hardware
 		StopRunning();
 		AudioHardwareDevicePropertyChanged(TJackClient::fPlugInRef, 
