@@ -275,13 +275,15 @@ void JackVST::flush() {
 		JackVST::sRetainPorts--;
 	}
 	free(outPorts);
+	
+	printf("ports retaining %d.\n",JackVST::sRetainPorts);
 			
 	if(!JackVST::sRetainPorts) { 
 		printf("closing client.\n"); 
 		jack_deactivate(JackVST::client); 
 		jack_client_close(JackVST::client);
 		JackVST::client = NULL;
-	} printf("client won't be closed.\n"); 
+	} else printf("client won't be closed.\n"); 
         
 }
 

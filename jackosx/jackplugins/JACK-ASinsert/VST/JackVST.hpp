@@ -87,7 +87,7 @@ private:
 		
         long jBufferSize;
 		int ID;
-		
+
 		static list<JackVST*> classInstances;
         static int jackProcess(jack_nframes_t nframes, void *arg);
         static jack_client_t *client;
