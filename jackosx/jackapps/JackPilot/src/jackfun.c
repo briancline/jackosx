@@ -328,7 +328,7 @@ int getInterface(void) {
     return interface;
 }
 
-int jackALStore(int inCH,int outCH,int AUTOC,int DEFinput,int DEFoutput,int DEFsystem,int LOGSLevel) {
+int jackALStore(int inCH,int outCH,int AUTOC,int DEFinput,int DEFoutput,int DEFsystem,int LOGSLevel,int audioDevID) {
     FILE *prefFile;
     char *path;
     path = (char*)alloca(256*sizeof(char));
@@ -337,7 +337,9 @@ int jackALStore(int inCH,int outCH,int AUTOC,int DEFinput,int DEFoutput,int DEFs
         return 22;
     } else {	
 		verboseLevel = LOGSLevel;
-		fprintf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",inCH, -1, outCH,-1,AUTOC,-1,DEFinput,-1,DEFoutput,-1,DEFsystem,-1,verboseLevel); 
+		fprintf(		prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d"
+						,inCH, -1, outCH,-1,AUTOC,-1,DEFinput,-1,DEFoutput,-1,DEFsystem,-1,verboseLevel,-1,audioDevID
+				); 
 		fclose(prefFile);
     }
     return 1;

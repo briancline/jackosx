@@ -371,14 +371,16 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
 				[defInput state]==NSOnState ? TRUE : FALSE,
 				[defOutput state]==NSOnState ? TRUE : FALSE,
 				[sysDefOut state]==NSOnState ? TRUE : FALSE,
-				[verboseBox state]==NSOnState ? 1 : 0);
+				[verboseBox state]==NSOnState ? 1 : 0,
+				(int)selDevID);
     }
     if([JALauto state]==NSOffState) {
         jackALStore([JALin intValue],[JALout intValue],0,
 		[defInput state]==NSOnState ? TRUE : FALSE,
 		[defOutput state]==NSOnState ? TRUE : FALSE,
 		[sysDefOut state]==NSOnState ? TRUE : FALSE,
-		[verboseBox state]==NSOnState ? 1 : 0);
+		[verboseBox state]==NSOnState ? 1 : 0,
+		(int)selDevID);
     }
     if(jackstat!=1) {
 		
@@ -586,14 +588,16 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
 						[defInput state]==NSOnState ? TRUE : FALSE,
 						[defOutput state]==NSOnState ? TRUE : FALSE,
 						[sysDefOut state]==NSOnState ? TRUE : FALSE,
-						[verboseBox state]==NSOnState ? 1 : 0)==22) [self error:@"Cannot save JAS preferences."];
+						[verboseBox state]==NSOnState ? 1 : 0,
+						(int)selDevID)==22) [self error:@"Cannot save JAS preferences."];
     }
     if([JALauto state]==NSOffState) {
         if(jackALStore([JALin intValue],[JALout intValue],0,
 						[defInput state]==NSOnState ? TRUE : FALSE,
 						[defOutput state]==NSOnState ? TRUE : FALSE,
 						[sysDefOut state]==NSOnState ? TRUE : FALSE,
-						[verboseBox state]==NSOnState ? 1 : 0)==22) [self error:@"Cannot save JAS preferences."];
+						[verboseBox state]==NSOnState ? 1 : 0,
+						(int)selDevID)==22) [self error:@"Cannot save JAS preferences."];
     }
     
     NSMutableArray *toFile;

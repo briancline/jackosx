@@ -2728,7 +2728,7 @@ bool TJackClient::ReadPref()
             if ((prefFile = fopen(path, "rt"))) {
                 int nullo;
                 fscanf(
-						prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",
+						prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",
                         &TJackClient::fInputChannels,
                         &nullo,
                         &TJackClient::fOutputChannels,
@@ -2742,6 +2742,8 @@ bool TJackClient::ReadPref()
                         &TJackClient::fDefaultSystem,
 						&nullo,
 						&TJackClient::fDebug
+						&nullo,
+						&nullo, //Johnny: Stephane, here it is the AudioDevID
 					);                
                 fclose(prefFile);
 				JARLog("Reading Preferences fInputChannels: %ld fOutputChannels: %ld fAutoConnect: %ld fDefaultInput: %ld fDefaultOutput: %ld fDefaultSystem: %ld\n",
