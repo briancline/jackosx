@@ -956,8 +956,10 @@ void TJackClient::StopRunning()
 //------------------------------------------------------------------------
 bool TJackClient::Open()
 {
-    char* id_name = bequite_getNameFromPid((int)getpid());
-    JARLog("JackClient::Open %s\n", id_name);
+	pid_t pid = getpid();
+    char* id_name = bequite_getNameFromPid(pid);
+    JARLog("JackClient::Open id %ld name %s\n", pid, id_name);
+	assert(id_name != NULL);
 
     if ((fClient = jack_client_new(id_name)) == NULL) {
         JARLog("jack server not running?\n");
@@ -966,9 +968,8 @@ bool TJackClient::Open()
 
     jack_set_process_callback(fClient, Process, this);
     jack_on_shutdown(fClient, Shutdown, NULL);
-    jack_set_buffer_size_callback (fClient, BufferSize, this);
-    jack_set_xrun_callback (fClient, XRun, this);
-
+    jack_set_buffer_size_callback(fClient, BufferSize, this);
+    jack_set_xrun_callback(fClient, XRun, this);
     return true;
 
 error:
