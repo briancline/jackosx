@@ -192,6 +192,7 @@ History
         Implement kAudioDevicePropertyIOProcStreamUsage. Implement kAudioDevicePropertyUsesVariableBufferFrameSizes in in DeviceGetProperty.
         This solve the iMovie 3.03 crash. Improve debug code using Johnny's code.  Reject "jackd" as a possible client.
 		Fixed ReadPref bug introduced when improving Debug code. Add kAudioHardwarePropertyBootChimeVolumeScalar in DeviceGetPropertyInfo.
+		Correct bug in CheckServer.
         
 TODO :
     
@@ -2872,7 +2873,7 @@ jack_client_t *  TJackClient::CheckServer(AudioHardwarePlugInRef inSelf)
 {
     jack_client_t * client;
     char name [JACK_CLIENT_NAME_LEN];
-    JARLog(name, "CA::%ld", (long)inSelf);
+    sprintf(name, "CA::%ld", (long)inSelf);
 
     if (client = jack_client_new(name)){
         TJackClient::fBufferSize = jack_get_buffer_size(client);
@@ -3068,6 +3069,9 @@ OSStatus TJackClient::Teardown(AudioHardwarePlugInRef inSelf)
 bool TJackClient::ExtractString(char* dst, const char* src, char sep)
 {
     int i;
+	
+	// steph
+	printf("ExtractString%s/n", src);
     
     // Look for the first sep character
     for (i = 0; i < strlen(src); i++) if (src[i] == sep) break;
