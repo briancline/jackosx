@@ -232,6 +232,9 @@ History
 
 29-11-04 : Version 0.63 : S Letz
 		Remove QueryDevices. The CoreAudio driver AudioDeviceID is now read in the JAS.pil preference file.
+		
+10-12-04 : Version 0.64 : S Letz
+		Implement XRun and BufferSize change notifications.
 		 
 TODO :
     
@@ -530,6 +533,47 @@ void TJackClient::SetTime(AudioTimeStamp* timeVal, long curTime, UInt64 time)
     timeVal->mFlags = kAudioTimeFlags;
 }
 
+//------------------------------------------------------------------------
+int TJackClient::XRun(void *arg)
+{
+	JARLog("XRun \n");
+	AudioHardwareDevicePropertyChanged(TJackClient::fPlugInRef, 
+										TJackClient::fDeviceID, 
+										0, 
+										0, 
+										kAudioDeviceProcessorOverload);
+	return 0;									
+}
+
+//------------------------------------------------------------------------
+int TJackClient::BufferSize(jack_nframes_t nframes, void *arg)
+{
+	TJackClient* client = (TJackClient*)arg;
+	JARLog("New BufferSize %ld\n",nframes);
+	
+	TJackClient::fBufferSize = nframes;
+	
+	for (long i = 0; i<TJackClient::fInputChannels; i++) {
+		client->fInputList->mBuffers[i].mNumberChannels = 1;
+        client->fInputList->mBuffers[i].mDataByteSize = TJackClient::fBufferSize*sizeof(float);
+    }
+    
+    for (long i = 0; i<TJackClient::fOutputChannels; i++) {
+        client->fOutputList->mBuffers[i].mNumberChannels = 1;
+        client->fOutputList->mBuffers[i].mDataByteSize = TJackClient::fBufferSize*sizeof(float);
+		free(client->fOuputListMixing[i]);
+		client->fOuputListMixing[i] = (float *)malloc(sizeof(float)*TJackClient::fBufferSize);
+    }
+	
+	AudioHardwareDevicePropertyChanged(TJackClient::fPlugInRef, 
+										TJackClient::fDeviceID, 
+										0, 
+										0, 
+										kAudioDevicePropertyBufferFrameSize);
+										
+	return 0;
+}
+
 /* Jack Process callback */
 //------------------------------------------------------------------------
 int TJackClient::Process(jack_nframes_t nframes, void *arg)
@@ -546,7 +590,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
 	SetTime(&inNow,curTime,time);
 	SetTime(&inInputTime,curTime-TJackClient::fBufferSize,time);
 	SetTime(&inOutputTime,curTime+TJackClient::fBufferSize,time);
-      
+	
     // One IOProc
     if (client->GetProcNum() == 1) {
 	
@@ -792,6 +836,9 @@ bool TJackClient::Open()
           
     jack_set_process_callback(fClient, Process, this);
     jack_on_shutdown(fClient, Shutdown, NULL);
+	jack_set_buffer_size_callback (fClient, BufferSize, this);
+	jack_set_xrun_callback (fClient, XRun, this);
+
     return true;
      
 error:
@@ -1120,18 +1167,16 @@ OSStatus TJackClient::DeviceGetPropertyInfo(AudioHardwarePlugInRef inSelf,
 	CheckRunning(inSelf);
 	Print4CharCode("DeviceGetPropertyInfo ", inPropertyID);
 
-	if (inDevice != TJackClient::fDeviceID)
-	{
+	if (inDevice != TJackClient::fDeviceID) {
  		JARLog("DeviceGetPropertyInfo called for invalid device ID\n");
 		return kAudioHardwareBadDeviceError;
 	}
     
-    if (outSize == NULL)
-	{
+    if (outSize == NULL) {
 		JARLog("DeviceGetPropertyInfo received NULL outSize pointer\n");
 	}
     
-    if (outWritable != NULL){
+    if (outWritable != NULL) {
         *outWritable = false;
     }else{
         JARLog("DeviceGetPropertyInfo received NULL outWritable pointer\n");
@@ -1271,13 +1316,11 @@ OSStatus TJackClient::DeviceGetPropertyInfo(AudioHardwarePlugInRef inSelf,
 		
 		case kAudioDevicePropertyDataSource:
 		case kAudioDevicePropertyDataSources: 
-			//if (outSize) *outSize = sizeof(UInt32);
 			err = kAudioHardwareUnknownPropertyError;
 			break;
 				
 		case kAudioDevicePropertyDataSourceNameForID:
 		case kAudioDevicePropertyDataSourceNameForIDCFString:
-			//if (outSize) *outSize = sizeof(AudioValueTranslation);
 			err = kAudioHardwareUnknownPropertyError;
 			break;
 			   
@@ -1341,8 +1384,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
     JARLog("DeviceGetProperty inSelf isInput inDevice %ld %ld %ld\n",(long)inSelf,isInput,inDevice);
 	Print4CharCode("DeviceGetProperty ", inPropertyID);
 
-	if (inDevice != TJackClient::fDeviceID)
-	{
+	if (inDevice != TJackClient::fDeviceID) {
 		JARLog("DeviceGetProperty called for invalid device ID\n");
  		return kAudioHardwareBadDeviceError;
 	}
@@ -1354,7 +1396,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
         // For applications that needs an output channels map, and for audio midi setup (that will not crash)
         case kAudioDevicePropertyPreferredChannelLayout:                
         {
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(AudioChannelLayout);
 			}else if(*ioPropertyDataSize < sizeof(AudioChannelLayout)) {
                 JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
@@ -1380,7 +1422,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                 
 		case kAudioDevicePropertyDeviceName:
 		{
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = TJackClient::fDeviceName.size()+1;
 			}else if (*ioPropertyDataSize < TJackClient::fDeviceName.size()+1){
 				err = kAudioHardwareBadPropertySizeError;
@@ -1395,7 +1437,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                 
 		case kAudioDevicePropertyDeviceNameCFString:
 		{
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(CFStringRef);
 			}else if (*ioPropertyDataSize < sizeof (CFStringRef)){
 				err = kAudioHardwareBadPropertySizeError;
@@ -1412,7 +1454,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                 
 		case kAudioDevicePropertyDeviceManufacturer:
 		{
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = TJackClient::fDeviceManufacturer.size()+1;
 			}else if (*ioPropertyDataSize < TJackClient::fDeviceManufacturer.size()+1){
 				err = kAudioHardwareBadPropertySizeError;
@@ -1428,7 +1470,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                 
 		case kAudioDevicePropertyDeviceManufacturerCFString:
 		{
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(CFStringRef);
 			}else if (*ioPropertyDataSize < sizeof(CFStringRef)){
 				err = kAudioHardwareBadPropertySizeError;
@@ -1445,7 +1487,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                 
 		case kAudioDevicePropertyDeviceUID:
 		{
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(CFStringRef);
 			}else if (*ioPropertyDataSize < sizeof(CFStringRef)){
 				JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
@@ -1462,9 +1504,9 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                 
 		case kAudioDevicePropertyTransportType:
         {
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(UInt32);
-			}else if (*ioPropertyDataSize < sizeof(UInt32)){
+			}else if (*ioPropertyDataSize < sizeof(UInt32)) {
 				JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 				err = kAudioHardwareBadPropertySizeError;
 			}else{
@@ -1476,9 +1518,9 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                   
 		case kAudioDevicePropertyDeviceIsAlive:
         {
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(UInt32);
-			}else if (*ioPropertyDataSize < sizeof(UInt32)){
+			}else if (*ioPropertyDataSize < sizeof(UInt32)) {
 				JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 				err = kAudioHardwareBadPropertySizeError;
 			}else{
@@ -1490,9 +1532,9 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                 
   		case kAudioDevicePropertyBufferFrameSize:
         {
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(UInt32);
-			}else if (*ioPropertyDataSize < sizeof(UInt32)){
+			}else if (*ioPropertyDataSize < sizeof(UInt32)) {
 				JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 				err = kAudioHardwareBadPropertySizeError;
 			}else{
@@ -1504,7 +1546,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                         
         case kAudioDevicePropertyBufferFrameSizeRange:
         {
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(AudioValueRange);
 			}else if (*ioPropertyDataSize < sizeof(AudioValueRange)){
 				JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
@@ -1520,9 +1562,9 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
         
         case kAudioDevicePropertyBufferSize:
         {
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(UInt32);
-			}else if (*ioPropertyDataSize < sizeof(UInt32)){
+			}else if (*ioPropertyDataSize < sizeof(UInt32)) {
 				JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 				err = kAudioHardwareBadPropertySizeError;
 			}else{
@@ -1534,7 +1576,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                 
         case kAudioDevicePropertyBufferSizeRange:
         {
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(AudioValueRange);
 			}else if (*ioPropertyDataSize < sizeof(AudioValueRange)){
 				JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
@@ -1552,7 +1594,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 		{
 			long channels = (isInput) ? TJackClient::fInputChannels : TJackClient::fOutputChannels;
 			
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(UInt32)+sizeof(AudioBuffer)*channels;
 			}else if (*ioPropertyDataSize < (sizeof(UInt32)+sizeof(AudioBuffer)*channels)){
 				JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
@@ -1578,7 +1620,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
         {
 			long channels = (isInput) ? TJackClient::fInputChannels : TJackClient::fOutputChannels;
 			
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(AudioStreamID)*channels;
 			}else if (*ioPropertyDataSize < (sizeof(AudioStreamID)*channels)){
 				JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
@@ -1604,7 +1646,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                           
 		case kAudioDevicePropertyStreamFormatSupported:
 		{
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(AudioStreamBasicDescription);
 			}else if (*ioPropertyDataSize < sizeof(AudioStreamBasicDescription)){
 				JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
@@ -1642,7 +1684,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                 
         case kAudioDevicePropertyStreamFormatMatch:
 		{
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(AudioStreamBasicDescription);
 			}else if (*ioPropertyDataSize < sizeof(AudioStreamBasicDescription)){
 				JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
@@ -1673,9 +1715,9 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
         case kAudioDevicePropertyDeviceCanBeDefaultSystemDevice:
 		case kAudioDevicePropertyDeviceCanBeDefaultDevice:
         {
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(UInt32);
-			}else if (*ioPropertyDataSize < sizeof(UInt32)){
+			}else if (*ioPropertyDataSize < sizeof(UInt32)) {
 			   JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 				err = kAudioHardwareBadPropertySizeError;
 			}else{
@@ -1691,7 +1733,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 		case kAudioStreamPropertyPhysicalFormat:
         case kAudioStreamPropertyPhysicalFormats:
 		{
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(AudioStreamBasicDescription);
 			}else if (*ioPropertyDataSize < sizeof(AudioStreamBasicDescription)){
 				JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
@@ -1713,7 +1755,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
            
         case kAudioDevicePropertyHogMode:
         {
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(pid_t);
 			}else if (*ioPropertyDataSize < sizeof(pid_t)){
 				JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
@@ -1730,7 +1772,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
         
 	    case kAudioDevicePropertyNominalSampleRate:
 	   {
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(Float64);
 			}else if (*ioPropertyDataSize < sizeof(Float64)){
 				JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
@@ -1745,7 +1787,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 		
         case kAudioDevicePropertyActualSampleRate:
         {
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(Float64);
 			}else if (*ioPropertyDataSize < sizeof(Float64)){
 				JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
@@ -1761,7 +1803,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
         
         case kAudioDevicePropertyAvailableNominalSampleRates:
         {
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(AudioValueRange);
 			}else if (*ioPropertyDataSize < sizeof(AudioValueRange)){
 				JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
@@ -1777,9 +1819,9 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
         
         case kAudioDevicePropertyDeviceIsRunning: 
 		{
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(UInt32);
-			}else if (*ioPropertyDataSize < sizeof(UInt32)){
+			}else if (*ioPropertyDataSize < sizeof(UInt32)) {
 				JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 				err = kAudioHardwareBadPropertySizeError;
 			}else{
@@ -1792,9 +1834,9 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
         
         case kAudioDevicePropertyDeviceIsRunningSomewhere:    
 		{
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(UInt32);
-			}else if (*ioPropertyDataSize < sizeof(UInt32)){
+			}else if (*ioPropertyDataSize < sizeof(UInt32)) {
 				JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 				err = kAudioHardwareBadPropertySizeError;
 			}else{
@@ -1807,7 +1849,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                 
         case kAudioDevicePropertyPreferredChannelsForStereo:
         {
-		     if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+		     if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(stereoList);
 			}else if (*ioPropertyDataSize < sizeof(stereoList)){
                 JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
@@ -1828,7 +1870,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                 
         case kAudioDevicePropertyPlugIn:
 		{
-		     if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+		     if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(OSStatus);
 			}else if (*ioPropertyDataSize < sizeof(OSStatus)){
                 JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
@@ -1847,7 +1889,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
         // Special Property to access Jack client from application code
         case kAudioDevicePropertyGetJackClient:
         {
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(jack_client_t*);
 			}else if (*ioPropertyDataSize < sizeof(jack_client_t*)){
                 JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
@@ -1877,9 +1919,9 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
         
         case kAudioDevicePropertySupportsMixing:
 		{
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = sizeof(UInt32);
-			}else if (*ioPropertyDataSize < sizeof(UInt32)){
+			}else if (*ioPropertyDataSize < sizeof(UInt32)) {
 				JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 				err = kAudioHardwareBadPropertySizeError;
             }else{
@@ -1913,7 +1955,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 			else
 				size = sizeof(void*) + sizeof(UInt32) + sizeof(UInt32)*TJackClient::fOutputChannels; 
 						
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 				*ioPropertyDataSize = size;
 			}else if(*ioPropertyDataSize < size) {
 				JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
@@ -2104,7 +2146,7 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
 					if (iter == TJackClient::fJackClient->fAudioIOProcList.end()) {
 						JARLog("DeviceSetProperty  kAudioDevicePropertyIOProcStreamUsage : Proc not found %x \n",(AudioDeviceIOProc)inData->mIOProc);
 						err = kAudioHardwareUnknownPropertyError;
-					}else {
+					}else{
 						JARLog("DeviceSetProperty kAudioDevicePropertyIOProcStreamUsage : Proc found %x \n",(AudioDeviceIOProc)inData->mIOProc);
 				
 						iter->second.fStreamUsage = true; // We need to take care of stream usage in Process
@@ -2199,12 +2241,11 @@ OSStatus TJackClient::StreamGetPropertyInfo(AudioHardwarePlugInRef inSelf,
         CheckRunning(inSelf);
         Print4CharCode("StreamGetPropertyInfo ", inPropertyID);
 	
-        if(outSize == NULL)
-        {
+        if(outSize == NULL) {
 			JARLog("StreamGetPropertyInfo received NULL outSize pointer\n");
         }
         
-        if (outWritable != NULL){
+        if (outWritable != NULL) {
             *outWritable = false;
         }else{
             JARLog("StreamGetPropertyInfo received NULL outWritable pointer\n");
@@ -2330,14 +2371,14 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
         {
 			case kAudioStreamPropertyDirection:
 			{
-				if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+				if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 					*ioPropertyDataSize = sizeof(UInt32);
-				}else if (*ioPropertyDataSize < sizeof(UInt32)){
+				}else if (*ioPropertyDataSize < sizeof(UInt32)) {
 					JARLog("StreamGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 					err = kAudioHardwareBadPropertySizeError;
 				}else{
 					for (int i = 0; i<TJackClient::fInputChannels; i++) {
-						if (inStream == fStreamIDList[i]){
+						if (inStream == fStreamIDList[i]) {
 							*(UInt32*) outPropertyData = 1;
 							JARLog("StreamGetProperty FOUND INPUT %ld\n", inStream);
 							break;
@@ -2345,7 +2386,7 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
 					} 
 					
 					for (int i = TJackClient::fInputChannels; i < (TJackClient::fOutputChannels + TJackClient::fInputChannels); i++) {
-						if (inStream == fStreamIDList[i]){
+						if (inStream == fStreamIDList[i]) {
 							*(UInt32*) outPropertyData = 0;
 							JARLog("StreamGetProperty FOUND OUTPUT %ld\n", inStream);
 							break;
@@ -2358,9 +2399,9 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
                 
 			case kAudioStreamPropertyStartingChannel:
 			{
-				if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+				if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 					*ioPropertyDataSize = sizeof(UInt32);
-				}else if (*ioPropertyDataSize < sizeof(UInt32)){
+				}else if (*ioPropertyDataSize < sizeof(UInt32)) {
 					JARLog("StreamGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 					err = kAudioHardwareBadPropertySizeError;
 				}else{
@@ -2372,9 +2413,9 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
                 
           	case kAudioStreamPropertyTerminalType:
 			{
-				if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+				if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 					*ioPropertyDataSize = sizeof(UInt32);
-				}else if (*ioPropertyDataSize < sizeof(UInt32)){
+				}else if (*ioPropertyDataSize < sizeof(UInt32)) {
 					JARLog("StreamGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 					err = kAudioHardwareBadPropertySizeError;
 				}else{
@@ -2402,15 +2443,15 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
          	case kAudioStreamPropertyPhysicalFormat:
          	{
                 
-				if (inPropertyID == kAudioDevicePropertyStreamFormat){
+				if (inPropertyID == kAudioDevicePropertyStreamFormat) {
 					JARLog("StreamGetProperty : GET kAudioDevicePropertyStreamFormat %ld\n",*ioPropertyDataSize);
 				}else{
 					JARLog("StreamGetProperty : GET kAudioStreamPropertyPhysicalFormat %ld\n",*ioPropertyDataSize); 
 				}
 			
-				if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+				if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 					*ioPropertyDataSize = sizeof(AudioStreamBasicDescription);
-				}else if (*ioPropertyDataSize < sizeof(AudioStreamBasicDescription)){
+				}else if (*ioPropertyDataSize < sizeof(AudioStreamBasicDescription)) {
 					JARLog("StreamGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 					err = kAudioHardwareBadPropertySizeError;
 				}else{
@@ -2431,9 +2472,9 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
             case kAudioDevicePropertyStreamFormats:
             case kAudioStreamPropertyPhysicalFormats:
             {
-				if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+				if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 					*ioPropertyDataSize = sizeof(AudioStreamBasicDescription);
-				}else if (*ioPropertyDataSize < sizeof(AudioStreamBasicDescription)){
+				}else if (*ioPropertyDataSize < sizeof(AudioStreamBasicDescription)) {
 					JARLog("StreamGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 					err = kAudioHardwareBadPropertySizeError;
 				}else{
@@ -2453,7 +2494,7 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
         
             case kAudioStreamPropertyOwningDevice:
             {
-				if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+				if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 					*ioPropertyDataSize = sizeof(AudioDeviceID);
 				}else if (*ioPropertyDataSize < sizeof(AudioDeviceID)){
 					JARLog("StreamGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
@@ -2479,9 +2520,9 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
                 
             case kAudioDevicePropertyDeviceName:
             {
-				if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+				if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
 					*ioPropertyDataSize = TJackClient::fStreamName.size()+1;
-				}else if (*ioPropertyDataSize < TJackClient::fStreamName.size()+1){
+				}else if (*ioPropertyDataSize < TJackClient::fStreamName.size()+1) {
 					err = kAudioHardwareBadPropertySizeError;
 					JARLog("StreamGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 				}else{
@@ -2773,7 +2814,7 @@ jack_client_t*  TJackClient::CheckServer(AudioHardwarePlugInRef inSelf)
         TJackClient::fDeviceRunning = true;
         
 		JARLog("CheckServer TJackClient::fBufferSizer %ld\n",TJackClient::fBufferSize);
-        JARLog("CheckServer TJackClient::fSampleRate  %f\n",TJackClient::fSampleRate );
+        JARLog("CheckServer TJackClient::fSampleRate  %f\n",TJackClient::fSampleRate);
          
         OSStatus err = AudioHardwareDevicePropertyChanged(TJackClient::fPlugInRef, 
                                                         TJackClient::fDeviceID, 
@@ -2867,14 +2908,12 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
             if ((ports = jack_get_ports(client, NULL, NULL, JackPortIsPhysical|JackPortIsOutput)) != NULL) {
                 while (ports[i]) i++;
             }
-            
             TJackClient::fInputChannels = max(2,i); // At least 2 channels
             
             i = 0;
             if ((ports = jack_get_ports(client, NULL, NULL, JackPortIsPhysical|JackPortIsInput)) != NULL) {
 				while (ports[i]) i++;
             }
-            
             TJackClient::fOutputChannels = max(2,i); // At least 2 channels
         }
 		

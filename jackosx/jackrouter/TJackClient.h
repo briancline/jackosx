@@ -126,7 +126,9 @@ class TJackClient {
         virtual ~TJackClient();
            
         static int Process(jack_nframes_t nframes, void *arg);
-		
+		static int BufferSize(jack_nframes_t nframes, void *arg);
+		static int XRun(void *arg);
+	
         static TJackClient* GetJackClient(); 
 		static void ClearJackClient();
 		static void KillJackClient();
