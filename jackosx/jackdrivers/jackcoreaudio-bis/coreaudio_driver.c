@@ -33,6 +33,7 @@
 	April 7, 2004: Johnny Petrantoni: option -I in order to use AudioDeviceID.
 	April 8,2008: S.Letz: fix a bug in GetDeviceNameFromID and a problem with "dirty buffers" when no ouput connections are made.
 	May 7, 2004: Johnny Petrantoni: Improved c++ code,cpu load counter fixed(jack_init_time() now links) and fixed GetDeviceNameFromID.
+	May 10, 2004: Johnny Petrantoni: Improved "change buffer size" behavior , TO BE TESTED!!!...
 										 
 	TODO:
 	- multiple-device processing.
@@ -50,6 +51,7 @@
 const int CAVersion = 1;
 
 void JCALog(char *fmt,...);
+int coreaudio_runCycle(void *driver,long bufferSize,float **inBuffers,float **outBuffers);
 
 OSStatus GetDeviceNameFromID(AudioDeviceID id, char name[60]) 
 {
@@ -57,12 +59,36 @@ OSStatus GetDeviceNameFromID(AudioDeviceID id, char name[60])
 	return AudioDeviceGetProperty(id,0,false,kAudioDevicePropertyDeviceName,&size,&name[0]);
 }
 
+static int coreaudio_driver_changeBufferSize(coreaudio_driver_t* driver)
+{	 
+	// First we check if it is possible, and then we close the old audio instance and switch to the new stream instance.
+	void *newStream = openAudioInstance((float)driver->device_frame_rate,driver->new_bsize,driver->capturing,driver->playing,&driver->driver_name[0]);
+	 
+	if(!newStream) return FALSE;
+	
+	closeAudioInstance(driver->stream);
+	
+	driver->stream = newStream;
+	driver->frames_per_cycle = driver->new_bsize;
+	setHostData(driver->stream,driver);
+	setCycleFun(driver->stream,coreaudio_runCycle);
+
+	return startAudioProcess(driver->stream);
+}
+
 int coreaudio_runCycle(void *driver,long bufferSize,float **inBuffers,float **outBuffers) {
 	coreaudio_driver_t * ca_driver = (coreaudio_driver_t*)driver;
 	ca_driver->incoreaudio = inBuffers;
 	ca_driver->outcoreaudio = outBuffers;
 	ca_driver->last_wait_ust = jack_get_microseconds();
-	return ca_driver->engine->run_cycle(ca_driver->engine, bufferSize, 0);
+	int res = ca_driver->engine->run_cycle(ca_driver->engine, bufferSize, 0);
+	
+	if(ca_driver->needsChangeBufferSize) {
+		coreaudio_driver_changeBufferSize(ca_driver);
+		ca_driver->needsChangeBufferSize = FALSE;
+	}
+	
+	return res;
 }
 
 static int
@@ -235,17 +261,10 @@ coreaudio_driver_bufsize (coreaudio_driver_t* driver, jack_nframes_t nframes)
 	/* This gets called from the engine server thread, so it must
 	 * be serialized with the driver thread.  Stopping the audio
 	 * also stops that thread. */
-	 	 
-	closeAudioInstance(driver->stream);
-	 
-	driver->stream = openAudioInstance((float)driver->device_frame_rate,driver->frames_per_cycle,driver->capturing,driver->playing,&driver->driver_name[0]);
-	 
-	if(!driver->stream) return FALSE;
+	driver->needsChangeBufferSize = TRUE;
+	driver->new_bsize = nframes;
 	
-	setHostData(driver->stream,driver);
-	setCycleFun(driver->stream,coreaudio_runCycle);
-
-	return startAudioProcess(driver->stream);
+	return 0; // is that correct???, if think not...
 }
 
 
@@ -280,6 +299,8 @@ coreaudio_driver_new (char *name,
 	driver->device_frame_rate = rate;
 	driver->capturing = capturing;
 	driver->playing = playing;
+	driver->needsChangeBufferSize = FALSE;
+	driver->new_bsize = frames_per_cycle;
 
 	driver->attach = (JackDriverAttachFunction) coreaudio_driver_attach;
 	driver->detach = (JackDriverDetachFunction) coreaudio_driver_detach;

@@ -68,6 +68,8 @@ typedef struct {
 		float **outcoreaudio;
         char driver_name[256];
         void *   stream;
+		int needsChangeBufferSize;
+		jack_nframes_t new_bsize;
 
 } coreaudio_driver_t;
 
