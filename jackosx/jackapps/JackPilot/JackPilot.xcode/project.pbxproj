@@ -13,9 +13,9 @@
 				B29F407604BDEFB100D20559,
 				B2C0175B0508E1BD0042DB15,
 				B2C0175A0508E1BD0042DB15,
+				B2EA0BA6050F44A200FED62D,
 				B292F8F80510D90700D45475,
 				B292F8F90510D90700D45475,
-				B2EA0BA6050F44A200FED62D,
 				B2EA0BA7050F44A200FED62D,
 				B2AA7CE0050F555C00FADF47,
 				B2AA7CE1050F555C00FADF47,
@@ -760,7 +760,7 @@
 	<key>CFBundleExecutable</key>
 	<string>JackPilot</string>
 	<key>CFBundleGetInfoString</key>
-	<string>JackPilot 1.5.2, @2003-2004 Johnny Petrantoni.</string>
+	<string>JackPilot 1.5.4, @2003-2004 Johnny Petrantoni.</string>
 	<key>CFBundleIconFile</key>
 	<string>jackpilot.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -776,7 +776,7 @@
 	<key>CFBundleSignature</key>
 	<string>ElCa</string>
 	<key>CFBundleVersion</key>
-	<string>1.5.2</string>
+	<string>1.5.4</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>

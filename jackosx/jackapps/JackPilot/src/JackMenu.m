@@ -6,6 +6,8 @@
 #import "JPPlugin.h"
 #import "JackCon1.3.h"
 
+//#define NOTIFICATION
+
 #include <CoreFoundation/CFNotificationCenter.h>
 
 OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean isInput) 
@@ -882,27 +884,29 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
 	free(in_channels); 
 	free(interface); 
 	
+#ifdef NOTIFICATION	
 	// Send notification to be used in the Jack Router
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(),
 										CFSTR("com.grame.jackserver.start"),
 										CFSTR("com.grame.jackserver"),
 										NULL,
 										true);
-  
+#endif  
 }
 
 - (IBAction) closeJackDeamon:(id) sender {
 	[managerWin orderOut:sender];
 	
-	// steph 
 	[[JackConnections getSelf] stopTimer];
 	
+#ifdef NOTIFICATION
 	// Send notification to be used in the Jack Router
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(),
 										CFSTR("com.grame.jackserver.stop"),
 										CFSTR("com.grame.jackserver"),
 										NULL,
 										true);
+#endif
 	
 	if (checkJack() != 0) {    
 		[self sendJackStatusToPlugins:NO];
@@ -969,9 +973,7 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
 		
 		OSStatus err = noErr;
 		UInt32 size;
-	
 		AudioDeviceID vDevice = 0;
-	
 		Boolean isWritable;
 	
 		err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices,&size,&isWritable);
@@ -1163,7 +1165,7 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
     //[bufferText selectItemWithTitle:[[NSNumber numberWithLong:newBufFrame] stringValue]];
 	[bufferText selectItemWithTitle:@"512"]; // forcing to a lower value...
     
-    JPLog("got actual buffersize ok\n");
+    JPLog("got actual buffersize ok %ld\n",newBufFrame);
     
     UInt32 theSize = sizeof(UInt32);
 	UInt32 newBufSize = 32;
@@ -1197,9 +1199,12 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
 	size = sizeof(UInt32);
     err = AudioDeviceGetProperty(vDevice,0,false,kAudioDevicePropertyBufferFrameSize,&size,&newBufFrame);
     if(err!=noErr) return NO;
+	
+	JPLog("got actual buffersize ok %ld\n",newBufFrame);
     
 	if(oldSize!=newBufFrame) {
-		err = AudioDeviceSetProperty(vDevice,NULL,0,false,kAudioDevicePropertyBufferFrameSize,theSize,&newBufFrame);
+		JPLog("AudioDeviceSetProperty kAudioDevicePropertyBufferFrameSize %ld\n",oldSize);
+		err = AudioDeviceSetProperty(vDevice,NULL,0,false,kAudioDevicePropertyBufferFrameSize,theSize,&oldSize);
 		if(err) { NSLog(@"err in kAudioDevicePropertyBufferFrameSize"); return NO; }
 	}
     
