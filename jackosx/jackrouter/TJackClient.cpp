@@ -191,7 +191,7 @@ History
 24-01-04 : Version 0.51 : S Letz  Johnny Petrantoni
         Implement kAudioDevicePropertyIOProcStreamUsage. Implement kAudioDevicePropertyUsesVariableBufferFrameSizes in in DeviceGetProperty.
         This solve the iMovie 3.03 crash. Improve debug code using Johnny's code.  Reject "jackd" as a possible client.
-		Fixed ReadPref bug introduced when improving Debug code.
+		Fixed ReadPref bug introduced when improving Debug code. Add kAudioHardwarePropertyBootChimeVolumeScalar in DeviceGetPropertyInfo.
         
 TODO :
     
@@ -1266,6 +1266,7 @@ OSStatus TJackClient::DeviceGetPropertyInfo(AudioHardwarePlugInRef inSelf,
 			case kAudioDevicePropertyClockSources:
 			case kAudioDevicePropertyClockSourceNameForID:
 			case kAudioDevicePropertyClockSourceNameForIDCFString:
+			case kAudioHardwarePropertyBootChimeVolumeScalar:
 			case kAudioDevicePropertyDriverShouldOwniSub:
 			case kAudioDevicePropertyVolumeScalar:
 			case kAudioDevicePropertyVolumeDecibels:
@@ -2059,7 +2060,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
         case kAudioDevicePropertyClockSourceNameForID:
         case kAudioDevicePropertyClockSourceNameForIDCFString:
         case kAudioHardwarePropertyBootChimeVolumeScalar:
-        case kAudioDevicePropertyDriverShouldOwniSub:
+		case kAudioDevicePropertyDriverShouldOwniSub:
         case kAudioDevicePropertyVolumeScalar:
         case kAudioDevicePropertyVolumeDecibels:
         case kAudioDevicePropertyVolumeRangeDecibels:
@@ -3108,10 +3109,10 @@ bool TJackClient::QueryDevices(jack_client_t * client)
 		JARLog("cannot find any physical capture ports\n");
 	}else{
          
-    // string of the form "portaudio:Built-in audio :out1"
-    if (!ExtractString(port_name,ports[0],':')) {
-        JARLog("error : can not extract Jack CoreAudio driver name\n");
-    }
+		// string of the form "portaudio:Built-in audio :out1"
+		if (!ExtractString(port_name,ports[0],':')) {
+			JARLog("error : can not extract Jack CoreAudio driver name\n");
+		}
       
 		JARLog("name %s : len %ld\n", port_name, strlen(port_name));
         free (ports);
@@ -3121,10 +3122,10 @@ bool TJackClient::QueryDevices(jack_client_t * client)
         JARLog("cannot find any physical playback ports\n");
     }else{
           
-    // string of the form "portaudio:Built-in audio :in1" 
-    if (!ExtractString(port_name,ports[0],':')) {
-        JARLog("error : can not extract Jack CoreAudio driver name\n");
-    }      
+		// string of the form "portaudio:Built-in audio :in1" 
+		if (!ExtractString(port_name,ports[0],':')) {
+			JARLog("error : can not extract Jack CoreAudio driver name\n");
+		}      
     
         JARLog("NAME %s : len %ld\n", port_name, strlen(port_name));
         free (ports);
@@ -3138,7 +3139,7 @@ bool TJackClient::QueryDevices(jack_client_t * client)
 	err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices, &outSize, &outWritable);
 	JARLog("AudioHardwareGetPropertyInfo : outSize %ld\n", outSize);
    
-	if (err != noErr){
+	if (err != noErr) {
 		JARLog("couldn't get info about list of audio devices %ld \n", err);
 		printError(err);
 		return false;
@@ -3148,8 +3149,7 @@ bool TJackClient::QueryDevices(jack_client_t * client)
     numCoreDevices = outSize/sizeof(AudioDeviceID);
 
     // Bail if there aren't any devices
-    if (numCoreDevices < 1)
-    {
+    if (numCoreDevices < 1) {
         JARLog("no Devices Available\n");
         return false;
     }
@@ -3159,8 +3159,7 @@ bool TJackClient::QueryDevices(jack_client_t * client)
 
     // Get an array of AudioDeviceIDs
     err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices, &outSize, (void *)coreDeviceIDs);
-    if (err != noErr)
-    {
+    if (err != noErr) {
         JARLog("couldn't get list of audio device IDs %ld\n", err);
         return false;
     }
@@ -3173,21 +3172,19 @@ bool TJackClient::QueryDevices(jack_client_t * client)
     
         err =  AudioDeviceGetPropertyInfo(coreDeviceIDs[i], 0, true, kAudioDevicePropertyDeviceName, &outSize, &outWritable);
         
-        if (err != noErr)
-        {
+        if (err != noErr) {
 			JARLog("couldn't get info about names of audio devices %ld \n", err);
 			return false;
         }
        
         err = AudioDeviceGetProperty(coreDeviceIDs[i], 0, true, kAudioDevicePropertyDeviceName, &outSize, (void *)name);
      
-        if (err != noErr)
-        {
+        if (err != noErr) {
             JARLog("couldn't get name of device IDs %ld\n", err);
 			return false;
         }else {
 			JARLog("device name %ld %s \n", coreDeviceIDs[i], name);
-         }
+		}
          
         if (strncmp(name,port_name,len) == 0) {
             JARLog("found Jack CoreAudio driver : %s \n",name);
