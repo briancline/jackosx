@@ -30,7 +30,6 @@
 									 the device must be specified. and all parameter must be correct.
 	Feb 04, 2004: Johnny Petrantoni: now the driver supports interfaces with multiple interleaved streams (such as the MOTU 828).
 	Feb 13, 2004: Johnny Petrantoni: new driver design based on AUHAL.
-	Feb 15, 2003: Johnny Petrantoni: set JAR preferences to not-default when jack is launching.
 									 
 	TODO:
 	- fix cpu load behavior.

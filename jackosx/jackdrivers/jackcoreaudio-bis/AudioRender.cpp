@@ -51,39 +51,6 @@ void PrintStreamDesc (AudioStreamBasicDescription *inDesc)
     JCALog ("- - - - - - - - - - - - - - - - - - - -\n");
 }
 
-int s_inCh,s_outCh,s_autoConn,s_defInput,s_defOutput,s_defSystem;
-
-int jackALLoad(void) {
-    FILE *prefFile;
-	char *homePath = getenv("HOME");
-    char path[256];
-    sprintf(&path[0],"%s/Library/Preferences/JAS.jpil",homePath);
-    if ((prefFile = fopen(&path[0], "rt")) == NULL) {
-        return FALSE;
-    } else {
-		int nullo;
-		fscanf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",&s_inCh,&nullo,&s_outCh,&nullo,&s_autoConn,&nullo,&s_defInput,&nullo,&s_defOutput,&nullo,&s_defSystem); 
-		fclose(prefFile);
-    }
-    return TRUE;
-}
-
-
-
-int jackALStore(int inCH,int outCH,int AUTOC,int DEFinput,int DEFoutput,int DEFsystem) {
-    FILE *prefFile;
-	char *homePath = getenv("HOME");
-    char path[256];
-    sprintf(&path[0],"%s/Library/Preferences/JAS.jpil",homePath);
-    if ((prefFile = fopen(&path[0], "wt")) == NULL) {
-        return FALSE;
-    } else {
-		fprintf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",inCH, -1, outCH,-1,AUTOC,-1,DEFinput,-1,DEFoutput,-1,DEFsystem); 
-		fclose(prefFile);
-    }
-    return TRUE;
-}
-
 OSStatus	AudioRender::MyRender(void 				*inRefCon, 
 				AudioUnitRenderActionFlags 	*ioActionFlags, 
 				const AudioTimeStamp 		*inTimeStamp, 
@@ -130,10 +97,6 @@ AudioRender::AudioRender(float sampleRate,float virtual_sampleRate,long bufferSi
     inBuffers=NULL;
     outBuffers=NULL;
 	vir_SampleRate = virtual_sampleRate;
-	
-	jackALLoad();
-	jackALStore(s_inCh,s_outCh,s_autoConn,0,0,0);
-
 	
     status = ConfigureAudioProc(sampleRate,bufferSize,outChannels,inChannels,device);
 	
@@ -389,7 +352,6 @@ OSStatus err,error;
 bool AudioRender::StartAudio() {
 	if(status) {
 		OSStatus err = AudioOutputUnitStart (device_au);
-		jackALStore(s_inCh,s_outCh,s_autoConn,s_defInput,s_defOutput,s_defSystem);
 		if(err!=noErr) return false;
 		AudioRender::isProcessing = true;
 		return true;
