@@ -216,6 +216,9 @@ History
 03-10-04 : Version 0.58 : S Letz
 		Correct bug in bequite_getNameFromPid. This solve the Band-in-a Box bug. 
 		New KillJackClient method to be called in TearDown when clients do not correctly quit (like iMovie).
+		
+15-10-04 : Version 0.59 : S Letz
+		Redirect kAudioDevicePropertySafetyOffset prroperty on the real driver.
 		 
 TODO :
     
@@ -1841,22 +1844,8 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
             }
             break;
         }
-            
-        case kAudioDevicePropertySafetyOffset:
-        {
-		     if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
-				*ioPropertyDataSize = sizeof(UInt32);
-			}else if (*ioPropertyDataSize < sizeof(UInt32)){
-                JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
-                err = kAudioHardwareBadPropertySizeError;
-            }else{
-                *(UInt32*) outPropertyData = 128; // TO BE IMPLEMENTED
-                *ioPropertyDataSize = sizeof(UInt32);
-            }
-            break;
-		}
-                
-        case kAudioDevicePropertyDataSource:
+		
+		case kAudioDevicePropertyDataSource:
         case kAudioDevicePropertyDataSources:
             /*
             if (*ioPropertyDataSize < sizeof (UInt32)){
@@ -2042,13 +2031,14 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
         case kAudioDevicePropertyVolumeDecibelsToScalar:
         case kAudioDevicePropertyMute:
         case kAudioDevicePropertyPlayThru:
+		case kAudioDevicePropertySafetyOffset:
         case kAudioDevicePropertySubVolumeScalar:
         case kAudioDevicePropertySubVolumeDecibels:
         case kAudioDevicePropertySubVolumeRangeDecibels:
         case kAudioDevicePropertySubVolumeScalarToDecibels:
         case kAudioDevicePropertySubVolumeDecibelsToScalar:
         case kAudioDevicePropertySubMute:
-        {
+	   {
             JARLog("Redirect call on used CoreAudio driver ID %ld \n",TJackClient::fCoreAudioDriver); 
             Print4CharCode("property ",inPropertyID);
 			err = AudioDeviceGetProperty(TJackClient::fCoreAudioDriver, 
@@ -2920,7 +2910,7 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
     JARLog("Initialize [inSelf, name] : %ld %s \n", (long)inSelf, id_name);
 	
 	// Reject "jackd" or "jackdmp" as a possible client (to be impoved if other clients need to be rejected)
-	if (strcmp (id_name,"jackd") == 0 || strcmp (id_name,"jackdmp") == 0 ){
+	if (strcmp (id_name,"jackd") == 0 || strcmp (id_name,"jackdmp") == 0){
 		JARLog("Rejected client : %s\n",id_name);
 		return noErr;
 	}
