@@ -37,10 +37,24 @@ int openJack(const char *stringa) {
 }
 
 int closeJack(void) {
+	if(client!=NULL) jack_client_close(client);
+	
+	#if 1
     int pid;
-    pid = checkJack();
-    if(pid!=0) { if(client!=NULL) jack_client_close(client); kill(pid,3); return 1; }
-    return 0;
+	unsigned short count = 0;
+	do {
+		if(count==10) return 0;
+		pid = checkJack();
+		if(pid!=0) { kill(pid,SIGUSR2); } //SIGUSR2 is the one that should work (look at jackd.c or engine.c) but doesn't work...
+		count++;
+	} while(pid!=0);
+    #else
+	my_system2("killall jackd"); //this works but to re-start jackd you must close and re open JP (look console logs)
+	my_system2("killall jackd");
+	my_system2("killall jackd");
+	#endif
+	
+	return 1;
 }
 
 int 

@@ -94,7 +94,7 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
 	NSString *file;
 	NSString *stringa = [NSString init];
 	[driverBox removeAllItems];
-	NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtPath:@"/usr/local/lib/"];
+	NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtPath:@"/usr/local/lib/jack/"];
 	while (file = [enumerator nextObject]) {
 		if ([file hasPrefix:@"jack_"]) {
 				stringa = (NSString*)[file substringFromIndex:5];
@@ -855,9 +855,9 @@ end:
     strcat(stringa,samplerate);
     strcat(stringa," -p ");
     strcat(stringa,buffersize);
-    strcat(stringa," -co ");
+    strcat(stringa," -o ");
     strcat(stringa,channels);
-	strcat(stringa," -ci ");
+	strcat(stringa," -i ");
     strcat(stringa,in_channels);
 	if(!useCoreAudio) {
 		strcat(stringa," -n ");
