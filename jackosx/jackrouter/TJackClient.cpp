@@ -214,7 +214,8 @@ History
 		Improve the external (Jack plugins) management : now internal and external "clients" are distinguished. Correct Save/Restore connections bug.
 		
 03-10-04 : Version 0.58 : S Letz
-		Correct bug in bequite_getNameFromPid. This solve the Band-in-a Box bug.
+		Correct bug in bequite_getNameFromPid. This solve the Band-in-a Box bug. 
+		New KillJackClient method to be called in TearDown when clients do not correctly quit (like iMovie).
 		 
 TODO :
     
@@ -415,6 +416,17 @@ void TJackClient::ClearJackClient()
 
     if (TJackClient::fJackClient) {
         TJackClient::fJackClient->ClearIOProc();
+        delete TJackClient::fJackClient;
+        TJackClient::fJackClient = NULL;
+    }
+}
+
+//------------------------------------------------------------------------
+void TJackClient::KillJackClient()
+{
+   if (TJackClient::fJackClient) {
+		TJackClient::fJackClient->Desactivate();
+	    TJackClient::fJackClient->Close();
         delete TJackClient::fJackClient;
         TJackClient::fJackClient = NULL;
     }
@@ -2907,8 +2919,8 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
 
     JARLog("Initialize [inSelf, name] : %ld %s \n", (long)inSelf, id_name);
 	
-	// Reject "jackd" as a possible client (to be impoved if other clients need to be rejected)
-	if (strcmp (id_name,"jackd") == 0){
+	// Reject "jackd" or "jackdmp" as a possible client (to be impoved if other clients need to be rejected)
+	if (strcmp (id_name,"jackd") == 0 || strcmp (id_name,"jackdmp") == 0 ){
 		JARLog("Rejected client : %s\n",id_name);
 		return noErr;
 	}
@@ -3002,6 +3014,8 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
 OSStatus TJackClient::Teardown(AudioHardwarePlugInRef inSelf)
 {
     char* id_name = bequite_getNameFromPid((int)getpid());
+	
+	KillJackClient(); // In case the client did not correctly quit itself (like iMovie...)
 	
 	JARLog("Teardown [inSelf, name] : %ld %s \n", (long)inSelf, id_name);
 	OSStatus err; 

@@ -128,6 +128,7 @@ class TJackClient {
 		
         static TJackClient* GetJackClient(); 
 		static void ClearJackClient();
+		static void KillJackClient();
 	    
         bool Open();  
         void Close();
