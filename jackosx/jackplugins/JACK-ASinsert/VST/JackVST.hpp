@@ -27,6 +27,8 @@
 #include <list>
 using namespace std;
 
+#define MAX_PORTS 2
+
 
 //-------------------------------------------------------------------------------------------------------
 
@@ -79,11 +81,11 @@ private:
         bool needsDeactivate;
         int manyInBuffers;
 		
-        float *vRBufferIn[2];
-        float *vRBufferOut[2];
+        float *vRBufferIn[MAX_PORTS];
+        float *vRBufferOut[MAX_PORTS];
 
-        RingBuffer sRingBufferIn[2];
-        RingBuffer sRingBufferOut[2];
+        RingBuffer sRingBufferIn[MAX_PORTS];
+        RingBuffer sRingBufferOut[MAX_PORTS];
 		
         long jBufferSize;
 		int ID;
@@ -100,7 +102,6 @@ private:
 		char programName[32];
         void flush();
         int status;
-		static int sRetainPorts;
 		
 };
 

@@ -23,8 +23,10 @@
 int JackVST::instances = 0;
 jack_client_t *JackVST::client = NULL;
 list<JackVST*> JackVST::classInstances;
-int JackVST::sRetainPorts = 0;
 
+static pthread_mutex_t	mutex = PTHREAD_MUTEX_INITIALIZER;
+static pthread_cond_t	cond1 = PTHREAD_COND_INITIALIZER;
+static bool isFlushing = FALSE;
 //-------------------------------------------------------------------------------------------------------
 JackVST::JackVST (audioMasterCallback audioMaster)
 	: AudioEffectX (audioMaster, 1, 1)	// 1 program, 1 parameter only
@@ -36,7 +38,7 @@ JackVST::JackVST (audioMasterCallback audioMaster)
 	canMono ();				// makes sense to feed both inputs with the same signal
 	canProcessReplacing ();	// supports both accumulating and replacing output
 	strcpy (programName, "Default");	// default program name
-	status = 2;
+	status = kIsOff;
         
 
     
@@ -53,7 +55,7 @@ JackVST::JackVST (audioMasterCallback audioMaster)
 			jack_set_process_callback(JackVST::client,jackProcess,NULL);
 		}
 		
-        int nPorte=2;
+        int nPorte=MAX_PORTS;
     
         inPorts = (jack_port_t**)malloc(sizeof(jack_port_t*)*nPorte);
         outPorts = (jack_port_t**)malloc(sizeof(jack_port_t*)*nPorte);
@@ -69,7 +71,6 @@ JackVST::JackVST (audioMasterCallback audioMaster)
             inPorts[i] = jack_port_register(JackVST::client,newName,JACK_DEFAULT_AUDIO_TYPE,JackPortIsInput,0);
             printf("Port: %s created\n",newName);
             free(newName);
-			JackVST::sRetainPorts++;
         }
     
         for(int i=0;i<nOutPorts;i++) {
@@ -78,7 +79,6 @@ JackVST::JackVST (audioMasterCallback audioMaster)
             outPorts[i] = jack_port_register(JackVST::client,newName,JACK_DEFAULT_AUDIO_TYPE,JackPortIsOutput,0);
             printf("Port: %s created\n",newName);
             free(newName);
-			JackVST::sRetainPorts++;
         }
 		
 		for(int i=0;i<2;i++) {
@@ -94,7 +94,7 @@ JackVST::JackVST (audioMasterCallback audioMaster)
         jack_activate(JackVST::client); 
         
         status = kIsOn;
-        instances += 2;
+        instances += MAX_PORTS;
 		
 		ID = rand();
 		
@@ -184,17 +184,19 @@ int JackVST::jackProcess(jack_nframes_t nframes, void *arg) {
 	
 	list<JackVST*>::iterator it;
 	
+	if(isFlushing) { pthread_cond_signal(&cond1); return 0; }
+	
 	for(it = JackVST::classInstances.begin(); it != JackVST::classInstances.end(); ++it) {
 		if(*it) {
 			JackVST *c = *it;
 			if(!c) break;
 			if(c->status == kIsOff) break;
-			float *inBuffers[2];
+			float *inBuffers[MAX_PORTS];
 			for(int i=0;i<c->nInPorts;i++) {
 				inBuffers[i] = (float*) jack_port_get_buffer(c->inPorts[i],nframes);
 				RingBuffer_Write(&c->sRingBufferIn[i],inBuffers[i],nframes*sizeof(float));
 			}
-			float *outBuffers[2];
+			float *outBuffers[MAX_PORTS];
 			for(int i=0;i<c->nOutPorts;i++) {
 				outBuffers[i] = (float*) jack_port_get_buffer(c->outPorts[i],nframes);
 				RingBuffer_Read(&c->sRingBufferOut[i],outBuffers[i],nframes*sizeof(float));
@@ -240,50 +242,47 @@ void JackVST::processReplacing (float **inputs, float **outputs, long sampleFram
 void JackVST::flush() {
 	
 	status = kIsOff;
+	isFlushing = TRUE;
 	
 	list<JackVST*>::iterator it;
 	
 	printf("actually there are %ld instances.\n",JackVST::classInstances.size());
 	
-	for(it = JackVST::classInstances.begin(); it != JackVST::classInstances.end(); ++it) {
-		if(*it) {
-			JackVST *c = *it;
-			if(c->ID == ID) { printf("removing instance\n"); JackVST::classInstances.erase(it); break; }
-		}
-	}
+	pthread_cond_wait(&cond1, &mutex);
+	JackVST::classInstances.remove(this);
 	
 	printf("now there are %ld instances.\n",JackVST::classInstances.size());
-        
+    
+	RingBuffer_Flush(&sRingBufferIn[0]);
+	RingBuffer_Flush(&sRingBufferIn[1]);
+	RingBuffer_Flush(&sRingBufferOut[0]);
+	RingBuffer_Flush(&sRingBufferOut[1]);    
+	
 	free(vRBufferIn[0]);
 	free(vRBufferIn[1]);
 	free(vRBufferOut[0]);
 	free(vRBufferOut[1]);
-	RingBuffer_Flush(&sRingBufferIn[0]);
-	RingBuffer_Flush(&sRingBufferIn[1]);
-	RingBuffer_Flush(&sRingBufferOut[0]);
-	RingBuffer_Flush(&sRingBufferOut[1]);
 	            
 	for(int i=0;i<nInPorts;i++) {
 		jack_port_unregister(JackVST::client,inPorts[i]);
 		printf("unregistering in port %d.\n",i);
-		JackVST::sRetainPorts--;
 	}
 	free(inPorts);
 	for(int i=0;i<nOutPorts;i++) {
 		jack_port_unregister(JackVST::client,outPorts[i]);
 		printf("unregistering out port %d.\n",i);
-		JackVST::sRetainPorts--;
 	}
 	free(outPorts);
-	
-	printf("ports retaining %d.\n",JackVST::sRetainPorts);
-			
-	if(!JackVST::sRetainPorts) { 
+				
+	if(!JackVST::classInstances.size()) { 
 		printf("closing client.\n"); 
 		jack_deactivate(JackVST::client); 
 		jack_client_close(JackVST::client);
 		JackVST::client = NULL;
+		JackVST::instances = 0;
 	} else printf("client won't be closed.\n"); 
-        
+	
+	isFlushing = FALSE;
+
 }
 
