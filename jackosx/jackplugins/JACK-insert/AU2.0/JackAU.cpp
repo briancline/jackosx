@@ -135,8 +135,10 @@ OSStatus	ElCAJAS::ProcessBufferLists( AudioUnitRenderActionFlags &	ioActionFlags
 				outBuf[i] = (float*)outBuffer.mBuffers[i].mData;
 			}
 			if(inBuffer.mNumberBuffers==1) memcpy(inBuf[1],inBuf[0],sizeof(float)*inFramesToProcess);
-			if(!c_jar->CanProcess()) c_jar->AllocBSizeAlign(inFramesToProcess);
-			if(c_jar->GetError()==JARInsert::kNoErr && c_jar->CanProcess()) c_jar->Process(inBuf,outBuf,inFramesToProcess);
+			if(c_jar->GetError()==JARInsert::kNoErr) {
+				if(!c_jar->CanProcess()) c_jar->AllocBSizeAlign(inFramesToProcess);
+				if(c_jar->CanProcess()) c_jar->Process(inBuf,outBuf,inFramesToProcess);
+			}
 		} else for(i=0;i<(int)outBuffer.mNumberBuffers;i++) memset(outBuffer.mBuffers[i].mData,0x0,outBuffer.mBuffers[i].mDataByteSize);
 	} else {
 		if(c_error == JARInsert::kNoErr && c_jar) {
@@ -161,8 +163,10 @@ OSStatus	ElCAJAS::ProcessBufferLists( AudioUnitRenderActionFlags &	ioActionFlags
 					count++;
 				}
 			}
-			if(!c_jar->CanProcess()) c_jar->AllocBSizeAlign(inFramesToProcess);
-			if(c_jar->GetError()==JARInsert::kNoErr && c_jar->CanProcess()) c_jar->Process((float**)inBufs,(float**)outBufs,inFramesToProcess);
+			if(c_jar->GetError()==JARInsert::kNoErr) {
+				if(!c_jar->CanProcess()) c_jar->AllocBSizeAlign(inFramesToProcess);
+				if(c_jar->CanProcess()) c_jar->Process((float**)inBufs,(float**)outBufs,inFramesToProcess);
+			}
 		} else for(i=0;i<(int)outBuffer.mNumberBuffers;i++) memset(outBuffer.mBuffers[i].mData,0x0,outBuffer.mBuffers[i].mDataByteSize);
 	}
          
