@@ -209,7 +209,10 @@ History
 
 10-09-04 : Version 0.56 : S Letz
 		Correct DeviceSetProperty: some properties can be "set" event there is no Jack client running other like kAudioDevicePropertyIOProcStreamUsage not.
-        
+
+14-09-04 : Version 0.57 : S Letz
+		Improve the external (Jack plugins) management : now internal and external "clients" are distinguished.
+		 
 TODO :
     
         - solve zombification problem of Jack (remove time-out check or use -T option)
@@ -228,7 +231,7 @@ long TJackClient::fBufferSize;
 float TJackClient::fSampleRate;
 
 long TJackClient::fInputChannels = 0;
-long TJackClient::fOutputChannels = 0;;
+long TJackClient::fOutputChannels = 0;
 
 bool TJackClient::fAutoConnect = true;
 bool TJackClient::fDeviceRunning = false;
@@ -338,20 +341,20 @@ void TJackClient::SaveConnections()
     fConnections.clear();
   
     for (int i = 0; i < TJackClient::fInputChannels; ++i) {
-       if ((connections = jack_port_get_connections (fInputPortList[i])) != 0) {
+       if (fInputPortList[i] && (connections = jack_port_get_connections(fInputPortList[i])) != 0) {
             for (int j = 0; connections[j]; j++) {
                 fConnections.push_back(make_pair(connections[j],jack_port_name(fInputPortList[i])));
             }
-            free (connections);
+            free(connections);
         } 
     }
 
     for (int i = 0; i < TJackClient::fOutputChannels; ++i) {
-        if ((connections = jack_port_get_connections (fOutputPortList[i])) != 0) {
+        if (fOutputPortList[i] && (connections = jack_port_get_connections(fOutputPortList[i])) != 0) {
             for (int j = 0; connections[j]; j++) {
                 fConnections.push_back(make_pair(jack_port_name(fOutputPortList[i]),connections[j]));
 			}
-            free (connections);
+            free(connections);
         } 
     }
 
@@ -387,8 +390,8 @@ TJackClient* TJackClient::GetJackClient()
 {
     JARLog("GetJackClient\n");
 
-    if (TJackClient::fJackClient){ 
-        return fJackClient;
+    if (TJackClient::fJackClient) { 
+        return TJackClient::fJackClient;
     }else{
         TJackClient::fJackClient = new TJackClient();
 
@@ -403,31 +406,11 @@ TJackClient* TJackClient::GetJackClient()
 }
 
 //------------------------------------------------------------------------
-TJackClient* TJackClient::GetJackClientExternal() 
-{
-    JARLog("GetJackClient\n");
-
-    if (TJackClient::fJackClient){ 
-        return TJackClient::fJackClient;
-    }else{
-        TJackClient::fJackClient = new TJackClient();
-
-        if (TJackClient::fJackClient->OpenExternal()) {
-            return TJackClient::fJackClient;
-        }else{
-            delete TJackClient::fJackClient;
-            TJackClient::fJackClient = NULL;
-            return NULL;
-        }
-    }
-}
-
-//------------------------------------------------------------------------
 void TJackClient::ClearJackClient()
 {
     JARLog("ClearJackClient\n");
 
-    if (TJackClient::fJackClient){
+    if (TJackClient::fJackClient) {
         TJackClient::fJackClient->ClearIOProc();
         delete TJackClient::fJackClient;
         TJackClient::fJackClient = NULL;
@@ -435,33 +418,11 @@ void TJackClient::ClearJackClient()
 }
 
 //------------------------------------------------------------------------
-void TJackClient::IncRef()
+void TJackClient::CheckLastRef()
 {
     assert(TJackClient::fJackClient);
-    TJackClient::fJackClient->fClientNum++;
-    if (TJackClient::fJackClient->fClientNum == 1){
-      
-	#if PRINTDEBUG
-		bool res = TJackClient::fJackClient->Activate();
-		if (!res) JARLog("cannot activate client\n");
-	#else
-		TJackClient::fJackClient->Activate();
-	#endif
-    }
     
-    JARLog("IncRef : %ld\n",TJackClient::fJackClient->fClientNum);
-}
-
-//------------------------------------------------------------------------
-void TJackClient::DecRef()
-{
-    assert(TJackClient::fJackClient);
-	
-    TJackClient::fJackClient->fClientNum--;
-    
-    JARLog("DecRef : %ld\n",TJackClient::fJackClient->fClientNum);
-    
-    if (TJackClient::fJackClient->fClientNum == 0){
+    if (TJackClient::fJackClient->fExternalClientNum + TJackClient::fJackClient->fInternalClientNum == 0) {
    	    JARLog("DeviceRemoveIOProc : last proc, remove client\n");
  	#if PRINTDEBUG
         bool res = TJackClient::fJackClient->Desactivate();
@@ -476,27 +437,43 @@ void TJackClient::DecRef()
 }
 
 //------------------------------------------------------------------------
+void TJackClient::IncRefInternal()
+{
+    assert(TJackClient::fJackClient);
+    TJackClient::fJackClient->fInternalClientNum++;
+	JARLog("IncRefInternal : %ld\n",TJackClient::fJackClient->fInternalClientNum);
+	if (TJackClient::fJackClient->fInternalClientNum == 1) 
+		TJackClient::fJackClient->AllocatePorts();
+	TJackClient::fJackClient->Activate();  
+}
+
+//------------------------------------------------------------------------
+void TJackClient::DecRefInternal()
+{
+    assert(TJackClient::fJackClient);
+    TJackClient::fJackClient->fInternalClientNum--;
+    JARLog("DecRef : %ld\n",TJackClient::fJackClient->fInternalClientNum);
+	if (TJackClient::fJackClient->fInternalClientNum == 0) 
+		TJackClient::fJackClient->DisposePorts();
+    CheckLastRef();
+}
+
+//------------------------------------------------------------------------
 void TJackClient::IncRefExternal()
 {
     assert(TJackClient::fJackClient);
-    TJackClient::fJackClient->fClientNum++;
-    JARLog("IncRefExternal : %ld\n",TJackClient::fJackClient->fClientNum);
+    TJackClient::fJackClient->fExternalClientNum++;
+	JARLog("IncRefExternal : %ld\n",TJackClient::fJackClient->fExternalClientNum);
+	TJackClient::fJackClient->Activate();
 }
 
 //------------------------------------------------------------------------
 void TJackClient::DecRefExternal()
 {
     assert(TJackClient::fJackClient);
-    TJackClient::fJackClient->fClientNum--;
-    
-    JARLog("DecRefExternal : %ld\n",TJackClient::fJackClient->fClientNum);
-
-    if (TJackClient::fJackClient->fClientNum == 0){
-        JARLog("DeviceRemoveIOProc : last proc, remove client\n");
-        TJackClient::fJackClient->Close();
-        delete TJackClient::fJackClient;
-        TJackClient::fJackClient = NULL;
-    }
+    TJackClient::fJackClient->fExternalClientNum--;
+    JARLog("DecRefExternal : %ld\n",TJackClient::fJackClient->fExternalClientNum);
+	CheckLastRef();
 }
 
 //------------------------------------------------------------------------
@@ -539,14 +516,14 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
 	SetTime(&inNow,curTime,time);
 	SetTime(&inInputTime,curTime-TJackClient::fBufferSize,time);
 	SetTime(&inOutputTime,curTime+TJackClient::fBufferSize,time);
-    
-    // Clear output ports in all cases
-    for (int i = 0; i<TJackClient::fOutputChannels; i++) {
-        memset((float *)jack_port_get_buffer(client->fOutputPortList[i], nframes), 0, nframes*sizeof(float));
-    }
-     
+      
     // One IOProc
     if (client->GetProcNum() == 1) {
+	
+		// Clear output ports in all cases
+		for (int i = 0; i<TJackClient::fOutputChannels; i++) {
+			memset((float *)jack_port_get_buffer(client->fOutputPortList[i], nframes), 0, nframes*sizeof(float));
+		}
    
         pair<AudioDeviceIOProc,TProcContext> val = *client->fAudioIOProcList.begin();
         TProcContext context = val.second;
@@ -599,6 +576,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
     }else if (client->GetProcNum() > 1) { // Several IOProc : need mixing  
 	
 		for (int i = 0; i<TJackClient::fOutputChannels; i++) {
+			memset((float *)jack_port_get_buffer(client->fOutputPortList[i], nframes), 0, nframes*sizeof(float));
             // Use an intermediate mixing buffer
             memset(client->fOuputListMixing[i], 0, nframes*sizeof(float));
 		}
@@ -632,9 +610,11 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
 					}
 				
 				}else {
+				
 					for (int i = 0; i<TJackClient::fInputChannels; i++) {
 						client->fInputList->mBuffers[i].mData = (float *)jack_port_get_buffer(client->fInputPortList[i], nframes);
 					}
+					
 					for (int i = 0; i<TJackClient::fOutputChannels; i++) {
 						// Use an intermediate mixing buffer
 						client->fOutputList->mBuffers[i].mData = client->fOuputListMixing[i];
@@ -707,7 +687,8 @@ TJackClient::TJackClient()
     
     fProcRunning = 0;
     fSampleTime = 0;
-    fClientNum = 0;
+    fExternalClientNum = 0;
+	fInternalClientNum = 0;
 }
 
 //------------------------------------------------------------------------
@@ -723,15 +704,8 @@ TJackClient::~TJackClient()
 }
            
 //------------------------------------------------------------------------
-bool TJackClient::Open()
+bool TJackClient::AllocatePorts()
 {
-    char* id_name = bequite_getNameFromPid((int)getpid()); 
-    
-    if ((fClient = jack_client_new(id_name)) == NULL) {
-		JARLog("jack server not running?\n");
-		goto error;
-    }
-          
     char in_port_name [JACK_PORT_NAME_LEN];
     
     for (long i = 0; i<TJackClient::fInputChannels; i++) {
@@ -751,40 +725,20 @@ bool TJackClient::Open()
         fOutputList->mBuffers[i].mNumberChannels = 1;
         fOutputList->mBuffers[i].mDataByteSize = TJackClient::fBufferSize*sizeof(float);
     }
-    
-    jack_set_process_callback (fClient, Process, this);
-    jack_on_shutdown (fClient, Shutdown, NULL);
+
     return true;
      
 error:
 
-	JARLog("cannot open Jack client or register ports\n");
-	Close();
+	JARLog("Cannot register ports\n");
+	DisposePorts();
     return false;
 }
 
 //------------------------------------------------------------------------
-bool TJackClient::OpenExternal()
+void TJackClient::DisposePorts()
 {
-    char* id_name = bequite_getNameFromPid((int)getpid()); 
-    
-    if ((fClient = jack_client_new(id_name)) == NULL) {
-		JARLog("jack server not running?\n");
-		goto error;
-    }
-          
-    jack_set_process_callback (fClient, Process, this);
-    jack_on_shutdown (fClient, Shutdown, NULL);
-    return true;
-     
-error:
-    return false;
-}
-
-//------------------------------------------------------------------------
-void TJackClient::Close()
-{
-    JARLog("Close\n");
+    JARLog("DisposePorts\n");
 
 	for (long i = 0; i<TJackClient::fInputChannels; i++) {
 		if (fInputPortList[i]) {
@@ -799,10 +753,36 @@ void TJackClient::Close()
 			fOutputPortList[i] = 0;
 		}
     }
+}
 
+//------------------------------------------------------------------------
+bool TJackClient::Open()
+{
+    char* id_name = bequite_getNameFromPid((int)getpid()); 
+    
+    if ((fClient = jack_client_new(id_name)) == NULL) {
+		JARLog("jack server not running?\n");
+		goto error;
+    }
+          
+    jack_set_process_callback(fClient, Process, this);
+    jack_on_shutdown(fClient, Shutdown, NULL);
+    return true;
+     
+error:
+    return false;
+}
+
+//------------------------------------------------------------------------
+void TJackClient::Close()
+{
+    JARLog("Close\n");
+
+	DisposePorts();
+	
 	if (fClient) {
 		if (jack_client_close(fClient)) {
-			JARLog("cannot close client\n");
+			JARLog("Cannot close client\n");
 		}
 	}
 }
@@ -907,7 +887,7 @@ bool TJackClient::Activate()
 		goto error;
     }
     
-    if(TJackClient::fAutoConnect) {
+    if (TJackClient::fAutoConnect) {
     
         if ((ports = jack_get_ports(fClient, NULL, NULL, JackPortIsPhysical|JackPortIsOutput)) == NULL) {
 			JARLog("cannot find any physical capture ports\n");
@@ -923,11 +903,13 @@ bool TJackClient::Activate()
                 // Stop condition
                 if (ports[i] == 0) break;
 				
-				if (jack_port_name(fInputPortList[i]) == NULL) goto error;
-            
-                if (jack_connect(fClient, ports[i], jack_port_name(fInputPortList[i]))) {
-                    JARLog("cannot connect input ports\n");
-                }
+				if (fInputPortList[i] && jack_port_name(fInputPortList[i])) {
+					if (jack_connect(fClient, ports[i], jack_port_name(fInputPortList[i]))) {
+						JARLog("cannot connect input ports\n");
+					}
+				}else
+					 goto error;
+
             }
             free (ports);
         }
@@ -939,18 +921,19 @@ bool TJackClient::Activate()
             for (int i = 0; i<TJackClient::fOutputChannels; i++) {
                 #if PRINTDEBUG
                     if (ports[i]) JARLog("ports[i] %s\n",ports[i]);
-                    if (jack_port_name(fOutputPortList[i]) && jack_port_name(fOutputPortList[i])) 
+                    if (fOutputPortList[i] && jack_port_name(fOutputPortList[i])) 
                         JARLog("jack_port_name(fOutputPortList[i]) %s\n",jack_port_name(fOutputPortList[i]));
                 #endif
                 
                 // Stop condition
                 if (ports[i] == 0) break;
 				
-				if (jack_port_name(fOutputPortList[i]) == NULL) goto error;
-                
-                if (jack_connect(fClient,jack_port_name(fOutputPortList[i]), ports[i])) {
-					JARLog("cannot connect ouput ports\n");
-				}
+				if (fOutputPortList[i] && jack_port_name(fOutputPortList[i])) {
+					if (jack_connect(fClient,jack_port_name(fOutputPortList[i]), ports[i])) {
+						JARLog("cannot connect ouput ports\n");
+					}
+				}else
+					goto error;
             }
             free (ports);
         }
@@ -987,7 +970,7 @@ OSStatus TJackClient::DeviceAddIOProc(AudioHardwarePlugInRef inSelf, AudioDevice
     
     if (client) {
         JARLog("DeviceAddIOProc : add a new proc\n");
-        if (client->AddIOProc(proc,context)) IncRef();
+        if (client->AddIOProc(proc,context)) IncRefInternal();
         return kAudioHardwareNoError;
     }else{
 		JARLog("DeviceAddIOProc : no client \n");
@@ -1007,7 +990,7 @@ OSStatus TJackClient::DeviceRemoveIOProc(AudioHardwarePlugInRef inSelf, AudioDev
     JARLog("DeviceRemoveIOProc GetJackClient %x client\n",client);
     
     if (client) {
-        if (client->RemoveIOProc(proc)) DecRef();
+        if (client->RemoveIOProc(proc)) DecRefInternal();
         return kAudioHardwareNoError;
     }else{
 		JARLog("DeviceRemoveIOProc : no client \n");
@@ -1916,11 +1899,12 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
             }else{
                 *ioPropertyDataSize = sizeof(jack_client_t*);
                 JARLog("DeviceGetProperty::kAudioDevicePropertyGetJackClient\n");
-                if (TJackClient* client = GetJackClientExternal()) {
-                    IncRefExternal();
-                    *(jack_client_t **) outPropertyData = client->fClient;
-                    err = kAudioHardwareNoError;
+				if (TJackClient* client = GetJackClient()) {
+			         IncRefExternal();
+			        *(jack_client_t **) outPropertyData = client->fClient;
+			         err = kAudioHardwareNoError;
                 }else{
+					*(jack_client_t **) outPropertyData = NULL;
                     err = kAudioHardwareBadDeviceError;
                 }
             }
@@ -1932,7 +1916,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
         {
             JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
             DecRefExternal(); 
-            break;
+	        break;
         }
         
         case kAudioDevicePropertySupportsMixing:
@@ -2956,7 +2940,7 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
             
             i = 0;
             if ((ports = jack_get_ports(client, NULL, NULL, JackPortIsPhysical|JackPortIsInput)) != NULL) {
-                    while (ports[i]) i++;
+				while (ports[i]) i++;
             }
             
             TJackClient::fOutputChannels = max(2,i); // At least 2 channels
@@ -3145,7 +3129,7 @@ bool TJackClient::QueryDevices(jack_client_t * client)
     
     for (int i = 0; i<numCoreDevices; i++) {
     
-        err =  AudioDeviceGetPropertyInfo(coreDeviceIDs[i], 0, true, kAudioDevicePropertyDeviceName, &outSize, &outWritable);
+        err = AudioDeviceGetPropertyInfo(coreDeviceIDs[i], 0, true, kAudioDevicePropertyDeviceName, &outSize, &outWritable);
         
         if (err != noErr) {
 			JARLog("couldn't get info about names of audio devices %ld \n", err);

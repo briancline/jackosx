@@ -89,8 +89,8 @@ class TJackClient {
          
         long fSampleTime;	// Current sample time
         long fProcRunning;	// Counter of running IOProc
-        long fClientNum;		
-		
+        long fExternalClientNum;	// Counter of external clients (Jack plug-in)
+		long fInternalClientNum;	// Counter of internal client	
 		
 		// Global state 
         static TJackClient* fJackClient;
@@ -127,12 +127,13 @@ class TJackClient {
         static int Process(jack_nframes_t nframes, void *arg);
 		
         static TJackClient* GetJackClient(); 
-        static TJackClient* GetJackClientExternal(); 
-        static void ClearJackClient();
+		static void ClearJackClient();
 	    
         bool Open();  
-        bool OpenExternal();
         void Close();
+		
+		bool AllocatePorts();
+		void DisposePorts();
           
         bool AddIOProc(AudioDeviceIOProc proc, void* context); 
         bool RemoveIOProc(AudioDeviceIOProc proc);
@@ -146,8 +147,9 @@ class TJackClient {
         void Start(AudioDeviceIOProc proc);
         void Stop(AudioDeviceIOProc proc);
         
-        static void IncRef();
-        static void DecRef();
+		static void CheckLastRef();
+        static void IncRefInternal();
+        static void DecRefInternal();
         static void IncRefExternal();
         static void DecRefExternal();
         
