@@ -32,7 +32,7 @@ JackVST::JackVST (audioMasterCallback audioMaster)
 	canProcessReplacing ();	// supports both accumulating and replacing output
 	strcpy (programName, "Default");	// default program name
 	
-	c_jar = new JARInsert();
+	c_jar = new JARInsert('vst ');
 	c_error = c_jar->GetError();
 }
 
