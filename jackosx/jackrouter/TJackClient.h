@@ -50,13 +50,6 @@ extern "C"
         kAudioDevicePropertyReleaseJackClient = 'jasr'
     };
 	
-	struct Foo {
-	
-		Foo() {printf("Constructor called \n");}
-			
-		static  Foo fInstance;
-	};
-
     // The IOProc context
 
     struct TProcContext {

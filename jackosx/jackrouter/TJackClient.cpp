@@ -244,7 +244,7 @@ History
 		
 24-01-05 : Version 0.67 : Correct Final Cut Pro crash by changing the way DeviceGetProperty for kAudioDevicePropertyStreams behaves.
 
-03-02-05 : Version 0.68 : Ouput buffer are produced in fOuputListTemp buffer before bieng copied to jack port buffers (to solve a dirty buffer looping problem)
+03-02-05 : Version 0.68 : Ouput buffer are produced in fOuputListTemp buffer before being copied to jack port buffers (to solve a dirty buffer looping problem)
 
 		 
 TODO :
@@ -295,8 +295,6 @@ AudioStreamID TJackClient::fCoreAudioDriver = 0;
 AudioHardwarePlugInRef TJackClient::fPlugInRef = 0;
 
 bool TJackClient::fNotification = false;
-
-Foo Foo::fInstance;
 
 #define kJackStreamFormat kAudioFormatFlagIsPacked|kLinearPCMFormatFlagIsFloat|kAudioFormatFlagIsBigEndian|kAudioFormatFlagIsNonInterleaved
 
