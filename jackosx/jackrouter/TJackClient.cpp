@@ -3071,7 +3071,7 @@ bool TJackClient::ExtractString(char* dst, const char* src, char sep)
     int i;
 	
 	// steph
-	printf("ExtractString%s/n", src);
+	printf("ExtractString %s \n", src);
     
     // Look for the first sep character
     for (i = 0; i < strlen(src); i++) if (src[i] == sep) break;
