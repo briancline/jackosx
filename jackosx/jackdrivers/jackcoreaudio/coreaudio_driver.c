@@ -24,9 +24,13 @@
 	Jan 30, 2004: Johnny Petrantoni: first code of the coreaudio driver, based on portaudio driver by Stephane Letz.
 	Feb 02, 2004: Johnny Petrantoni: fixed null cycle, removed double copy of buffers in AudioRender, the driver works fine (tested with Built-in Audio and Hammerfall RME), 
 									 but no cpu load is displayed.
+	Feb 03, 2004: Johnny Petrantoni: some little fix.
+	Feb 03, 2004: Stephane Letz: some fix in AudioRender.cpp code.
 									 
 	TODO:
 	- fix cpu load behavior.
+	- multiple-device processing.
+	
    
 */
 
@@ -251,6 +255,10 @@ coreaudio_driver_bufsize (coreaudio_driver_t* driver, jack_nframes_t nframes)
 	driver->stream = openPandaAudioInstance((float)driver->frame_rate,driver->frames_per_cycle,driver->capturing,driver->playing,&driver->driver_name[0]);
 	 
 	if(!driver->stream) return FALSE;
+	
+	setHostData(driver->stream,driver);
+	setCycleFun(driver->stream,coreaudio_runCycle);
+	setParameter(driver->stream,'inte',&driver->isInterleaved);
 	 
 	driver->incoreaudio = getPandaAudioInputs(driver->stream);
 	driver->outcoreaudio = getPandaAudioOutputs(driver->stream);
@@ -451,7 +459,7 @@ jack_driver_t *
 driver_initialize (jack_client_t *client, const JSList * params)
 {
 	jack_nframes_t srate = 44100;
-	jack_nframes_t frames_per_interrupt = 256;
+	jack_nframes_t frames_per_interrupt = 512;
 	
 	int capture = FALSE;
 	int playback = FALSE;

@@ -66,8 +66,8 @@ AudioRender::AudioRender(float sampleRate,long bufferSize,int inChannels, int ou
     if(status) {
         inBuffers = (float**)malloc(sizeof(float*)*vInChannels);
         outBuffers = (float**)malloc(sizeof(float*)*vChannels);
-	}
-	JCALog("AudioRender created\n");
+		JCALog("AudioRender created.\n");
+	} else JCALog("error while creating AudioRender.\n");
 }
 
 AudioRender::~AudioRender() {
@@ -85,7 +85,9 @@ bool AudioRender::ConfigureAudioProc(float sampleRate,long bufferSize,int channe
     OSStatus err;
     UInt32 size;
     Boolean isWritable;
-    
+
+	JCALog("Wanted DEVICE: %s\n",device);
+	
     err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices,&size,&isWritable);
     if(err!=noErr) return false;
     
@@ -103,8 +105,12 @@ bool AudioRender::ConfigureAudioProc(float sampleRate,long bufferSize,int channe
         size = sizeof(char)*256;
         char name[256];
         err = AudioDeviceGetProperty(devices[i],0,false,kAudioDevicePropertyDeviceName,&size,&name);
+		JCALog("Read DEVICE: %s\n",name);
         if(err!=noErr) return false;
-        if(strcmp(device,name)==0) vDevice = devices[i];
+		if(strncmp(device,name,strlen(device))==0) { // steph : name seems to be limited to 32 character, thus compare the common part only 
+			JCALog("Found DEVICE: %s %ld\n",name,device);
+			vDevice = devices[i];
+		}
     }
     
     char deviceName[256];
@@ -123,6 +129,9 @@ bool AudioRender::ConfigureAudioProc(float sampleRate,long bufferSize,int channe
     
     
     vChannels = (int)SR.mChannelsPerFrame*(size/sizeof(AudioStreamID));
+	
+	if(channels>vChannels) { JCALog("cannot find requested output channels\n"); return false; }
+	
     if(vChannels>=channels) vChannels = channels;
     
     JCALog("OUTPUT CHANNELS: %d.\n",vChannels);
@@ -142,7 +151,9 @@ bool AudioRender::ConfigureAudioProc(float sampleRate,long bufferSize,int channe
     vInChannels = (int)inSR.mChannelsPerFrame*(size/sizeof(AudioStreamID));
 
 endInChan:
-
+	
+	if(inChannels>vInChannels) { JCALog("cannot find requested input channels\n"); return false; }
+	
     if(vInChannels>=inChannels) vInChannels = inChannels;
     
     JCALog("INPUT CHANNELS: %d.\n",vInChannels);
@@ -159,7 +170,7 @@ endInChan:
         UInt32 theSize = sizeof(UInt32);
         UInt32 newBufferSize = (UInt32) bufferSize;
         err = AudioDeviceSetProperty(vDevice,NULL,0,false,kAudioDevicePropertyBufferFrameSize,theSize,&newBufferSize);
-        if(err!=noErr) JCALog("Cannot set a new buffer size.\n");
+        if(err!=noErr) { JCALog("Cannot set a new buffer size.\n"); return false; }
         else {	
             UInt32 newBufFrame;
             size = sizeof(UInt32);
@@ -179,7 +190,7 @@ endInChan:
         UInt32 theSize = sizeof(AudioStreamBasicDescription);
         SR.mSampleRate = (Float64)sampleRate;
         err = AudioDeviceSetProperty(vDevice,NULL,0,false,kAudioDevicePropertyStreamFormat,theSize,&SR);
-        if(err!=noErr) JCALog("Cannot set a new sample rate.\n");
+        if(err!=noErr) { JCALog("Cannot set a new sample rate.\n"); return false; }
         else {
             size = sizeof(AudioStreamBasicDescription);
             AudioStreamBasicDescription newCheckSR;
@@ -227,10 +238,9 @@ OSStatus AudioRender::process(AudioDeviceID inDevice,const AudioTimeStamp* inNow
     
     AudioRender::gTime = inInputTime;
 	
-	if(inInputData->mNumberBuffers!=0 && inInputData->mBuffers[0].mNumberChannels==1) classe->isInterleaved = FALSE;
-	else *classe->isInterleaved = TRUE;
+	*classe->isInterleaved = (inInputData->mNumberBuffers!=0 && inInputData->mBuffers[0].mNumberChannels==1) ? FALSE : TRUE;
 	
-	if(!classe->isInterleaved) {
+	if(!*classe->isInterleaved) {
 		for(unsigned int a = 0; a < inInputData->mNumberBuffers;a++) {
 			classe->inBuffers[channel] = (float*)inInputData->mBuffers[a].mData;
 			channel++;
