@@ -6,7 +6,6 @@
 #import "JPPlugin.h"
 #import "JackCon1.3.h"
 
-
 OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean isInput) 
 {
     OSStatus			err = noErr;
@@ -16,14 +15,13 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
     short				i;
 
     *channelCount = 0;
-    err =  AudioDeviceGetPropertyInfo(device, 0, isInput, kAudioDevicePropertyStreamConfiguration,  &outSize, &outWritable);
+    err = AudioDeviceGetPropertyInfo(device, 0, isInput, kAudioDevicePropertyStreamConfiguration,  &outSize, &outWritable);
     if (err == noErr)
     {
-        bufferList = malloc(outSize);
+        bufferList = (AudioBufferList*)malloc(outSize);
         
         err = AudioDeviceGetProperty(device, 0, isInput, kAudioDevicePropertyStreamConfiguration, &outSize, bufferList);
-        if (err == noErr)
-        {								
+        if (err == noErr) {								
             for (i = 0; i < bufferList->mNumberBuffers; i++) 
                 *channelCount += bufferList->mBuffers[i].mNumberChannels;
         }
@@ -459,13 +457,10 @@ end:
         [self error:LOCSTR(@"Cannot start Jack server,\nPlease check the console or retry after a system reboot.")]; 
         writeStatus(0); 
     }
-    
     //free(stringa); free(driver); free(samplerate); free(buffersize); free(channels); free(interface); 
-
-    }
+	}
     [self jackALstore:sender];
     }
-    
 }
 
 - (IBAction)stopJack:(id)sender
@@ -1083,9 +1078,13 @@ end:
     Float64 actualSr;
     size = sizeof(Float64);
     err = AudioDeviceGetProperty(vDevice,0,false,kAudioDevicePropertyNominalSampleRate,&size,&actualSr);
-    if(err!=noErr) { NSLog(@"err in kAudioDevicePropertyNominalSampleRate"); sampleRatesOk = NO; }
-    else if(!sampleRatesOk) { [samplerateText addItemWithTitle:[[NSNumber numberWithLong:(long)actualSr] stringValue]]; sampleRatesOk = YES; }
-    else { sampleRatesOk = YES; }
+    if(err!=noErr) { 
+		NSLog(@"err in kAudioDevicePropertyNominalSampleRate"); sampleRatesOk = NO; 
+	}else if(!sampleRatesOk) { 
+		[samplerateText addItemWithTitle:[[NSNumber numberWithLong:(long)actualSr] stringValue]]; sampleRatesOk = YES; 
+	}else { 
+		sampleRatesOk = YES; 
+	}
     
     if(!sampleRatesOk) {
         size = sizeof(AudioStreamBasicDescription);
@@ -1099,8 +1098,12 @@ end:
         }
     }
     
-    if(!sampleRatesOk) { NSLog(@"writing sample rate using a standard 44100 value"); [samplerateText addItemWithTitle:[[NSNumber numberWithLong:44100L] stringValue]]; [samplerateText selectItemWithTitle:[[NSNumber numberWithLong:44100L] stringValue]]; }
-    else [samplerateText selectItemWithTitle:[[NSNumber numberWithLong:(long)actualSr] stringValue]];
+    if(!sampleRatesOk) { 
+		NSLog(@"writing sample rate using a standard 44100 value"); 
+		[samplerateText addItemWithTitle:[[NSNumber numberWithLong:44100L] stringValue]]; 
+		[samplerateText selectItemWithTitle:[[NSNumber numberWithLong:44100L] stringValue]]; 
+	}else 
+		[samplerateText selectItemWithTitle:[[NSNumber numberWithLong:(long)actualSr] stringValue]];
     
     JPLog("got nominal samplerate ok\n");
     
