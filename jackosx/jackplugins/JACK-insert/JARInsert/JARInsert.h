@@ -34,11 +34,13 @@ printf("JARInsert Critical Log: error = %d.\n",c_error);
 enum {
         kAudioDevicePropertyGetJackClient = 'jasg',
         kAudioDevicePropertyReleaseJackClient = 'jasr',
-		kAudioDevicePropertyAllocateJackPortVST = 'japv',
-		kAudioDevicePropertyAllocateJackPortAU = 'japa',
-		kAudioDevicePropertyGetJackPort = 'japg',
-		kAudioDevicePropertyReleaseJackPort = 'japr'
-};
+		kAudioDevicePropertyAllocateJackPortVST = 'jpav',  
+		kAudioDevicePropertyAllocateJackPortAU = 'jpaa',
+		kAudioDevicePropertyGetJackPortVST = 'jpgv',
+		kAudioDevicePropertyGetJackPortAU = 'jpga',
+		kAudioDevicePropertyReleaseJackPortVST = 'jprv',
+		kAudioDevicePropertyReleaseJackPortAU = 'jpra'
+    };
 
 class JARInsert
 {
@@ -80,6 +82,7 @@ class JARInsert
 		float** c_outPorts;
 		
         long c_jBufferSize, c_hBufferSize;
+		int c_hostType;
         static int c_instances;
         static int c_instances_count;
         BSizeAlign *c_bsAI1, *c_bsAI2, *c_bsAO1, *c_bsAO2;
