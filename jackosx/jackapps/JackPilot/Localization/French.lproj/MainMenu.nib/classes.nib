@@ -1,0 +1,100 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {
+                loadScheme = id; 
+                makeCon = id; 
+                orderFront = id; 
+                reload = id; 
+                reloadColor = id; 
+                removCon = id; 
+                saveScheme = id; 
+                selectFrom = id; 
+                selectTo = id; 
+            }; 
+            CLASS = JackConnections; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                aText = NSTextField; 
+                colonnaDest = NSTableColumn; 
+                colonnaSend = NSTableColumn; 
+                colonnaSource = NSTableColumn; 
+                cpuLoadBar = NSProgressIndicator; 
+                daText = NSTextField; 
+                loadText = NSTextField; 
+                loadWarn = NSPanel; 
+                nCon = NSTextField; 
+                reloadbut = NSButton; 
+                tabellaConnect = NSTableView; 
+                tabellaPorte = NSTableView; 
+                tabellaSend = NSOutlineView; 
+                theWindow = NSWindow; 
+                warnText = NSTextField; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {
+                closeAboutWin = id; 
+                closeJackDeamon = id; 
+                closePrefWin = id; 
+                getJackInfo = id; 
+                jackALstore = id; 
+                launchJackDeamon = id; 
+                openAboutWin = id; 
+                openDocsFile = id; 
+                openJackOsxNet = id; 
+                openJohnnyMail = id; 
+                openPrefWin = id; 
+                reloadPref = id; 
+                startJack = id; 
+                stopJack = id; 
+                testPlugin = id; 
+                toggle2Jack = id; 
+                toggleJack = id; 
+            }; 
+            CLASS = JackMenu; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                JALauto = NSButton; 
+                JALin = NSTextField; 
+                JALout = NSTextField; 
+                aboutWin = id; 
+                bufferText = id; 
+                channelsTest = id; 
+                connectionsNumb = NSTextField; 
+                cpuLoadBar = NSProgressIndicator; 
+                defInput = id; 
+                defOutput = id; 
+                driverBox = NSPopUpButton; 
+                inputChannels = id; 
+                interfaceBox = NSPopUpButton; 
+                isonBut = NSTextField; 
+                jackCopyRText = id; 
+                jackPilWin = id; 
+                jackVerText = id; 
+                jackdMode = id; 
+                jasCopyRText = id; 
+                jasVerText = id; 
+                jpCopyRText = id; 
+                jpVerText = id; 
+                jpWinController = id; 
+                loadText = NSTextField; 
+                managerWin = NSWindow; 
+                pluginSubMenu = id; 
+                pluginsMenu = id; 
+                prefWindow = id; 
+                routingBut = id; 
+                samplerateText = id; 
+                startBut = NSButton; 
+                sysDefOut = id; 
+                toggleDock = NSMenuItem; 
+                waitPanel = NSPanel; 
+                warnPanel = NSPanel; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}
