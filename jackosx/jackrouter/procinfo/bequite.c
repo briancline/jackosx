@@ -28,14 +28,16 @@ typedef struct processo {
     int pid;
 } InfoProc;
 
-int manyProcesses() {
+int manyProcesses() 
+{
     kinfo_proc *pInfo;
     int quanti;
     pInfo = test(&quanti);
     return quanti;
 }
 
-InfoProc ottieniInfo(int n) {
+InfoProc ottieniInfo(int n) 
+{
     kinfo_proc *pInfo;
     int quanti;
     pInfo = test(&quanti);
@@ -45,7 +47,8 @@ InfoProc ottieniInfo(int n) {
     return result;
 }
 
-char* bequite_get_name(int n) {
+char* bequite_get_name(int n) 
+{
     kinfo_proc *pInfo;
     int quanti;
     pInfo = test(&quanti);
@@ -55,22 +58,26 @@ char* bequite_get_name(int n) {
     return result;
 }
 
-int bequite_get_pid(int n) {
+int bequite_get_pid(int n) 
+{
     kinfo_proc *pInfo;
     int quanti;
     pInfo = test(&quanti);
     return pInfo[n].kp_proc.p_pid;
 }
 
-void stop(int n) {
+void stop(int n) 
+{
     kill(bequite_get_pid(n),SIGSTOP);
 }
 
-void reStart(int n) {
+void reStart(int n) 
+{
     kill(bequite_get_pid(n),SIGCONT);
 }
 
-int bequite_get_flag(int n) {
+int bequite_get_flag(int n) 
+{
     kinfo_proc *pInfo;
     int quanti;
     pInfo = test(&quanti);
@@ -82,12 +89,13 @@ int bequite_get_flag(int n) {
     return result;
 }
 
-char* bequite_getNameFromPid(int pid) {
+char* bequite_getNameFromPid(int pid) 
+{
     int quanti = manyProcesses();
     int i;
     for (i = 0; i < quanti; i++) {
         if (pid == bequite_get_pid(i)) {
-            if (strcmp("LaunchCFMApp",bequite_get_name(i)) == 0) { //Look for the name using CARBON (for CFM applications)
+            if (strcmp("LaunchCFMApp",bequite_get_name(i)) == 0) { // Look for the name using CARBON (for CFM applications)
                 OSErr err;
                 ProcessSerialNumber process;
                 CFStringRef nomeStr;

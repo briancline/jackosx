@@ -20,7 +20,6 @@
 
 #include "procinfo.h"
 
-
 kinfo_proc* GetBSDProcessList(size_t *procCount, kinfo_proc infop)
 // Returns a list of all BSD processes on the system. This routine
 // allocates the list and puts it in *procList and a count of the
@@ -32,7 +31,7 @@ kinfo_proc* GetBSDProcessList(size_t *procCount, kinfo_proc infop)
     int err;
     kinfo_proc * result;
     bool done;
-    static const int name[] = { CTL_KERN, KERN_PROC, KERN_PROC_ALL, 0 };
+    static const int name[] = {CTL_KERN, KERN_PROC, KERN_PROC_ALL, 0};
    
     size_t length;
 
@@ -86,7 +85,8 @@ kinfo_proc* GetBSDProcessList(size_t *procCount, kinfo_proc infop)
     return result;
 }
 
-kinfo_proc *test(int *quanti) {
+kinfo_proc *test(int *quanti) 
+{
     size_t b;
     kinfo_proc test;
     kinfo_proc *uu;
