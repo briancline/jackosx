@@ -32,8 +32,32 @@ extern "C" void JCALog(char *fmt,...) {
 #endif
 }
 
-void PrintStreamDesc (AudioStreamBasicDescription *inDesc)
-{
+static OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean isInput) {
+    OSStatus err = noErr;
+    UInt32 outSize;
+    Boolean outWritable;
+    AudioBufferList *bufferList = NULL;
+    unsigned short i;
+
+    *channelCount = 0;
+    err =  AudioDeviceGetPropertyInfo(device, 0, isInput, kAudioDevicePropertyStreamConfiguration,  &outSize, &outWritable);
+    if (err == noErr)
+    {
+        bufferList = (AudioBufferList*)malloc(outSize);
+        
+        err = AudioDeviceGetProperty(device, 0, isInput, kAudioDevicePropertyStreamConfiguration, &outSize, bufferList);
+        if (err == noErr)
+        {								
+            for (i = 0; i < bufferList->mNumberBuffers; i++) 
+                *channelCount += bufferList->mBuffers[i].mNumberChannels;
+        }
+        free(bufferList);
+    }
+ 
+    return (err);
+}
+
+static void PrintStreamDesc (AudioStreamBasicDescription *inDesc) {
     if (!inDesc) {
         JCALog ("Can't print a NULL desc!\n");
         return;
@@ -130,8 +154,8 @@ bool AudioRender::ConfigureAudioProc(float sampleRate,long bufferSize,int channe
     err = AudioDeviceGetPropertyInfo(vDevice,0,false,kAudioDevicePropertyStreams,&size,&isWritable);
     if(err!=noErr) return false;
     
-    
-    vChannels = (int)SR.mChannelsPerFrame*(size/sizeof(AudioStreamID));
+	err = GetTotalChannels(vDevice,(UInt32*)&vChannels,false);
+	if(err!=noErr) return false;
 	
 	n_out_streams = size/sizeof(AudioStreamID);
 	
@@ -152,8 +176,8 @@ bool AudioRender::ConfigureAudioProc(float sampleRate,long bufferSize,int channe
     err = AudioDeviceGetPropertyInfo(vDevice,0,true,kAudioDevicePropertyStreams,&size,&isWritable);
     if(err!=noErr) return false;
     
-    
-    vInChannels = (int)inSR.mChannelsPerFrame*(size/sizeof(AudioStreamID));
+	err = GetTotalChannels(vDevice,(UInt32*)&vInChannels,true);
+	if(err!=noErr) return false;
 	
 	n_streams = size/sizeof(AudioStreamID);
 
@@ -188,7 +212,6 @@ endInChan:
     }
     
     JCALog("BUFFER SIZE: %ld.\n",vBufferSize);
-    
     
     vSampleRate = (float)SR.mSampleRate;
     
