@@ -397,7 +397,8 @@
         NSString *name = [portData getName];
         NSArray *lista = [name componentsSeparatedByString:@":"];
         if([[lista objectAtIndex:0] isEqualToString:cliente]) {
-            if([portData getTipo]==21 || [portData getTipo]==1) {
+            //if([portData getTipo]==21 || [portData getTipo]==1) { // steph
+			if([portData getTipo] & JackPortIsInput) {
                 portsArrData *sendData = [portsArrData alloc];
                 [sendData setNameB:name];
                 [sendData setID:[portData getID]];

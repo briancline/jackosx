@@ -293,7 +293,7 @@
 		if(bypass) continue;
 		
 		NSMutableArray *nomi = [self getPortsForClient:testclient withData:testo1];
-		if(nomi!=nil) {
+		if(nomi!=nil) { 
 			[dataToSend setData:[nomi count] nomiPorte:nomi nomeCliente:nomeCli kind:tipoPorta];
 			[data addObject:dataToSend];
 			quantiItem++;
@@ -394,7 +394,8 @@
         NSString *name = [portData getName];
         NSArray *lista = [name componentsSeparatedByString:@":"];
         if([[lista objectAtIndex:0] isEqualToString:cliente]) {
-            if([portData getTipo]==22 || [portData getTipo]==2) {
+            //if([portData getTipo]==22 || [portData getTipo]==2) { // steph 
+			if([portData getTipo] & JackPortIsOutput) {
                 portsArrData *sendData = [portsArrData alloc];
                 [sendData setNameB:name];
                 [sendData setID:[portData getID]];
