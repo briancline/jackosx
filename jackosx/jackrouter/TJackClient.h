@@ -75,20 +75,20 @@ class TJackClient {
 
     private:
 	
-		jack_client_t * fClient;			// Jack client 
+		jack_client_t * fClient;	// Jack client 
         
         jack_port_t * fInputPortList[MAX_JACK_PORTS];  // Jack input ports
         jack_port_t * fOutputPortList[MAX_JACK_PORTS];  // Jack output ports
          
-        AudioBufferList* fInputList;		// CoreAudio input buffers
-        AudioBufferList* fOutputList;		// CoreAudio output buffers
+        AudioBufferList* fInputList;	// CoreAudio input buffers
+        AudioBufferList* fOutputList;	// CoreAudio output buffers
         
-        float** fOuputListMixing;			// Buffers for mixing
+        float** fOuputListMixing;	// Buffers for mixing
         
         map<AudioDeviceIOProc,TProcContext> fAudioIOProcList;   // Table of IOProc 
          
-        long fSampleTime;		// Current sample time
-        long fProcRunning;		// Counter of running IOProc
+        long fSampleTime;	// Current sample time
+        long fProcRunning;	// Counter of running IOProc
         long fClientNum;		
 		
 		
@@ -113,7 +113,7 @@ class TJackClient {
         static AudioDeviceID fDeviceID;
         static AudioStreamID fStreamIDList[128];
         
-        static AudioDeviceID fCoreAudioDriver; // the CoreAudio currently loaded by Jack
+        static AudioDeviceID fCoreAudioDriver;		// the CoreAudio driver currently loaded by Jack
         static AudioHardwarePlugInRef fPlugInRef;
         
         static bool ExtractString(char* dst, const char* src, char sep);
@@ -155,7 +155,6 @@ class TJackClient {
         void IncRunning() {fProcRunning++;}
         void DecRunning() {fProcRunning--; if (fProcRunning < 0) fProcRunning = 0;}
 		
-		//  steph 15/01/04 
 		void StopRunning() {fProcRunning = 0;}
            
         // Jack jack_frame_time API does not seem to work correctly...
