@@ -346,7 +346,7 @@ static void printError(OSStatus err)
 //------------------------------------------------------------------------
 void TJackClient::SaveConnections()
 {
-    const char **ports,**connections;
+    const char **connections;
     
     if (!fClient) return;
     
@@ -667,7 +667,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
 					for (int i = 0; i<TJackClient::fOutputChannels; i++) {
 						if (context.fOutput[i]) {
 							float * output = (float *)jack_port_get_buffer(client->fOutputPortList[i], nframes);
-							for (int j = 0; j<nframes; j++) {
+							for (unsigned int j = 0; j<nframes; j++) {
 								output[j] += ((float*)client->fOutputList->mBuffers[i].mData)[j];
 							}
 						}
@@ -676,7 +676,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
 				}else{
 					for (int i = 0; i<TJackClient::fOutputChannels; i++) {
 						float * output = (float *)jack_port_get_buffer(client->fOutputPortList[i], nframes);
-						for (int j = 0; j<nframes; j++) {
+						for (unsigned int j = 0; j<nframes; j++) {
 							output[j] += ((float*)client->fOutputList->mBuffers[i].mData)[j];
 						}
 					}
@@ -809,8 +809,6 @@ void TJackClient::Close()
 {
     JARLog("Close\n");
 
-	//DisposePorts();
-	
 	if (fClient) {
 		if (jack_client_close(fClient)) {
 			JARLog("Cannot close client\n");
@@ -2181,12 +2179,12 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
 						iter->second.fStreamUsage = true; // We need to take care of stream usage in Process
 				
 						if (isInput) {
-							for (int i = 0; i<inData->mNumberStreams; i++) {
+							for (unsigned int i = 0; i<inData->mNumberStreams; i++) {
 								iter->second.fInput[i] = inData->mStreamIsOn[i];
 								JARLog("DeviceSetProperty : input kAudioDevicePropertyIOProcStreamUsage inData->mStreamIsOn %ld \n",inData->mStreamIsOn[i]);
 							}
 						}else{
-							for (int i = 0; i<inData->mNumberStreams; i++) {
+							for (unsigned int i = 0; i<inData->mNumberStreams; i++) {
 								iter->second.fOutput[i] = inData->mStreamIsOn[i];
 								JARLog("DeviceSetProperty : output kAudioDevicePropertyIOProcStreamUsage inData->mStreamIsOn %ld \n",inData->mStreamIsOn[i]);
 							}   
