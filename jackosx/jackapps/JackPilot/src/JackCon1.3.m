@@ -5,16 +5,20 @@
 #import "JackCon1.3.h"
 #include "jackfun.h"
 
-void JackPortRegistration(jack_port_id_t port, int a, void *arg) {
+static void JackPortRegistration(jack_port_id_t port, int a, void *arg) {
 	JPLog("JackPortRegistration.\n");
 	JackConnections *c = (JackConnections*)arg;
 	[c reload:nil];
 }
 
-int JackGraphOrder(void *arg) {
+static int JackGraphOrder(void *arg) {
 	JPLog("JackGraphOrder.\n");
 	JackConnections *c = (JackConnections*)arg;
 	[c reload:nil];
+	return 0;
+}
+
+static int JackProcess(jack_nframes_t frames, void *arg) {
 	return 0;
 }
 
@@ -35,6 +39,8 @@ int nConnections = 0;
 	if (res != 0) JPLog("Cannot: jack_set_port_registration_callback.\n");
 	jack_set_graph_order_callback(getClient(),JackGraphOrder,self);
 	if (res != 0) JPLog("Cannot: jack_set_graph_order_callback.\n");
+	res = jack_set_process_callback(getClient(),JackProcess,NULL);
+	if (res != 0) JPLog("Cannot: jack_set_process_callback.\n");
 }
 
 -(void)awakeFromNib {
@@ -84,8 +90,7 @@ int nConnections = 0;
         [theWindow makeKeyAndOrderFront:sender];
         
         [nCon setIntValue:getConnections()/2];
-        
-        [self setupTimer];
+		[self setupTimer];
     }
 }
 

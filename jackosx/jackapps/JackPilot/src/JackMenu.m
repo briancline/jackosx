@@ -79,7 +79,7 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
 		ottieniPorte();
 		jackstat=1; writeStatus(1);
 		[isonBut setStringValue:LOCSTR(@"Jack is On")];
-        [self setupTimer]; 
+		[self setupTimer]; 
 		[startBut setTitle:LOCSTR(@"Stop Jack")];
 		[toggleDock setTitle:LOCSTR(@"Stop Jack")];
 		[bufferText setEnabled:NO];
@@ -364,6 +364,7 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
 	}
 }
 
+
 - (IBAction)startJack:(id)sender
 {	
     if(jackdStartMode) [self launchJackCarbon:sender];
@@ -456,7 +457,7 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
 			[jackdMode setEnabled:NO];
 			[self sendJackStatusToPlugins:YES];
 			[routingBut setEnabled:YES];
-			[[JackConnections getSelf] JackCallBacks];
+			//[[JackConnections getSelf] JackCallBacks]; // not used
 		}
 		else { 
 			jackstat = 0; 
@@ -468,6 +469,7 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
 		[self jackALstore:sender];
     }
 }
+
 
 - (IBAction)stopJack:(id)sender
 {

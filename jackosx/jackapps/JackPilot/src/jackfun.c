@@ -121,7 +121,7 @@ int checkJack(void)
 int openJackClient(void) 
 {
     client = jack_client_new("JackPilot");
-    return 1;
+	return 1;
 }
 
 int ottieniPorte(void)  //why not void instead of int return!!??
