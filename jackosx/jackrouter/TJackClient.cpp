@@ -218,7 +218,7 @@ History
 		New KillJackClient method to be called in TearDown when clients do not correctly quit (like iMovie).
 		
 15-10-04 : Version 0.59 : S Letz
-		Redirect kAudioDevicePropertySafetyOffset property on the real driver.
+		Redirect kAudioDevicePropertySafetyOffset and kAudioDevicePropertyLatency properties on the real driver.
 		 
 TODO :
     
@@ -1719,7 +1719,8 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 			}
 			break;
 		}
-                        
+         
+		/*				               
 		case kAudioDevicePropertyLatency:
 		{
 			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
@@ -1734,6 +1735,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 			}
 			break;
 		}
+		*/
         
         case kAudioDevicePropertyHogMode:
         {
@@ -2024,6 +2026,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
         case kAudioDevicePropertyClockSourceNameForIDCFString:
         case kAudioHardwarePropertyBootChimeVolumeScalar:
 		case kAudioDevicePropertyDriverShouldOwniSub:
+		case kAudioDevicePropertyLatency:
         case kAudioDevicePropertyVolumeScalar:
         case kAudioDevicePropertyVolumeDecibels:
         case kAudioDevicePropertyVolumeRangeDecibels:
