@@ -115,7 +115,7 @@ void JackVST::process (float **inputs, float **outputs, long sampleFrames)
 //-----------------------------------------------------------------------------------------
 void JackVST::processReplacing (float **inputs, float **outputs, long sampleFrames)
 {
-	if(c_error == JARInsert::kNoErr && c_jar) {
+	if((c_jar->GetError() == JARInsert::kNoErr) && c_jar) {
 		if(!c_jar->CanProcess()) c_jar->AllocBSizeAlign(sampleFrames);
 		c_jar->Process(inputs,outputs,sampleFrames);
 	} else for(int i=0;i<2;i++) memset(outputs[i],0x0,sizeof(float)*sampleFrames);
