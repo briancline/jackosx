@@ -30,6 +30,7 @@ grame@rd.grame.fr
 #include <map>
 #include <list>
 #include <string>
+#include <set>
 #include "bequite.h"
 
 using namespace std;
@@ -122,6 +123,7 @@ extern "C"
 
             static AudioDeviceID fDeviceID;
             static AudioStreamID fStreamIDList[128];
+			static set<string> fBlackList;
 
             static AudioDeviceID fCoreAudioDriver;		// The CoreAudio driver currently loaded by Jack
 			static bool fFirstActivate;

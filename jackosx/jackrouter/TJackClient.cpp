@@ -256,7 +256,10 @@ History
 		To solve dirty buffer problems : new management of audio buffers for plug-ins: they are now allocated and managed on JAR side. 
 
 16-02-05 : Version 0.71 : S Letz
-		independant management of VST and AU plug-ins so that both types can be used at the same time.
+		Independant management of VST and AU plug-ins so that both types can be used at the same time. 
+		
+16-02-05 : Version 0.72 : S Letz
+		Management of a set of "blacklisted" clients.
 		 
 TODO :
     
@@ -307,6 +310,8 @@ AudioHardwarePlugInRef TJackClient::fPlugInRef = 0;
 
 bool TJackClient::fNotification = false;
 bool TJackClient::fFirstActivate = true;
+
+set<string> TJackClient::fBlackList;
 
 #define kJackStreamFormat kAudioFormatFlagIsPacked|kLinearPCMFormatFlagIsFloat|kAudioFormatFlagIsBigEndian|kAudioFormatFlagIsNonInterleaved
 
@@ -836,9 +841,7 @@ int TJackClient::Process(jack_nframes_t nframes, void* arg)
                         if (context.fOutput[i]) {
                             float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
                             if (k == 1) {	// first proc : copy
-                                for (unsigned int j = 0; j < nframes; j++) {
-                                    output[j] = ((float*)client->fOutputList->mBuffers[i].mData)[j];
-                                }
+								memcpy(output, (float*)client->fOutputList->mBuffers[i].mData, nframes*sizeof(float));
                             } else { // other proc : mix
                                 for (unsigned int j = 0; j < nframes; j++) {
                                     output[j] += ((float*)client->fOutputList->mBuffers[i].mData)[j];
@@ -851,9 +854,7 @@ int TJackClient::Process(jack_nframes_t nframes, void* arg)
                     for (int i = 0; i < TJackClient::fOutputChannels; i++) {
                         float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
                         if (k == 1) {	// first proc : copy
-                            for (unsigned int j = 0; j < nframes; j++) {
-                                output[j] = ((float*)client->fOutputList->mBuffers[i].mData)[j];
-                            }
+							memcpy(output, (float*)client->fOutputList->mBuffers[i].mData, nframes*sizeof(float));
                         } else { // other proc : mix
                             for (unsigned int j = 0; j < nframes; j++) {
                                 output[j] += ((float*)client->fOutputList->mBuffers[i].mData)[j];
@@ -2382,24 +2383,25 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
             err = kAudioHardwareNoError;
             break;
 #endif
-			// Special Property to allocate Jack port from plug-in code
+			// Special Property to allocate Jack port from VST plug-in code
         case kAudioDevicePropertyAllocateJackPortVST: {
                 err = (GetJackClient()->AllocatePlugInPortVST(inPropertyDataSize)) ? kAudioHardwareNoError : kAudioHardwareBadPropertySizeError;
                 break;
             }
 		
+			// Special Property to allocate Jack port from AU plug-in code
 		 case kAudioDevicePropertyAllocateJackPortAU: {
 				err = (GetJackClient()->AllocatePlugInPortAU(inPropertyDataSize)) ? kAudioHardwareNoError : kAudioHardwareBadPropertySizeError;
 				break;
             }
 	
-		      // Special Property to release Jack port from plug-in code
+		      // Special Property to release Jack port from VST plug-in code
         case kAudioDevicePropertyReleaseJackPortVST: {
                 GetJackClient()->ReleasePlugInPortVST(inPropertyDataSize);
                 break;
             }
 			
-		      // Special Property to release Jack port from plug-in code
+		      // Special Property to release Jack port from AU plug-in code
         case kAudioDevicePropertyReleaseJackPortAU: {
                 GetJackClient()->ReleasePlugInPortAU(inPropertyDataSize);
                 break;
@@ -3120,10 +3122,23 @@ bool TJackClient::ReadPref()
                        TJackClient::fInputChannels, TJackClient::fOutputChannels, TJackClient::fAutoConnect);
                 JARLog("Reading Preferences fDefaultInput: %ld fDefaultOutput: %ld fDefaultSystem: %ld fDeviceID: %ld\n",
                        TJackClient::fInputChannels, TJackClient::fOutputChannels, TJackClient::fAutoConnect, TJackClient::fCoreAudioDriver);
-                return true;
             }
-        }
+		}
     }
+
+	char* path1 = "/Library/Audio/Plug-Ins/HAL/JackRouter.plugin/Contents/Resources/BlackList.txt";
+	FILE* blackListFile;
+	if ((blackListFile = fopen(path1, "rt"))) {
+		char client_name[64];
+		char line[500];
+		while (fgets(line, 500, blackListFile)) {
+			sscanf(line, "%s", client_name);
+			TJackClient::fBlackList.insert(client_name);
+			JARLog("Blacklisted client %s\n", client_name); 
+		}
+		return true;
+	}
+	
     return false;
 }
 
@@ -3203,11 +3218,15 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
 {
     OSStatus err = kAudioHardwareNoError;
     char* id_name = bequite_getNameFromPid((int)getpid());
+	
+	// Set of always "blacklisted" clients
+	TJackClient::fBlackList.insert("jackd");
+	TJackClient::fBlackList.insert("jackdmp");
+  
     bool prefOK = ReadPref();
 
     JARLog("Initialize [inSelf, name] : %ld %s \n", (long)inSelf, id_name);
-
-    TJackClient::fPlugInRef = inSelf;
+	TJackClient::fPlugInRef = inSelf;
 
 #ifdef JACK_NOTIFICATION
     // Start notifications (but not for JackPilot)
@@ -3216,8 +3235,8 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
     }
 #endif
 
-    // Reject "jackd" or "jackdmp" as a possible client (to be improved if other clients need to be rejected)
-    if (strcmp(id_name, "jackd") == 0 || strcmp(id_name, "jackdmp") == 0) {
+    // Reject "blacklisted" clients
+	if (TJackClient::fBlackList.find(id_name) != TJackClient::fBlackList.end()) {
         JARLog("Rejected client : %s\n", id_name);
         return noErr;
     }
