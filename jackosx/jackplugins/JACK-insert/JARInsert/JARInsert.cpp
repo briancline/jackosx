@@ -34,6 +34,7 @@ extern "C" void JARILog(char *fmt,...) {
 }
 
 int JARInsert::c_instances = 0;
+int JARInsert::c_instances_count = 0;
 
 JARInsert::JARInsert(long host_buffer_size,int hostType) 
 	: c_error(kNoErr),c_client(NULL),c_isRunning(false),c_rBufOn(false),c_needsDeactivate(false),c_hBufferSize(host_buffer_size)
@@ -90,6 +91,7 @@ JARInsert::JARInsert(long host_buffer_size,int hostType)
 		else { c_error = kErrInvalidBSize; Flush(); return; }
 	}
 	
+	JARInsert::c_instances_count++;
 	c_canProcess = true;
 }
 
@@ -138,6 +140,8 @@ JARInsert::JARInsert(int hostType)
     #endif    
 	
 	JARInsert::c_instances += 2;
+	
+	JARInsert::c_instances_count++;
 	
 	c_canProcess = false;
 }
@@ -276,5 +280,8 @@ void JARInsert::Flush() {
         free(c_outPorts);        
 		UInt32 size;
 		AudioDeviceGetProperty(c_jackDevID,0,true,kAudioDevicePropertyReleaseJackClient,&size,&c_client);
+		
+		JARInsert::c_instances_count--;
+		if(JARInsert::c_instances_count==0) JARInsert::c_instances = 0;
     }
 }

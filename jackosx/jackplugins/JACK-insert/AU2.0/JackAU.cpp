@@ -32,9 +32,15 @@ ElCAJAS::ElCAJAS(AudioUnit component) : AUEffectBase(component),c_jar(NULL),c_er
     CreateElements();
 }
 
+void ElCAJAS::Cleanup() {
+	if(c_jar) {
+		delete c_jar;
+		c_jar = NULL;
+	}
+}
 
 ElCAJAS::~ElCAJAS() {    
-	if(c_jar) delete c_jar;
+	Cleanup();
 }
 
 UInt32		ElCAJAS::SupportedNumChannels ( const AUChannelInfo**	outInfo )

@@ -46,6 +46,8 @@ public:
     }
 
     virtual ComponentResult	Initialize();
+	
+	virtual void Cleanup();
 
     virtual	ComponentResult		GetParameterValueStrings(	AudioUnitScope			inScope,
                                                             AudioUnitParameterID	inParameterID,

@@ -66,6 +66,7 @@ class JARInsert {
 		jack_port_t **c_inPorts,**c_outPorts;
 		long c_jBufferSize,c_hBufferSize;
 		static int c_instances;
+		static int c_instances_count;
 		BSizeAlign *c_bsAI1,*c_bsAI2,*c_bsAO1,*c_bsAO2;
 };
 
