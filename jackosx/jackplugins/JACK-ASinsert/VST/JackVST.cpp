@@ -23,6 +23,7 @@
 int JackVST::instances = 0;
 jack_client_t *JackVST::client = NULL;
 list<JackVST*> JackVST::classInstances;
+int JackVST::sRetainPorts = 0;
 
 //-------------------------------------------------------------------------------------------------------
 JackVST::JackVST (audioMasterCallback audioMaster)
@@ -68,6 +69,7 @@ JackVST::JackVST (audioMasterCallback audioMaster)
             inPorts[i] = jack_port_register(JackVST::client,newName,JACK_DEFAULT_AUDIO_TYPE,JackPortIsInput,0);
             printf("Port: %s created\n",newName);
             free(newName);
+			JackVST::sRetainPorts++;
         }
     
         for(int i=0;i<nOutPorts;i++) {
@@ -76,6 +78,7 @@ JackVST::JackVST (audioMasterCallback audioMaster)
             outPorts[i] = jack_port_register(JackVST::client,newName,JACK_DEFAULT_AUDIO_TYPE,JackPortIsOutput,0);
             printf("Port: %s created\n",newName);
             free(newName);
+			JackVST::sRetainPorts++;
         }
 		
 		for(int i=0;i<2;i++) {
@@ -185,12 +188,12 @@ int JackVST::jackProcess(jack_nframes_t nframes, void *arg) {
 		if(*it) {
 			JackVST *c = *it;
 			float *inBuffers[2];
-			for(int i=0;i<2;i++) {
+			for(int i=0;i<c->nInPorts;i++) {
 				inBuffers[i] = (float*) jack_port_get_buffer(c->inPorts[i],nframes);
 				RingBuffer_Write(&c->sRingBufferIn[i],inBuffers[i],nframes*sizeof(float));
 			}
 			float *outBuffers[2];
-			for(int i=0;i<2;i++) {
+			for(int i=0;i<c->nOutPorts;i++) {
 				outBuffers[i] = (float*) jack_port_get_buffer(c->outPorts[i],nframes);
 				RingBuffer_Read(&c->sRingBufferOut[i],outBuffers[i],nframes*sizeof(float));
 			}
@@ -202,12 +205,11 @@ int JackVST::jackProcess(jack_nframes_t nframes, void *arg) {
 
 void JackVST::process (float **inputs, float **outputs, long sampleFrames)
 {
-    
 	if(status==kIsOn) {
-		for(int i=0;i<2;i++) {
+		for(int i=0;i<nOutPorts;i++) {
 			RingBuffer_Write(&sRingBufferOut[i],inputs[i],sizeof(float)*sampleFrames);
 		}
-		for(int i=0;i<2;i++) {
+		for(int i=0;i<nInPorts;i++) {
 			RingBuffer_Read(&sRingBufferIn[i],outputs[i],sizeof(float)*sampleFrames);
 		}
 		return;
@@ -219,13 +221,12 @@ void JackVST::process (float **inputs, float **outputs, long sampleFrames)
 
 //-----------------------------------------------------------------------------------------
 void JackVST::processReplacing (float **inputs, float **outputs, long sampleFrames)
-{
-
+{	
     if(status==kIsOn) {
-		for(int i=0;i<2;i++) {
+		for(int i=0;i<nOutPorts;i++) {
 			RingBuffer_Write(&sRingBufferOut[i],inputs[i],sizeof(float)*sampleFrames);
 		}
-		for(int i=0;i<2;i++) {
+		for(int i=0;i<nInPorts;i++) {
 			RingBuffer_Read(&sRingBufferIn[i],outputs[i],sizeof(float)*sampleFrames);
 		}
 		return;
@@ -235,13 +236,15 @@ void JackVST::processReplacing (float **inputs, float **outputs, long sampleFram
 }
 
 void JackVST::flush() {
-
+	
+	status = kIsOff;
+	
 	list<JackVST*>::iterator it;
 	
 	for(it = JackVST::classInstances.begin(); it != JackVST::classInstances.end(); ++it) {
 		if(*it) {
 			JackVST *c = *it;
-			if(c->ID == ID) JackVST::classInstances.erase(it);
+			if(c->ID == ID) { JackVST::classInstances.erase(it); break; }
 		}
 	}
         
@@ -256,14 +259,21 @@ void JackVST::flush() {
             
 	for(int i=0;i<nInPorts;i++) {
 		jack_port_unregister(JackVST::client,inPorts[i]);
+		JackVST::sRetainPorts--;
 	}
 	free(inPorts);
 	for(int i=0;i<nOutPorts;i++) {
 		jack_port_unregister(JackVST::client,outPorts[i]);
+		JackVST::sRetainPorts--;
 	}
 	free(outPorts);
 		
-	if(!jack_get_ports(JackVST::client,NULL,NULL,0)) { printf("closing client.\n"); jack_deactivate(JackVST::client); }
+	if(!JackVST::sRetainPorts) { 
+		printf("closing client.\n"); 
+		jack_deactivate(JackVST::client); 
+		jack_client_close(JackVST::client);
+		JackVST::client = NULL;
+	} printf("client won't be closed.\n"); 
         
 }
 

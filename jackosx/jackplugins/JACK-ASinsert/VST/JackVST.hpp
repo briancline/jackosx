@@ -100,7 +100,8 @@ private:
 		char programName[32];
         void flush();
         int status;
-
+		static int sRetainPorts;
+		
 };
 
 
