@@ -1,0 +1,403 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 39;
+	objects = {
+		B20E8FCC05D7AD2F0022C8A7 = {
+			fileRef = B2CE579E05CA654200667293;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B20E8FCF05D7AD310022C8A7 = {
+			fileRef = B2CE579D05CA654200667293;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B20E8FD005D7AD310022C8A7 = {
+			fileRef = B2CE592005CA6D7E00667293;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B20E8FD205D7AD320022C8A7 = {
+			fileRef = B2CE591F05CA6D7E00667293;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B21AE61805D7A87600971B83 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = AudioToolbox.framework;
+			path = /System/Library/Frameworks/AudioToolbox.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		B21AE61905D7A87600971B83 = {
+			fileRef = B21AE61805D7A87600971B83;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B221889C05D7BED30048229E = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = AudioUnit.framework;
+			path = /System/Library/Frameworks/AudioUnit.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		B221889D05D7BED30048229E = {
+			fileRef = B221889C05D7BED30048229E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B221890E05D7C5450048229E = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = CoreServices.framework;
+			path = /System/Library/Frameworks/CoreServices.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		B221890F05D7C5450048229E = {
+			fileRef = B221890E05D7C5450048229E;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B27EF0E9067F90830022AE73 = {
+			fileRef = B2EFA46C05CA7C8700CC0BE7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B2BF364005CEA38A00463CC3 = {
+			fileRef = B2CE56DE05CA63AE00667293;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B2CE55E905CA605900667293 = {
+			children = (
+				B2CE567505CA626E00667293,
+				B2CE563E05CA61FA00667293,
+				B2CE55FA05CA606B00667293,
+			);
+			isa = PBXGroup;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B2CE55EB05CA605900667293 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		B2CE55EC05CA605900667293 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+		B2CE55ED05CA605900667293 = {
+			buildSettings = {
+			};
+			buildStyles = (
+				B2CE55EB05CA605900667293,
+				B2CE55EC05CA605900667293,
+			);
+			hasScannedForEncodings = 1;
+			isa = PBXProject;
+			mainGroup = B2CE55E905CA605900667293;
+			productRefGroup = B2CE55FA05CA606B00667293;
+			projectDirPath = "";
+			targets = (
+				B2CE561E05CA61BD00667293,
+			);
+		};
+		B2CE55FA05CA606B00667293 = {
+			children = (
+				B2CE561F05CA61BD00667293,
+			);
+			isa = PBXGroup;
+			name = Products;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B2CE561A05CA61BD00667293 = {
+			buildActionMask = 2147483647;
+			files = (
+				B2CE564F05CA622100667293,
+				B2CE570205CA63EF00667293,
+				B2CE571505CA642900667293,
+				B2EFA47305CA7C9300CC0BE7,
+				B20E8FCF05D7AD310022C8A7,
+				B20E8FD205D7AD320022C8A7,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2CE561B05CA61BD00667293 = {
+			buildActionMask = 2147483647;
+			files = (
+				B2CE564E05CA622100667293,
+				B2CE571405CA642900667293,
+				B20E8FCC05D7AD2F0022C8A7,
+				B20E8FD005D7AD310022C8A7,
+				B27EF0E9067F90830022AE73,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2CE561C05CA61BD00667293 = {
+			buildActionMask = 2147483647;
+			files = (
+				B2CE576805CA64E600667293,
+				B2BF364005CEA38A00463CC3,
+				B21AE61905D7A87600971B83,
+				B221889D05D7BED30048229E,
+				B221890F05D7C5450048229E,
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2CE561D05CA61BD00667293 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2CE561E05CA61BD00667293 = {
+			buildPhases = (
+				B2CE561A05CA61BD00667293,
+				B2CE561B05CA61BD00667293,
+				B2CE561C05CA61BD00667293,
+				B2CE561D05CA61BD00667293,
+			);
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				HEADER_SEARCH_PATHS = "\"/Volumes/Archivio HD/Development/jackosx/jackosx/jackdrivers/jack\"";
+				LIBRARY_STYLE = BUNDLE;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "-D__APPLE__ -D__POWERPC__ -I../jack/config/";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = jack_coreaudio.so;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			};
+			dependencies = (
+			);
+			isa = PBXLibraryTarget;
+			name = jack_auhal;
+			productInstallPath = /usr/local/lib;
+			productName = jack_panda;
+			productReference = B2CE561F05CA61BD00667293;
+		};
+		B2CE561F05CA61BD00667293 = {
+			explicitFileType = "compiled.mach-o.dylib";
+			includeInIndex = 0;
+			isa = PBXFileReference;
+			path = jack_coreaudio.so;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B2CE563E05CA61FA00667293 = {
+			children = (
+				B2CE564D05CA622100667293,
+				B2CE579D05CA654200667293,
+				B2CE591F05CA6D7E00667293,
+				B2CE564C05CA622100667293,
+				B2CE579E05CA654200667293,
+				B2CE592005CA6D7E00667293,
+				B221890E05D7C5450048229E,
+				B221889C05D7BED30048229E,
+				B21AE61805D7A87600971B83,
+				B2CE576705CA64E600667293,
+			);
+			isa = PBXGroup;
+			name = Source;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B2CE564C05CA622100667293 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = coreaudio_driver.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B2CE564D05CA622100667293 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = coreaudio_driver.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B2CE564E05CA622100667293 = {
+			fileRef = B2CE564C05CA622100667293;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B2CE564F05CA622100667293 = {
+			fileRef = B2CE564D05CA622100667293;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B2CE567505CA626E00667293 = {
+			children = (
+				B2EFA46C05CA7C8700CC0BE7,
+				B2EFA47205CA7C9300CC0BE7,
+				B2CE571205CA642900667293,
+				B2CE571305CA642900667293,
+				B2CE570105CA63EF00667293,
+				B2CE56DE05CA63AE00667293,
+			);
+			isa = PBXGroup;
+			name = "Jack-files";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B2CE56DE05CA63AE00667293 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = Jack.framework;
+			path = /Library/Frameworks/Jack.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		B2CE570105CA63EF00667293 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = mach_port.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B2CE570205CA63EF00667293 = {
+			fileRef = B2CE570105CA63EF00667293;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B2CE571205CA642900667293 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = memops.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B2CE571305CA642900667293 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = memops.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B2CE571405CA642900667293 = {
+			fileRef = B2CE571205CA642900667293;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B2CE571505CA642900667293 = {
+			fileRef = B2CE571305CA642900667293;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B2CE576705CA64E600667293 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = CoreAudio.framework;
+			path = /System/Library/Frameworks/CoreAudio.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		B2CE576805CA64E600667293 = {
+			fileRef = B2CE576705CA64E600667293;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B2CE579D05CA654200667293 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = AudioRender.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B2CE579E05CA654200667293 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			path = AudioRender.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B2CE591F05CA6D7E00667293 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = AudioRenderBridge.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B2CE592005CA6D7E00667293 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			path = AudioRenderBridge.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B2EFA46C05CA7C8700CC0BE7 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = driver.c;
+			path = ../jack/libjack/driver.c;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		B2EFA47205CA7C9300CC0BE7 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = driver.h;
+			path = ../jack/jack/driver.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		B2EFA47305CA7C9300CC0BE7 = {
+			fileRef = B2EFA47205CA7C9300CC0BE7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+	};
+	rootObject = B2CE55ED05CA605900667293;
+}

@@ -1,0 +1,2068 @@
+// !$*UTF8*$!
+{
+	B214761E064D7A500063F0D1 = {
+		fRef = B2CE592005CA6D7E00667293;
+		isa = PBXTextBookmark;
+		name = "AudioRenderBridge.cpp: stopAudioProcess";
+		rLen = 0;
+		rLoc = 988;
+		rType = 0;
+		vrLen = 1229;
+		vrLoc = 130;
+	};
+	B2147660064D7C340063F0D1 = {
+		fRef = B2CE579D05CA654200667293;
+		isa = PBXTextBookmark;
+		name = "AudioRender.h: GetHostData";
+		rLen = 0;
+		rLoc = 1230;
+		rType = 0;
+		vrLen = 1999;
+		vrLoc = 0;
+	};
+	B221889705D7BEB60048229E = {
+		fRef = B22188CC05D7BF0A0048229E;
+		isa = PBXTextBookmark;
+		name = OpenDefaultAudioOutput;
+		rLen = 22;
+		rLoc = 553;
+		rType = 0;
+		vrLen = 778;
+		vrLoc = 0;
+	};
+	B22188B905D7BEDF0048229E = {
+		fRef = B22188C905D7BF0A0048229E;
+		isa = PBXTextBookmark;
+		name = AudioUnit;
+		rLen = 9;
+		rLoc = 576;
+		rType = 0;
+		vrLen = 778;
+		vrLoc = 0;
+	};
+	B22188BD05D7BEE10048229E = {
+		fRef = B2E59E0605CBE8C600C53220;
+		isa = PBXTextBookmark;
+		name = "AudioUnitUtilities.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1589;
+		vrLoc = 0;
+	};
+	B22188BE05D7BEE10048229E = {
+		fRef = B2E59E0605CBE8C600C53220;
+		isa = PBXTextBookmark;
+		name = "AudioUnitUtilities.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1589;
+		vrLoc = 0;
+	};
+	B22188C905D7BF0A0048229E = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = DefaultAudioOutput.h;
+		path = /System/Library/Frameworks/AudioToolbox.framework/Versions/A/Headers/DefaultAudioOutput.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B22188CC05D7BF0A0048229E = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = DefaultAudioOutput.h;
+		path = /System/Library/Frameworks/AudioToolbox.framework/Versions/A/Headers/DefaultAudioOutput.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B232841505E0195F00944D13 = {
+		fRef = B232841D05E0196E00944D13;
+		isa = PBXTextBookmark;
+		name = "int jackALLoad(void) {\n    FILE *prefFile;\n    char *path;\n    path = (char*)alloca(256*sizeof(char));\n    sprintf(path,\"%s/Library/Preferences/JAS.jpil\",homePath);\n    if ((prefFile = fopen(path, \"rt\")) == NULL) {\n        inch = 2;\n        outch = 2;\n        autoc = 1;\n        defInput = FALSE;\n        defOutput = FALSE;\n        defSystem = FALSE;\n        return 1;\n    } else {\n    int nullo;\n    fscanf(prefFile,\"\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\",&inch,&nullo,&outch,&nullo,&autoc,&nullo,&defInput,&nullo,&defOutput,&nullo,&defSystem); \n    \n    fclose(prefFile);\n    }\n    return 1;\n}\n";
+		rLen = 603;
+		rLoc = 6573;
+		rType = 0;
+		vrLen = 1255;
+		vrLoc = 5970;
+	};
+	B232841605E0195F00944D13 = {
+		fRef = B232841A05E0196E00944D13;
+		isa = PBXTextBookmark;
+		name = "int jackALLoad(void) {\n    FILE *prefFile;\n    char *path;\n    path = (char*)alloca(256*sizeof(char));\n    sprintf(path,\"%s/Library/Preferences/JAS.jpil\",homePath);\n    if ((prefFile = fopen(path, \"rt\")) == NULL) {\n        inch = 2;\n        outch = 2;\n        autoc = 1;\n        defInput = FALSE;\n        defOutput = FALSE;\n        defSystem = FALSE;\n        return 1;\n    } else {\n    int nullo;\n    fscanf(prefFile,\"\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\",&inch,&nullo,&outch,&nullo,&autoc,&nullo,&defInput,&nullo,&defOutput,&nullo,&defSystem); \n    \n    fclose(prefFile);\n    }\n    return 1;\n}\n";
+		rLen = 603;
+		rLoc = 6573;
+		rType = 0;
+		vrLen = 1255;
+		vrLoc = 5970;
+	};
+	B232841A05E0196E00944D13 = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.c;
+		name = jackfun.c;
+		path = "/Volumes/Archivio HD/Development/jackosx/TO PUT/JackPilot/src/jackfun.c";
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B232841D05E0196E00944D13 = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.c;
+		name = jackfun.c;
+		path = "/Volumes/Archivio HD/Development/jackosx/TO PUT/JackPilot/src/jackfun.c";
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B266F0FA05D44F9400845F09 = {
+		fRef = B2BF330A05CE9BD100463CC3;
+		isa = PBXTextBookmark;
+		name = "client.c: 472";
+		rLen = 0;
+		rLoc = 11498;
+		rType = 0;
+		vrLen = 950;
+		vrLoc = 10718;
+	};
+	B266F0FB05D44F9400845F09 = {
+		fRef = B2BF330A05CE9BD100463CC3;
+		isa = PBXTextBookmark;
+		name = "client.c: 472";
+		rLen = 0;
+		rLoc = 11498;
+		rType = 0;
+		vrLen = 950;
+		vrLoc = 10718;
+	};
+	B266F11505D4503800845F09 = {
+		fRef = B2CE579D05CA654200667293;
+		isa = PBXTextBookmark;
+		name = "AudioRender.h: process";
+		rLen = 0;
+		rLoc = 1340;
+		rType = 0;
+		vrLen = 1295;
+		vrLoc = 265;
+	};
+	B266F13A05D4514300845F09 = {
+		fRef = B2E59E0B05CBE8C600C53220;
+		isa = PBXTextBookmark;
+		name = AudioDeviceTranslateTime;
+		rLen = 24;
+		rLoc = 50239;
+		rType = 0;
+		vrLen = 1789;
+		vrLoc = 59561;
+	};
+	B266F14105D4517000845F09 = {
+		fRef = B2EA5FC105CBC4780087828C;
+		isa = PBXTextBookmark;
+		name = AudioConverterNew;
+		rLen = 17;
+		rLoc = 13268;
+		rType = 0;
+		vrLen = 2108;
+		vrLoc = 12201;
+	};
+	B267A16C064B16E7008CA6F8 = {
+		fRef = B267A16F064B16F3008CA6F8;
+		isa = PBXTextBookmark;
+		name = "#include <sysdeps/time.h>\n";
+		rLen = 26;
+		rLoc = 1394;
+		rType = 0;
+		vrLen = 1723;
+		vrLoc = 0;
+	};
+	B267A16D064B16E7008CA6F8 = {
+		fRef = B267A172064B16F3008CA6F8;
+		isa = PBXTextBookmark;
+		name = "#include <sysdeps/time.h>\n";
+		rLen = 26;
+		rLoc = 1394;
+		rType = 0;
+		vrLen = 1723;
+		vrLoc = 0;
+	};
+	B267A16F064B16F3008CA6F8 = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = internal.h;
+		path = "/Volumes/Archivio HD/Development/jackosx/jackosx/jackdrivers/jack/jack/internal.h";
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B267A172064B16F3008CA6F8 = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = internal.h;
+		path = "/Volumes/Archivio HD/Development/jackosx/jackosx/jackdrivers/jack/jack/internal.h";
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B267A1BA064B1876008CA6F8 = {
+		isa = PBXTargetBookmark;
+		trg = B2CE561E05CA61BD00667293;
+	};
+	B269BD2005CE5F91008A029D = {
+		exec = B2D77A3505CAAC5F00918C9C;
+		isa = PBXExecutableBookmark;
+	};
+	B269BD5E05CE64EC008A029D = {
+		fRef = B2EFA47205CA7C9300CC0BE7;
+		isa = PBXTextBookmark;
+		name = "driver.h: 103";
+		rLen = 0;
+		rLoc = 3452;
+		rType = 0;
+		vrLen = 1421;
+		vrLoc = 0;
+	};
+	B269BD6205CE64F9008A029D = {
+		fRef = B2EFA46C05CA7C8700CC0BE7;
+		isa = PBXTextBookmark;
+		name = "driver.c: 119";
+		rLen = 0;
+		rLoc = 3511;
+		rType = 0;
+		vrLen = 1819;
+		vrLoc = 0;
+	};
+	B269BD6905CE64FF008A029D = {
+		fRef = B2CE570105CA63EF00667293;
+		isa = PBXTextBookmark;
+		name = "mach_port.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1142;
+		vrLoc = 0;
+	};
+	B27EF0CE067F90490022AE73 = {
+		fRef = B2CE579E05CA654200667293;
+		isa = PBXTextBookmark;
+		name = "AudioRender.cpp: 171";
+		rLen = 0;
+		rLoc = 5432;
+		rType = 0;
+		vrLen = 2004;
+		vrLoc = 9307;
+	};
+	B2AB3180064FCE3700A4BCA4 = {
+		fRef = B2CE591F05CA6D7E00667293;
+		isa = PBXTextBookmark;
+		name = "AudioRenderBridge.h: 12";
+		rLen = 0;
+		rLoc = 294;
+		rType = 0;
+		vrLen = 778;
+		vrLoc = 0;
+	};
+	B2BF322505CE932500463CC3 = {
+		fRef = B2BF323105CE934500463CC3;
+		isa = PBXTextBookmark;
+		name = "(null): 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 594;
+		vrLoc = 0;
+	};
+	B2BF322705CE932500463CC3 = {
+		fRef = B2BF322D05CE934500463CC3;
+		isa = PBXTextBookmark;
+		name = "(null): 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 594;
+		vrLoc = 0;
+	};
+	B2BF322B05CE932700463CC3 = {
+		fRef = B2BF323305CE934500463CC3;
+		isa = PBXTextBookmark;
+		name = "(null): 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1483;
+		vrLoc = 0;
+	};
+	B2BF322D05CE934500463CC3 = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = CoreAudio.h;
+		path = /System/Library/Frameworks/CoreAudio.framework/Versions/A/Headers/CoreAudio.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2BF323105CE934500463CC3 = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = CoreAudio.h;
+		path = /System/Library/Frameworks/CoreAudio.framework/Versions/A/Headers/CoreAudio.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2BF323305CE934500463CC3 = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = AudioHardwarePlugIn.h;
+		path = /System/Library/Frameworks/CoreAudio.framework/Versions/A/Headers/AudioHardwarePlugIn.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2BF323A05CE936B00463CC3 = {
+		fRef = B2CE579005CA651300667293;
+		isa = PBXTextBookmark;
+		name = "AudioDriverPlugIn.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1957;
+		vrLoc = 3215;
+	};
+	B2BF323B05CE936B00463CC3 = {
+		fRef = B2CE579005CA651300667293;
+		isa = PBXTextBookmark;
+		name = "AudioDriverPlugIn.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1957;
+		vrLoc = 3215;
+	};
+	B2BF324205CE937A00463CC3 = {
+		fRef = B2BF324A05CE939900463CC3;
+		isa = PBXTextBookmark;
+		name = "(null): 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 3506;
+		vrLoc = 3276;
+	};
+	B2BF324A05CE939900463CC3 = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = AudioHardwarePlugIn.h;
+		path = /System/Library/Frameworks/CoreAudio.framework/Versions/A/Headers/AudioHardwarePlugIn.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2BF32A805CE982600463CC3 = {
+		fRef = B2BF32B805CE984000463CC3;
+		isa = PBXTextBookmark;
+		name = "(null): 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1501;
+		vrLoc = 0;
+	};
+	B2BF32A905CE982600463CC3 = {
+		fRef = B2BF32B705CE984000463CC3;
+		isa = PBXTextBookmark;
+		name = "(null): 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1501;
+		vrLoc = 0;
+	};
+	B2BF32B705CE984000463CC3 = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = HostTime.h;
+		path = /System/Library/Frameworks/CoreAudio.framework/Versions/A/Headers/HostTime.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2BF32B805CE984000463CC3 = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = HostTime.h;
+		path = /System/Library/Frameworks/CoreAudio.framework/Versions/A/Headers/HostTime.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2BF330A05CE9BD100463CC3 = {
+		fileEncoding = 30;
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.c;
+		name = client.c;
+		path = "/Volumes/Archivio HD/Development/jackosx/jackosx/jackdrivers/jack/libjack/client.c";
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2C0390B05CC23D80005F8F1 = {
+		fRef = B2C0391205CC23DF0005F8F1;
+		isa = PBXTextBookmark;
+		name = "#else\n";
+		rLen = 6;
+		rLoc = 9270;
+		rType = 0;
+		vrLen = 1605;
+		vrLoc = 8432;
+	};
+	B2C0390C05CC23D80005F8F1 = {
+		fRef = B2C0390F05CC23DF0005F8F1;
+		isa = PBXTextBookmark;
+		name = "#else\n";
+		rLen = 6;
+		rLoc = 9270;
+		rType = 0;
+		vrLen = 1605;
+		vrLoc = 8432;
+	};
+	B2C0390F05CC23DF0005F8F1 = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = Debugging.h;
+		path = /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/Headers/Debugging.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2C0391205CC23DF0005F8F1 = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = Debugging.h;
+		path = /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/Headers/Debugging.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2CE55ED05CA605900667293 = {
+		activeBuildStyle = B2CE55EB05CA605900667293;
+		activeExecutable = B2D77A3505CAAC5F00918C9C;
+		activeTarget = B2CE561E05CA61BD00667293;
+		addToTargets = (
+			B2CE561E05CA61BD00667293,
+		);
+		breakpoints = (
+		);
+		codeSenseManager = B2CE55EF05CA605900667293;
+		executables = (
+			B2D77A3505CAAC5F00918C9C,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXErrorsWarningsDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXErrorsWarningsDataSource_LocationID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					771.8799,
+					407.2085,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXErrorsWarningsDataSource_TypeID,
+					PBXErrorsWarningsDataSource_MessageID,
+					PBXErrorsWarningsDataSource_LocationID,
+				);
+			};
+			PBXConfiguration.PBXFileTableDataSource3.PBXExecutablesDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXExecutablesDataSource_NameID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					22,
+					1000,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXExecutablesDataSource_ActiveFlagID,
+					PBXExecutablesDataSource_NameID,
+				);
+			};
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = 1;
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Warnings_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					745,
+					20,
+					132,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					707,
+					149,
+					20,
+					149,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 109086368;
+			PBXPrepackagedSmartGroups_v2 = (
+				{
+					PBXTransientLocationAtTop = bottom;
+					absolutePathToBundle = "";
+					activationKey = OldTargetSmartGroup;
+					clz = PBXTargetSmartGroup;
+					description = "Displays all targets of the project.";
+					globalID = 1C37FABC04509CD000000102;
+					name = Targets;
+					preferences = {
+						image = Targets;
+					};
+				},
+				{
+					PBXTransientLocationAtTop = bottom;
+					absolutePathToBundle = "";
+					clz = PBXTargetSmartGroup2;
+					description = "Displays all targets of the project as well as nested build phases.";
+					globalID = 1C37FBAC04509CD000000102;
+					name = Targets;
+					preferences = {
+						image = Targets;
+					};
+				},
+				{
+					PBXTransientLocationAtTop = bottom;
+					absolutePathToBundle = "";
+					clz = PBXExecutablesSmartGroup;
+					description = "Displays all executables of the project.";
+					globalID = 1C37FAAC04509CD000000102;
+					name = Executables;
+					preferences = {
+						image = Executable;
+					};
+				},
+				{
+					" PBXTransientLocationAtTop " = bottom;
+					absolutePathToBundle = "";
+					clz = PBXErrorsWarningsSmartGroup;
+					description = "Displays files with errors or warnings.";
+					globalID = 1C08E77C0454961000C914BD;
+					name = "Errors and Warnings";
+					preferences = {
+						fnmatch = "";
+						image = WarningsErrors;
+						recursive = 1;
+						regex = "";
+						root = "<PROJECT>";
+					};
+				},
+				{
+					PBXTransientLocationAtTop = bottom;
+					absolutePathToBundle = "";
+					clz = PBXFilenameSmartGroup;
+					description = "Filters items in a given group (potentially recursively) based on matching the name with the regular expression of the filter.";
+					globalID = 1CC0EA4004350EF90044410B;
+					name = "Implementation Files";
+					preferences = {
+						canSave = 1;
+						fnmatch = "";
+						image = SmartFolder;
+						isLeaf = 0;
+						recursive = 1;
+						regex = "?*\\.[mcMC]";
+						root = "<PROJECT>";
+					};
+				},
+				{
+					PBXTransientLocationAtTop = bottom;
+					absolutePathToBundle = "";
+					clz = PBXFilenameSmartGroup;
+					description = "This group displays Interface Builder NIB Files.";
+					globalID = 1CC0EA4004350EF90041110B;
+					name = "NIB Files";
+					preferences = {
+						canSave = 1;
+						fnmatch = "*.nib";
+						image = SmartFolder;
+						isLeaf = 0;
+						recursive = 1;
+						regex = "";
+						root = "<PROJECT>";
+					};
+				},
+				{
+					PBXTransientLocationAtTop = no;
+					absolutePathToBundle = "";
+					clz = PBXFindSmartGroup;
+					description = "Displays Find Results.";
+					globalID = 1C37FABC05509CD000000102;
+					name = "Find Results";
+					preferences = {
+						image = spyglass;
+					};
+				},
+				{
+					PBXTransientLocationAtTop = no;
+					absolutePathToBundle = "";
+					clz = PBXBookmarksSmartGroup;
+					description = "Displays Project Bookmarks.";
+					globalID = 1C37FABC05539CD112110102;
+					name = Bookmarks;
+					preferences = {
+						image = Bookmarks;
+					};
+				},
+				{
+					PBXTransientLocationAtTop = bottom;
+					absolutePathToBundle = "";
+					clz = XCSCMSmartGroup;
+					description = "Displays files with interesting SCM status.";
+					globalID = E2644B35053B69B200211256;
+					name = SCM;
+					preferences = {
+						image = PBXRepository;
+						isLeaf = 0;
+					};
+				},
+				{
+					PBXTransientLocationAtTop = bottom;
+					absolutePathToBundle = "";
+					clz = PBXSymbolsSmartGroup;
+					description = "Displays all symbols for the project.";
+					globalID = 1C37FABC04509CD000100104;
+					name = "Project Symbols";
+					preferences = {
+						image = ProjectSymbols;
+						isLeaf = 1;
+					};
+				},
+				{
+					PBXTransientLocationAtTop = bottom;
+					absolutePathToBundle = "";
+					clz = PBXFilenameSmartGroup;
+					description = "Filters items in a given group (potentially recursively) based on matching the name with the regular expression of the filter.";
+					globalID = PBXTemplateMarker;
+					name = "Simple Filter SmartGroup";
+					preferences = {
+						canSave = 1;
+						fnmatch = "*.nib";
+						image = SmartFolder;
+						isLeaf = 0;
+						recursive = 1;
+						regex = "";
+						root = "<PROJECT>";
+					};
+				},
+				{
+					PBXTransientLocationAtTop = bottom;
+					absolutePathToBundle = "";
+					clz = PBXFilenameSmartGroup;
+					description = "Filters items in a given group (potentially recursively) based on matching the name with the regular expression of the filter.";
+					globalID = PBXTemplateMarker;
+					name = "Simple Regular Expression SmartGroup";
+					preferences = {
+						canSave = 1;
+						fnmatch = "";
+						image = SmartFolder;
+						isLeaf = 0;
+						recursive = 1;
+						regex = "?*\\.[mcMC]";
+						root = "<PROJECT>";
+					};
+				},
+			);
+			PBXWorkspaceContents = (
+				{
+					PBXProjectWorkspaceModule_StateKey_Rev39 = {
+						PBXProjectWorkspaceModule_DEGV_Geometry = {
+							_collapsingFrameDimension = 0;
+							_indexOfCollapsedView = 0;
+							_percentageOfCollapsedView = 0;
+							isCollapsed = yes;
+							sizes = (
+								"{{0, 0}, {1066, 0}}",
+								"{{0, 0}, {1066, 684}}",
+							);
+						};
+						PBXProjectWorkspaceModule_DataSourceSelectionKey_Rev6 = {
+							BoundsStr = "{{0, 0}, {1051, 255}}";
+							Rows = (
+								0,
+							);
+							VisibleRectStr = "{{0, 0}, {0, 0}}";
+						};
+						PBXProjectWorkspaceModule_EditorOpen = true;
+						PBXProjectWorkspaceModule_EmbeddedNavigatorGroup = {
+							PBXSplitModuleInNavigatorKey = {
+								Split0 = {
+									bookmark = B2D860CA06808B6900D0B293;
+									history = (
+										B2CE574D05CA64B100667293,
+										B2EA600C05CBC6220087828C,
+										B2E59DFD05CBE8A700C53220,
+										B2E59E0005CBE8A800C53220,
+										B2C0390B05CC23D80005F8F1,
+										B269BD2005CE5F91008A029D,
+										B269BD6905CE64FF008A029D,
+										B2BF322505CE932500463CC3,
+										B2BF323A05CE936B00463CC3,
+										B2BF324205CE937A00463CC3,
+										B2BF32A805CE982600463CC3,
+										B266F0FA05D44F9400845F09,
+										B266F13A05D4514300845F09,
+										B266F14105D4517000845F09,
+										B22188B905D7BEDF0048229E,
+										B22188BD05D7BEE10048229E,
+										B2E900E205D7D2E300385626,
+										B2EE7DD705DA5E87003A2BBE,
+										B2EE7DDC05DA5E88003A2BBE,
+										B2EE7DE105DA5E91003A2BBE,
+										B2EE7E0805DA6255003A2BBE,
+										B232841505E0195F00944D13,
+										B2D3A28006032F5A0035D658,
+										B2D3A28506032F5E0035D658,
+										B267A16C064B16E7008CA6F8,
+										B267A1BA064B1876008CA6F8,
+										B214761E064D7A500063F0D1,
+										B2147660064D7C340063F0D1,
+										B2AB3180064FCE3700A4BCA4,
+										B27EF0CE067F90490022AE73,
+										B2D8605E068086E500D0B293,
+										B2D86062068086E700D0B293,
+										B2D86068068086FA00D0B293,
+										B2D860730680872800D0B293,
+										B2D860780680873300D0B293,
+										B2D8609A0680883000D0B293,
+									);
+									prevStack = (
+										B2CE562405CA61BE00667293,
+										B2CE565605CA622200667293,
+										B2CE570D05CA63F800667293,
+										B2CE574E05CA64B100667293,
+										B2CE594505CA6E3C00667293,
+										B2EFA47A05CA7C9E00CC0BE7,
+										B2D77A4405CAACA500918C9C,
+										B2D77AF105CAB75300918C9C,
+										B2E09E3A05CAC29600835B0B,
+										B2EA5FD605CBC5150087828C,
+										B2EA600D05CBC6220087828C,
+										B2C0390C05CC23D80005F8F1,
+										B269BD5E05CE64EC008A029D,
+										B269BD6205CE64F9008A029D,
+										B2BF322705CE932500463CC3,
+										B2BF322B05CE932700463CC3,
+										B2BF323B05CE936B00463CC3,
+										B2BF32A905CE982600463CC3,
+										B266F0FB05D44F9400845F09,
+										B266F11505D4503800845F09,
+										B221889705D7BEB60048229E,
+										B22188BE05D7BEE10048229E,
+										B2EE7D2F05DA5A9E003A2BBE,
+										B2EE7DBB05DA5E1E003A2BBE,
+										B2EE7DD905DA5E87003A2BBE,
+										B2EE7DDE05DA5E88003A2BBE,
+										B2EE7DE305DA5E91003A2BBE,
+										B2EE7DF405DA5EC1003A2BBE,
+										B2EE7E0405DA6013003A2BBE,
+										B232841605E0195F00944D13,
+										B2D3A28206032F5A0035D658,
+										B2D3A28606032F5E0035D658,
+										B267A16D064B16E7008CA6F8,
+										B2D8604A068086C200D0B293,
+										B2D86050068086CC00D0B293,
+										B2D86053068086D400D0B293,
+										B2D86057068086E000D0B293,
+										B2D8605B068086E400D0B293,
+										B2D8605F068086E500D0B293,
+										B2D86063068086E700D0B293,
+										B2D86069068086FA00D0B293,
+										B2D860700680872400D0B293,
+										B2D860740680872800D0B293,
+										B2D8607A0680873300D0B293,
+									);
+								};
+								SplitCount = 1;
+							};
+						};
+						PBXProjectWorkspaceModule_GeometryKey_Rev15 = {
+							PBXProjectWorkspaceModule_SGTM_Geometry = {
+								_collapsingFrameDimension = 0;
+								_indexOfCollapsedView = 0;
+								_percentageOfCollapsedView = 0;
+								sizes = (
+									"{{0, 0}, {214, 684}}",
+									"{{214, 0}, {1066, 684}}",
+								);
+							};
+						};
+						PBXProjectWorkspaceModule_OldDetailFrame = "{{0, 0}, {1066, 0}}";
+						PBXProjectWorkspaceModule_OldEditorFrame = "{{0, 0}, {1066, 684}}";
+						PBXProjectWorkspaceModule_OldSuperviewFrame = "{{214, 0}, {1066, 684}}";
+						PBXProjectWorkspaceModule_SGTM = {
+							PBXBottomSmartGroupGIDs = (
+								1C37FBAC04509CD000000102,
+								1C37FAAC04509CD000000102,
+								1C08E77C0454961000C914BD,
+								1C37FABC05509CD000000102,
+								1C37FABC05539CD112110102,
+								E2644B35053B69B200211256,
+								1C37FABC04509CD000100104,
+								1CC0EA4004350EF90044410B,
+								1CC0EA4004350EF90041110B,
+							);
+							PBXSmartGroupTreeModuleColumnData = {
+								PBXSmartGroupTreeModuleColumnWidthsKey = (
+									22,
+									175,
+								);
+								PBXSmartGroupTreeModuleColumnsKey_v4 = (
+									SCMStatusColumn,
+									MainColumn,
+								);
+							};
+							PBXSmartGroupTreeModuleOutlineStateKey_v7 = {
+								PBXSmartGroupTreeModuleOutlineStateExpansionKey = (
+								);
+								PBXSmartGroupTreeModuleOutlineStateSelectionKey = (
+									(
+										0,
+									),
+								);
+								PBXSmartGroupTreeModuleOutlineStateVisibleRectKey = "{{0, 0}, {197, 666}}";
+							};
+							PBXTopSmartGroupGIDs = (
+							);
+						};
+					};
+				},
+			);
+			"PBXWorkspaceContents:PBXConfiguration.PBXModule.PBXBuildResultsModule" = {
+			};
+			"PBXWorkspaceContents:PBXConfiguration.PBXModule.PBXCVSModule" = {
+			};
+			"PBXWorkspaceContents:PBXConfiguration.PBXModule.PBXDebugCLIModule" = {
+			};
+			"PBXWorkspaceContents:PBXConfiguration.PBXModule.PBXDebugSessionModule" = {
+				Debugger = {
+					HorizontalSplitView = {
+						_collapsingFrameDimension = 0;
+						_indexOfCollapsedView = 0;
+						_percentageOfCollapsedView = 0;
+						isCollapsed = yes;
+						sizes = (
+							"{{0, 0}, {282, 187}}",
+							"{{282, 0}, {463, 187}}",
+						);
+					};
+					VerticalSplitView = {
+						_collapsingFrameDimension = 0;
+						_indexOfCollapsedView = 0;
+						_percentageOfCollapsedView = 0;
+						isCollapsed = yes;
+						sizes = (
+							"{{0, 0}, {745, 187}}",
+							"{{0, 187}, {745, 235}}",
+						);
+					};
+				};
+				LauncherConfigVersion = 8;
+			};
+			"PBXWorkspaceContents:PBXConfiguration.PBXModule.PBXNavigatorGroup" = {
+				PBXSplitModuleInNavigatorKey = {
+					SplitCount = 1;
+				};
+			};
+			"PBXWorkspaceContents:PBXConfiguration.PBXModule.PBXProjectFindModule" = {
+			};
+			"PBXWorkspaceContents:PBXConfiguration.PBXModule.PBXProjectWorkspaceModule" = {
+				PBXProjectWorkspaceModule_StateKey_Rev39 = {
+					PBXProjectWorkspaceModule_DEGV_Geometry = {
+						_collapsingFrameDimension = 0;
+						_indexOfCollapsedView = 0;
+						_percentageOfCollapsedView = 0;
+						isCollapsed = yes;
+						sizes = (
+							"{{0, 0}, {1066, 0}}",
+							"{{0, 0}, {1066, 684}}",
+						);
+					};
+					PBXProjectWorkspaceModule_DataSourceSelectionKey_Rev6 = {
+						BoundsStr = "{{0, 0}, {1051, 15}}";
+						Rows = (
+							0,
+						);
+						VisibleRectStr = "{{0, 0}, {0, 0}}";
+					};
+					PBXProjectWorkspaceModule_EditorOpen = true;
+					PBXProjectWorkspaceModule_EmbeddedNavigatorGroup = {
+						PBXSplitModuleInNavigatorKey = {
+							Split0 = {
+								bookmark = B2D8606D0680871F00D0B293;
+								history = (
+									B2CE574D05CA64B100667293,
+									B2EA600C05CBC6220087828C,
+									B2E59DFD05CBE8A700C53220,
+									B2E59E0005CBE8A800C53220,
+									B2C0390B05CC23D80005F8F1,
+									B269BD2005CE5F91008A029D,
+									B269BD6905CE64FF008A029D,
+									B2BF322505CE932500463CC3,
+									B2BF323A05CE936B00463CC3,
+									B2BF324205CE937A00463CC3,
+									B2BF32A805CE982600463CC3,
+									B266F0FA05D44F9400845F09,
+									B266F13A05D4514300845F09,
+									B266F14105D4517000845F09,
+									B22188B905D7BEDF0048229E,
+									B22188BD05D7BEE10048229E,
+									B2E900E205D7D2E300385626,
+									B2EE7DD705DA5E87003A2BBE,
+									B2EE7DDC05DA5E88003A2BBE,
+									B2EE7DE105DA5E91003A2BBE,
+									B2EE7E0805DA6255003A2BBE,
+									B232841505E0195F00944D13,
+									B2D3A28006032F5A0035D658,
+									B2D3A28506032F5E0035D658,
+									B267A16C064B16E7008CA6F8,
+									B267A1BA064B1876008CA6F8,
+									B214761E064D7A500063F0D1,
+									B2147660064D7C340063F0D1,
+									B2AB3180064FCE3700A4BCA4,
+									B27EF0CE067F90490022AE73,
+									B2D86052068086D400D0B293,
+									B2D8605A068086E400D0B293,
+									B2D8605E068086E500D0B293,
+									B2D86062068086E700D0B293,
+									B2D86068068086FA00D0B293,
+									B27EF0D2067F904C0022AE73,
+								);
+								prevStack = (
+									B2CE562405CA61BE00667293,
+									B2CE565605CA622200667293,
+									B2CE570D05CA63F800667293,
+									B2CE574E05CA64B100667293,
+									B2CE594505CA6E3C00667293,
+									B2EFA47A05CA7C9E00CC0BE7,
+									B2D77A4405CAACA500918C9C,
+									B2D77AF105CAB75300918C9C,
+									B2E09E3A05CAC29600835B0B,
+									B2EA5FD605CBC5150087828C,
+									B2EA600D05CBC6220087828C,
+									B2C0390C05CC23D80005F8F1,
+									B269BD5E05CE64EC008A029D,
+									B269BD6205CE64F9008A029D,
+									B2BF322705CE932500463CC3,
+									B2BF322B05CE932700463CC3,
+									B2BF323B05CE936B00463CC3,
+									B2BF32A905CE982600463CC3,
+									B266F0FB05D44F9400845F09,
+									B266F11505D4503800845F09,
+									B221889705D7BEB60048229E,
+									B22188BE05D7BEE10048229E,
+									B2EE7D2F05DA5A9E003A2BBE,
+									B2EE7DBB05DA5E1E003A2BBE,
+									B2EE7DD905DA5E87003A2BBE,
+									B2EE7DDE05DA5E88003A2BBE,
+									B2EE7DE305DA5E91003A2BBE,
+									B2EE7DF405DA5EC1003A2BBE,
+									B2EE7E0405DA6013003A2BBE,
+									B232841605E0195F00944D13,
+									B2D3A28206032F5A0035D658,
+									B2D3A28606032F5E0035D658,
+									B267A16D064B16E7008CA6F8,
+									B2D8604A068086C200D0B293,
+									B2D86050068086CC00D0B293,
+									B2D86053068086D400D0B293,
+									B2D86057068086E000D0B293,
+									B2D8605B068086E400D0B293,
+									B2D8605F068086E500D0B293,
+									B2D86063068086E700D0B293,
+									B2D86069068086FA00D0B293,
+								);
+							};
+							SplitCount = 1;
+						};
+					};
+					PBXProjectWorkspaceModule_GeometryKey_Rev15 = {
+						PBXProjectWorkspaceModule_SGTM_Geometry = {
+							_collapsingFrameDimension = 0;
+							_indexOfCollapsedView = 0;
+							_percentageOfCollapsedView = 0;
+							sizes = (
+								"{{0, 0}, {214, 684}}",
+								"{{214, 0}, {1066, 684}}",
+							);
+						};
+					};
+					PBXProjectWorkspaceModule_OldDetailFrame = "{{0, 0}, {1066, 0}}";
+					PBXProjectWorkspaceModule_OldEditorFrame = "{{0, 0}, {1066, 684}}";
+					PBXProjectWorkspaceModule_OldSuperviewFrame = "{{214, 0}, {1066, 684}}";
+					PBXProjectWorkspaceModule_SGTM = {
+						PBXBottomSmartGroupGIDs = (
+							1C37FBAC04509CD000000102,
+							1C37FAAC04509CD000000102,
+							1C08E77C0454961000C914BD,
+							1C37FABC05509CD000000102,
+							1C37FABC05539CD112110102,
+							E2644B35053B69B200211256,
+							1C37FABC04509CD000100104,
+							1CC0EA4004350EF90044410B,
+							1CC0EA4004350EF90041110B,
+						);
+						PBXSmartGroupTreeModuleColumnData = {
+							PBXSmartGroupTreeModuleColumnWidthsKey = (
+								22,
+								175,
+							);
+							PBXSmartGroupTreeModuleColumnsKey_v4 = (
+								SCMStatusColumn,
+								MainColumn,
+							);
+						};
+						PBXSmartGroupTreeModuleOutlineStateKey_v7 = {
+							PBXSmartGroupTreeModuleOutlineStateExpansionKey = (
+								B2CE55E905CA605900667293,
+								B2CE567505CA626E00667293,
+								B2CE563E05CA61FA00667293,
+							);
+							PBXSmartGroupTreeModuleOutlineStateSelectionKey = (
+								(
+									9,
+									8,
+									0,
+								),
+							);
+							PBXSmartGroupTreeModuleOutlineStateVisibleRectKey = "{{0, 0}, {197, 666}}";
+						};
+						PBXTopSmartGroupGIDs = (
+						);
+					};
+				};
+			};
+			PBXWorkspaceGeometries = (
+				{
+					Frame = "{{0, 0}, {1280, 684}}";
+					PBXProjectWorkspaceModule_GeometryKey_Rev15 = {
+					};
+					RubberWindowFrame = "0 106 1280 726 0 0 1280 832 ";
+				},
+			);
+			"PBXWorkspaceGeometries:PBXConfiguration.PBXModule.PBXBuildResultsModule" = {
+				Frame = "{{0, 0}, {903, 430}}";
+				PBXModuleWindowStatusBarHidden = YES;
+				RubberWindowFrame = "366 290 903 451 0 0 1280 832 ";
+			};
+			"PBXWorkspaceGeometries:PBXConfiguration.PBXModule.PBXCVSModule" = {
+				Frame = "{{0, 0}, {482, 276}}";
+				RubberWindowFrame = "470 345 482 318 0 0 1440 878 ";
+			};
+			"PBXWorkspaceGeometries:PBXConfiguration.PBXModule.PBXDebugCLIModule" = {
+				Frame = "{{0, 0}, {400, 201}}";
+				PBXModuleWindowStatusBarHidden = YES;
+				RubberWindowFrame = "104 850 400 222 0 0 1440 878 ";
+			};
+			"PBXWorkspaceGeometries:PBXConfiguration.PBXModule.PBXDebugSessionModule" = {
+				DebugConsoleDrawerSize = "{699, 182}";
+				DebugConsoleVisible = Drawer;
+				DebugConsoleWindowFrame = "{{200, 200}, {500, 300}}";
+				DebugSTDIOWindowFrame = "{{200, 200}, {500, 300}}";
+				Frame = "{{0, 0}, {745, 422}}";
+				RubberWindowFrame = "231 389 745 464 0 0 1440 878 ";
+			};
+			"PBXWorkspaceGeometries:PBXConfiguration.PBXModule.PBXNavigatorGroup" = {
+				Frame = "{{0, 0}, {750, 481}}";
+				PBXModuleWindowStatusBarHidden = YES;
+				RubberWindowFrame = "115 329 750 502 0 0 1440 878 ";
+			};
+			"PBXWorkspaceGeometries:PBXConfiguration.PBXModule.PBXProjectFindModule" = {
+				Frame = "{{0, 0}, {614, 316}}";
+				RubberWindowFrame = "413 427 614 358 0 0 1440 878 ";
+			};
+			"PBXWorkspaceGeometries:PBXConfiguration.PBXModule.PBXProjectWorkspaceModule" = {
+				Frame = "{{0, 0}, {1280, 684}}";
+				PBXProjectWorkspaceModule_GeometryKey_Rev15 = {
+				};
+				RubberWindowFrame = "0 106 1280 726 0 0 1280 832 ";
+			};
+			PBXWorkspaceStateSaveDate = 109086368;
+		};
+		perUserProjectItems = {
+			B214761E064D7A500063F0D1 = B214761E064D7A500063F0D1;
+			B2147660064D7C340063F0D1 = B2147660064D7C340063F0D1;
+			B221889705D7BEB60048229E = B221889705D7BEB60048229E;
+			B22188B905D7BEDF0048229E = B22188B905D7BEDF0048229E;
+			B22188BD05D7BEE10048229E = B22188BD05D7BEE10048229E;
+			B22188BE05D7BEE10048229E = B22188BE05D7BEE10048229E;
+			B232841505E0195F00944D13 = B232841505E0195F00944D13;
+			B232841605E0195F00944D13 = B232841605E0195F00944D13;
+			B266F0FA05D44F9400845F09 = B266F0FA05D44F9400845F09;
+			B266F0FB05D44F9400845F09 = B266F0FB05D44F9400845F09;
+			B266F11505D4503800845F09 = B266F11505D4503800845F09;
+			B266F13A05D4514300845F09 = B266F13A05D4514300845F09;
+			B266F14105D4517000845F09 = B266F14105D4517000845F09;
+			B267A16C064B16E7008CA6F8 = B267A16C064B16E7008CA6F8;
+			B267A16D064B16E7008CA6F8 = B267A16D064B16E7008CA6F8;
+			B267A1BA064B1876008CA6F8 = B267A1BA064B1876008CA6F8;
+			B269BD2005CE5F91008A029D = B269BD2005CE5F91008A029D;
+			B269BD5E05CE64EC008A029D = B269BD5E05CE64EC008A029D;
+			B269BD6205CE64F9008A029D = B269BD6205CE64F9008A029D;
+			B269BD6905CE64FF008A029D = B269BD6905CE64FF008A029D;
+			B27EF0CE067F90490022AE73 = B27EF0CE067F90490022AE73;
+			B2AB3180064FCE3700A4BCA4 = B2AB3180064FCE3700A4BCA4;
+			B2BF322505CE932500463CC3 = B2BF322505CE932500463CC3;
+			B2BF322705CE932500463CC3 = B2BF322705CE932500463CC3;
+			B2BF322B05CE932700463CC3 = B2BF322B05CE932700463CC3;
+			B2BF323A05CE936B00463CC3 = B2BF323A05CE936B00463CC3;
+			B2BF323B05CE936B00463CC3 = B2BF323B05CE936B00463CC3;
+			B2BF324205CE937A00463CC3 = B2BF324205CE937A00463CC3;
+			B2BF32A805CE982600463CC3 = B2BF32A805CE982600463CC3;
+			B2BF32A905CE982600463CC3 = B2BF32A905CE982600463CC3;
+			B2C0390B05CC23D80005F8F1 = B2C0390B05CC23D80005F8F1;
+			B2C0390C05CC23D80005F8F1 = B2C0390C05CC23D80005F8F1;
+			B2CE562405CA61BE00667293 = B2CE562405CA61BE00667293;
+			B2CE565605CA622200667293 = B2CE565605CA622200667293;
+			B2CE570D05CA63F800667293 = B2CE570D05CA63F800667293;
+			B2CE574D05CA64B100667293 = B2CE574D05CA64B100667293;
+			B2CE574E05CA64B100667293 = B2CE574E05CA64B100667293;
+			B2CE594505CA6E3C00667293 = B2CE594505CA6E3C00667293;
+			B2D3A28006032F5A0035D658 = B2D3A28006032F5A0035D658;
+			B2D3A28206032F5A0035D658 = B2D3A28206032F5A0035D658;
+			B2D3A28506032F5E0035D658 = B2D3A28506032F5E0035D658;
+			B2D3A28606032F5E0035D658 = B2D3A28606032F5E0035D658;
+			B2D77A4405CAACA500918C9C = B2D77A4405CAACA500918C9C;
+			B2D77AF105CAB75300918C9C = B2D77AF105CAB75300918C9C;
+			B2D8604A068086C200D0B293 = B2D8604A068086C200D0B293;
+			B2D86050068086CC00D0B293 = B2D86050068086CC00D0B293;
+			B2D86053068086D400D0B293 = B2D86053068086D400D0B293;
+			B2D86057068086E000D0B293 = B2D86057068086E000D0B293;
+			B2D8605B068086E400D0B293 = B2D8605B068086E400D0B293;
+			B2D8605E068086E500D0B293 = B2D8605E068086E500D0B293;
+			B2D8605F068086E500D0B293 = B2D8605F068086E500D0B293;
+			B2D86062068086E700D0B293 = B2D86062068086E700D0B293;
+			B2D86063068086E700D0B293 = B2D86063068086E700D0B293;
+			B2D86068068086FA00D0B293 = B2D86068068086FA00D0B293;
+			B2D86069068086FA00D0B293 = B2D86069068086FA00D0B293;
+			B2D860700680872400D0B293 = B2D860700680872400D0B293;
+			B2D860730680872800D0B293 = B2D860730680872800D0B293;
+			B2D860740680872800D0B293 = B2D860740680872800D0B293;
+			B2D860780680873300D0B293 = B2D860780680873300D0B293;
+			B2D8607A0680873300D0B293 = B2D8607A0680873300D0B293;
+			B2D8609A0680883000D0B293 = B2D8609A0680883000D0B293;
+			B2D860CA06808B6900D0B293 = B2D860CA06808B6900D0B293;
+			B2E09E3A05CAC29600835B0B = B2E09E3A05CAC29600835B0B;
+			B2E59DFD05CBE8A700C53220 = B2E59DFD05CBE8A700C53220;
+			B2E59E0005CBE8A800C53220 = B2E59E0005CBE8A800C53220;
+			B2E900E205D7D2E300385626 = B2E900E205D7D2E300385626;
+			B2EA5FD605CBC5150087828C = B2EA5FD605CBC5150087828C;
+			B2EA600C05CBC6220087828C = B2EA600C05CBC6220087828C;
+			B2EA600D05CBC6220087828C = B2EA600D05CBC6220087828C;
+			B2EE7D2F05DA5A9E003A2BBE = B2EE7D2F05DA5A9E003A2BBE;
+			B2EE7DBB05DA5E1E003A2BBE = B2EE7DBB05DA5E1E003A2BBE;
+			B2EE7DD705DA5E87003A2BBE = B2EE7DD705DA5E87003A2BBE;
+			B2EE7DD905DA5E87003A2BBE = B2EE7DD905DA5E87003A2BBE;
+			B2EE7DDC05DA5E88003A2BBE = B2EE7DDC05DA5E88003A2BBE;
+			B2EE7DDE05DA5E88003A2BBE = B2EE7DDE05DA5E88003A2BBE;
+			B2EE7DE105DA5E91003A2BBE = B2EE7DE105DA5E91003A2BBE;
+			B2EE7DE305DA5E91003A2BBE = B2EE7DE305DA5E91003A2BBE;
+			B2EE7DF405DA5EC1003A2BBE = B2EE7DF405DA5EC1003A2BBE;
+			B2EE7E0405DA6013003A2BBE = B2EE7E0405DA6013003A2BBE;
+			B2EE7E0805DA6255003A2BBE = B2EE7E0805DA6255003A2BBE;
+			B2EFA47A05CA7C9E00CC0BE7 = B2EFA47A05CA7C9E00CC0BE7;
+		};
+		sourceControlManager = B2CE55EE05CA605900667293;
+		userBuildSettings = {
+		};
+	};
+	B2CE55EE05CA605900667293 = {
+		isa = PBXSourceControlManager;
+		scmConfiguration = {
+		};
+		scmType = scm.cvs;
+	};
+	B2CE55EF05CA605900667293 = {
+		indexTemplatePath = "";
+		isa = PBXCodeSenseManager;
+		usesDefaults = 1;
+		wantsCodeCompletion = 1;
+		wantsCodeCompletionAutoPopup = 0;
+		wantsCodeCompletionAutoSuggestions = 0;
+		wantsCodeCompletionCaseSensitivity = 1;
+		wantsCodeCompletionOnlyMatchingItems = 1;
+		wantsCodeCompletionParametersIncluded = 1;
+		wantsCodeCompletionPlaceholdersInserted = 1;
+		wantsCodeCompletionTabCompletes = 1;
+		wantsIndex = 1;
+	};
+	B2CE560505CA618A00667293 = {
+		buildActionMask = 2147483647;
+		files = (
+		);
+		isa = PBXHeadersBuildPhase;
+		runOnlyForDeploymentPostprocessing = 0;
+	};
+	B2CE560605CA618A00667293 = {
+		buildActionMask = 2147483647;
+		files = (
+		);
+		isa = PBXResourcesBuildPhase;
+		runOnlyForDeploymentPostprocessing = 0;
+	};
+	B2CE560705CA618A00667293 = {
+		buildActionMask = 2147483647;
+		files = (
+		);
+		isa = PBXSourcesBuildPhase;
+		runOnlyForDeploymentPostprocessing = 0;
+	};
+	B2CE560805CA618A00667293 = {
+		buildActionMask = 2147483647;
+		files = (
+		);
+		isa = PBXFrameworksBuildPhase;
+		runOnlyForDeploymentPostprocessing = 0;
+	};
+	B2CE560905CA618A00667293 = {
+		buildActionMask = 2147483647;
+		files = (
+		);
+		isa = PBXRezBuildPhase;
+		runOnlyForDeploymentPostprocessing = 0;
+	};
+	B2CE560A05CA618A00667293 = {
+		activeExec = 0;
+		buildPhases = (
+			B2CE560505CA618A00667293,
+			B2CE560605CA618A00667293,
+			B2CE560705CA618A00667293,
+			B2CE560805CA618A00667293,
+			B2CE560905CA618A00667293,
+		);
+		buildSettings = {
+			OTHER_CFLAGS = "";
+			OTHER_LDFLAGS = "";
+			OTHER_REZFLAGS = "";
+			PRODUCT_NAME = jack_panda;
+			SECTORDER_FLAGS = "";
+			WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+			WRAPPER_EXTENSION = bundle;
+		};
+		dependencies = (
+		);
+		isa = PBXBundleTarget;
+		name = jack_panda;
+		productInstallPath = "$(USER_LIBRARY_DIR)/Bundles";
+		productName = jack_panda;
+		productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string></string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>BNDL</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>0.0.1d1</string>
+</dict>
+</plist>
+";
+	};
+	B2CE561E05CA61BD00667293 = {
+		activeExec = 0;
+	};
+	B2CE562405CA61BE00667293 = {
+		isa = PBXTargetBookmark;
+		trg = B2CE560A05CA618A00667293;
+	};
+	B2CE564C05CA622100667293 = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1058, 7195}}";
+			sepNavSelRange = "{2277, 0}";
+			sepNavVisRect = "{{0, 14}, {1027, 652}}";
+			sepNavWindowFrame = "{{15, 315}, {750, 558}}";
+		};
+	};
+	B2CE564D05CA622100667293 = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1027, 1077}}";
+			sepNavSelRange = "{2006, 9}";
+			sepNavVisRect = "{{0, 412}, {1027, 652}}";
+			sepNavWindowFrame = "{{38, 294}, {750, 558}}";
+		};
+	};
+	B2CE565605CA622200667293 = {
+		isa = PBXTargetBookmark;
+		trg = B2CE561E05CA61BD00667293;
+	};
+	B2CE570105CA63EF00667293 = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1187, 700}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRect = "{{0, 0}, {1187, 700}}";
+		};
+	};
+	B2CE570D05CA63F800667293 = {
+		fRef = B2CE570105CA63EF00667293;
+		isa = PBXTextBookmark;
+		name = "mach_port.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1142;
+		vrLoc = 0;
+	};
+	B2CE571205CA642900667293 = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1027, 9113}}";
+			sepNavSelRange = "{12590, 17}";
+			sepNavVisRect = "{{0, 6695}, {1027, 652}}";
+		};
+	};
+	B2CE571305CA642900667293 = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1027, 1371}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRect = "{{0, 48}, {1027, 652}}";
+		};
+	};
+	B2CE574D05CA64B100667293 = {
+		fRef = B2CE579605CA651300667293;
+		isa = PBXTextBookmark;
+		name = closePluginInstace;
+		rLen = 18;
+		rLoc = 6412;
+		rType = 0;
+		vrLen = 1466;
+		vrLoc = 5684;
+	};
+	B2CE574E05CA64B100667293 = {
+		fRef = B2CE579805CA651300667293;
+		isa = PBXTextBookmark;
+		name = closePluginInstace;
+		rLen = 18;
+		rLoc = 6412;
+		rType = 0;
+		vrLen = 1466;
+		vrLoc = 5684;
+	};
+	B2CE579005CA651300667293 = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = AudioDriverPlugIn.h;
+		path = /System/Library/Frameworks/CoreAudio.framework/Versions/A/Headers/AudioDriverPlugIn.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2CE579605CA651300667293 = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = panda.h;
+		path = /Library/Frameworks/Panda.framework/Headers/panda.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2CE579805CA651300667293 = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = panda.h;
+		path = /Library/Frameworks/Panda.framework/Headers/panda.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2CE579D05CA654200667293 = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1135, 909}}";
+			sepNavSelRange = "{1230, 0}";
+			sepNavVisRect = "{{0, 0}, {1135, 764}}";
+		};
+	};
+	B2CE579E05CA654200667293 = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1027, 4507}}";
+			sepNavSelRange = "{5432, 0}";
+			sepNavVisRect = "{{0, 3640}, {1027, 652}}";
+			sepNavWindowFrame = "{{15, 315}, {750, 558}}";
+		};
+	};
+	B2CE591F05CA6D7E00667293 = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1131, 764}}";
+			sepNavSelRange = "{294, 0}";
+			sepNavVisRect = "{{0, 0}, {1131, 764}}";
+		};
+	};
+	B2CE592005CA6D7E00667293 = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1135, 1021}}";
+			sepNavSelRange = "{988, 0}";
+			sepNavVisRect = "{{0, 87}, {1135, 764}}";
+		};
+	};
+	B2CE594505CA6E3C00667293 = {
+		fRef = B2CE591F05CA6D7E00667293;
+		isa = PBXTextBookmark;
+		name = "AudioRenderBridge.h: 17";
+		rLen = 0;
+		rLoc = 518;
+		rType = 0;
+		vrLen = 538;
+		vrLoc = 0;
+	};
+	B2D3A28006032F5A0035D658 = {
+		fRef = B2D3A29306032F750035D658;
+		isa = PBXTextBookmark;
+		name = "(null): 333";
+		rLen = 0;
+		rLoc = 11940;
+		rType = 0;
+		vrLen = 1572;
+		vrLoc = 10866;
+	};
+	B2D3A28206032F5A0035D658 = {
+		fRef = B2D3A29106032F750035D658;
+		isa = PBXTextBookmark;
+		name = "(null): 333";
+		rLen = 0;
+		rLoc = 11940;
+		rType = 0;
+		vrLen = 1572;
+		vrLoc = 10866;
+	};
+	B2D3A28506032F5E0035D658 = {
+		fRef = B2D3A29406032F750035D658;
+		isa = PBXTextBookmark;
+		name = "(null): 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1509;
+		vrLoc = 0;
+	};
+	B2D3A28606032F5E0035D658 = {
+		fRef = B2D3A29206032F750035D658;
+		isa = PBXTextBookmark;
+		name = "(null): 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1509;
+		vrLoc = 0;
+	};
+	B2D3A29106032F750035D658 = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = transport.h;
+		path = /Library/Frameworks/Jack.framework/Versions/A/Headers/transport.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2D3A29206032F750035D658 = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = jack.h;
+		path = /Library/Frameworks/Jack.framework/Versions/A/Headers/jack.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2D3A29306032F750035D658 = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = transport.h;
+		path = /Library/Frameworks/Jack.framework/Versions/A/Headers/transport.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2D3A29406032F750035D658 = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = jack.h;
+		path = /Library/Frameworks/Jack.framework/Versions/A/Headers/jack.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2D77A3505CAAC5F00918C9C = {
+		activeArgIndex = 0;
+		activeArgIndices = (
+			YES,
+		);
+		argumentStrings = (
+			"-d coreaudio -n \"Built-in Audio\" -r 44100 -p 512 -o 2 -i 2",
+		);
+		configStateDict = {
+		};
+		debuggerPlugin = GDBDebugging;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		isa = PBXExecutable;
+		launchableReference = B2D77A3605CAAC5F00918C9C;
+		name = Executable;
+		shlibInfoDictList = (
+		);
+		sourceDirectories = (
+		);
+	};
+	B2D77A3605CAAC5F00918C9C = {
+		isa = PBXFileReference;
+		lastKnownFileType = "compiled.mach-o.executable";
+		name = jackd;
+		path = /usr/local/bin/jackd;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2D77A4405CAACA500918C9C = {
+		exec = B2D77A3505CAAC5F00918C9C;
+		isa = PBXExecutableBookmark;
+	};
+	B2D77AF105CAB75300918C9C = {
+		fRef = B2CE571205CA642900667293;
+		isa = PBXTextBookmark;
+		name = memset_interleave;
+		rLen = 17;
+		rLoc = 12590;
+		rType = 0;
+		vrLen = 1023;
+		vrLoc = 12029;
+	};
+	B2D8604A068086C200D0B293 = {
+		fRef = B2EFA46C05CA7C8700CC0BE7;
+		isa = PBXTextBookmark;
+		name = jack_driver_init;
+		rLen = 16;
+		rLoc = 1729;
+		rType = 0;
+		vrLen = 1262;
+		vrLoc = 800;
+	};
+	B2D86050068086CC00D0B293 = {
+		fRef = B2EFA47205CA7C9300CC0BE7;
+		isa = PBXTextBookmark;
+		name = "driver.h: 29";
+		rLen = 0;
+		rLoc = 960;
+		rType = 0;
+		vrLen = 1421;
+		vrLoc = 6056;
+	};
+	B2D86053068086D400D0B293 = {
+		fRef = B2CE564C05CA622100667293;
+		isa = PBXTextBookmark;
+		name = "\tdriver->bufsize = (JackDriverBufSizeFunction) coreaudio_driver_bufsize;\n";
+		rLen = 75;
+		rLoc = 10567;
+		rType = 0;
+		vrLen = 1669;
+		vrLoc = 9714;
+	};
+	B2D86057068086E000D0B293 = {
+		fRef = B2EFA47205CA7C9300CC0BE7;
+		isa = PBXTextBookmark;
+		name = "driver.h: 194";
+		rLen = 0;
+		rLoc = 6827;
+		rType = 0;
+		vrLen = 1421;
+		vrLoc = 6056;
+	};
+	B2D8605B068086E400D0B293 = {
+		fRef = B2EFA46C05CA7C8700CC0BE7;
+		isa = PBXTextBookmark;
+		name = jack_driver_init;
+		rLen = 16;
+		rLoc = 1729;
+		rType = 0;
+		vrLen = 1262;
+		vrLoc = 800;
+	};
+	B2D8605E068086E500D0B293 = {
+		fRef = B2EFA47205CA7C9300CC0BE7;
+		isa = PBXTextBookmark;
+		name = "driver.h: 194";
+		rLen = 0;
+		rLoc = 6827;
+		rType = 0;
+		vrLen = 1486;
+		vrLoc = 5991;
+	};
+	B2D8605F068086E500D0B293 = {
+		fRef = B2EFA47205CA7C9300CC0BE7;
+		isa = PBXTextBookmark;
+		name = "driver.h: 194";
+		rLen = 0;
+		rLoc = 6827;
+		rType = 0;
+		vrLen = 1486;
+		vrLoc = 5991;
+	};
+	B2D86062068086E700D0B293 = {
+		fRef = B2CE571205CA642900667293;
+		isa = PBXTextBookmark;
+		name = "\t\n\nvoid memset_in";
+		rLen = 17;
+		rLoc = 12590;
+		rType = 0;
+		vrLen = 997;
+		vrLoc = 12040;
+	};
+	B2D86063068086E700D0B293 = {
+		fRef = B2CE571205CA642900667293;
+		isa = PBXTextBookmark;
+		name = "\t\n\nvoid memset_in";
+		rLen = 17;
+		rLoc = 12590;
+		rType = 0;
+		vrLen = 997;
+		vrLoc = 12040;
+	};
+	B2D86068068086FA00D0B293 = {
+		fRef = B2CE571305CA642900667293;
+		isa = PBXTextBookmark;
+		name = "memops.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 2055;
+		vrLoc = 44;
+	};
+	B2D86069068086FA00D0B293 = {
+		fRef = B2CE571305CA642900667293;
+		isa = PBXTextBookmark;
+		name = "memops.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 2055;
+		vrLoc = 44;
+	};
+	B2D860700680872400D0B293 = {
+		fRef = B2CE564D05CA622100667293;
+		isa = PBXTextBookmark;
+		name = new_bsize;
+		rLen = 9;
+		rLoc = 2006;
+		rType = 0;
+		vrLen = 1010;
+		vrLoc = 1072;
+	};
+	B2D860730680872800D0B293 = {
+		fRef = B2EFA46C05CA7C8700CC0BE7;
+		isa = PBXTextBookmark;
+		name = jack_driver_init;
+		rLen = 16;
+		rLoc = 1729;
+		rType = 0;
+		vrLen = 1341;
+		vrLoc = 721;
+	};
+	B2D860740680872800D0B293 = {
+		fRef = B2EFA46C05CA7C8700CC0BE7;
+		isa = PBXTextBookmark;
+		name = jack_driver_init;
+		rLen = 16;
+		rLoc = 1729;
+		rType = 0;
+		vrLen = 1341;
+		vrLoc = 721;
+	};
+	B2D860780680873300D0B293 = {
+		fRef = B2CE564D05CA622100667293;
+		isa = PBXTextBookmark;
+		name = new_bsize;
+		rLen = 9;
+		rLoc = 2006;
+		rType = 0;
+		vrLen = 1011;
+		vrLoc = 1071;
+	};
+	B2D8607A0680873300D0B293 = {
+		fRef = B2CE564D05CA622100667293;
+		isa = PBXTextBookmark;
+		name = new_bsize;
+		rLen = 9;
+		rLoc = 2006;
+		rType = 0;
+		vrLen = 1011;
+		vrLoc = 1071;
+	};
+	B2D8609A0680883000D0B293 = {
+		fRef = B2CE564C05CA622100667293;
+		isa = PBXTextBookmark;
+		rLen = 1;
+		rLoc = 258;
+		rType = 1;
+	};
+	B2D860CA06808B6900D0B293 = {
+		fRef = B2CE564C05CA622100667293;
+		isa = PBXTextBookmark;
+		name = "coreaudio_driver.c: 37";
+		rLen = 0;
+		rLoc = 2277;
+		rType = 0;
+		vrLen = 2418;
+		vrLoc = 3;
+	};
+	B2E09E3A05CAC29600835B0B = {
+		fRef = B2CE564D05CA622100667293;
+		isa = PBXTextBookmark;
+		name = playback_nchannels;
+		rLen = 18;
+		rLoc = 1675;
+		rType = 0;
+		vrLen = 1136;
+		vrLoc = 609;
+	};
+	B2E59DFD05CBE8A700C53220 = {
+		fRef = B2EA5FB605CBC4560087828C;
+		isa = PBXTextBookmark;
+		name = "AudioToolbox.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1325;
+		vrLoc = 0;
+	};
+	B2E59E0005CBE8A800C53220 = {
+		fRef = B2E59E0905CBE8C600C53220;
+		isa = PBXTextBookmark;
+		name = "(null): 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1341;
+		vrLoc = 0;
+	};
+	B2E59E0605CBE8C600C53220 = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = AudioUnitUtilities.h;
+		path = /System/Library/Frameworks/AudioToolbox.framework/Versions/A/Headers/AudioUnitUtilities.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2E59E0905CBE8C600C53220 = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = AudioFormat.h;
+		path = /System/Library/Frameworks/AudioToolbox.framework/Versions/A/Headers/AudioFormat.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2E59E0B05CBE8C600C53220 = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = AudioHardware.h;
+		path = /System/Library/Frameworks/CoreAudio.framework/Versions/A/Headers/AudioHardware.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2E900E205D7D2E300385626 = {
+		fRef = B2EA612605CBD3660087828C;
+		isa = PBXTextBookmark;
+		name = mNumberBuffers;
+		rLen = 14;
+		rLoc = 1969;
+		rType = 0;
+		vrLen = 1388;
+		vrLoc = 1001;
+	};
+	B2EA5FB605CBC4560087828C = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = AudioToolbox.h;
+		path = /System/Library/Frameworks/AudioToolbox.framework/Versions/A/Headers/AudioToolbox.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2EA5FC105CBC4780087828C = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = AudioConverter.h;
+		path = /System/Library/Frameworks/AudioToolbox.framework/Versions/A/Headers/AudioConverter.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2EA5FD605CBC5150087828C = {
+		fRef = B2EA5FDF05CBC5500087828C;
+		isa = PBXTextBookmark;
+		name = mNumberBuffers;
+		rLen = 14;
+		rLoc = 1969;
+		rType = 0;
+		vrLen = 2112;
+		vrLoc = 1309;
+	};
+	B2EA5FDF05CBC5500087828C = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = CoreAudioTypes.h;
+		path = /System/Library/Frameworks/CoreAudio.framework/Versions/A/Headers/CoreAudioTypes.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2EA600C05CBC6220087828C = {
+		fRef = B2EA601005CBC6400087828C;
+		isa = PBXTextBookmark;
+		name = "(null): 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1537;
+		vrLoc = 0;
+	};
+	B2EA600D05CBC6220087828C = {
+		fRef = B2EA601105CBC6400087828C;
+		isa = PBXTextBookmark;
+		name = "(null): 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1537;
+		vrLoc = 0;
+	};
+	B2EA601005CBC6400087828C = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = AudioFile.h;
+		path = /System/Library/Frameworks/AudioToolbox.framework/Versions/A/Headers/AudioFile.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2EA601105CBC6400087828C = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = AudioFile.h;
+		path = /System/Library/Frameworks/AudioToolbox.framework/Versions/A/Headers/AudioFile.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2EA612605CBD3660087828C = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = CoreAudioTypes.h;
+		path = /System/Library/Frameworks/CoreAudio.framework/Versions/A/Headers/CoreAudioTypes.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2EE7D2F05DA5A9E003A2BBE = {
+		fRef = B2CE592005CA6D7E00667293;
+		isa = PBXTextBookmark;
+		name = v_sr;
+		rLen = 4;
+		rLoc = 1846;
+		rType = 0;
+		vrLen = 877;
+		vrLoc = 978;
+	};
+	B2EE7DBB05DA5E1E003A2BBE = {
+		fRef = B2CE564C05CA622100667293;
+		isa = PBXTextBookmark;
+		name = "coreaudio_driver.c: 294";
+		rLen = 0;
+		rLoc = 10490;
+		rType = 0;
+		vrLen = 1688;
+		vrLoc = 8727;
+	};
+	B2EE7DD705DA5E87003A2BBE = {
+		fRef = B2EE7DED05DA5EAF003A2BBE;
+		isa = PBXTextBookmark;
+		name = "(null): 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 903;
+		vrLoc = 0;
+	};
+	B2EE7DD905DA5E87003A2BBE = {
+		fRef = B2EE7DF005DA5EAF003A2BBE;
+		isa = PBXTextBookmark;
+		name = "(null): 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 903;
+		vrLoc = 0;
+	};
+	B2EE7DDC05DA5E88003A2BBE = {
+		fRef = B2EE7DE505DA5EAF003A2BBE;
+		isa = PBXTextBookmark;
+		name = "(null): 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 906;
+		vrLoc = 0;
+	};
+	B2EE7DDE05DA5E88003A2BBE = {
+		fRef = B2EE7DE705DA5EAF003A2BBE;
+		isa = PBXTextBookmark;
+		name = "(null): 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 906;
+		vrLoc = 0;
+	};
+	B2EE7DE105DA5E91003A2BBE = {
+		fRef = B2EE7DEA05DA5EAF003A2BBE;
+		isa = PBXTextBookmark;
+		name = "(null): 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1667;
+		vrLoc = 8490;
+	};
+	B2EE7DE305DA5E91003A2BBE = {
+		fRef = B2EE7DEC05DA5EAF003A2BBE;
+		isa = PBXTextBookmark;
+		name = "(null): 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1667;
+		vrLoc = 8490;
+	};
+	B2EE7DE505DA5EAF003A2BBE = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = AudioOutputUnit.h;
+		path = /System/Library/Frameworks/AudioUnit.framework/Versions/A/Headers/AudioOutputUnit.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2EE7DE705DA5EAF003A2BBE = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = AudioOutputUnit.h;
+		path = /System/Library/Frameworks/AudioUnit.framework/Versions/A/Headers/AudioOutputUnit.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2EE7DEA05DA5EAF003A2BBE = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = AUComponent.h;
+		path = /System/Library/Frameworks/AudioUnit.framework/Versions/A/Headers/AUComponent.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2EE7DEC05DA5EAF003A2BBE = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = AUComponent.h;
+		path = /System/Library/Frameworks/AudioUnit.framework/Versions/A/Headers/AUComponent.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2EE7DED05DA5EAF003A2BBE = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = AudioUnit.h;
+		path = /System/Library/Frameworks/AudioUnit.framework/Versions/A/Headers/AudioUnit.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2EE7DF005DA5EAF003A2BBE = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = AudioUnit.h;
+		path = /System/Library/Frameworks/AudioUnit.framework/Versions/A/Headers/AudioUnit.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2EE7DF405DA5EC1003A2BBE = {
+		fRef = B2EE7DF705DA5ED7003A2BBE;
+		isa = PBXTextBookmark;
+		name = kAudioUnitProperty_RenderQuality;
+		rLen = 32;
+		rLoc = 2171;
+		rType = 0;
+		vrLen = 2176;
+		vrLoc = 870;
+	};
+	B2EE7DF705DA5ED7003A2BBE = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = AudioUnitProperties.h;
+		path = /System/Library/Frameworks/AudioUnit.framework/Versions/A/Headers/AudioUnitProperties.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2EE7E0405DA6013003A2BBE = {
+		fRef = B2CE579E05CA654200667293;
+		isa = PBXTextBookmark;
+		name = "AudioRender.cpp: 267";
+		rLen = 0;
+		rLoc = 11003;
+		rType = 0;
+		vrLen = 2241;
+		vrLoc = 8445;
+	};
+	B2EE7E0805DA6255003A2BBE = {
+		fRef = B2EE7E0D05DA6262003A2BBE;
+		isa = PBXTextBookmark;
+		name = kAudioUnitProperty_RenderQuality;
+		rLen = 32;
+		rLoc = 2171;
+		rType = 0;
+		vrLen = 2175;
+		vrLoc = 871;
+	};
+	B2EE7E0D05DA6262003A2BBE = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = AudioUnitProperties.h;
+		path = /System/Library/Frameworks/AudioUnit.framework/Versions/A/Headers/AudioUnitProperties.h;
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B2EFA46C05CA7C8700CC0BE7 = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1027, 881}}";
+			sepNavSelRange = "{1729, 16}";
+			sepNavVisRect = "{{0, 220}, {1027, 652}}";
+		};
+	};
+	B2EFA47205CA7C9300CC0BE7 = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1027, 3037}}";
+			sepNavSelRange = "{6827, 0}";
+			sepNavVisRect = "{{0, 2376}, {1027, 652}}";
+		};
+	};
+	B2EFA47A05CA7C9E00CC0BE7 = {
+		fRef = B2CE571305CA642900667293;
+		isa = PBXTextBookmark;
+		name = "memops.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 2087;
+		vrLoc = 0;
+	};
+}
