@@ -309,8 +309,8 @@ coreaudio_driver_new (char *name,
 				int playing,
 				int chan_in, 
 				int chan_out,
-				DitherAlgorithm dither,
-				char* driver_name,AudioDeviceID deviceID)
+				char* driver_name,
+				AudioDeviceID deviceID)
 {
 	coreaudio_driver_t *driver;
 	
@@ -415,8 +415,6 @@ static void coreaudio_usage (void) {
         "    -P playback, (default: duplex)\n"
         "    -n audio device name\n"
 		"    -I audio device ID\n"
-
-        "    -z[r|t|s|-] (dither, rect|tri|shaped|off, default: off)\n"
         );
 }
 
@@ -437,7 +435,6 @@ driver_initialize (jack_client_t *client, int argc, char **argv)
 	int playback = FALSE;
 	int chan_in = -1;
 	int chan_out = -1;
-	DitherAlgorithm dither = None;
 	char* name = NULL;
 	int i;
 	AudioDeviceID deviceID = 0;
@@ -495,27 +492,6 @@ driver_initialize (jack_client_t *client, int argc, char **argv)
                                     frames_per_interrupt = atoi (argv[i+1]);
                                     i++;
                                     break;
-                                    
-                            case 'z':
-                                    switch (argv[i][2]) {
-                                            case '-':
-                                            dither = None;
-                                            break;
-    
-                                            case 'r':
-                                            dither = Rectangular;
-                                            break;
-    
-                                            case 's':
-                                            dither = Shaped;
-                                            break;
-    
-                                            case 't':
-                                            default:
-                                            dither = Triangular;
-                                            break;
-                                    }
-                                    break;
 							case 'I':
 								deviceID = atoi(argv[i+1]);
 								i++;
@@ -538,7 +514,7 @@ driver_initialize (jack_client_t *client, int argc, char **argv)
 		playback = TRUE;
 	}
         
-	return coreaudio_driver_new ("coreaudio", client, frames_per_interrupt, srate, capture, playback, chan_in, chan_out, dither, name,deviceID);
+	return coreaudio_driver_new ("coreaudio", client, frames_per_interrupt, srate, capture, playback, chan_in, chan_out,name,deviceID);
 }
 
 

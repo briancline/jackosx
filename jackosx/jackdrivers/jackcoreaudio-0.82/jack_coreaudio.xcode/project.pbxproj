@@ -112,8 +112,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2CE564F05CA622100667293,
-				B2CE570205CA63EF00667293,
-				B2CE571505CA642900667293,
 				B2EFA47305CA7C9300CC0BE7,
 				B20E8FCF05D7AD310022C8A7,
 				B20E8FD205D7AD320022C8A7,
@@ -125,7 +123,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2CE564E05CA622100667293,
-				B2CE571405CA642900667293,
 				B269BD8905CE675F008A029D,
 				B20E8FCC05D7AD2F0022C8A7,
 				B20E8FD005D7AD310022C8A7,
@@ -236,9 +233,6 @@
 			children = (
 				B2EFA46C05CA7C8700CC0BE7,
 				B2EFA47205CA7C9300CC0BE7,
-				B2CE571205CA642900667293,
-				B2CE571305CA642900667293,
-				B2CE570105CA63EF00667293,
 				B2CE56DE05CA63AE00667293,
 			);
 			isa = PBXGroup;
@@ -253,48 +247,6 @@
 			path = /Library/Frameworks/Jack.framework;
 			refType = 0;
 			sourceTree = "<absolute>";
-		};
-		B2CE570105CA63EF00667293 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = mach_port.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		B2CE570205CA63EF00667293 = {
-			fileRef = B2CE570105CA63EF00667293;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		B2CE571205CA642900667293 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.c;
-			path = memops.c;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		B2CE571305CA642900667293 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			path = memops.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		B2CE571405CA642900667293 = {
-			fileRef = B2CE571205CA642900667293;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		B2CE571505CA642900667293 = {
-			fileRef = B2CE571305CA642900667293;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		B2CE576705CA64E600667293 = {
 			isa = PBXFileReference;

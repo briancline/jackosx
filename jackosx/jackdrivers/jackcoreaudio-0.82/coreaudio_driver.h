@@ -30,12 +30,6 @@
 
 #define kVersion 001
 
-#if defined(__APPLE__) && defined(__POWERPC__) 
-#include <memops.h>
-#else
-#include "memops.h"
-#endif
-
 #include <jack/types.h>
 #include <jack/hardware.h>
 #include <jack/driver.h>
