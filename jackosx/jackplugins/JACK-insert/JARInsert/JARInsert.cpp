@@ -75,7 +75,7 @@ JARInsert::JARInsert(long host_buffer_size)
 	if(out1) memset(out1,0x0,sizeof(float)*c_jBufferSize);
 	if(out2) memset(out2,0x0,sizeof(float)*c_jBufferSize);
 	
-	#if 1
+	#if 0
 	if(!c_isRunning) { 
 		JARILog("Jack client activated\n"); 
 		jack_activate(c_client); 
@@ -137,7 +137,7 @@ JARInsert::JARInsert()
 	if(out1) memset(out1,0x0,sizeof(float)*c_jBufferSize);
 	if(out2) memset(out2,0x0,sizeof(float)*c_jBufferSize);
 	
-	#if 1
+	#if 0
 	if(!c_isRunning) { 
 		JARILog("Jack client activated\n"); 
 		jack_activate(c_client); 
@@ -233,7 +233,7 @@ bool JARInsert::OpenAudioClient() {
 				if(device!=NULL) free(device); 
 				err = AudioDeviceGetProperty(c_jackDevID,0,true,kAudioDevicePropertyGetJackClient,&size,&c_client);
 				if(err!=noErr) { c_error = -235; return false; }
-				#if 1
+				#if 0
 				err = AudioDeviceGetProperty(c_jackDevID,0,true,kAudioDevicePropertyDeviceIsRunning,&size,&c_isRunning);
 				if(err!=noErr) { c_error = -238; return false; }
 				#endif
@@ -256,7 +256,7 @@ void JARInsert::Flush() {
 			delete c_bsAI2;
         }
 		
-		#if 1
+		#if 0
         if(c_needsDeactivate) { 
 			JARILog("Needs Deactivate client\n");
 			jack_deactivate(c_client); 
