@@ -3155,13 +3155,6 @@ bool TJackClient::QueryDevices(jack_client_t * client)
     TJackClient::fCoreAudioDriver = 0;
 	
 	// Find out how many Core Audio devices there are, if any
-    //outSize = sizeof(outWritable);
-	
-	err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices, &outSize, &outWritable);
-	JARLog("AudioHardwareGetPropertyInfo : outSize %ld\n", outSize);
-
-
-    // Find out how many Core Audio devices there are, if any
     outSize = sizeof(outWritable);
 	
 	err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices, &outSize, &outWritable);

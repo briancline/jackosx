@@ -217,7 +217,7 @@ void *MyFactory(CFAllocatorRef allocator, CFUUIDRef typeID)
 
     if (CFEqual(typeID, kAudioHardwarePlugInTypeID)) {
     #if PRINTDEBUG
-	printf ("JAS: MyFactory kAudioHardwarePlugInTypeID\n");
+		printf ("JAS: MyFactory kAudioHardwarePlugInTypeID\n");
     #endif
     
     #ifdef kAudioHardwarePlugInInterface2ID	  
