@@ -30,14 +30,14 @@ e-mail: johnny@meskalina.it web: http://www.meskalina.it
 
 #define SHOWALERT(err_str_) \
 printf("JARInsert Critical Log: error = %d.\n",c_error); 
-/*
-CFStringRef str = CFStringCreateWithCString(NULL,err_str_,NULL); \
-CFUserNotificationDisplayNotice(0,kCFUserNotificationCautionAlertLevel,NULL,NULL,NULL,\
-CFSTR("JACK-insert"),str,CFSTR("Ok"));
-*/
 
 enum {
-    kAudioDevicePropertyGetJackClient = 'jasg', kAudioDevicePropertyReleaseJackClient = 'jasr'
+        kAudioDevicePropertyGetJackClient = 'jasg',
+        kAudioDevicePropertyReleaseJackClient = 'jasr',
+		kAudioDevicePropertyAllocateJackPortVST = 'japv',
+		kAudioDevicePropertyAllocateJackPortAU = 'japa',
+		kAudioDevicePropertyGetJackPort = 'japg',
+		kAudioDevicePropertyReleaseJackPort = 'japr'
 };
 
 class JARInsert
@@ -55,7 +55,7 @@ class JARInsert
         {
             return c_error;
         }
-        int Process(float **in_buffer, float **out_buffer, long host_nframes);
+        int Process(float** in_buffer, float** out_buffer, long host_nframes);
         bool AllocBSizeAlign(long host_buffer_size);
         bool CanProcess()
         {
@@ -69,12 +69,16 @@ class JARInsert
         bool c_canProcess;
         int c_error;
         AudioDeviceID c_jackDevID;
-        jack_client_t *c_client;
+        jack_client_t* c_client;
         bool c_isRunning;
         bool c_rBufOn;
         bool c_needsDeactivate;
         int c_nInPorts, c_nOutPorts;
-        jack_port_t **c_inPorts, **c_outPorts;
+		int c_instance;
+		
+		jack_port_t** c_inPorts;
+		float** c_outPorts;
+		
         long c_jBufferSize, c_hBufferSize;
         static int c_instances;
         static int c_instances_count;

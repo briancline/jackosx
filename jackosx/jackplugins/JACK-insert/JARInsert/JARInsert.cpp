@@ -50,34 +50,36 @@ JARInsert::JARInsert(long host_buffer_size, int hostType)
     }
 
     int nPorts = 2;
-
-    c_inPorts = (jack_port_t**)malloc(sizeof(jack_port_t*) * nPorts);
-    c_outPorts = (jack_port_t**)malloc(sizeof(jack_port_t*) * nPorts);
+	
+	c_inPorts = (jack_port_t**)malloc(sizeof(jack_port_t*) * nPorts);
+    c_outPorts = (float**)malloc(sizeof(float*) * nPorts);
 
     c_nInPorts = c_nOutPorts = nPorts;
     c_jBufferSize = jack_get_buffer_size(c_client);
 
-    char *newName = (char*)calloc(256, sizeof(char));
+    char name[256];
 
     for (int i = 0;i < c_nInPorts;i++) {
         if (hostType == 'vst ')
-            sprintf(newName, "VSTreturn%d", JARInsert::c_instances + i + 1);
+            sprintf(name, "VSTreturn%d", JARInsert::c_instances + i + 1);
         else
-            sprintf(newName, "AUreturn%d", JARInsert::c_instances + i + 1);
-        c_inPorts[i] = jack_port_register(c_client, newName, JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
-        JARILog("Port: %s created\n", newName);
+            sprintf(name, "AUreturn%d", JARInsert::c_instances + i + 1);
+		c_inPorts[i] = jack_port_register(c_client, name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
+        JARILog("Port: %s created\n", name);
     }
 
-    for (int i = 0;i < c_nOutPorts;i++) {
-        if (hostType == 'vst ')
-            sprintf(newName, "VSTsend%d", JARInsert::c_instances + i + 1);
-        else
-            sprintf(newName, "AUsend%d", JARInsert::c_instances + i + 1);
-        c_outPorts[i] = jack_port_register(c_client, newName, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
-        JARILog("Port: %s created\n", newName);
+	c_instance = JARInsert::c_instances;
+	
+	for (int i = 0; i < c_nOutPorts; i++) {
+		UInt32 portNum = c_instance + i;
+        if (hostType == 'vst ') {
+            AudioDeviceSetProperty(c_jackDevID, NULL, 0, true, kAudioDevicePropertyAllocateJackPortVST, portNum, NULL);
+		} else {
+			AudioDeviceSetProperty(c_jackDevID, NULL, 0, true, kAudioDevicePropertyAllocateJackPortAU, portNum, NULL);
+		}
+ 		AudioDeviceGetProperty(c_jackDevID, 0, true, kAudioDevicePropertyGetJackPort, &portNum, &c_outPorts[i]);
+		JARILog("Port: %s created\n", name);
     }
-
-    free(newName);
 
 #if 0
     if (!c_isRunning) {
@@ -121,36 +123,37 @@ JARInsert::JARInsert(int hostType)
 
     int nPorts = 2;
 
-    c_inPorts = (jack_port_t**)malloc(sizeof(jack_port_t*) * nPorts);
-    c_outPorts = (jack_port_t**)malloc(sizeof(jack_port_t*) * nPorts);
-
+	c_inPorts = (jack_port_t**)malloc(sizeof(jack_port_t*) * nPorts);
+    c_outPorts = (float**)malloc(sizeof(float*) * nPorts);
+	
     c_nInPorts = c_nOutPorts = nPorts;
     c_jBufferSize = jack_get_buffer_size(c_client);
 
-    char *newName = (char*)calloc(256, sizeof(char));
+    char name[256];
 
-    for (int i = 0;i < c_nInPorts;i++) {
+    for (int i = 0; i < c_nInPorts; i++) {
         if (hostType == 'vst ')
-            sprintf(newName, "VSTreturn%d", JARInsert::c_instances + i + 1);
+            sprintf(name, "VSTreturn%d", JARInsert::c_instances + i + 1);
         else
-            sprintf(newName, "AUreturn%d", JARInsert::c_instances + i + 1);
-        c_inPorts[i] = jack_port_register(c_client, newName, JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
-        JARILog("Port: %s created\n", newName);
+            sprintf(name, "AUreturn%d", JARInsert::c_instances + i + 1);
+        c_inPorts[i] = jack_port_register(c_client, name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
+        JARILog("Port: %s created\n", name);
     }
 
-    for (int i = 0;i < c_nOutPorts;i++) {
-        if (hostType == 'vst ')
-            sprintf(newName, "VSTsend%d", JARInsert::c_instances + i + 1);
-        else
-            sprintf(newName, "AUsend%d", JARInsert::c_instances + i + 1);
-        c_outPorts[i] = jack_port_register(c_client, newName, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
-        JARILog("Port: %s created\n", newName);
+	c_instance = JARInsert::c_instances;
+	
+	for (int i = 0; i < c_nOutPorts; i++) {
+		UInt32 portNum = c_instance + i;
+        if (hostType == 'vst ') {
+            AudioDeviceSetProperty(c_jackDevID, NULL, 0, true, kAudioDevicePropertyAllocateJackPortVST, portNum, NULL);
+		} else {
+			AudioDeviceSetProperty(c_jackDevID, NULL, 0, true, kAudioDevicePropertyAllocateJackPortAU, portNum, NULL);
+		}
+ 		AudioDeviceGetProperty(c_jackDevID, 0, true, kAudioDevicePropertyGetJackPort, &portNum, &c_outPorts[i]);
+		JARILog("Port: %s created\n", name);
     }
-
-    free(newName);
 
 #if 0
-
     if (!c_isRunning) {
         JARILog("Jack client activated\n");
         jack_activate(c_client);
@@ -193,7 +196,7 @@ bool JARInsert::AllocBSizeAlign(long host_buffer_size)
             return false;
         }
     } else if (c_jBufferSize < c_hBufferSize) {
-        JARILog("Bad buffer size jack<host, must be jack>host || jack==host.\n");
+        JARILog("Bad buffer size jack<host, must be jack>host || jack==host %ld %ld \n", c_jBufferSize, c_hBufferSize);
         c_error = kErrInvalidBSize;
         Flush();
         return false;
@@ -206,19 +209,19 @@ bool JARInsert::AllocBSizeAlign(long host_buffer_size)
     return true;
 }
 
-int JARInsert::Process(float **in_buffer, float **out_buffer, long host_nframes)
+int JARInsert::Process(float** in_buffer, float** out_buffer, long host_nframes)
 {
     if (c_hBufferSize != host_nframes) {
         JARILog("CRITICAL ERROR: Host Buffer Size mismatch, NOT PROCESSING!!.\n");
         return 1;
     }
     if (c_rBufOn) {
-        float *out1 = (float*) jack_port_get_buffer(c_outPorts[0], (jack_nframes_t)c_jBufferSize);
-        float *out2 = (float*) jack_port_get_buffer(c_outPorts[1], (jack_nframes_t)c_jBufferSize);
-        float *in1 = (float*) jack_port_get_buffer(c_inPorts[0], (jack_nframes_t)c_jBufferSize);
-        float *in2 = (float*) jack_port_get_buffer(c_inPorts[1], (jack_nframes_t)c_jBufferSize);
-
-        c_bsAI1->AddBuffer(in_buffer[0]);
+		float* out1 = c_outPorts[0];
+        float* out2 = c_outPorts[1];
+        float* in1 = (float*) jack_port_get_buffer(c_inPorts[0], (jack_nframes_t)c_jBufferSize);
+        float* in2 = (float*) jack_port_get_buffer(c_inPorts[1], (jack_nframes_t)c_jBufferSize);
+		
+		c_bsAI1->AddBuffer(in_buffer[0]);
         c_bsAI2->AddBuffer(in_buffer[1]);
 
         if (!c_bsAO1->CanGet())
@@ -240,12 +243,12 @@ int JARInsert::Process(float **in_buffer, float **out_buffer, long host_nframes)
             JARILog("CRITICAL ERROR: Host Buffer Size mismatch, NOT PROCESSING!!.\n");
             return 1;
         }
-        float *out1 = (float*) jack_port_get_buffer(c_outPorts[0], (jack_nframes_t)c_jBufferSize);
-        float *out2 = (float*) jack_port_get_buffer(c_outPorts[1], (jack_nframes_t)c_jBufferSize);
-        float *in1 = (float*) jack_port_get_buffer(c_inPorts[0], (jack_nframes_t)c_jBufferSize);
-        float *in2 = (float*) jack_port_get_buffer(c_inPorts[1], (jack_nframes_t)c_jBufferSize);
-
-        memcpy(out1, in_buffer[0], sizeof(float)*c_jBufferSize);
+		float* out1 = c_outPorts[0];
+        float* out2 = c_outPorts[1];
+        float* in1 = (float*) jack_port_get_buffer(c_inPorts[0], (jack_nframes_t)c_jBufferSize);
+        float* in2 = (float*) jack_port_get_buffer(c_inPorts[1], (jack_nframes_t)c_jBufferSize);
+		
+		memcpy(out1, in_buffer[0], sizeof(float)*c_jBufferSize);
         memcpy(out2, in_buffer[1], sizeof(float)*c_jBufferSize);
         memcpy(out_buffer[0], in1, sizeof(float)*c_jBufferSize);
         memcpy(out_buffer[1], in2, sizeof(float)*c_jBufferSize);
@@ -266,8 +269,7 @@ bool JARInsert::OpenAudioClient()
     }
 
     int nDevices = size / sizeof(AudioDeviceID);
-
-    JARILog("There are %d audio devices\n", nDevices);
+	JARILog("There are %d audio devices\n", nDevices);
 
     AudioDeviceID *device = (AudioDeviceID*)calloc(nDevices, sizeof(AudioDeviceID));
     err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices, &size, device);
@@ -332,12 +334,13 @@ void JARInsert::Flush()
         }
 #endif
 
-        for (int i = 0;i < c_nInPorts;i++) {
+        for (int i = 0; i < c_nInPorts; i++) {
             jack_port_unregister(c_client, c_inPorts[i]);
         }
         free(c_inPorts);
-        for (int i = 0;i < c_nOutPorts;i++) {
-            jack_port_unregister(c_client, c_outPorts[i]);
+		for (int i = 0; i < c_nOutPorts; i++) {
+			UInt32 portNum = c_instance + i;
+            AudioDeviceSetProperty(c_jackDevID, NULL, 0, true, kAudioDevicePropertyReleaseJackPort, portNum, NULL);
         }
         free(c_outPorts);
         UInt32 size;
@@ -363,7 +366,7 @@ bool JARInsert::ReadPrefs()
         if (prefURL) {
             CFURLGetFileSystemRepresentation(prefURL, FALSE, (UInt8*)buf, 256);
             sprintf(path, "%s/JAS.jpil", buf);
-            FILE *prefFile;
+            FILE* prefFile;
             if ((prefFile = fopen(path, "rt"))) {
                 int nullo;
                 fscanf(
