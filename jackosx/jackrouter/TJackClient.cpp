@@ -259,37 +259,37 @@ static void printError(OSStatus err)
 {
     switch (err) {
         case kAudioHardwareNoError:
-            printf("JAS: error code : kAudioHardwareNoError\n");
+            printf("JAR: error code : kAudioHardwareNoError\n");
             break;
          case kAudioHardwareNotRunningError:
-            printf("JAS: error code : kAudioHardwareNotRunningError\n");
+            printf("JAR: error code : kAudioHardwareNotRunningError\n");
             break;
         case kAudioHardwareUnspecifiedError:
-            printf("JAS: error code : kAudioHardwareUnspecifiedError\n");
+            printf("JAR: error code : kAudioHardwareUnspecifiedError\n");
             break;
         case kAudioHardwareUnknownPropertyError:
-            printf("JAS: error code : kAudioHardwareUnknownPropertyError\n");
+            printf("JAR: error code : kAudioHardwareUnknownPropertyError\n");
             break;
         case kAudioHardwareBadPropertySizeError:
-            printf("JAS: error code : kAudioHardwareBadPropertySizeError\n");
+            printf("JAR: error code : kAudioHardwareBadPropertySizeError\n");
             break;
         case kAudioHardwareIllegalOperationError:
-            printf("JAS: error code : kAudioHardwareIllegalOperationError\n");
+            printf("JAR: error code : kAudioHardwareIllegalOperationError\n");
             break;
         case kAudioHardwareBadDeviceError:
-            printf("JAS: error code : kAudioHardwareBadDeviceError\n");
+            printf("JAR: error code : kAudioHardwareBadDeviceError\n");
             break;
         case kAudioHardwareBadStreamError:
-            printf("JAS: error code : kAudioHardwareBadStreamError\n");
+            printf("JAR: error code : kAudioHardwareBadStreamError\n");
             break;
         case kAudioDeviceUnsupportedFormatError:
-            printf("JAS: error code : kAudioDeviceUnsupportedFormatError\n");
+            printf("JAR: error code : kAudioDeviceUnsupportedFormatError\n");
             break;
       	case kAudioDevicePermissionsError:
-            printf("JAS: error code : kAudioDevicePermissionsError\n");
+            printf("JAR: error code : kAudioDevicePermissionsError\n");
             break;
         default:
-            printf("JAS: error code : unknown\n");
+            printf("JAR: error code : unknown\n");
             break;
     }
 }
@@ -304,7 +304,7 @@ void TJackClient::SaveConnections()
     
 #if PRINTDEBUG
 	printf("--------------------------------------------------------\n");
-    printf("JAS: SaveConnections\n");
+    printf("JAR: SaveConnections\n");
 #endif
 
     fConnections.clear();
@@ -332,7 +332,7 @@ void TJackClient::SaveConnections()
     
     for (it = fConnections.begin(); it != fConnections.end(); it++) {
         pair<string,string> connection = *it;
-        printf("JAS: connections : %s %s\n", connection.first.c_str(),connection.second.c_str());
+        printf("JAR: connections : %s %s\n", connection.first.c_str(),connection.second.c_str());
     }
 #endif
 }
@@ -342,7 +342,7 @@ void TJackClient::RestoreConnections()
 {
 #if PRINTDEBUG
 	printf("--------------------------------------------------------\n");
-    printf("JAS: RestoreConnections\n");
+    printf("JAR: RestoreConnections\n");
 #endif
 
     list<pair<string,string> >::const_iterator it;
@@ -350,7 +350,7 @@ void TJackClient::RestoreConnections()
     for (it = fConnections.begin(); it != fConnections.end(); it++) {
         pair<string,string> connection = *it;
     #if PRINTDEBUG   
-         printf("JAS: connections : %s %s\n", connection.first.c_str(),connection.second.c_str());
+         printf("JAR: connections : %s %s\n", connection.first.c_str(),connection.second.c_str());
     #endif
         jack_connect(fClient,connection.first.c_str(),connection.second.c_str());
     }
@@ -362,7 +362,7 @@ void TJackClient::RestoreConnections()
 TJackClient* TJackClient::GetJackClient() 
 {
 #if PRINTDEBUG
-    printf("JAS: GetJackClient\n");
+    printf("JAR: GetJackClient\n");
 #endif
 
     if (TJackClient::fJackClient){ 
@@ -384,7 +384,7 @@ TJackClient* TJackClient::GetJackClient()
 TJackClient* TJackClient::GetJackClientExternal() 
 {
 #if PRINTDEBUG
-    printf("JAS: GetJackClient\n");
+    printf("JAR: GetJackClient\n");
 #endif
 
     if (TJackClient::fJackClient){ 
@@ -406,7 +406,7 @@ TJackClient* TJackClient::GetJackClientExternal()
 void TJackClient::ClearJackClient()
 {
 #if PRINTDEBUG
-    printf("JAS: ClearJackClient\n");
+    printf("JAR: ClearJackClient\n");
 #endif
     if(TJackClient::fJackClient){
         TJackClient::fJackClient->ClearIOProc();
@@ -424,14 +424,14 @@ void TJackClient::IncRef()
       
 	#if PRINTDEBUG
 		bool res = TJackClient::fJackClient->Activate();
-		if (!res) printf("JAS: cannot activate client\n");
+		if (!res) printf("JAR: cannot activate client\n");
 	#else
 		TJackClient::fJackClient->Activate();
 	#endif
     }
     
 #if PRINTDEBUG
-    printf("JAS: IncRef : %ld\n",TJackClient::fJackClient->fClientNum);
+    printf("JAR: IncRef : %ld\n",TJackClient::fJackClient->fClientNum);
 #endif
 }
 
@@ -443,17 +443,17 @@ void TJackClient::DecRef()
     TJackClient::fJackClient->fClientNum--;
     
 #if PRINTDEBUG
-    printf("JAS: DecRef : %ld\n",TJackClient::fJackClient->fClientNum);
+    printf("JAR: DecRef : %ld\n",TJackClient::fJackClient->fClientNum);
 #endif    
     
     if (TJackClient::fJackClient->fClientNum == 0){
    	
     #if PRINTDEBUG
-        printf("JAS: DeviceRemoveIOProc : last proc, remove client\n");
+        printf("JAR: DeviceRemoveIOProc : last proc, remove client\n");
     #endif
 	#if PRINTDEBUG
         bool res = TJackClient::fJackClient->Desactivate();
-		if (!res) printf("JAS: cannot desactivate client\n");
+		if (!res) printf("JAR: cannot desactivate client\n");
 	#else
 		TJackClient::fJackClient->Desactivate();
 	#endif
@@ -470,7 +470,7 @@ void TJackClient::IncRefExternal()
     TJackClient::fJackClient->fClientNum++;
     
 #if PRINTDEBUG
-    printf("JAS: IncRefExternal : %ld\n",TJackClient::fJackClient->fClientNum);
+    printf("JAR: IncRefExternal : %ld\n",TJackClient::fJackClient->fClientNum);
 #endif    
 }
 
@@ -481,12 +481,12 @@ void TJackClient::DecRefExternal()
     TJackClient::fJackClient->fClientNum--;
     
 #if PRINTDEBUG
-    printf("JAS: DecRefExternal : %ld\n",TJackClient::fJackClient->fClientNum);
+    printf("JAR: DecRefExternal : %ld\n",TJackClient::fJackClient->fClientNum);
 #endif    
 
     if (TJackClient::fJackClient->fClientNum == 0){
     #if PRINTDEBUG
-        printf("JAS: DeviceRemoveIOProc : last proc, remove client\n");
+        printf("JAR: DeviceRemoveIOProc : last proc, remove client\n");
     #endif
         TJackClient::fJackClient->Close();
         delete TJackClient::fJackClient;
@@ -500,7 +500,7 @@ void TJackClient::Shutdown (void *arg)
     TJackClient::fDeviceRunning = false;
     
 #if PRINTDEBUG
-    printf("JAS: Shutdown\n");
+    printf("JAR: Shutdown\n");
 #endif
     ClearJackClient();
         
@@ -510,7 +510,7 @@ void TJackClient::Shutdown (void *arg)
                                                         0, 
                                                         kAudioDevicePropertyDeviceIsAlive);
 #if PRINTDEBUG
-    printf("JAS: Shutdown err %ld\n",err);
+    printf("JAR: Shutdown err %ld\n",err);
 #endif
 }
 
@@ -598,7 +598,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
                                 context.fContext);
 		                         
         #if PRINTDEBUG
-            if (err != kAudioHardwareNoError) printf("JAS: Process error %ld\n", err);
+            if (err != kAudioHardwareNoError) printf("JAR: Process error %ld\n", err);
         #endif
         }
                   
@@ -663,7 +663,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
                                     context.fContext);
 		                                     
             #if PRINTDEBUG
-                if (err != kAudioHardwareNoError) printf("JAS: Process error %ld\n", err);
+                if (err != kAudioHardwareNoError) printf("JAR: Process error %ld\n", err);
             #endif
 			
 				// Only mix buffers that are really needed
@@ -696,7 +696,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
 TJackClient::TJackClient()
 {
 #if PRINTDEBUG
-    printf("JAS: TJackClient constructor\n");
+    printf("JAR: TJackClient constructor\n");
 #endif
 
     fInputList = (AudioBufferList*)malloc(sizeof(UInt32)+sizeof(AudioBuffer)*TJackClient::fInputChannels);
@@ -729,7 +729,7 @@ TJackClient::TJackClient()
 TJackClient::~TJackClient()
 {
 #if PRINTDEBUG
-    printf("JAS: TJackClient destructor\n");
+    printf("JAR: TJackClient destructor\n");
 #endif
 
     free(fInputList);
@@ -746,7 +746,7 @@ bool TJackClient::Open()
     
     if ((fClient = jack_client_new(id_name)) == NULL) {
         #if PRINTDEBUG
-            printf("JAS: jack server not running?\n");
+            printf("JAR: jack server not running?\n");
         #endif
             goto error;
     }
@@ -777,7 +777,7 @@ bool TJackClient::Open()
      
 error:
 #if PRINTDEBUG
-	printf("JAS: cannot open Jack client or register ports\n");
+	printf("JAR: cannot open Jack client or register ports\n");
 #endif		
 	Close();
     return false;
@@ -790,7 +790,7 @@ bool TJackClient::OpenExternal()
     
     if ((fClient = jack_client_new(id_name)) == NULL) {
         #if PRINTDEBUG
-            printf("JAS: jack server not running?\n");
+            printf("JAR: jack server not running?\n");
         #endif
             goto error;
     }
@@ -807,7 +807,7 @@ error:
 void TJackClient::Close()
 {
 #if PRINTDEBUG
-    printf("JAS: Close\n");
+    printf("JAR: Close\n");
 #endif
 
 	for (long i = 0; i<TJackClient::fInputChannels; i++) {
@@ -837,12 +837,12 @@ bool TJackClient::AddIOProc(AudioDeviceIOProc proc, void* context)
     if(fAudioIOProcList.find(proc) == fAudioIOProcList.end()) {
         fAudioIOProcList.insert(make_pair(proc,TProcContext(context)));
     #if PRINTDEBUG
-        printf("JAS: AddIOProc fAudioIOProcList.size %ld \n",fAudioIOProcList.size());
+        printf("JAR: AddIOProc fAudioIOProcList.size %ld \n",fAudioIOProcList.size());
     #endif
         return true;
     }else{
     #if PRINTDEBUG
-        printf("JAS: AddIOProc proc already added %x \n",proc);
+        printf("JAR: AddIOProc proc already added %x \n",proc);
     #endif
         return false;
     }
@@ -854,12 +854,12 @@ bool TJackClient::RemoveIOProc(AudioDeviceIOProc proc)
     if(fAudioIOProcList.find(proc) != fAudioIOProcList.end()) {
         fAudioIOProcList.erase(proc);
     #if PRINTDEBUG
-        printf("JAS: fAudioIOProcList size %ld \n",fAudioIOProcList.size());
+        printf("JAR: fAudioIOProcList size %ld \n",fAudioIOProcList.size());
     #endif
         return true;
     }else{
     #if PRINTDEBUG
-        printf("JAS: RemoveIOProc proc not present %x \n",proc);
+        printf("JAR: RemoveIOProc proc not present %x \n",proc);
     #endif
         return false;
     }
@@ -888,17 +888,17 @@ void TJackClient::Start(AudioDeviceIOProc proc)
 																0, 
 																kAudioDevicePropertyDeviceIsRunning);
 			#if PRINTDEBUG
-				printf("JAS: TJackClient::Start err %ld\n",err);
+				printf("JAR: TJackClient::Start err %ld\n",err);
 			#endif
 
 			}else{
 			#if PRINTDEBUG
-				printf("JAS: TJackClient::Start proc already started %x\n",proc);
+				printf("JAR: TJackClient::Start proc already started %x\n",proc);
 			#endif
 			}
 		}else{
 		#if PRINTDEBUG
-			printf("JAS: Start proc %x not found\n",proc);
+			printf("JAR: Start proc %x not found\n",proc);
 		#endif
 		}
 	}
@@ -927,17 +927,17 @@ void TJackClient::Stop(AudioDeviceIOProc proc)
 																0, 
 																kAudioDevicePropertyDeviceIsRunning);
 			#if PRINTDEBUG
-				printf("JAS: TJackClient::Stop err %ld\n",err);
+				printf("JAR: TJackClient::Stop err %ld\n",err);
 			#endif
 			
 			}else{
 			#if PRINTDEBUG
-				printf("JAS: TJackClient::Stop proc already stopped %x\n",proc);
+				printf("JAR: TJackClient::Stop proc already stopped %x\n",proc);
 			#endif
 			}        
 		}else{
 		#if PRINTDEBUG
-			printf("JAS: Stop : proc %x not found\n",proc);
+			printf("JAR: Stop : proc %x not found\n",proc);
 		#endif
 		}
 	}
@@ -950,7 +950,7 @@ bool TJackClient::Activate()
     
     if (jack_activate(fClient)) {
         #if PRINTDEBUG
-            printf("JAS: cannot activate client");
+            printf("JAR: cannot activate client");
         #endif
             goto error;
     }
@@ -959,15 +959,15 @@ bool TJackClient::Activate()
     
         if ((ports = jack_get_ports(fClient, NULL, NULL, JackPortIsPhysical|JackPortIsOutput)) == NULL) {
              #if PRINTDEBUG
-                printf("JAS: cannot find any physical capture ports\n");
+                printf("JAR: cannot find any physical capture ports\n");
             #endif
         }else{
             
             for (int i = 0; i<TJackClient::fInputChannels; i++) {
                 #if PRINTDEBUG
-                    if (ports[i]) printf("JAS: ports[i] %s\n",ports[i]);
+                    if (ports[i]) printf("JAR: ports[i] %s\n",ports[i]);
                     if (fInputPortList[i] && jack_port_name(fInputPortList[i])) 
-                        printf("JAS: jack_port_name(fInputPortList[i]) %s\n",jack_port_name(fInputPortList[i]));
+                        printf("JAR: jack_port_name(fInputPortList[i]) %s\n",jack_port_name(fInputPortList[i]));
                 #endif
                 
                 // Stop condition
@@ -977,7 +977,7 @@ bool TJackClient::Activate()
             
                 if (jack_connect(fClient, ports[i], jack_port_name(fInputPortList[i]))) {
                 #if PRINTDEBUG
-                    printf("JAS: cannot connect input ports\n");
+                    printf("JAR: cannot connect input ports\n");
                 #endif
                 }
             }
@@ -986,15 +986,15 @@ bool TJackClient::Activate()
         
         if ((ports = jack_get_ports(fClient, NULL, NULL, JackPortIsPhysical|JackPortIsInput)) == NULL) {
             #if PRINTDEBUG
-                printf("JAS: cannot find any physical playback ports\n");
+                printf("JAR: cannot find any physical playback ports\n");
             #endif
         }else{
         
             for (int i = 0; i<TJackClient::fOutputChannels; i++) {
                 #if PRINTDEBUG
-                    if (ports[i]) printf("JAS: ports[i] %s\n",ports[i]);
+                    if (ports[i]) printf("JAR: ports[i] %s\n",ports[i]);
                     if (jack_port_name(fOutputPortList[i]) && jack_port_name(fOutputPortList[i])) 
-                        printf("JAS: jack_port_name(fOutputPortList[i]) %s\n",jack_port_name(fOutputPortList[i]));
+                        printf("JAR: jack_port_name(fOutputPortList[i]) %s\n",jack_port_name(fOutputPortList[i]));
                 #endif
                 
                 // Stop condition
@@ -1004,7 +1004,7 @@ bool TJackClient::Activate()
                 
                 if (jack_connect(fClient,jack_port_name(fOutputPortList[i]), ports[i])) {
                 #if PRINTDEBUG
-                    printf("JAS: cannot connect ouput ports\n");
+                    printf("JAR: cannot connect ouput ports\n");
                 #endif
                 }
             }
@@ -1017,7 +1017,7 @@ bool TJackClient::Activate()
     
  error:
  #if PRINTDEBUG
-    printf("JAS: Jack_Activate error\n");
+    printf("JAR: Jack_Activate error\n");
  #endif
     return false;
 }
@@ -1029,7 +1029,7 @@ bool TJackClient::Desactivate()
     
     if (jack_deactivate (fClient)) {
         #if PRINTDEBUG
-            printf("JAS: cannot deactivate client");
+            printf("JAR: cannot deactivate client");
         #endif
             return false;
     }
@@ -1041,7 +1041,7 @@ OSStatus TJackClient::DeviceAddIOProc(AudioHardwarePlugInRef inSelf, AudioDevice
 {
  #if PRINTDEBUG
     printf("--------------------------------------------------------\n");
-    printf("JAS: DeviceAddIOProc called inSelf, proc %ld %x \n", (long)inSelf, proc);
+    printf("JAR: DeviceAddIOProc called inSelf, proc %ld %x \n", (long)inSelf, proc);
  #endif    
     
     CheckRunning(inSelf);
@@ -1049,13 +1049,13 @@ OSStatus TJackClient::DeviceAddIOProc(AudioHardwarePlugInRef inSelf, AudioDevice
     
     if (client) {
     #if PRINTDEBUG
-        printf("JAS: DeviceAddIOProc : add a new proc\n");
+        printf("JAR: DeviceAddIOProc : add a new proc\n");
     #endif
         if (client->AddIOProc(proc,context)) IncRef();
         return kAudioHardwareNoError;
     }else{
     #if PRINTDEBUG
-        printf("JAS: DeviceAddIOProc : no client \n");
+        printf("JAR: DeviceAddIOProc : no client \n");
     #endif
         return kAudioHardwareBadDeviceError;
     }
@@ -1066,14 +1066,14 @@ OSStatus TJackClient::DeviceRemoveIOProc(AudioHardwarePlugInRef inSelf, AudioDev
 {
 #if PRINTDEBUG
     printf("--------------------------------------------------------\n");
-    printf("JAS: DeviceRemoveIOProc called inSelf, proc %ld %x \n", (long)inSelf, proc);
+    printf("JAR: DeviceRemoveIOProc called inSelf, proc %ld %x \n", (long)inSelf, proc);
 #endif 
  
     CheckRunning(inSelf);
     TJackClient* client = TJackClient::fJackClient; 
     
 #if PRINTDEBUG
-    printf("JAS: DeviceRemoveIOProc GetJackClient %x client\n",client);
+    printf("JAR: DeviceRemoveIOProc GetJackClient %x client\n",client);
 #endif 
     
     if (client) {
@@ -1082,7 +1082,7 @@ OSStatus TJackClient::DeviceRemoveIOProc(AudioHardwarePlugInRef inSelf, AudioDev
     }else{
     
     #if PRINTDEBUG
-        printf("JAS: DeviceRemoveIOProc : no client \n");
+        printf("JAR: DeviceRemoveIOProc : no client \n");
     #endif
        return kAudioHardwareBadDeviceError;
     }
@@ -1093,7 +1093,7 @@ OSStatus TJackClient::DeviceStart(AudioHardwarePlugInRef inSelf, AudioDeviceID i
 {
  #if PRINTDEBUG
     printf("--------------------------------------------------------\n");
-    printf("JAS: DeviceStart called inSelf, proc %ld %x \n", (long)inSelf, proc);
+    printf("JAR: DeviceStart called inSelf, proc %ld %x \n", (long)inSelf, proc);
  #endif    
  
     CheckRunning(inSelf);
@@ -1102,12 +1102,12 @@ OSStatus TJackClient::DeviceStart(AudioHardwarePlugInRef inSelf, AudioDeviceID i
     if (client){
         client->Start(proc);
     #if PRINTDEBUG
-        printf("JAS: DeviceStart fProcRunning %ld \n", client->fProcRunning);
+        printf("JAR: DeviceStart fProcRunning %ld \n", client->fProcRunning);
     #endif
         
     }else{
     #if PRINTDEBUG
-        printf("JAS: DeviceStart error : null client\n");
+        printf("JAR: DeviceStart error : null client\n");
     #endif
         return kAudioHardwareBadDeviceError;
     }
@@ -1120,7 +1120,7 @@ OSStatus TJackClient::DeviceStop(AudioHardwarePlugInRef inSelf, AudioDeviceID in
 {
  #if PRINTDEBUG
     printf("--------------------------------------------------------\n");
-    printf("JAS: DeviceStop called inSelf, proc %ld %x \n", (long)inSelf, proc);
+    printf("JAR: DeviceStop called inSelf, proc %ld %x \n", (long)inSelf, proc);
  #endif
  
     CheckRunning(inSelf);
@@ -1129,12 +1129,12 @@ OSStatus TJackClient::DeviceStop(AudioHardwarePlugInRef inSelf, AudioDeviceID in
     if (client){
         client->Stop(proc);
     #if PRINTDEBUG
-        printf("JAS: DeviceStop fProcRunning %ld \n", client->fProcRunning);
+        printf("JAR: DeviceStop fProcRunning %ld \n", client->fProcRunning);
     #endif
   
     }else{
     #if PRINTDEBUG
-        printf("JAS: DeviceStop error : null client\n");
+        printf("JAR: DeviceStop error : null client\n");
     #endif
         return kAudioHardwareBadDeviceError;
     }
@@ -1147,7 +1147,7 @@ OSStatus TJackClient::DeviceRead(AudioHardwarePlugInRef inSelf, AudioDeviceID in
 {
 #if PRINTDEBUG
     printf("--------------------------------------------------------\n");
-    printf ("JAS: DeviceRead : not yet implemented\n");
+    printf ("JAR: DeviceRead : not yet implemented\n");
 #endif
     return kAudioHardwareUnsupportedOperationError;
 }
@@ -1156,7 +1156,7 @@ OSStatus TJackClient::DeviceRead(AudioHardwarePlugInRef inSelf, AudioDeviceID in
 OSStatus TJackClient::DeviceGetCurrentTime(AudioHardwarePlugInRef inSelf,AudioDeviceID inDevice, AudioTimeStamp* outTime)
 {
     if (TJackClient::fJackClient){
-        printf ("JAS: DeviceGetCurrentTime : %ld\n",TJackClient::fJackClient->GetTime());
+        printf ("JAR: DeviceGetCurrentTime : %ld\n",TJackClient::fJackClient->GetTime());
         
         outTime->mSampleTime = TJackClient::fJackClient->GetTime();
         outTime->mHostTime = AudioGetCurrentHostTime();
@@ -1175,7 +1175,7 @@ OSStatus TJackClient::DeviceTranslateTime(AudioHardwarePlugInRef inSelf,
                                         AudioTimeStamp* outTime)
 {
 #if PRINTDEBUG
-	printf ("JAS: DeviceTranslateTime : not yet implemented\n");
+	printf ("JAR: DeviceTranslateTime : not yet implemented\n");
 #endif
 	return kAudioHardwareUnsupportedOperationError;
 }
@@ -1195,19 +1195,19 @@ OSStatus TJackClient::DeviceGetPropertyInfo(AudioHardwarePlugInRef inSelf,
 
 #if PRINTDEBUG
 	printf("--------------------------------------------------------\n");
-	printf ("JAS: DeviceGetPropertyInfo inSelf inDevice inChannel isInput  %ld %ld %ld %ld %ld %ld \n",(long)inSelf,inDevice,inChannel,isInput,outSize,outWritable);
+	printf ("JAR: DeviceGetPropertyInfo inSelf inDevice inChannel isInput  %ld %ld %ld %ld %ld %ld \n",(long)inSelf,inDevice,inChannel,isInput,outSize,outWritable);
 #endif
 
 	CheckRunning(inSelf);
           
 #if PRINT4CC
-	Print4CharCode("JAS: DeviceGetPropertyInfo ", inPropertyID);
+	Print4CharCode("JAR: DeviceGetPropertyInfo ", inPropertyID);
 #endif
 
 	if (inDevice != TJackClient::fDeviceID)
 	{
     #if PRINTDEBUG
-		printf ("JAS: DeviceGetPropertyInfo called for invalid device ID\n");
+		printf ("JAR: DeviceGetPropertyInfo called for invalid device ID\n");
     #endif
 		return kAudioHardwareBadDeviceError;
 	}
@@ -1215,7 +1215,7 @@ OSStatus TJackClient::DeviceGetPropertyInfo(AudioHardwarePlugInRef inSelf,
     if (outSize == NULL)
 	{
     #if PRINTDEBUG
-		printf ("JAS: DeviceGetPropertyInfo received NULL outSize pointer\n");
+		printf ("JAR: DeviceGetPropertyInfo received NULL outSize pointer\n");
     #endif
 	}
     
@@ -1223,7 +1223,7 @@ OSStatus TJackClient::DeviceGetPropertyInfo(AudioHardwarePlugInRef inSelf,
         *outWritable = false;
     }else{
     #if PRINTDEBUG
-        printf ("JAS: DeviceGetPropertyInfo received NULL outWritable pointer\n");
+        printf ("JAR: DeviceGetPropertyInfo received NULL outWritable pointer\n");
     #endif
     }
  	
@@ -1311,7 +1311,7 @@ OSStatus TJackClient::DeviceGetPropertyInfo(AudioHardwarePlugInRef inSelf,
 					else
 						*outSize =  sizeof(UInt32) + sizeof(AudioBuffer)*TJackClient::fOutputChannels;
 				#if PRINTDEBUG
-					printf("JAS: DeviceGetPropertyInfo::kAudioDevicePropertyStreamConfiguration %ld\n", *outSize);
+					printf("JAR: DeviceGetPropertyInfo::kAudioDevicePropertyStreamConfiguration %ld\n", *outSize);
 				#endif
 				}
 				break;
@@ -1323,7 +1323,7 @@ OSStatus TJackClient::DeviceGetPropertyInfo(AudioHardwarePlugInRef inSelf,
 					else
 						*outSize = sizeof(void*) + sizeof(UInt32) + sizeof(UInt32)*TJackClient::fOutputChannels; 
 				#if PRINTDEBUG
-					printf("JAS: DeviceGetPropertyInfo::kAudioDevicePropertyIOProcStreamUsage %ld %ld\n", isInput, *outSize);
+					printf("JAR: DeviceGetPropertyInfo::kAudioDevicePropertyIOProcStreamUsage %ld %ld\n", isInput, *outSize);
 				#endif
 				}
 				break;
@@ -1391,14 +1391,14 @@ OSStatus TJackClient::DeviceGetPropertyInfo(AudioHardwarePlugInRef inSelf,
 			case kAudioDevicePropertySubMute:
 		   {
 			#if PRINTDEBUG   
-				printf("JAS: Redirect call on used CoreAudio driver ID %ld \n",TJackClient::fCoreAudioDriver); 
-				Print4CharCode("JAS: property ",inPropertyID);
+				printf("JAR: Redirect call on used CoreAudio driver ID %ld \n",TJackClient::fCoreAudioDriver); 
+				Print4CharCode("JAR: property ",inPropertyID);
 			#endif
 			
 				err = AudioDeviceGetPropertyInfo(TJackClient::fCoreAudioDriver, inChannel, isInput, inPropertyID,outSize, outWritable);
 				 
 			#if PRINTDEBUG   
-				printf("JAS: Redirect call on used CoreAudio driver err %ld \n",err); 
+				printf("JAR: Redirect call on used CoreAudio driver err %ld \n",err); 
 				printError(err);
 			#endif
 			
@@ -1407,7 +1407,7 @@ OSStatus TJackClient::DeviceGetPropertyInfo(AudioHardwarePlugInRef inSelf,
                  
 		default:
 		#if PRINTDEBUG 
-				Print4CharCode("JAS: DeviceGetPropertyInfo unkown request:", inPropertyID);
+				Print4CharCode("JAR: DeviceGetPropertyInfo unkown request:", inPropertyID);
 		#endif
 				err = kAudioHardwareUnknownPropertyError;
 				break;
@@ -1431,17 +1431,17 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
          
 #if PRINTDEBUG
     printf("--------------------------------------------------------\n");
-    printf ("JAS: DeviceGetProperty inSelf isInput%ld  %ld\n",(long)inSelf,isInput);
+    printf ("JAR: DeviceGetProperty inSelf isInput%ld  %ld\n",(long)inSelf,isInput);
 #endif
 
 #if PRINT4CC
-	Print4CharCode("JAS: DeviceGetProperty ", inPropertyID);
+	Print4CharCode("JAR: DeviceGetProperty ", inPropertyID);
 #endif
 
 	if (inDevice != TJackClient::fDeviceID)
 	{
     #if PRINTDEBUG
-		printf ("JAS: DeviceGetProperty called for invalid device ID\n");
+		printf ("JAR: DeviceGetProperty called for invalid device ID\n");
     #endif
 		return kAudioHardwareBadDeviceError;
 	}
@@ -1451,7 +1451,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 	if (outPropertyData == NULL)
 	{
     #if PRINTDEBUG
-		printf ("JAS: DeviceGetProperty received NULL pointer\n");
+		printf ("JAR: DeviceGetProperty received NULL pointer\n");
     #endif
 		return kAudioHardwareBadPropertySizeError;
 	}
@@ -1469,7 +1469,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 				*ioPropertyDataSize = sizeof(AudioChannelLayout);
 			}else if(*ioPropertyDataSize < sizeof(AudioChannelLayout)) {
             #if PRINTDEBUG
-                printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
             #endif    
                 err = kAudioHardwareBadPropertySizeError; 
             } else {
@@ -1499,7 +1499,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 				}else if (*ioPropertyDataSize < TJackClient::fDeviceName.size()+1){
                     err = kAudioHardwareBadPropertySizeError;
                 #if PRINTDEBUG
-                    printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                    printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
                 #endif    
                 }else{
                     char* data = (char*) outPropertyData;
@@ -1517,7 +1517,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 				}else if (*ioPropertyDataSize < sizeof (CFStringRef)){
                     err = kAudioHardwareBadPropertySizeError;
                 #if PRINTDEBUG
-                    printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                    printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
                 #endif    
                 }else{
                     CFStringRef theUIDString = NULL;
@@ -1537,7 +1537,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 				}else if (*ioPropertyDataSize < TJackClient::fDeviceManufacturer.size()+1){
                     err = kAudioHardwareBadPropertySizeError;
                 #if PRINTDEBUG
-                    printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                    printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
                 #endif    
                 }else{
                     char* data = (char*) outPropertyData;
@@ -1556,7 +1556,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 				}else if (*ioPropertyDataSize < sizeof(CFStringRef)){
                     err = kAudioHardwareBadPropertySizeError;
                 #if PRINTDEBUG
-                    printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                    printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
                 #endif    
                 }else{
                     CFStringRef theUIDString = NULL;
@@ -1575,7 +1575,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					*ioPropertyDataSize = sizeof(CFStringRef);
 				}else if (*ioPropertyDataSize < sizeof(CFStringRef)){
 				#if PRINTDEBUG
-					printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+					printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 				#endif    
 				  err = kAudioHardwareBadPropertySizeError;
 				}else{
@@ -1595,7 +1595,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					*ioPropertyDataSize = sizeof(UInt32);
 				}else if (*ioPropertyDataSize < sizeof(UInt32)){
                  #if PRINTDEBUG
-                    printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                    printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
                 #endif    
                   err = kAudioHardwareBadPropertySizeError;
                 }else{
@@ -1612,7 +1612,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					*ioPropertyDataSize = sizeof(UInt32);
 				}else if (*ioPropertyDataSize < sizeof(UInt32)){
                 #if PRINTDEBUG
-                   printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                   printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
                 #endif    
                 err = kAudioHardwareBadPropertySizeError;
                 }else{
@@ -1629,7 +1629,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					*ioPropertyDataSize = sizeof(UInt32);
 				}else if (*ioPropertyDataSize < sizeof(UInt32)){
                 #if PRINTDEBUG
-                    printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                    printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
                 #endif    
                     err = kAudioHardwareBadPropertySizeError;
                 }else{
@@ -1646,7 +1646,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					*ioPropertyDataSize = sizeof(AudioValueRange);
 				}else if (*ioPropertyDataSize < sizeof(AudioValueRange)){
                 #if PRINTDEBUG
-                    printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                    printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
                 #endif    
                     err = kAudioHardwareBadPropertySizeError;
                 }else{
@@ -1665,7 +1665,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					*ioPropertyDataSize = sizeof(UInt32);
 				}else if (*ioPropertyDataSize < sizeof(UInt32)){
 				#if PRINTDEBUG
-					printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+					printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 				#endif    
 					err = kAudioHardwareBadPropertySizeError;
 				}else{
@@ -1682,7 +1682,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					*ioPropertyDataSize = sizeof(AudioValueRange);
 				}else if (*ioPropertyDataSize < sizeof(AudioValueRange)){
 				#if PRINTDEBUG
-					printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+					printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 				#endif    
 					err = kAudioHardwareBadPropertySizeError;
 				}else{
@@ -1703,7 +1703,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					*ioPropertyDataSize = sizeof(UInt32)+sizeof(AudioBuffer)*channels;
 				}else if (*ioPropertyDataSize < (sizeof(UInt32)+sizeof(AudioBuffer)*channels)){
                 #if PRINTDEBUG
-                    printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                    printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
                 #endif    
                 err = kAudioHardwareBadPropertySizeError;
                 }else{
@@ -1720,7 +1720,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                     *ioPropertyDataSize = sizeof(UInt32)+sizeof(AudioBuffer)*channels;
                     
                 #if PRINTDEBUG   
-                    printf("JAS: DeviceGetProperty::kAudioDevicePropertyStreamConfiguration %ld\n",  *ioPropertyDataSize);
+                    printf("JAR: DeviceGetProperty::kAudioDevicePropertyStreamConfiguration %ld\n",  *ioPropertyDataSize);
                 #endif
                 }
                 break;
@@ -1735,7 +1735,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					*ioPropertyDataSize = sizeof(AudioStreamID)*channels;
 				}else if (*ioPropertyDataSize < (sizeof(AudioStreamID)*channels)){
                 #if PRINTDEBUG
-                    printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                    printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
                 #endif    
                     err = kAudioHardwareBadPropertySizeError;
                 }else{
@@ -1764,22 +1764,22 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					*ioPropertyDataSize = sizeof(AudioStreamBasicDescription);
 				}else if (*ioPropertyDataSize < sizeof(AudioStreamBasicDescription)){
                 #if PRINTDEBUG
-                    printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                    printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
                 #endif    
                     err = kAudioHardwareBadPropertySizeError;
                 }else{
                 
                 #if PRINTDEBUG   
-                    printf("JAS: DeviceGetProperty::kAudioDevicePropertyStreamFormatSupported \n");
+                    printf("JAR: DeviceGetProperty::kAudioDevicePropertyStreamFormatSupported \n");
                 #endif
                 
                     AudioStreamBasicDescription* desc = (AudioStreamBasicDescription*) outPropertyData;
                     bool res = true;
                     
                 #if PRINTDEBUG     
-                    printf ("JAS: Sample Rate:        %f\n", desc->mSampleRate);
-                    printf ("JAS: Encoding:           %d\n", (int)desc->mFormatID);
-                    printf ("JAS: FormatFlags:        %d\n", (int)desc->mFormatFlags);
+                    printf ("JAR: Sample Rate:        %f\n", desc->mSampleRate);
+                    printf ("JAR: Encoding:           %d\n", (int)desc->mFormatID);
+                    printf ("JAR: FormatFlags:        %d\n", (int)desc->mFormatFlags);
                     /*
                     printf ("Encoding:           %d\n", (int)desc->mFormatID);
                     printf ("FormatFlags:        %d\n", (int)desc->mFormatFlags);
@@ -1805,11 +1805,11 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                     if (res){
                         err = kAudioHardwareNoError;
                     #if PRINTDEBUG   
-                        printf("JAS: DeviceGetProperty::kAudioDevicePropertyStreamFormatSupported : format SUPPORTED\n");
+                        printf("JAR: DeviceGetProperty::kAudioDevicePropertyStreamFormatSupported : format SUPPORTED\n");
                     #endif
                     }else{
                     #if PRINTDEBUG   
-                        printf("JAS: DeviceGetProperty::kAudioDevicePropertyStreamFormatSupported : format UNSUPPORTED\n");
+                        printf("JAR: DeviceGetProperty::kAudioDevicePropertyStreamFormatSupported : format UNSUPPORTED\n");
                     #endif
                         err = kAudioDeviceUnsupportedFormatError;
                     }
@@ -1824,21 +1824,21 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					*ioPropertyDataSize = sizeof(AudioStreamBasicDescription);
 				}else if (*ioPropertyDataSize < sizeof(AudioStreamBasicDescription)){
                 #if PRINTDEBUG
-                    printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                    printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
                 #endif    
                     err = kAudioHardwareBadPropertySizeError;
                 }else{
           
                     #if PRINTDEBUG   
-                        printf("JAS: DeviceGetProperty::kAudioDevicePropertyStreamFormatMatch \n");
+                        printf("JAR: DeviceGetProperty::kAudioDevicePropertyStreamFormatMatch \n");
                     #endif
                     
                         AudioStreamBasicDescription* desc = (AudioStreamBasicDescription*) outPropertyData;
                         
                     #if PRINTDEBUG        
-                        printf ("JAS: Sample Rate:        %f\n", desc->mSampleRate);
-                        printf ("JAS: Encoding:           %d\n", (int)desc->mFormatID);
-                        printf ("JAS: FormatFlags:        %d\n", (int)desc->mFormatFlags);
+                        printf ("JAR: Sample Rate:        %f\n", desc->mSampleRate);
+                        printf ("JAR: Encoding:           %d\n", (int)desc->mFormatID);
+                        printf ("JAR: FormatFlags:        %d\n", (int)desc->mFormatFlags);
                         /*
                         printf ("Encoding:           %d\n", (int)desc->mFormatID);
                         printf ("FormatFlags:        %d\n", (int)desc->mFormatFlags);
@@ -1873,7 +1873,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					*ioPropertyDataSize = sizeof(UInt32);
 				}else if (*ioPropertyDataSize < sizeof(UInt32)){
 				#if PRINTDEBUG
-				   printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+				   printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 				#endif    
 					err = kAudioHardwareBadPropertySizeError;
 				}else{
@@ -1881,7 +1881,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					*ioPropertyDataSize = sizeof(UInt32);
 						
 				#if PRINTDEBUG   
-					printf("JAS: DeviceGetProperty::kAudioDevicePropertyDeviceCanBeDefaultDevice %ld\n",(long)isInput);
+					printf("JAR: DeviceGetProperty::kAudioDevicePropertyDeviceCanBeDefaultDevice %ld\n",(long)isInput);
 				#endif
 				}
 				break;
@@ -1895,7 +1895,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					*ioPropertyDataSize = sizeof(AudioStreamBasicDescription);
 				}else if (*ioPropertyDataSize < sizeof(AudioStreamBasicDescription)){
 				#if PRINTDEBUG
-					printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+					printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 				#endif    
 					err = kAudioHardwareBadPropertySizeError;
 				}else{
@@ -1921,7 +1921,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					*ioPropertyDataSize = sizeof(AudioStreamBasicDescription);
 				}else if (*ioPropertyDataSize < sizeof(AudioStreamBasicDescription)){
 				#if PRINTDEBUG
-					printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+					printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 				#endif    
 					err = kAudioHardwareBadPropertySizeError;
 				}else{
@@ -1946,7 +1946,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					*ioPropertyDataSize = sizeof(UInt32);
 				}else if (*ioPropertyDataSize < sizeof(UInt32)){
 				#if PRINTDEBUG
-					printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+					printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 				#endif    
 					err = kAudioHardwareBadPropertySizeError;
 				}else{
@@ -1955,7 +1955,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					*ioPropertyDataSize = sizeof(UInt32);
 		
 				#if PRINTDEBUG   
-					printf("JAS: DeviceGetProperty::kAudioDevicePropertyLatency %ld \n",*(UInt32*) outPropertyData);
+					printf("JAR: DeviceGetProperty::kAudioDevicePropertyLatency %ld \n",*(UInt32*) outPropertyData);
 				#endif
 				}
 				break;
@@ -1968,7 +1968,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					*ioPropertyDataSize = sizeof(pid_t);
 				}else if (*ioPropertyDataSize < sizeof(pid_t)){
 				#if PRINTDEBUG
-					printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+					printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 				#endif    
 					err = kAudioHardwareBadPropertySizeError;
 				}else{
@@ -1989,7 +1989,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					*ioPropertyDataSize = sizeof(Float64);
 				}else if (*ioPropertyDataSize < sizeof(Float64)){
 				#if PRINTDEBUG
-					printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+					printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 				#endif    
 					err = kAudioHardwareBadPropertySizeError;
 				}else{
@@ -2007,7 +2007,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					*ioPropertyDataSize = sizeof(AudioValueRange);
 				}else if (*ioPropertyDataSize < sizeof(AudioValueRange)){
 				#if PRINTDEBUG
-					printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+					printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 				#endif    
 					err = kAudioHardwareBadPropertySizeError;
 				}else{
@@ -2025,14 +2025,14 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					*ioPropertyDataSize = sizeof(UInt32);
 				}else if (*ioPropertyDataSize < sizeof(UInt32)){
 				#if PRINTDEBUG
-					printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+					printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 				#endif    
 					err = kAudioHardwareBadPropertySizeError;
 				}else{
 					*(UInt32*) outPropertyData = (TJackClient::fJackClient) ? TJackClient::fJackClient->IsRunning() : false; 
 					*ioPropertyDataSize = sizeof(UInt32);
 				#if PRINTDEBUG   
-					printf("JAS: DeviceGetProperty::kAudioDevicePropertyDeviceIsRunning %ld \n", *(UInt32*) outPropertyData);
+					printf("JAR: DeviceGetProperty::kAudioDevicePropertyDeviceIsRunning %ld \n", *(UInt32*) outPropertyData);
 				#endif
 				}
 				break; 
@@ -2043,14 +2043,14 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					*ioPropertyDataSize = sizeof(UInt32);
 				}else if (*ioPropertyDataSize < sizeof(UInt32)){
 				#if PRINTDEBUG
-					printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+					printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
 				#endif    
 					err = kAudioHardwareBadPropertySizeError;
 				}else{
 					*(UInt32*) outPropertyData = true; 
 					*ioPropertyDataSize = sizeof(UInt32);
 				#if PRINTDEBUG   
-					printf("JAS: DeviceGetProperty::kAudioDevicePropertyDeviceIsRunning %ld \n", *(UInt32*) outPropertyData);
+					printf("JAR: DeviceGetProperty::kAudioDevicePropertyDeviceIsRunning %ld \n", *(UInt32*) outPropertyData);
 				#endif
 				}
 				break; 
@@ -2062,7 +2062,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 				*ioPropertyDataSize = sizeof(stereoList);
 			}else if (*ioPropertyDataSize < sizeof(stereoList)){
             #if PRINTDEBUG
-                printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
             #endif    
                 err = kAudioHardwareBadPropertySizeError;
             }else{
@@ -2081,7 +2081,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 				*ioPropertyDataSize = sizeof(UInt32);
 			}else if (*ioPropertyDataSize < sizeof(UInt32)){
             #if PRINTDEBUG
-                printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
             #endif    
                 err = kAudioHardwareBadPropertySizeError;
             }else{
@@ -2096,7 +2096,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
             /*
             if (*ioPropertyDataSize < sizeof (UInt32)){
             #if PRINTDEBUG
-                printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
             #endif    
                 err = kAudioHardwareBadPropertySizeError;
             }else{
@@ -2112,7 +2112,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 				*ioPropertyDataSize = sizeof(OSStatus);
 			}else if (*ioPropertyDataSize < sizeof(OSStatus)){
             #if PRINTDEBUG
-                printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
             #endif    
                 err = kAudioHardwareBadPropertySizeError;
             }else{
@@ -2125,7 +2125,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
             /*
             if (*ioPropertyDataSize < sizeof (UInt32)){
             #if PRINTDEBUG
-                printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
             #endif    
                 err = kAudioHardwareBadPropertySizeError;
             }else{
@@ -2145,14 +2145,14 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 				*ioPropertyDataSize = sizeof(jack_client_t*);
 			}else if (*ioPropertyDataSize < sizeof(jack_client_t*)){
             #if PRINTDEBUG
-                printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
             #endif    
                 err = kAudioHardwareBadPropertySizeError;
             }else{
                 *ioPropertyDataSize = sizeof(jack_client_t*);
                 
             #if PRINTDEBUG   
-                printf("JAS: DeviceGetProperty::kAudioDevicePropertyGetJackClient\n");
+                printf("JAR: DeviceGetProperty::kAudioDevicePropertyGetJackClient\n");
             #endif
                 if (TJackClient* client = GetJackClientExternal()) {
                     IncRefExternal();
@@ -2169,7 +2169,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
         case kAudioDevicePropertyReleaseJackClient:
         {
         #if PRINTDEBUG   
-            printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+            printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
         #endif
             DecRefExternal(); 
             break;
@@ -2181,7 +2181,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 				*ioPropertyDataSize = sizeof(UInt32);
 			}else if (*ioPropertyDataSize < sizeof(UInt32)){
             #if PRINTDEBUG
-               printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+               printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
             #endif    
                 err = kAudioHardwareBadPropertySizeError;
             }else{
@@ -2199,7 +2199,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
             /*
             if (*ioPropertyDataSize < sizeof (AudioValueTranslation)){
             #if PRINTDEBUG
-                printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
             #endif    
                 err = kAudioHardwareBadPropertySizeError;
             }else{
@@ -2218,7 +2218,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
             /*
             if (*ioPropertyDataSize < sizeof (AudioValueTranslation)){
             #if PRINTDEBUG
-                printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
             #endif    
                 err = kAudioHardwareBadPropertySizeError;
             }else{
@@ -2248,25 +2248,25 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 				*ioPropertyDataSize = size;
 			}else if(*ioPropertyDataSize < size) {
             #if PRINTDEBUG
-                printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
             #endif    
                 err = kAudioHardwareBadPropertySizeError; 
 			}else{
 			#if PRINTDEBUG
-                printf("JAS: DeviceGetProperty : kAudioDevicePropertyIOProcStreamUsage %ld \n",*ioPropertyDataSize);
+                printf("JAR: DeviceGetProperty : kAudioDevicePropertyIOProcStreamUsage %ld \n",*ioPropertyDataSize);
             #endif    
          
 				AudioHardwareIOProcStreamUsage* outData  = (AudioHardwareIOProcStreamUsage*)outPropertyData;
 				
 			#if PRINTDEBUG
-                printf("JAS: DeviceGetProperty : kAudioDevicePropertyIOProcStreamUsage mIOProc %x \n", (AudioDeviceIOProc)outData->mIOProc);
+                printf("JAR: DeviceGetProperty : kAudioDevicePropertyIOProcStreamUsage mIOProc %x \n", (AudioDeviceIOProc)outData->mIOProc);
             #endif    
    			
 				if (isInput) {
 					outData->mNumberStreams = TJackClient::fInputChannels;
 					for (int i = 0; i<TJackClient::fInputChannels; i++) {
 					#if PRINTDEBUG
-						printf("JAS: DeviceGetProperty : kAudioDevicePropertyIOProcStreamUsage mStreamIsOn %ld \n",outData->mStreamIsOn[i]);
+						printf("JAR: DeviceGetProperty : kAudioDevicePropertyIOProcStreamUsage mStreamIsOn %ld \n",outData->mStreamIsOn[i]);
 					#endif    
 						outData->mStreamIsOn[i] = 1;
 					}
@@ -2274,7 +2274,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					outData->mNumberStreams = TJackClient::fOutputChannels;
 					for (int i = 0; i<TJackClient::fOutputChannels; i++) {
 					#if PRINTDEBUG
-						printf("JAS: DeviceGetProperty : kAudioDevicePropertyIOProcStreamUsage mStreamIsOn %ld \n",outData->mStreamIsOn[i]);
+						printf("JAR: DeviceGetProperty : kAudioDevicePropertyIOProcStreamUsage mStreamIsOn %ld \n",outData->mStreamIsOn[i]);
 					#endif    
 						outData->mStreamIsOn[i] = 1;
 					}
@@ -2307,8 +2307,8 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
         case kAudioDevicePropertySubMute:
         {
         #if PRINTDEBUG   
-            printf("JAS: Redirect call on used CoreAudio driver ID %ld \n",TJackClient::fCoreAudioDriver); 
-            Print4CharCode("JAS: property ",inPropertyID);
+            printf("JAR: Redirect call on used CoreAudio driver ID %ld \n",TJackClient::fCoreAudioDriver); 
+            Print4CharCode("JAR: property ",inPropertyID);
         #endif
                      
             err = AudioDeviceGetProperty(TJackClient::fCoreAudioDriver, 
@@ -2319,7 +2319,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                                         outPropertyData);
             
         #if PRINTDEBUG   
-            printf("JAS: Redirect call on used CoreAudio driver err %ld \n",err); 
+            printf("JAR: Redirect call on used CoreAudio driver err %ld \n",err); 
             printError(err);
         #endif
         
@@ -2328,7 +2328,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                            
 		default:
 	#if PRINTDEBUG   
-			Print4CharCode("JAS: DeviceGetProperty unkown request:", inPropertyID);
+			Print4CharCode("JAR: DeviceGetProperty unkown request:", inPropertyID);
 	#endif
 			err = kAudioHardwareUnknownPropertyError;
 			break;
@@ -2349,19 +2349,19 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
 
 #if PRINTDEBUG
         printf("--------------------------------------------------------\n");
-        printf ("JAS: DeviceSetProperty inSelf %ld\n",(long)inSelf);
+        printf ("JAR: DeviceSetProperty inSelf %ld\n",(long)inSelf);
 #endif
         CheckRunning(inSelf);
 
 #if PRINT4CC
-	Print4CharCode ("JAS: DeviceSetProperty ",inPropertyID);
+	Print4CharCode ("JAR: DeviceSetProperty ",inPropertyID);
 #endif
         OSStatus err = kAudioHardwareNoError;
         
         if (inDevice != TJackClient::fDeviceID)
         {
         #if PRINTDEBUG
-            printf ("JAS: DeviceSetProperty called for invalid device ID\n");
+            printf ("JAR: DeviceSetProperty called for invalid device ID\n");
         #endif
             return kAudioHardwareBadDeviceError;
         }
@@ -2372,7 +2372,7 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
 		#ifdef kAudioHardwarePlugInInterface2ID
 			case kAudioDevicePropertyPreferredChannelLayout:
 			#if PRINTDEBUG
-				printf("JAS: kAudioDevicePropertyPreferredChannelLayout\n");
+				printf("JAR: kAudioDevicePropertyPreferredChannelLayout\n");
 			#endif
 				err = kAudioHardwareNoError;
 				break;
@@ -2380,7 +2380,7 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
                      
 				case kAudioDevicePropertyBufferSize:
                 #if PRINTDEBUG
-                    printf("JAS: kAudioDevicePropertyBufferSize %ld \n", *(UInt32*) inPropertyData);
+                    printf("JAR: kAudioDevicePropertyBufferSize %ld \n", *(UInt32*) inPropertyData);
                 #endif
                     err = (*(UInt32*) inPropertyData == TJackClient::fBufferSize*sizeof(float)) ? kAudioHardwareNoError
                         : kAudioHardwareUnknownPropertyError;
@@ -2390,7 +2390,7 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
                     
                 case kAudioDevicePropertyBufferFrameSize:
                 #if PRINTDEBUG
-                    printf("JAS: kAudioDevicePropertyBufferFrameSize %ld \n", *(UInt32*) inPropertyData);
+                    printf("JAR: kAudioDevicePropertyBufferFrameSize %ld \n", *(UInt32*) inPropertyData);
                 #endif
                     err = (*(UInt32*) inPropertyData == TJackClient::fBufferSize) ? kAudioHardwareNoError
                             : kAudioHardwareUnknownPropertyError;
@@ -2402,7 +2402,7 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
                 {
                     Float64* value = (Float64*)inPropertyData;
                 #if PRINTDEBUG
-                    printf("JAS: kAudioDevicePropertyNominalSampleRate %f \n", *value);
+                    printf("JAR: kAudioDevicePropertyNominalSampleRate %f \n", *value);
                 #endif
                     err =  (*value == TJackClient::fSampleRate) ? kAudioHardwareNoError 
 						: kAudioHardwareUnknownPropertyError;
@@ -2410,7 +2410,7 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
               		// : kAudioDeviceUnsupportedFormatError;	
 		               
                 #if PRINTDEBUG
-                    printf("JAS: kAudioDevicePropertyNominalSampleRate err %ld \n", err);
+                    printf("JAR: kAudioDevicePropertyNominalSampleRate err %ld \n", err);
                 #endif
                     break;
                 }
@@ -2419,14 +2419,14 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
                {
                  #if PRINTDEBUG
                     AudioStreamBasicDescription* streamDesc = (AudioStreamBasicDescription*) inPropertyData;
-                    printf ("JAS: Sample Rate:        %f\n", streamDesc->mSampleRate);
-                    printf ("JAS: Encoding:           %d\n", (int)streamDesc->mFormatID);
-                    printf ("JAS: FormatFlags:        %d\n", (int)streamDesc->mFormatFlags);
-                    printf ("JAS: Bytes per Packet:   %d\n", (int)streamDesc->mBytesPerPacket);
-                    printf ("JAS: Frames per Packet:  %d\n", (int)streamDesc->mFramesPerPacket);
-                    printf ("JAS: Bytes per Frame:    %d\n", (int)streamDesc->mBytesPerFrame);
-                    printf ("JAS: Channels per Frame: %d\n", (int)streamDesc->mChannelsPerFrame);
-                    printf ("JAS: Bits per Channel:   %d\n", (int)streamDesc->mBitsPerChannel);
+                    printf ("JAR: Sample Rate:        %f\n", streamDesc->mSampleRate);
+                    printf ("JAR: Encoding:           %d\n", (int)streamDesc->mFormatID);
+                    printf ("JAR: FormatFlags:        %d\n", (int)streamDesc->mFormatFlags);
+                    printf ("JAR: Bytes per Packet:   %d\n", (int)streamDesc->mBytesPerPacket);
+                    printf ("JAR: Frames per Packet:  %d\n", (int)streamDesc->mFramesPerPacket);
+                    printf ("JAR: Bytes per Frame:    %d\n", (int)streamDesc->mBytesPerFrame);
+                    printf ("JAR: Channels per Frame: %d\n", (int)streamDesc->mChannelsPerFrame);
+                    printf ("JAR: Bits per Channel:   %d\n", (int)streamDesc->mBitsPerChannel);
                 #endif
 					// steph 13/01/04
 					 err = kAudioHardwareUnknownPropertyError;
@@ -2462,9 +2462,9 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
 					AudioHardwareIOProcStreamUsage* inData  = (AudioHardwareIOProcStreamUsage*)inPropertyData;	
 					
 				#if PRINTDEBUG
-					printf("JAS: DeviceSetProperty : kAudioDevicePropertyIOProcStreamUsage size %ld\n",inPropertyDataSize);
-					printf("JAS: DeviceSetProperty : kAudioDevicePropertyIOProcStreamUsage proc %x\n",(AudioDeviceIOProc)inData->mIOProc);
-					printf("JAS: DeviceSetProperty : kAudioDevicePropertyIOProcStreamUsage mNumberStreams %ld\n",inData->mNumberStreams);
+					printf("JAR: DeviceSetProperty : kAudioDevicePropertyIOProcStreamUsage size %ld\n",inPropertyDataSize);
+					printf("JAR: DeviceSetProperty : kAudioDevicePropertyIOProcStreamUsage proc %x\n",(AudioDeviceIOProc)inData->mIOProc);
+					printf("JAR: DeviceSetProperty : kAudioDevicePropertyIOProcStreamUsage mNumberStreams %ld\n",inData->mNumberStreams);
 				#endif 
 			
 					map<AudioDeviceIOProc,TProcContext>::iterator iter = TJackClient::fJackClient->fAudioIOProcList.find((AudioDeviceIOProc)inData->mIOProc);
@@ -2472,13 +2472,13 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
 					if (iter == TJackClient::fJackClient->fAudioIOProcList.end()) {
 					
 					#if PRINTDEBUG
-						printf("JAS: DeviceSetProperty  kAudioDevicePropertyIOProcStreamUsage : Proc not found %x \n",(AudioDeviceIOProc)inData->mIOProc);
+						printf("JAR: DeviceSetProperty  kAudioDevicePropertyIOProcStreamUsage : Proc not found %x \n",(AudioDeviceIOProc)inData->mIOProc);
 					#endif 
 						err = kAudioHardwareUnknownPropertyError;
 					}else {
 					
 					#if PRINTDEBUG
-						printf("JAS: DeviceSetProperty  kAudioDevicePropertyIOProcStreamUsage : Proc FOUND %x \n",(AudioDeviceIOProc)inData->mIOProc);
+						printf("JAR: DeviceSetProperty  kAudioDevicePropertyIOProcStreamUsage : Proc FOUND %x \n",(AudioDeviceIOProc)inData->mIOProc);
 					#endif 
 				
 						//iter->second.fStreamUsage = true; // We need to take care of stream usage in Process
@@ -2487,14 +2487,14 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
 							for (int i = 0; i<inData->mNumberStreams; i++) {
 								iter->second.fInput[i] = inData->mStreamIsOn[i];
 							#if PRINTDEBUG
-								printf("JAS: DeviceSetProperty : input kAudioDevicePropertyIOProcStreamUsage inData->mStreamIsOn %ld \n",inData->mStreamIsOn[i]);
+								printf("JAR: DeviceSetProperty : input kAudioDevicePropertyIOProcStreamUsage inData->mStreamIsOn %ld \n",inData->mStreamIsOn[i]);
 							#endif    
 							}
 						}else{
 							for (int i = 0; i<inData->mNumberStreams; i++) {
 								iter->second.fOutput[i] = inData->mStreamIsOn[i];
 							#if PRINTDEBUG
-								printf("JAS: DeviceSetProperty : output kAudioDevicePropertyIOProcStreamUsage inData->mStreamIsOn %ld \n",inData->mStreamIsOn[i]);
+								printf("JAR: DeviceSetProperty : output kAudioDevicePropertyIOProcStreamUsage inData->mStreamIsOn %ld \n",inData->mStreamIsOn[i]);
 							#endif 
 							}   
 						}
@@ -2536,8 +2536,8 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
                 case kAudioDevicePropertySubMute:							
                 {
                 #if PRINTDEBUG   
-                    printf("JAS: Redirect call on used CoreAudio driver ID %ld \n",TJackClient::fCoreAudioDriver); 
-                    Print4CharCode("JAS: property ",inPropertyID);
+                    printf("JAR: Redirect call on used CoreAudio driver ID %ld \n",TJackClient::fCoreAudioDriver); 
+                    Print4CharCode("JAR: property ",inPropertyID);
                  #endif
                 
                     err = AudioDeviceSetProperty(TJackClient::fCoreAudioDriver, 
@@ -2549,7 +2549,7 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
                                                 inPropertyData);
                     
                 #if PRINTDEBUG   
-                    printf("JAS: Redirect call on used CoreAudio driver err %ld \n",err); 
+                    printf("JAR: Redirect call on used CoreAudio driver err %ld \n",err); 
                     printError(err);
                 #endif
                 
@@ -2558,7 +2558,7 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
           
                 default:
                 #if PRINTDEBUG 
-                    Print4CharCode("JAS: DeviceSetProperty unkown request:", inPropertyID);
+                    Print4CharCode("JAR: DeviceSetProperty unkown request:", inPropertyID);
                 #endif
                     err = kAudioHardwareUnknownPropertyError;
                     break;
@@ -2582,18 +2582,18 @@ OSStatus TJackClient::StreamGetPropertyInfo(AudioHardwarePlugInRef inSelf,
 
     #if PRINTDEBUG
         printf("--------------------------------------------------------\n");
-        printf ("JAS: StreamGetPropertyInfo inSelf inPropertyID %ld \n",(long)inSelf);
+        printf ("JAR: StreamGetPropertyInfo inSelf inPropertyID %ld \n",(long)inSelf);
     #endif
         CheckRunning(inSelf);
 
     #if PRINT4CC
-        Print4CharCode("JAS: StreamGetPropertyInfo ", inPropertyID);
+        Print4CharCode("JAR: StreamGetPropertyInfo ", inPropertyID);
     #endif
 	
         if(outSize == NULL)
         {
             #if PRINTDEBUG
-		printf ("JAS: StreamGetPropertyInfo received NULL outSize pointer\n");
+		printf ("JAR: StreamGetPropertyInfo received NULL outSize pointer\n");
             #endif
         }
         
@@ -2601,7 +2601,7 @@ OSStatus TJackClient::StreamGetPropertyInfo(AudioHardwarePlugInRef inSelf,
             *outWritable = false;
         }else{
         #if PRINTDEBUG
-            printf ("JAS: StreamGetPropertyInfo received NULL outWritable pointer\n");
+            printf ("JAR: StreamGetPropertyInfo received NULL outWritable pointer\n");
         #endif
         }
     
@@ -2689,8 +2689,8 @@ OSStatus TJackClient::StreamGetPropertyInfo(AudioHardwarePlugInRef inSelf,
                 case kAudioDevicePropertySubMute:					
                 {
                 #if PRINTDEBUG   
-                    printf("JAS: Error : StreamGetPropertyInfo called for a stream\n"); 
-                    Print4CharCode("JAS: property ",inPropertyID);
+                    printf("JAR: Error : StreamGetPropertyInfo called for a stream\n"); 
+                    Print4CharCode("JAR: property ",inPropertyID);
                 #endif
                     err = kAudioHardwareUnknownPropertyError;
                     break;
@@ -2698,7 +2698,7 @@ OSStatus TJackClient::StreamGetPropertyInfo(AudioHardwarePlugInRef inSelf,
                        
 		default:
                 #if PRINTDEBUG  
-                    Print4CharCode("JAS: StreamGetPropertyInfo unkown request:", inPropertyID);
+                    Print4CharCode("JAR: StreamGetPropertyInfo unkown request:", inPropertyID);
                  #endif
                     err = kAudioHardwareUnknownPropertyError;
                     break;
@@ -2719,13 +2719,13 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
 
 #if PRINTDEBUG
         printf("--------------------------------------------------------\n");
-        printf ("JAS: StreamGetProperty inSelf %ld\n",(long)inSelf);
+        printf ("JAR: StreamGetProperty inSelf %ld\n",(long)inSelf);
 #endif
 
         CheckRunning(inSelf);
 
     #if PRINT4CC
-        Print4CharCode("JAS: StreamGetProperty ", inPropertyID);
+        Print4CharCode("JAR: StreamGetProperty ", inPropertyID);
     #endif
              
         switch (inPropertyID)
@@ -2737,7 +2737,7 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
 						*ioPropertyDataSize = sizeof(UInt32);
 					}else if (*ioPropertyDataSize < sizeof(UInt32)){
 					#if PRINTDEBUG
-                        printf("JAS: StreamGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                        printf("JAR: StreamGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
                     #endif    
                         err = kAudioHardwareBadPropertySizeError;
                     }else{
@@ -2745,7 +2745,7 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
                             if (inStream == fStreamIDList[i]){
                                 *(UInt32*) outPropertyData = 1;
                             #if PRINTDEBUG
-                                printf("JAS: StreamGetProperty FOUND INPUT %ld\n", inStream);
+                                printf("JAR: StreamGetProperty FOUND INPUT %ld\n", inStream);
                             #endif
                                 break;
                             }
@@ -2755,7 +2755,7 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
                             if (inStream == fStreamIDList[i]){
                                 *(UInt32*) outPropertyData = 0;
                             #if PRINTDEBUG
-                                    printf("JAS: StreamGetProperty FOUND OUTPUT %ld\n", inStream);
+                                    printf("JAR: StreamGetProperty FOUND OUTPUT %ld\n", inStream);
                             #endif
                                 break;
                             }
@@ -2771,7 +2771,7 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
 						*ioPropertyDataSize = sizeof(UInt32);
 					}else if (*ioPropertyDataSize < sizeof(UInt32)){
                     #if PRINTDEBUG
-                        printf("JAS: StreamGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                        printf("JAR: StreamGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
                     #endif    
                         err = kAudioHardwareBadPropertySizeError;
                     }else{
@@ -2787,7 +2787,7 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
 						*ioPropertyDataSize = sizeof(UInt32);
 					}else if (*ioPropertyDataSize < sizeof(UInt32)){
                     #if PRINTDEBUG
-                        printf("JAS: StreamGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                        printf("JAR: StreamGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
                     #endif    
                         err = kAudioHardwareBadPropertySizeError;
                     }else{
@@ -2795,7 +2795,7 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
                             if (inStream == fStreamIDList[i]){
                                 *(UInt32*) outPropertyData = INPUT_MICROPHONE;
                             #if PRINTDEBUG
-                                printf("JAS: StreamGetProperty FOUND INPUT %ld\n", inStream);
+                                printf("JAR: StreamGetProperty FOUND INPUT %ld\n", inStream);
                             #endif
                                 break;
                             }
@@ -2805,7 +2805,7 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
                             if (inStream == fStreamIDList[i]){
                                 *(UInt32*) outPropertyData = OUTPUT_SPEAKER;
                             #if PRINTDEBUG
-                                    printf("JAS: StreamGetProperty FOUND OUTPUT %ld\n", inStream);
+                                    printf("JAR: StreamGetProperty FOUND OUTPUT %ld\n", inStream);
                             #endif
                                 break;
                             }
@@ -2821,9 +2821,9 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
                 
                 #if PRINTDEBUG
                     if (inPropertyID == kAudioDevicePropertyStreamFormat)
-                        printf("JAS: StreamGetProperty : GET kAudioDevicePropertyStreamFormat %ld\n",*ioPropertyDataSize);
+                        printf("JAR: StreamGetProperty : GET kAudioDevicePropertyStreamFormat %ld\n",*ioPropertyDataSize);
                     else
-                        printf("JAS: StreamGetProperty : GET kAudioStreamPropertyPhysicalFormat %ld\n",*ioPropertyDataSize);  
+                        printf("JAR: StreamGetProperty : GET kAudioStreamPropertyPhysicalFormat %ld\n",*ioPropertyDataSize);  
                 #endif 
                 
                     // steph 14/01/04
@@ -2831,7 +2831,7 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
 						*ioPropertyDataSize = sizeof(AudioStreamBasicDescription);
 					}else if (*ioPropertyDataSize < sizeof(AudioStreamBasicDescription)){
                     #if PRINTDEBUG
-                        printf("JAS: StreamGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                        printf("JAR: StreamGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
                     #endif    
                         err = kAudioHardwareBadPropertySizeError;
                     }else{
@@ -2857,7 +2857,7 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
 						*ioPropertyDataSize = sizeof(AudioStreamBasicDescription);
 					}else if (*ioPropertyDataSize < sizeof(AudioStreamBasicDescription)){
                     #if PRINTDEBUG
-                        printf("JAS: StreamGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                        printf("JAR: StreamGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
                     #endif    
                         err = kAudioHardwareBadPropertySizeError;
                     }else{
@@ -2882,7 +2882,7 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
 						*ioPropertyDataSize = sizeof(AudioDeviceID);
 					}else if (*ioPropertyDataSize < sizeof(AudioDeviceID)){
                     #if PRINTDEBUG
-                        printf("JAS: StreamGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                        printf("JAR: StreamGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
                     #endif    
                         err = kAudioHardwareBadPropertySizeError;
                     }else{
@@ -2912,7 +2912,7 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
 					}else if (*ioPropertyDataSize < TJackClient::fStreamName.size()+1){
                         err = kAudioHardwareBadPropertySizeError;
                     #if PRINTDEBUG
-                        printf("JAS: StreamGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                        printf("JAR: StreamGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
                     #endif    
                     }else{
                         char* data = (char*) outPropertyData;
@@ -2928,7 +2928,7 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
                     /*
                     if (*ioPropertyDataSize < sizeof (UInt32)){
                     #if PRINTDEBUG
-                        printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                        printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
                     #endif    
                         err = kAudioHardwareBadPropertySizeError;
                     }else{
@@ -2943,7 +2943,7 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
                     /*
                     if (*ioPropertyDataSize < sizeof (UInt32)){
                     #if PRINTDEBUG
-                        printf("JAS: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+                        printf("JAR: DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
                     #endif    
                         err = kAudioHardwareBadPropertySizeError;
                     }else{
@@ -3008,14 +3008,14 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
                 case kAudioDevicePropertySubVolumeDecibelsToScalar:		
                 case kAudioDevicePropertySubMute:					
                     #if PRINTDEBUG   
-                        printf("JAS: Error : StreamGetProperty called for a stream %ld \n",inPropertyID); 
+                        printf("JAR: Error : StreamGetProperty called for a stream %ld \n",inPropertyID); 
                     #endif
                     err = kAudioHardwareUnknownPropertyError;
                     break;
           
              	default:
                 #if PRINTDEBUG   
-                    Print4CharCode("JAS: StreamGetProperty unkown request:", inPropertyID);
+                    Print4CharCode("JAR: StreamGetProperty unkown request:", inPropertyID);
                 #endif
                     err = kAudioHardwareUnknownPropertyError;
                     break;
@@ -3037,13 +3037,13 @@ OSStatus TJackClient::StreamSetProperty(AudioHardwarePlugInRef inSelf,
 
 #if PRINTDEBUG
         printf("--------------------------------------------------------\n");
-        printf ("JAS: StreamSetProperty inSelf %ld\n",(long)inSelf);
+        printf ("JAR: StreamSetProperty inSelf %ld\n",(long)inSelf);
 #endif
         CheckRunning(inSelf);
          
 #if PRINTDEBUG
-        printf ("JAS: StreamSetProperty\n");
-        Print4CharCode("JAS: StreamSetProperty request:", inPropertyID);
+        printf ("JAR: StreamSetProperty\n");
+        Print4CharCode("JAR: StreamSetProperty request:", inPropertyID);
 #endif
          
         switch(inPropertyID) {
@@ -3117,14 +3117,14 @@ OSStatus TJackClient::StreamSetProperty(AudioHardwarePlugInRef inSelf,
             case kAudioDevicePropertySubVolumeDecibelsToScalar:		
             case kAudioDevicePropertySubMute:	
                 #if PRINTDEBUG   
-                    printf("JAS: Error : DeviceProperty called for a stream %ld \n",inPropertyID); 
+                    printf("JAR: Error : DeviceProperty called for a stream %ld \n",inPropertyID); 
                 #endif
                 err = kAudioHardwareUnknownPropertyError;
                 break;				
              
             default:
             #if PRINTDEBUG  
-                Print4CharCode("JAS: StreamSetProperty unkown request:", inPropertyID);
+                Print4CharCode("JAR: StreamSetProperty unkown request:", inPropertyID);
             #endif
                 err = kAudioHardwareUnknownPropertyError;
                 break;
@@ -3144,7 +3144,7 @@ OSStatus TJackClient::DeviceStartAtTime(AudioHardwarePlugInRef inSelf,
 {
 #if PRINTDEBUG
     printf("--------------------------------------------------------\n");
-    printf ("JAS: DeviceStartAtTime : not yet implemented\n");
+    printf ("JAR: DeviceStartAtTime : not yet implemented\n");
 #endif
 	return kAudioHardwareNoError;
 }
@@ -3157,7 +3157,7 @@ OSStatus TJackClient::DeviceGetNearestStartTime (AudioHardwarePlugInRef inSelf,
 {
 #if PRINTDEBUG
     printf("--------------------------------------------------------\n");
-    printf ("JAS: DeviceGetNearestStartTime : not yet implemented\n");
+    printf ("JAR: DeviceGetNearestStartTime : not yet implemented\n");
 #endif
 	return kAudioHardwareUnsupportedOperationError;
 }
@@ -3182,7 +3182,7 @@ bool TJackClient::ReadPref()
             FILE *prefFile;
             if ((prefFile = fopen(path, "rt"))) {
              #if PRINTDEBUG  
-                printf("JAS: Reading Preferences\n");
+                printf("JAR: Reading Preferences\n");
             #endif
                 int nullo;
                 fscanf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",
@@ -3218,8 +3218,8 @@ jack_client_t *  TJackClient::CheckServer(AudioHardwarePlugInRef inSelf)
         TJackClient::fDeviceRunning = true;
         
     #if PRINTDEBUG
-        printf("JAS: CheckServer TJackClient::fBufferSizer %ld\n",TJackClient::fBufferSize);
-        printf("JAS: CheckServer TJackClient::fSampleRate  %f\n",TJackClient::fSampleRate );
+        printf("JAR: CheckServer TJackClient::fBufferSizer %ld\n",TJackClient::fBufferSize);
+        printf("JAR: CheckServer TJackClient::fSampleRate  %f\n",TJackClient::fSampleRate );
     #endif
          
         OSStatus err = AudioHardwareDevicePropertyChanged(TJackClient::fPlugInRef, 
@@ -3228,7 +3228,7 @@ jack_client_t *  TJackClient::CheckServer(AudioHardwarePlugInRef inSelf)
                                                         0, 
                                                         kAudioDevicePropertyBufferSize);
     #if PRINTDEBUG
-        printf("JAS: CheckServer kAudioDevicePropertyBufferSize err %ld\n",err);
+        printf("JAR: CheckServer kAudioDevicePropertyBufferSize err %ld\n",err);
     #endif
     
         err = AudioHardwareDevicePropertyChanged(TJackClient::fPlugInRef, 
@@ -3237,7 +3237,7 @@ jack_client_t *  TJackClient::CheckServer(AudioHardwarePlugInRef inSelf)
                                                 0, 
                                                 kAudioDevicePropertyBufferFrameSize);
     #if PRINTDEBUG
-        printf("JAS: CheckServer kAudioDevicePropertyBufferFrameSize err %ld\n",err);
+        printf("JAR: CheckServer kAudioDevicePropertyBufferFrameSize err %ld\n",err);
     #endif
     
         err = AudioHardwareDevicePropertyChanged(TJackClient::fPlugInRef, 
@@ -3246,7 +3246,7 @@ jack_client_t *  TJackClient::CheckServer(AudioHardwarePlugInRef inSelf)
                                                 0, 
                                                 kAudioDevicePropertyNominalSampleRate);
     #if PRINTDEBUG
-        printf("JAS: CheckServer kAudioDevicePropertyNominalSampleRate err %ld\n",err);
+        printf("JAR: CheckServer kAudioDevicePropertyNominalSampleRate err %ld\n",err);
     #endif
 
         err = AudioHardwareDevicePropertyChanged(TJackClient::fPlugInRef, 
@@ -3255,7 +3255,7 @@ jack_client_t *  TJackClient::CheckServer(AudioHardwarePlugInRef inSelf)
                                                 0, 
                                                 kAudioDevicePropertyActualSampleRate);
     #if PRINTDEBUG
-        printf("JAS: CheckServer kAudioDevicePropertyActualSampleRate err %ld\n",err);
+        printf("JAR: CheckServer kAudioDevicePropertyActualSampleRate err %ld\n",err);
     #endif
 
         err = AudioHardwareDevicePropertyChanged(TJackClient::fPlugInRef, 
@@ -3264,7 +3264,7 @@ jack_client_t *  TJackClient::CheckServer(AudioHardwarePlugInRef inSelf)
                                                 0, 
                                                 kAudioDevicePropertyDeviceIsAlive);
     #if PRINTDEBUG
-        printf("JAS: CheckServer kAudioDevicePropertyIsRunning err %ld\n",err);
+        printf("JAR: CheckServer kAudioDevicePropertyIsRunning err %ld\n",err);
     #endif
         
         return client;
@@ -3295,7 +3295,7 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
     char* id_name = ottieniNomeFromPid((int)getpid());
 
 #if PRINTDEBUG
-    printf ("JAS: Initialize [inSelf, name] : %ld %s \n", (long)inSelf, id_name);
+    printf ("JAR: Initialize [inSelf, name] : %ld %s \n", (long)inSelf, id_name);
 #endif
     
 #ifdef kAudioHardwarePlugInInterface2ID  
@@ -3304,11 +3304,11 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
         UInt32 outData = 0;
         err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyProcessIsMaster, &theSize, NULL);
     #if PRINTDEBUG
-        printf("JAS: kAudioHardwarePropertyProcessIsMaster err theSize %ld %ld\n",err,theSize);
+        printf("JAR: kAudioHardwarePropertyProcessIsMaster err theSize %ld %ld\n",err,theSize);
     #endif
         err = AudioHardwareGetProperty(kAudioHardwarePropertyProcessIsMaster, &theSize, &outData);
     #if PRINTDEBUG
-        printf("JAS: kAudioHardwarePropertyProcessIsMaster err outData %ld %ld\n",err,outData);
+        printf("JAR: kAudioHardwarePropertyProcessIsMaster err outData %ld %ld\n",err,outData);
     #endif
     
 #endif
@@ -3342,15 +3342,15 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
 		assert(TJackClient::fOutputChannels < MAX_JACK_PORTS);
             
     #if PRINTDEBUG    
-        printf("JAS: fInputChannels %ld \n", TJackClient::fInputChannels);
-        printf("JAS: fOutputChannels %ld \n", TJackClient::fOutputChannels);
+        printf("JAR: fInputChannels %ld \n", TJackClient::fInputChannels);
+        printf("JAR: fOutputChannels %ld \n", TJackClient::fOutputChannels);
     #endif      
         jack_client_close(client);
 		
 		
     }else{
     #if PRINTDEBUG
-        printf("JAS: jack server not running?\n");
+        printf("JAR: jack server not running?\n");
     #endif
         return kAudioHardwareNotRunningError;
     }        
@@ -3365,13 +3365,13 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
             for (int i = 0; i<TJackClient::fOutputChannels + TJackClient::fInputChannels; i++) {
                 err = AudioHardwareClaimAudioStreamID(inSelf, TJackClient::fDeviceID, &fStreamIDList[i]);
             #if PRINTDEBUG
-                printf("JAS: AudioHardwareClaimAudioStreamID %ld\n", (long)&TJackClient::fStreamIDList[i]);
+                printf("JAR: AudioHardwareClaimAudioStreamID %ld\n", (long)&TJackClient::fStreamIDList[i]);
             #endif
                 if (err == kAudioHardwareNoError)
                 {
                     err = AudioHardwareStreamsCreated(inSelf, TJackClient::fDeviceID, i+1, &TJackClient::fStreamIDList[i]);
                 #if PRINTDEBUG
-                    printf("JAS: AudioHardwareStreamsCreated %ld\n", (long)&TJackClient::fStreamIDList[i]);
+                    printf("JAR: AudioHardwareStreamsCreated %ld\n", (long)&TJackClient::fStreamIDList[i]);
                 #endif
                     if (err != kAudioHardwareNoError) return err;
                 }else
@@ -3407,7 +3407,7 @@ OSStatus TJackClient::Teardown(AudioHardwarePlugInRef inSelf)
     char* id_name = ottieniNomeFromPid((int)getpid());
 	
 #if PRINTDEBUG
-	printf ("JAS: Teardown [inSelf, name] : %ld %s \n", (long)inSelf, id_name);
+	printf ("JAR: Teardown [inSelf, name] : %ld %s \n", (long)inSelf, id_name);
 #endif
     OSStatus err; 
 
@@ -3421,14 +3421,14 @@ OSStatus TJackClient::Teardown(AudioHardwarePlugInRef inSelf)
     if (TJackClient::fConnected2HAL) {
     	err = AudioHardwareDevicesDied(inSelf, 1, &TJackClient::fDeviceID);
     #if PRINTDEBUG
-        printf ("JAS: Teardown : connection to HAL\n");
+        printf ("JAR: Teardown : connection to HAL\n");
         printError(err);
     #endif
     
     }else{
     
     #if PRINTDEBUG
-       printf ("JAS: Teardown : no connection to HAL\n");
+       printf ("JAR: Teardown : no connection to HAL\n");
     #endif
     
     }
@@ -3479,38 +3479,38 @@ bool TJackClient::QueryDevices(jack_client_t * client)
     
     if ((ports = jack_get_ports(client, NULL, NULL, JackPortIsPhysical|JackPortIsOutput)) == NULL) {
         #if PRINTDEBUG
-            printf("JAS: cannot find any physical capture ports\n");
+            printf("JAR: cannot find any physical capture ports\n");
         #endif
     }else{
          
     // string of the form "portaudio:Built-in audio :out1"
     if (!ExtractString(port_name,ports[0],':')) {
     #if PRINTDEBUG
-        printf("JAS: error : can not extract Jack CoreAudio driver name\n");
+        printf("JAR: error : can not extract Jack CoreAudio driver name\n");
     #endif
     }
       
     #if PRINTDEBUG
-        printf("JAS: name %s : len %ld\n", port_name, strlen(port_name));
+        printf("JAR: name %s : len %ld\n", port_name, strlen(port_name));
     #endif
         free (ports);
     }
     
     if ((ports = jack_get_ports(client, NULL, NULL, JackPortIsPhysical|JackPortIsInput)) == NULL) {
     #if PRINTDEBUG
-        printf("JAS: cannot find any physical playback ports\n");
+        printf("JAR: cannot find any physical playback ports\n");
     #endif
     }else{
           
     // string of the form "portaudio:Built-in audio :in1" 
     if (!ExtractString(port_name,ports[0],':')) {
     #if PRINTDEBUG
-        printf("JAS: error : can not extract Jack CoreAudio driver name\n");
+        printf("JAR: error : can not extract Jack CoreAudio driver name\n");
     #endif
     }      
     
     #if PRINTDEBUG
-        printf("JAS: NAME %s : len %ld\n", port_name, strlen(port_name));
+        printf("JAR: NAME %s : len %ld\n", port_name, strlen(port_name));
     #endif
         free (ports);
     }
@@ -3523,11 +3523,11 @@ bool TJackClient::QueryDevices(jack_client_t * client)
 	err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices, &outSize, &outWritable);
 		
 	#if PRINTDEBUG
-        printf("JAS: AudioHardwareGetPropertyInfo : outSize %ld\n", outSize);
+        printf("JAR: AudioHardwareGetPropertyInfo : outSize %ld\n", outSize);
     #endif
 
 	if (err != noErr){
-		printf("JAS: couldn't get info about list of audio devices %ld \n", err);
+		printf("JAR: couldn't get info about list of audio devices %ld \n", err);
 		printError(err);
 		return false;
 	}
@@ -3538,7 +3538,7 @@ bool TJackClient::QueryDevices(jack_client_t * client)
     // Bail if there aren't any devices
     if (numCoreDevices < 1)
     {
-        printf("JAS: no Devices Available\n");
+        printf("JAR: no Devices Available\n");
         return false;
     }
     
@@ -3549,7 +3549,7 @@ bool TJackClient::QueryDevices(jack_client_t * client)
     err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices, &outSize, (void *)coreDeviceIDs);
     if (err != noErr)
     {
-        printf("JAS: couldn't get list of audio device IDs %ld\n", err);
+        printf("JAR: couldn't get list of audio device IDs %ld\n", err);
         return false;
     }
 
@@ -3564,7 +3564,7 @@ bool TJackClient::QueryDevices(jack_client_t * client)
         if (err != noErr)
         {
         #if PRINTDEBUG
-            printf("JAS: couldn't get info about names of audio devices %ld \n", err);
+            printf("JAR: couldn't get info about names of audio devices %ld \n", err);
         #endif
             return false;
         }
@@ -3574,18 +3574,18 @@ bool TJackClient::QueryDevices(jack_client_t * client)
         if (err != noErr)
         {
         #if PRINTDEBUG
-            printf("JAS: couldn't get name of device IDs %ld\n", err);
+            printf("JAR: couldn't get name of device IDs %ld\n", err);
         #endif
             return false;
         }else {
         #if PRINTDEBUG
-            printf("JAS: device name %ld %s \n", coreDeviceIDs[i], name);
+            printf("JAR: device name %ld %s \n", coreDeviceIDs[i], name);
         #endif
         }
          
         if (strncmp(name,port_name,len) == 0) {
         #if PRINTDEBUG
-            printf("JAS: found Jack CoreAudio driver : %s \n",name);
+            printf("JAR: found Jack CoreAudio driver : %s \n",name);
         #endif
             TJackClient::fCoreAudioDriver = coreDeviceIDs[i];
         }
