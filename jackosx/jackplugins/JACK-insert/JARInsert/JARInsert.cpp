@@ -23,22 +23,25 @@
 
 #include "JARInsert.h"
 
-extern "C" void JARILog(char *fmt,...) {
-#ifdef DEBUG
-    va_list ap;
-    va_start(ap, fmt);
-    fprintf(stdout,"JARInsert Log: ");
-    vfprintf(stdout, fmt, ap);
-    va_end(ap);
-#endif
-}
-
 int JARInsert::c_instances = 0;
 int JARInsert::c_instances_count = 0;
+bool JARInsert::c_printDebug = false;
+
+extern "C" void JARILog(char *fmt,...) {
+	if(JARInsert::c_printDebug) {
+		va_list ap;
+		va_start(ap, fmt);
+		fprintf(stdout,"JARInsert Log: ");
+		vfprintf(stdout, fmt, ap);
+		va_end(ap);
+	}
+}
 
 JARInsert::JARInsert(long host_buffer_size,int hostType) 
 	: c_error(kNoErr),c_client(NULL),c_isRunning(false),c_rBufOn(false),c_needsDeactivate(false),c_hBufferSize(host_buffer_size)
 {	
+	ReadPrefs();
+	
 	if(!OpenAudioClient()) { 
 		JARILog("Cannot find jack client.\n");
 		SHOWALERT("Cannot find jack client for this application, check if Jack server is running.");
@@ -98,6 +101,8 @@ JARInsert::JARInsert(long host_buffer_size,int hostType)
 JARInsert::JARInsert(int hostType) 
 	: c_error(kNoErr),c_client(NULL),c_isRunning(false),c_rBufOn(false),c_needsDeactivate(false),c_hBufferSize(0)
 {
+	ReadPrefs();
+	
 	if(!OpenAudioClient()) { 
 		JARILog("Cannot find jack client.\n");
 		SHOWALERT("Cannot find jack client for this application, check if Jack server is running.");
@@ -285,3 +290,44 @@ void JARInsert::Flush() {
 		if(JARInsert::c_instances_count==0) JARInsert::c_instances = 0;
     }
 }
+
+bool JARInsert::ReadPrefs() {
+    CFURLRef  prefURL;
+    FSRef     prefFolderRef;
+    OSErr     err;
+    char buf[256];
+    char path[256];
+    
+    err = FSFindFolder(kUserDomain, kPreferencesFolderType, kDontCreateFolder, &prefFolderRef);
+    if (err == noErr) {
+        prefURL = CFURLCreateFromFSRef(kCFAllocatorSystemDefault, &prefFolderRef);
+        if (prefURL) {
+            CFURLGetFileSystemRepresentation(prefURL,FALSE,(UInt8*)buf,256);
+            sprintf(path,"%s/JAS.jpil",buf);
+            FILE *prefFile;
+            if ((prefFile = fopen(path, "rt"))) {
+                int nullo;
+                fscanf(
+						prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",
+                        &nullo,
+                        &nullo,
+                        &nullo,
+                        &nullo,
+                        &nullo,
+                        &nullo,
+                        &nullo,
+                        &nullo,
+                        &nullo,
+                        &nullo,
+                        &nullo,
+						&nullo,
+						(int*)&JARInsert::c_printDebug
+					);                
+                fclose(prefFile);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+

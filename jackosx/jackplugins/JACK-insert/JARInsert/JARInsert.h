@@ -54,7 +54,11 @@ class JARInsert {
 		int Process(float **in_buffer,float **out_buffer,long host_nframes);
 		bool AllocBSizeAlign(long host_buffer_size);
 		bool CanProcess() { return c_canProcess; }
+		
+		static bool c_printDebug;
 	private:
+		bool ReadPrefs();
+		
 		bool c_canProcess;
 		int c_error;
 		AudioDeviceID c_jackDevID;
