@@ -8,7 +8,7 @@
  *
  */
 
-typedef int (*RenderCyclePtr)(void *data,long nframes);
+typedef int (*RenderCyclePtr)(void *data,long nframes,float **inBuffers,float **outBuffers);
 
 #ifdef __cplusplus
 extern "C" {
@@ -18,8 +18,6 @@ void *openAudioInstance(float sampleRate,long bufferSize,int inChannels,int outC
 void closeAudioInstance(void *instance);
 int startAudioProcess(void *instance);
 int stopAudioProcess(void *instance);
-float **getAudioInputs(void *instance);
-float **getAudioOutputs(void *instance);
 void * getHostData(void *instance);
 void setHostData(void *instance, void* hostData);
 void setCycleFun(void *instance,RenderCyclePtr fun);

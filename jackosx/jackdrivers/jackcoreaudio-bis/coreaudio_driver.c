@@ -57,8 +57,10 @@ OSStatus GetDeviceNameFromID(AudioDeviceID id, char name[60])
 	return AudioDeviceGetProperty(id,0,false,kAudioDevicePropertyDeviceName,&size,&name[0]);
 }
 
-int coreaudio_runCycle(void *driver,long bufferSize) {
+int coreaudio_runCycle(void *driver,long bufferSize,float **inBuffers,float **outBuffers) {
 	coreaudio_driver_t * ca_driver = (coreaudio_driver_t*)driver;
+	ca_driver->incoreaudio = inBuffers;
+	ca_driver->outcoreaudio = outBuffers;
 	ca_driver->last_wait_ust = jack_get_microseconds();
 	return ca_driver->engine->run_cycle(ca_driver->engine, bufferSize, 0);
 }
@@ -242,9 +244,6 @@ coreaudio_driver_bufsize (coreaudio_driver_t* driver, jack_nframes_t nframes)
 	
 	setHostData(driver->stream,driver);
 	setCycleFun(driver->stream,coreaudio_runCycle);
-	 
-	driver->incoreaudio = getAudioInputs(driver->stream);
-	driver->outcoreaudio = getAudioOutputs(driver->stream);
 
 	return startAudioProcess(driver->stream);
 }
@@ -311,8 +310,8 @@ coreaudio_driver_new (char *name,
 	setHostData(driver->stream,driver);
 	setCycleFun(driver->stream,coreaudio_runCycle);
 	
-	driver->incoreaudio = getAudioInputs(driver->stream);
-	driver->outcoreaudio = getAudioOutputs(driver->stream);
+	driver->incoreaudio = NULL;
+	driver->outcoreaudio = NULL;
 	
 	driver->playback_nchannels = chan_out;
 	driver->capture_nchannels = chan_in;

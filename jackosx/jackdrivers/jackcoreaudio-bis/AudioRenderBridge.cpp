@@ -42,26 +42,10 @@ int stopAudioProcess(void *instance) {
 	return FALSE;
 }
 
-float **getAudioInputs(void *instance) {
-	if(instance) {
-		AudioRender *inst = (AudioRender*)instance;
-		return inst->cInBuffers;
-	}
-	return NULL;
-}
-
-float **getAudioOutputs(void *instance) {
-	if(instance) {
-		AudioRender *inst = (AudioRender*)instance;
-		return inst->cOutBuffers;
-	}
-	return NULL;
-}
-
 void * getHostData(void *instance) {
 	if(instance) {
 		AudioRender *inst = (AudioRender*)instance;
-		return inst->cData;
+		return inst->GetHostData();
 	}
 	return NULL;
 }
@@ -69,14 +53,14 @@ void * getHostData(void *instance) {
 void setHostData(void *instance, void* hostData) {
 	if(instance) {
 		AudioRender *inst = (AudioRender*)instance;
-		inst->cData = hostData;
+		inst->SetHostData(hostData);
 	}
 }
 
 void setCycleFun(void *instance,RenderCyclePtr fun) {
 	if(instance) {
 		AudioRender *inst = (AudioRender*)instance;
-		inst->cRenderCallback = fun;
+		inst->SetRenderCallback(fun);
 	}
 }
 

@@ -41,7 +41,7 @@ OSStatus	AudioRender::MyRender(void 				*inRefCon,
 		x->cOutBuffers[i] = (float*)ioData->mBuffers[i].mData;
 	}
 	
-	x->cRenderCallback(x->cData,inNumberFrames);
+	x->cRenderCallback(x->cData,inNumberFrames,x->cInBuffers,x->cOutBuffers);
 	
 	return noErr;
 }
@@ -60,7 +60,7 @@ OSStatus	AudioRender::MyRenderInput(void 				*inRefCon,
 	
 	AudioUnitRender(x->cDeviceAu,ioActionFlags,inTimeStamp,1,inNumberFrames,x->cInputsBufs);
 	
-	x->cRenderCallback(x->cData,inNumberFrames);
+	x->cRenderCallback(x->cData,inNumberFrames,x->cInBuffers,x->cOutBuffers);
 	
 	return noErr;
 }
@@ -168,7 +168,7 @@ bool AudioRender::ConfigureAudioProc(float sampleRate,long bufferSize,int outCha
         UInt32 theSize = sizeof(AudioStreamBasicDescription);
         SR.mSampleRate = (Float64)sampleRate;
         err = AudioDeviceSetProperty(cDevice,NULL,0,false,kAudioDevicePropertyStreamFormat,theSize,&SR);
-        if(err!=noErr) JCALog("Cannot set a new sample rate\n");
+        if(err!=noErr) { JCALog("Cannot set a new sample rate\n"); return false; }
         else {
             size = sizeof(AudioStreamBasicDescription);
             AudioStreamBasicDescription newCheckSR;
@@ -191,7 +191,7 @@ bool AudioRender::ConfigureAudioProc(float sampleRate,long bufferSize,int outCha
         UInt32 theSize = sizeof(UInt32);
         UInt32 newBufferSize = (UInt32) bufferSize;
         err = AudioDeviceSetProperty(cDevice,NULL,0,false,kAudioDevicePropertyBufferFrameSize,theSize,&newBufferSize);
-        if(err!=noErr) JCALog("Cannot set a new buffer size\n");
+        if(err!=noErr) { JCALog("Cannot set a new buffer size\n"); return false; }
         else {	
             UInt32 newBufFrame;
             size = sizeof(UInt32);
