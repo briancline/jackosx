@@ -7,15 +7,12 @@
 	objects = {
 		014CEA3E0018CDD111CA2923 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = "JACK-insert.component";
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		014CEA3F0018CDD111CA2923 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				DEBUGGING_SYMBOLS = YES;
@@ -30,8 +27,6 @@
 			name = Development;
 		};
 		014CEA400018CDD111CA2923 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -1038,8 +1033,7 @@
 			};
 		};
 		B225B98005260A67001F8BAF = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = CoreAudio.framework;
 			path = /System/Library/Frameworks/CoreAudio.framework;
@@ -1165,8 +1159,7 @@
 			sourceTree = "<group>";
 		};
 		B287674904AAAEA200A35172 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = Carbon.framework;
 			path = /System/Library/Frameworks/Carbon.framework;
@@ -1180,8 +1173,7 @@
 			};
 		};
 		B287677D04AAB07B00A35172 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = AudioToolbox.framework;
 			path = /System/Library/Frameworks/AudioToolbox.framework;
@@ -1195,8 +1187,7 @@
 			};
 		};
 		B287677F04AAB08800A35172 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = CoreFoundation.framework;
 			path = /System/Library/Frameworks/CoreFoundation.framework;
@@ -1204,8 +1195,7 @@
 			sourceTree = "<absolute>";
 		};
 		B287678004AAB08800A35172 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = CoreServices.framework;
 			path = /System/Library/Frameworks/CoreServices.framework;
@@ -1231,8 +1221,7 @@
 			};
 		};
 		B2A8609104AD914300C2F34A = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = Jack.framework;
 			path = /Library/Frameworks/Jack.framework;
@@ -1284,8 +1273,7 @@
 			};
 		};
 		F50094AB0377301301000103 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = CoreServices.framework;
 			path = /System/Library/Frameworks/CoreServices.framework;
@@ -1321,8 +1309,7 @@
 			};
 		};
 		F50095300377357701000103 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = AudioUnit.framework;
 			path = /System/Library/Frameworks/AudioUnit.framework;
