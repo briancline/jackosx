@@ -238,6 +238,14 @@ History
 		
 15-12-04 : Version 0.65 : Notification sent by JackPilot when the jack server start and stops : allows applications
 		to dynamically see when jack server is available.
+
+13-01-05 : Version 0.66 : Correct RestoreConnections issue : RestoreConnections is called only once for the first Activate. 
+		Correct bug in Process in the "several proc" case : output buffer need to be cleared
+		
+24-01-05 : Version 0.67 : Correct Final Cut Pro crash by changing the way DeviceGetProperty for kAudioDevicePropertyStreams behaves.
+
+03-02-05 : Version 0.68 : Ouput buffer are produced in fOuputListTemp buffer before bieng copied to jack port buffers (to solve a dirty buffer looping problem)
+
 		 
 TODO :
     
@@ -247,6 +255,7 @@ TODO :
  
 */
 
+
 #include "TJackClient.h"
 #include <notify.h>
 
@@ -255,7 +264,7 @@ TODO :
 #include <stdio.h>
 #include <assert.h>
 
-//#define JACK_NOTIFICATION
+//#define JACK_NOTIFICATION 1
 
 // Static variables declaration
 
@@ -286,6 +295,8 @@ AudioStreamID TJackClient::fCoreAudioDriver = 0;
 AudioHardwarePlugInRef TJackClient::fPlugInRef = 0;
 
 bool TJackClient::fNotification = false;
+
+Foo Foo::fInstance;
 
 #define kJackStreamFormat kAudioFormatFlagIsPacked|kLinearPCMFormatFlagIsFloat|kAudioFormatFlagIsBigEndian|kAudioFormatFlagIsNonInterleaved
 
@@ -462,7 +473,7 @@ void TJackClient::SaveConnections()
 bool TJackClient::RestoreConnections()
 {
     JARLog("--------------------------------------------------------\n");
-    JARLog("RestoreConnections\n");
+    JARLog("RestoreConnections size : %ld\n", fConnections.size());
     bool res = false;
 
     list<pair<string, string> >::const_iterator it;
@@ -524,6 +535,16 @@ void TJackClient::KillJackClient()
 }
 
 //------------------------------------------------------------------------
+void TJackClient::CheckFirstRef()
+{
+    assert(TJackClient::fJackClient);
+
+    if (TJackClient::fJackClient->fExternalClientNum + TJackClient::fJackClient->fInternalClientNum == 1) {
+		TJackClient::fJackClient->Activate();
+	}
+}
+
+//------------------------------------------------------------------------
 void TJackClient::CheckLastRef()
 {
     assert(TJackClient::fJackClient);
@@ -540,6 +561,7 @@ void TJackClient::CheckLastRef()
 }
 
 //------------------------------------------------------------------------
+/*
 void TJackClient::IncRefInternal()
 {
     assert(TJackClient::fJackClient);
@@ -548,6 +570,18 @@ void TJackClient::IncRefInternal()
     if (TJackClient::fJackClient->fInternalClientNum == 1)
         TJackClient::fJackClient->AllocatePorts();
     TJackClient::fJackClient->Activate();
+}
+*/
+
+void TJackClient::IncRefInternal()
+{
+    assert(TJackClient::fJackClient);
+    TJackClient::fJackClient->fInternalClientNum++;
+    JARLog("IncRefInternal : %ld\n", TJackClient::fJackClient->fInternalClientNum);
+    if (TJackClient::fJackClient->fInternalClientNum == 1) {
+        TJackClient::fJackClient->AllocatePorts();
+	}
+	CheckFirstRef();
 }
 
 //------------------------------------------------------------------------
@@ -562,12 +596,22 @@ void TJackClient::DecRefInternal()
 }
 
 //------------------------------------------------------------------------
+/*
 void TJackClient::IncRefExternal()
 {
     assert(TJackClient::fJackClient);
     TJackClient::fJackClient->fExternalClientNum++;
     JARLog("IncRefExternal : %ld\n", TJackClient::fJackClient->fExternalClientNum);
     TJackClient::fJackClient->Activate();
+}
+*/
+
+void TJackClient::IncRefExternal()
+{
+    assert(TJackClient::fJackClient);
+    TJackClient::fJackClient->fExternalClientNum++;
+    JARLog("IncRefExternal : %ld\n", TJackClient::fJackClient->fExternalClientNum);
+    CheckFirstRef();
 }
 
 //------------------------------------------------------------------------
@@ -632,8 +676,8 @@ int TJackClient::BufferSize(jack_nframes_t nframes, void *arg)
     for (long i = 0; i < TJackClient::fOutputChannels; i++) {
         client->fOutputList->mBuffers[i].mNumberChannels = 1;
         client->fOutputList->mBuffers[i].mDataByteSize = TJackClient::fBufferSize * sizeof(float);
-        free(client->fOuputListMixing[i]);
-        client->fOuputListMixing[i] = (float *)malloc(sizeof(float) * TJackClient::fBufferSize);
+        free(client->fOuputListTemp[i]);
+        client->fOuputListTemp[i] = (float *)malloc(sizeof(float) * TJackClient::fBufferSize);
     }
 
     AudioHardwareDevicePropertyChanged(TJackClient::fPlugInRef,
@@ -687,6 +731,11 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
         TProcContext context = val.second;
 
         if (context.fStatus) { // If proc is started
+		
+			for (int i = 0; i < TJackClient::fOutputChannels; i++) {
+				// Use an intermediate buffer
+				memset(client->fOuputListTemp[i], 0, nframes*sizeof(float));
+			}
 
             if (context.fStreamUsage) {
 
@@ -701,7 +750,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
 
                 for (int i = 0; i < TJackClient::fOutputChannels; i++) {
                     if (context.fOutput[i]) {
-                        client->fOutputList->mBuffers[i].mData = (float *)jack_port_get_buffer(client->fOutputPortList[i], nframes);
+    					client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
                     } else {
                         client->fOutputList->mBuffers[i].mData = NULL;
                     }
@@ -714,7 +763,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
                 }
 
                 for (int i = 0; i < TJackClient::fOutputChannels; i++) {
-                    client->fOutputList->mBuffers[i].mData = (float *)jack_port_get_buffer(client->fOutputPortList[i], nframes);
+					client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
                 }
             }
 
@@ -730,17 +779,23 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
                 if (err != kAudioHardwareNoError)
                     JARLog("Process error %ld\n", err);
             }
+			
+			// Copy intermediate buffer in client buffer
+			for (int i = 0; i < TJackClient::fOutputChannels; i++) {
+				memcpy((float *)jack_port_get_buffer(client->fOutputPortList[i], nframes), client->fOuputListTemp[i], nframes*sizeof(float));
+			}
         }
 
     } else if (client->GetProcNum() > 1) { // Several IOProc : need mixing
 
         for (int i = 0; i < TJackClient::fOutputChannels; i++) {
-            // Use an intermediate mixing buffer
-            memset(client->fOuputListMixing[i], 0, nframes*sizeof(float));
+            // Use a mixing buffer
+            memset(client->fOuputListTemp[i], 0, nframes*sizeof(float));
         }
-
+		
         map<AudioDeviceIOProc, TProcContext>::iterator iter;
-        for (iter = client->fAudioIOProcList.begin(); iter != client->fAudioIOProcList.end(); iter++) {
+		int k;
+        for (k = 1, iter = client->fAudioIOProcList.begin(); iter != client->fAudioIOProcList.end(); iter++, k++) {
 
             pair<AudioDeviceIOProc, TProcContext> val = *iter;
             TProcContext context = val.second;
@@ -761,7 +816,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
                     for (int i = 0; i < TJackClient::fOutputChannels; i++) {
                         // Use an intermediate mixing buffer
                         if (context.fOutput[i]) {
-                            client->fOutputList->mBuffers[i].mData = client->fOuputListMixing[i];
+                            client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
                         } else {
                             client->fOutputList->mBuffers[i].mData = NULL;
                         }
@@ -775,7 +830,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
 
                     for (int i = 0; i < TJackClient::fOutputChannels; i++) {
                         // Use an intermediate mixing buffer
-                        client->fOutputList->mBuffers[i].mData = client->fOuputListMixing[i];
+                        client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
                     }
                 }
 
@@ -797,24 +852,36 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
                     for (int i = 0; i < TJackClient::fOutputChannels; i++) {
                         if (context.fOutput[i]) {
                             float * output = (float *)jack_port_get_buffer(client->fOutputPortList[i], nframes);
-                            for (unsigned int j = 0; j < nframes; j++) {
-                                output[j] += ((float*)client->fOutputList->mBuffers[i].mData)[j];
-                            }
+							if (k == 1) {	// first proc : copy 
+								for (unsigned int j = 0; j < nframes; j++) {
+									output[j] = ((float*)client->fOutputList->mBuffers[i].mData)[j];
+								}
+							} else { // other proc : mix
+								for (unsigned int j = 0; j < nframes; j++) {
+									output[j] += ((float*)client->fOutputList->mBuffers[i].mData)[j];
+								}
+							}
                         }
                     }
 
                 } else {
                     for (int i = 0; i < TJackClient::fOutputChannels; i++) {
                         float * output = (float *)jack_port_get_buffer(client->fOutputPortList[i], nframes);
-                        for (unsigned int j = 0; j < nframes; j++) {
-                            output[j] += ((float*)client->fOutputList->mBuffers[i].mData)[j];
-                        }
+						if (k == 1) {	// first proc : copy 
+							for (unsigned int j = 0; j < nframes; j++) {
+								output[j] = ((float*)client->fOutputList->mBuffers[i].mData)[j];
+							}
+						} else { // other proc : mix
+							for (unsigned int j = 0; j < nframes; j++) {
+								output[j] += ((float*)client->fOutputList->mBuffers[i].mData)[j];
+							}
+						}
                     }
                 }
             }
         }
     }
-
+	
     return 0;
 }
 
@@ -831,12 +898,12 @@ TJackClient::TJackClient()
     fInputList->mNumberBuffers = TJackClient::fInputChannels;
     fOutputList->mNumberBuffers = TJackClient::fOutputChannels;
 
-    fOuputListMixing = (float **)malloc(sizeof(float*) * TJackClient::fOutputChannels);
-    assert(fOuputListMixing);
+    fOuputListTemp = (float **)malloc(sizeof(float*) * TJackClient::fOutputChannels);
+    assert(fOuputListTemp);
 
     for (int i = 0; i < TJackClient::fOutputChannels; i++) {
-        fOuputListMixing[i] = (float *)malloc(sizeof(float) * TJackClient::fBufferSize);
-        assert(fOuputListMixing[i]);
+        fOuputListTemp[i] = (float *)malloc(sizeof(float) * TJackClient::fBufferSize);
+        assert(fOuputListTemp[i]);
     }
 
     for (int i = 0; i < MAX_JACK_PORTS; i++) {
@@ -858,14 +925,16 @@ TJackClient::~TJackClient()
     free(fOutputList);
 
     for (int i = 0; i < TJackClient::fOutputChannels; i++)
-        free(fOuputListMixing[i]);
-    free(fOuputListMixing);
+        free(fOuputListTemp[i]);
+    free(fOuputListTemp);
 }
 
 //------------------------------------------------------------------------
 bool TJackClient::AllocatePorts()
 {
     char in_port_name [JACK_PORT_NAME_LEN];
+	
+	JARLog("AllocatePorts fInputChannels %ld fOutputChannels %ld \n", fInputChannels, fOutputChannels);
 
     for (long i = 0; i < TJackClient::fInputChannels; i++) {
         sprintf(in_port_name, "in%ld", i + 1);
@@ -1082,6 +1151,8 @@ void TJackClient::Stop(AudioDeviceIOProc proc)
 //------------------------------------------------------------------------
 bool TJackClient::Activate()
 {
+	JARLog("Activate\n");
+	  
     if (jack_activate(fClient)) {
         JARLog("cannot activate client");
         return false;
@@ -1092,6 +1163,19 @@ bool TJackClient::Activate()
         return true;
     }
 }
+
+//------------------------------------------------------------------------
+bool TJackClient::Desactivate()
+{
+	JARLog("Desactivate\n");
+	
+    if (jack_deactivate(fClient)) {
+        JARLog("cannot deactivate client");
+        return false;
+    }
+    return true;
+}
+
 
 //------------------------------------------------------------------------
 bool TJackClient::AutoConnect()
@@ -1120,8 +1204,10 @@ bool TJackClient::AutoConnect()
                     if (jack_connect(fClient, ports[i], jack_port_name(fInputPortList[i]))) {
                         JARLog("cannot connect input ports\n");
                     }
-                } else
+                } else {
+					JARLog("AutoConnect input: i %ld fInputPortList[i] %x\n", i, fInputPortList[i]);
                     goto error;
+				}
 
             }
             free (ports);
@@ -1147,8 +1233,10 @@ bool TJackClient::AutoConnect()
                     if (jack_connect(fClient, jack_port_name(fOutputPortList[i]), ports[i])) {
                         JARLog("cannot connect ouput ports\n");
                     }
-                } else
+                } else {
+					JARLog("AutoConnect output: i %ld fOutputPortList[i] %x\n", i, fOutputPortList[i]);
                     goto error;
+				}
             }
             free (ports);
         }
@@ -1159,16 +1247,6 @@ bool TJackClient::AutoConnect()
 error:
     JARLog("AutoConnect error\n");
     return false;
-}
-
-//------------------------------------------------------------------------
-bool TJackClient::Desactivate()
-{
-    if (jack_deactivate(fClient)) {
-        JARLog("cannot deactivate client");
-        return false;
-    }
-    return true;
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
@@ -1583,9 +1661,10 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                     err = kAudioHardwareBadPropertySizeError;
                     JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n", *ioPropertyDataSize);
                 } else {
-                    char* data = (char*) outPropertyData;
+				   char* data = (char*) outPropertyData;
                     strcpy(data, TJackClient::fDeviceName.c_str());
                     *ioPropertyDataSize = TJackClient::fDeviceName.size() + 1;
+					//JARLog("DeviceGetProperty : kAudioDevicePropertyDeviceName write %ld\n",TJackClient::fDeviceName.size() + 1);
                 }
                 break;
             }
@@ -1767,7 +1846,28 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                     *ioPropertyDataSize = sizeof(AudioStreamID) * channels;
                 } else if (*ioPropertyDataSize < (sizeof(AudioStreamID)*channels)) {
                     JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n", *ioPropertyDataSize);
-                    err = kAudioHardwareBadPropertySizeError;
+					/*
+					FINAL Cut pro *incorrectly* ask for this property with a two small "ioPropertyDataSize". 
+					The kAudioHardwareBadPropertySizeError value was thus returned but then cause a crash in FCP
+					Now the date size that can be safely written the is returned without any error.....
+					*/
+					AudioStreamID* streamIDList = (AudioStreamID*)outPropertyData;
+					int streams = *ioPropertyDataSize/sizeof(AudioStreamID);
+					
+					JARLog("DeviceGetProperty : kAudioDevicePropertyStreams copy %ld stream\n", streams);
+
+                    if (isInput) {
+                        for (int i = 0; i < streams; i++) {
+                            streamIDList[i] = TJackClient::fStreamIDList[i];
+                        }
+                    } else {
+                        for (int i = 0; i < streams; i++) {
+                            streamIDList[i] = TJackClient::fStreamIDList[i + TJackClient::fInputChannels];
+                        }
+                    }
+
+                    *ioPropertyDataSize = sizeof(AudioStreamID) * streams;
+					
                 } else {
 
                     AudioStreamID* streamIDList = (AudioStreamID*)outPropertyData;
@@ -2049,8 +2149,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 
             // Special Property to release Jack client from application code
         case kAudioDevicePropertyReleaseJackClient: {
-                JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n", *ioPropertyDataSize);
-                DecRefExternal();
+				DecRefExternal();
                 break;
             }
 

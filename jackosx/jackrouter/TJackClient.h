@@ -49,6 +49,13 @@ extern "C"
         kAudioDevicePropertyGetJackClient = 'jasg',
         kAudioDevicePropertyReleaseJackClient = 'jasr'
     };
+	
+	struct Foo {
+	
+		Foo() {printf("Constructor called \n");}
+			
+		static  Foo fInstance;
+	};
 
     // The IOProc context
 
@@ -85,7 +92,7 @@ extern "C"
             AudioBufferList* fInputList;	// CoreAudio input buffers
             AudioBufferList* fOutputList;	// CoreAudio output buffers
 
-            float** fOuputListMixing;	// Buffers for mixing
+            float** fOuputListTemp;	// Intermediate output buffers
 
             map<AudioDeviceIOProc, TProcContext> fAudioIOProcList;   // Table of IOProc
 
@@ -155,6 +162,7 @@ extern "C"
             void Start(AudioDeviceIOProc proc);
             void Stop(AudioDeviceIOProc proc);
 
+			static void CheckFirstRef();
             static void CheckLastRef();
             static void IncRefInternal();
             static void DecRefInternal();
