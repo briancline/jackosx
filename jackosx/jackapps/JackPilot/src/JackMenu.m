@@ -792,43 +792,35 @@ end:
     interface = (char*)malloc(sizeof(char)*[interfaccia length]+2);
     [interfaccia getCString:interface];
 	
-	BOOL useCoreAudio = NO;
-	
-	if(strcmp(driver,"coreaudio")==0) {
-		OSStatus err = noErr;
-		UInt32 size;
-	
-		AudioDeviceID vDevice = 0;
-	
-		Boolean isWritable;
-	
-		err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices,&size,&isWritable);
+	OSStatus err = noErr;
+	UInt32 size;
+	AudioDeviceID vDevice = 0;
+	Boolean isWritable;
+
+	err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices,&size,&isWritable);
+	if (err!=noErr) return;
+
+	int manyDevices = size/sizeof(AudioDeviceID);
+
+	AudioDeviceID devices[manyDevices];
+	err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices,&size,&devices);
+	if (err!=noErr) return;
+
+	int i;
+
+	for(i=0; i<manyDevices; i++) {
+		size = sizeof(char)*256;
+		char name[256];
+		err = AudioDeviceGetProperty(devices[i],0,false,kAudioDevicePropertyDeviceName,&size,&name);
 		if(err!=noErr) return;
-    
-		int manyDevices = size/sizeof(AudioDeviceID);
-	
-		AudioDeviceID devices[manyDevices];
-		err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices,&size,&devices);
-		if(err!=noErr) return;
-	
-		int i;
-	
-		for(i=0;i<manyDevices;i++) {
-			size = sizeof(char)*256;
-			char name[256];
-			err = AudioDeviceGetProperty(devices[i],0,false,kAudioDevicePropertyDeviceName,&size,&name);
-			if(err!=noErr) return;
-			if(strncmp(interface,name,strlen(interface))==0) {  
-				vDevice = devices[i];
-			}
+		if(strncmp(interface,name,strlen(interface))==0) {  
+			vDevice = devices[i];
 		}
-	
-		NSString *deviceIDStr = [[NSNumber numberWithLong:vDevice] stringValue];
-		[deviceIDStr getCString:interface];
-		
-		useCoreAudio = YES;
 	}
-	
+
+	NSString *deviceIDStr = [[NSNumber numberWithLong:vDevice] stringValue];
+	[deviceIDStr getCString:interface];
+		
 	if(strcmp(channels,"0")==0 && strcmp(in_channels,"0")==0) {
 		openJack("");
 		free(driver); free(samplerate); free(buffersize); free(channels); free(in_channels); free(interface);
@@ -849,15 +841,8 @@ end:
     strcat(stringa,channels);
 	strcat(stringa," -i ");
     strcat(stringa,in_channels);
-	if (!useCoreAudio) {
-		strcat(stringa," -n ");
-		strcat(stringa,"\"");
-		strcat(stringa,interface);
-		strcat(stringa,"\"");
-	} else {
-		strcat(stringa," -I ");
-		strcat(stringa,interface);
-	}
+	strcat(stringa," -I ");
+	strcat(stringa,interface);
     
     int a;
     id pannelloDiAlert = NSGetAlertPanel(LOCSTR(@"Please Wait..."),LOCSTR(@"Jack server is starting..."),nil,nil,nil);
@@ -865,26 +850,6 @@ end:
     a = openJack(stringa);
     [NSApp endModalSession:modalSession];
     NSReleaseAlertPanel(pannelloDiAlert);
-
-    /*
-    if(checkJack()!=0){
-        ottieniPorte();
-        jackstat = 1;
-        writeStatus(1); 
-        [isonBut setStringValue:[NSString stringWithCString:"Jack is On"]];
-        [self setupTimer];
-        [bufferText setEnabled:NO];
-        [channelsTest setEnabled:NO];
-        [driverBox setEnabled:NO];
-        [interfaceBox setEnabled:NO];
-        [samplerateText setEnabled:NO];
-    }
-    else { 
-        jackstat = 0; 
-        [self error:@"Cannot start Jack server,\nPlease check the console or retry after a system reboot."]; 
-        writeStatus(0); 
-    }
-    */
     
     free(stringa); free(driver); free(samplerate); free(buffersize); free(channels); free(in_channels); free(interface); 
 }
