@@ -235,6 +235,9 @@ History
 		
 10-12-04 : Version 0.64 : S Letz
 		Implement XRun and BufferSize change notifications.
+		
+15-12-04 : Version 0.65 : Notification sent by JackPilot when the jack server start and stops : allows applications
+		to dynamically see when jack server is available.
 		 
 TODO :
     
@@ -245,8 +248,14 @@ TODO :
 */
 
 #include "TJackClient.h"
+#include <notify.h>
+
+#include <CoreFoundation/CFNotificationCenter.h>
+
 #include <stdio.h>
 #include <assert.h>
+
+//#define JACK_NOTIFICATION
 
 // Static variables declaration
 
@@ -275,6 +284,8 @@ TJackClient* TJackClient::fJackClient = NULL;
 AudioStreamID TJackClient::fStreamIDList[MAX_JACK_PORTS];
 AudioStreamID TJackClient::fCoreAudioDriver = 0;
 AudioHardwarePlugInRef TJackClient::fPlugInRef = 0;
+
+bool TJackClient::fNotification = false;
 
 #define kJackStreamFormat kAudioFormatFlagIsPacked|kLinearPCMFormatFlagIsFloat|kAudioFormatFlagIsBigEndian|kAudioFormatFlagIsNonInterleaved
 
@@ -350,6 +361,61 @@ static void printError(OSStatus err)
         }
     }
 }
+
+#ifdef JACK_NOTIFICATION
+
+//---------------------------------------------------------------------------------------------------------------------------------
+static void startCallback(CFNotificationCenterRef 	center, 
+						void*					 	observer, 
+						CFStringRef 				name, 
+						const void* 				object, 
+						CFDictionaryRef 			userInfo)
+{
+	OSStatus err = TJackClient::Initialize(TJackClient::fPlugInRef);
+    JARLog("com.grame.jackserver.start notification %ld\n",err);
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------
+static void stopCallback(CFNotificationCenterRef 	center, 
+						void*					 	observer, 
+						CFStringRef 				name, 
+						const void* 				object, 
+						CFDictionaryRef 			userInfo)
+{
+    OSStatus err = TJackClient::Teardown1(TJackClient::fPlugInRef);
+	JARLog("com.grame.jackserver.stop notification %ld\n",err);
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------
+
+static void StartNotification() 
+{
+	if (!TJackClient::fNotification) {
+		CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(), 
+										NULL, startCallback, CFSTR("com.grame.jackserver.start"), 
+										CFSTR("com.grame.jackserver"), CFNotificationSuspensionBehaviorDeliverImmediately);
+
+		CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(), 
+										NULL, stopCallback, CFSTR("com.grame.jackserver.stop"), 
+										CFSTR("com.grame.jackserver"), CFNotificationSuspensionBehaviorDeliverImmediately);
+		TJackClient::fNotification = true;
+	}
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------
+static void StopNotification()
+{
+	if (TJackClient::fNotification) {
+		CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(),NULL,
+			CFSTR("com.grame.jackserver.start"),CFSTR("com.grame.jackserver"));
+			
+		CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(),NULL,
+			CFSTR("com.grame.jackserver.stop"),CFSTR("com.grame.jackserver"));
+		TJackClient::fNotification = false;
+	}
+}
+
+#endif 
 
 //------------------------------------------------------------------------
 void TJackClient::SaveConnections()
@@ -447,6 +513,8 @@ void TJackClient::ClearJackClient()
 //------------------------------------------------------------------------
 void TJackClient::KillJackClient()
 {
+	JARLog("KillJackClient\n");
+	 
     if (TJackClient::fJackClient) {
         TJackClient::fJackClient->Desactivate();
         TJackClient::fJackClient->Close();
@@ -516,7 +584,8 @@ void TJackClient::Shutdown (void *arg)
 {
     TJackClient::fDeviceRunning = false;
     JARLog("Shutdown\n");
-    ClearJackClient();
+    //ClearJackClient();
+	KillJackClient();
     OSStatus err = AudioHardwareDevicePropertyChanged(TJackClient::fPlugInRef,
                    TJackClient::fDeviceID,
                    0,
@@ -2931,9 +3000,18 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
     bool prefOK = ReadPref();
 
     JARLog("Initialize [inSelf, name] : %ld %s \n", (long)inSelf, id_name);
+		
+	TJackClient::fPlugInRef = inSelf;
+
+#ifdef JACK_NOTIFICATION	
+	// Start notifications (but not for JackPilot)
+	if (strcmp(id_name, "JackPilot") != 0) {
+		StartNotification();
+	}
+#endif
 
     // Reject "jackd" or "jackdmp" as a possible client (to be improved if other clients need to be rejected)
-    if (strcmp (id_name, "jackd") == 0 || strcmp (id_name, "jackdmp") == 0) {
+    if (strcmp(id_name, "jackd") == 0 || strcmp(id_name, "jackdmp") == 0) {
         JARLog("Rejected client : %s\n", id_name);
         return noErr;
     }
@@ -2979,7 +3057,7 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
 
     } else {
         JARLog("jack server not running?\n");
-        return kAudioHardwareNotRunningError;
+		return kAudioHardwareNotRunningError;
     }
 
     err = AudioHardwareClaimAudioDeviceID(inSelf, &TJackClient::fDeviceID);
@@ -3000,8 +3078,6 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
             return err;
         TJackClient::fConnected2HAL = true;
     }
-
-    TJackClient::fPlugInRef = inSelf;
 
     if (TJackClient::fDefaultInput) {
         err = AudioHardwareSetProperty(kAudioHardwarePropertyDefaultInputDevice, sizeof(UInt32), &TJackClient::fDeviceID);
@@ -3028,13 +3104,13 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
 OSStatus TJackClient::Teardown(AudioHardwarePlugInRef inSelf)
 {
     char* id_name = bequite_getNameFromPid((int)getpid());
-
-    KillJackClient(); // In case the client did not correctly quit itself (like iMovie...)
-
+  
     JARLog("Teardown [inSelf, name] : %ld %s \n", (long)inSelf, id_name);
-    OSStatus err;
-
-    err = AudioHardwareStreamsDied(inSelf, TJackClient::fDeviceID, TJackClient::fOutputChannels + TJackClient::fInputChannels, &TJackClient::fStreamIDList[0]);
+	KillJackClient(); // In case the client did not correctly quit itself (like iMovie...)
+#ifdef JACK_NOTIFICATION	
+	StopNotification();
+#endif 
+    OSStatus err = AudioHardwareStreamsDied(inSelf, TJackClient::fDeviceID, TJackClient::fOutputChannels + TJackClient::fInputChannels, &TJackClient::fStreamIDList[0]);
     JARLog("Teardown : AudioHardwareStreamsDied\n");
     printError(err);
 
@@ -3049,4 +3125,30 @@ OSStatus TJackClient::Teardown(AudioHardwarePlugInRef inSelf)
 
     return kAudioHardwareNoError;
 }
+
+//---------------------------------------------------------------------------------------------------------------------------------
+OSStatus TJackClient::Teardown1(AudioHardwarePlugInRef inSelf)
+{
+    char* id_name = bequite_getNameFromPid((int)getpid());
+  
+    JARLog("Teardown1 [inSelf, name] : %ld %s \n", (long)inSelf, id_name);
+	//KillJackClient(); // In case the client did not correctly quit itself (like iMovie...)
+	//ClearJackClient();
+
+    OSStatus err = AudioHardwareStreamsDied(inSelf, TJackClient::fDeviceID, TJackClient::fOutputChannels + TJackClient::fInputChannels, &TJackClient::fStreamIDList[0]);
+    JARLog("Teardown1 : AudioHardwareStreamsDied\n");
+    printError(err);
+
+    if (TJackClient::fConnected2HAL) {
+        err = AudioHardwareDevicesDied(inSelf, 1, &TJackClient::fDeviceID);
+        JARLog("Teardown1 : AudioHardwareDevicesDied\n");
+        printError(err);
+        JARLog("Teardown1 : connection to HAL\n");
+    } else {
+        JARLog("Teardown1 : no connection to HAL\n");
+    }
+
+    return kAudioHardwareNoError;
+}
+
 

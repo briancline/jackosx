@@ -122,8 +122,8 @@ extern "C"
 #ifdef kAudioHardwarePlugInInterface2ID
 
     static AudioHardwarePlugInInterface testInterfaceFtbl = {
-                NULL,                     // Required padding for COM
-                myQueryInterface,         // These three are the required COM functions
+                NULL,                           // Required padding for COM
+                myQueryInterface,               // These three are the required COM functions
                 myAddRef,
                 myRelease,
                 TJackClient::Initialize,
@@ -148,8 +148,8 @@ extern "C"
 #else
 
     static AudioHardwarePlugInInterface testInterfaceFtbl = {
-                NULL,                     // Required padding for COM
-                myQueryInterface,         // These three are the required COM functions
+                NULL,                           // Required padding for COM
+                myQueryInterface,               // These three are the required COM functions
                 myAddRef,
                 myRelease,
                 TJackClient::Initialize,

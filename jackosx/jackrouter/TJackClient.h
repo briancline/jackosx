@@ -71,12 +71,11 @@ extern "C"
         }
     };
 
-
-    // The CoreAudio/Jack client
+	// The CoreAudio/Jack client
 
     class TJackClient {
-
-        private:
+	
+		private:
 
             jack_client_t * fClient;	// Jack client
 
@@ -112,19 +111,21 @@ extern "C"
             static string fDeviceManufacturer;
             static bool fDeviceRunning;
             static bool fConnected2HAL;
-
+	
             static AudioDeviceID fDeviceID;
             static AudioStreamID fStreamIDList[128];
 
             static AudioDeviceID fCoreAudioDriver;		// The CoreAudio driver currently loaded by Jack
-            static AudioHardwarePlugInRef fPlugInRef;
-
+     
             static void SetTime(AudioTimeStamp* timeVal, long curTime, UInt64 time);
-
+		
         public:
 
             TJackClient();
             virtual ~TJackClient();
+			
+			static AudioHardwarePlugInRef fPlugInRef;
+			static bool fNotification;
 
             static int Process(jack_nframes_t nframes, void *arg);
             static int BufferSize(jack_nframes_t nframes, void *arg);
@@ -172,11 +173,12 @@ extern "C"
 
             void SaveConnections();
             bool RestoreConnections();
-
-            // Plug-in API
+			
+			// Plug-in API
 
             static OSStatus	Initialize(AudioHardwarePlugInRef inSelf);
             static OSStatus Teardown(AudioHardwarePlugInRef inSelf);
+			static OSStatus Teardown1(AudioHardwarePlugInRef inSelf);
 
             static OSStatus DeviceAddIOProc(AudioHardwarePlugInRef inSelf,
                                             AudioDeviceID inDevice,
