@@ -71,12 +71,6 @@
 			settings = {
 			};
 		};
-		B269BD8905CE675F008A029D = {
-			fileRef = B2EFA46C05CA7C8700CC0BE7;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		B2BF364005CEA38A00463CC3 = {
 			fileRef = B2CE56DE05CA63AE00667293;
 			isa = PBXBuildFile;
@@ -154,7 +148,6 @@
 			files = (
 				B2CE564E05CA622100667293,
 				B2CE571405CA642900667293,
-				B269BD8905CE675F008A029D,
 				B20E8FCC05D7AD2F0022C8A7,
 				B20E8FD005D7AD310022C8A7,
 			);
@@ -197,7 +190,7 @@
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOL_FLAGS = "";
 				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = jack_coreaudio.so;
+				PRODUCT_NAME = auhal.so;
 				REZ_EXECUTABLE = YES;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
@@ -214,7 +207,7 @@
 			explicitFileType = "compiled.mach-o.dylib";
 			includeInIndex = 0;
 			isa = PBXFileReference;
-			path = jack_coreaudio.so;
+			path = auhal.so;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};

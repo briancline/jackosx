@@ -42,6 +42,7 @@
 #include <jack/jack.h>
 #include <jack/internal.h>
 #include "AudioRenderBridge.h"
+#include <CoreAudio/CoreAudio.h>
 
 typedef struct {
 
