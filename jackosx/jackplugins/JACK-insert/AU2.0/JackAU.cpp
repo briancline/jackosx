@@ -48,7 +48,7 @@ ComponentResult	ElCAJAS::Initialize()
 {    
 	c_jar = new JARInsert();
 	c_error = c_jar->GetError();
-    return noErr;
+	return noErr;
 }
 
 ComponentResult		ElCAJAS::GetParameterValueStrings(	AudioUnitScope			inScope,
