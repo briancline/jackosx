@@ -796,9 +796,11 @@ void TJackClient::Close()
 		}
     }
 
-    if (jack_client_close(fClient)) {
-		JARLog("cannot close client\n");
-    }
+	if (fClient) {
+		if (jack_client_close(fClient)) {
+			JARLog("cannot close client\n");
+		}
+	}
 }
 
 //------------------------------------------------------------------------
