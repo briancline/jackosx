@@ -87,9 +87,8 @@ class TJackClient {
         
         map<AudioDeviceIOProc,TProcContext> fAudioIOProcList;   // Table of IOProc 
          
-        long fSampleTime;	// Current sample time
         long fProcRunning;	// Counter of running IOProc
-        long fExternalClientNum;	// Counter of external clients (Jack plug-in)
+        long fExternalClientNum;	// Counter of external clients (Jack plug-ins)
 		long fInternalClientNum;	// Counter of internal client	
 		
 		// Global state 
@@ -104,6 +103,7 @@ class TJackClient {
         static bool fDefaultInput;
         static bool fDefaultOutput;
         static bool fDefaultSystem;
+		
         static string fDeviceName;
         static string fStreamName;
         static string fDeviceManufacturer;
@@ -113,7 +113,7 @@ class TJackClient {
         static AudioDeviceID fDeviceID;
         static AudioStreamID fStreamIDList[128];
         
-        static AudioDeviceID fCoreAudioDriver;		// the CoreAudio driver currently loaded by Jack
+        static AudioDeviceID fCoreAudioDriver;		// The CoreAudio driver currently loaded by Jack
         static AudioHardwarePlugInRef fPlugInRef;
         
         static bool ExtractString(char* dst, const char* src, char sep);
@@ -129,6 +129,8 @@ class TJackClient {
         static TJackClient* GetJackClient(); 
 		static void ClearJackClient();
 		static void KillJackClient();
+		
+		static bool fDebug;
 	    
         bool Open();  
         void Close();
@@ -161,11 +163,6 @@ class TJackClient {
 		
 		void StopRunning() {fProcRunning = 0;}
            
-        // Jack jack_frame_time API does not seem to work correctly...
-        
-        long IncTime() {fSampleTime += fBufferSize; return fSampleTime;}
-        long GetTime() {return fSampleTime;}
-        
         static bool QueryDevices(jack_client_t * client);
         static bool ReadPref();
         static void Shutdown(void *arg);
@@ -175,9 +172,7 @@ class TJackClient {
         void SaveConnections();
         bool RestoreConnections();
 		
-		static int fVerboseMode;
-      
-        // Plug-in API
+		// Plug-in API
   
         static OSStatus	Initialize(AudioHardwarePlugInRef inSelf);
         static OSStatus Teardown(AudioHardwarePlugInRef inSelf);
