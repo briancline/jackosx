@@ -8,21 +8,21 @@
  *
  */
 
-typedef int (*JackRunCyclePtr)(void * driver,long bufferSize);
+typedef int (*RenderCyclePtr)(void *data,long nframes);
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void *openPandaAudioInstance(float sampleRate,float virtual_sampleRate,long bufferSize,int inChannels, int outChannels,char *device);
-void closePandaAudioInstance(void *instance);
-int startPandaAudioProcess(void *instance);
-int stopPandaAudioProcess(void *instance);
-float **getPandaAudioInputs(void *instance);
-float **getPandaAudioOutputs(void *instance);
+void *openAudioInstance(float sampleRate,long bufferSize,int inChannels,int outChannels,char *device);
+void closeAudioInstance(void *instance);
+int startAudioProcess(void *instance);
+int stopAudioProcess(void *instance);
+float **getAudioInputs(void *instance);
+float **getAudioOutputs(void *instance);
 void * getHostData(void *instance);
 void setHostData(void *instance, void* hostData);
-void setCycleFun(void *instance,JackRunCyclePtr fun);
+void setCycleFun(void *instance,RenderCyclePtr fun);
 void setParameter(void *instance,int id,void *data);
 
 #ifdef __cplusplus

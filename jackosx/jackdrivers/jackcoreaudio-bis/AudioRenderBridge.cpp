@@ -11,13 +11,14 @@
 #include "AudioRenderBridge.h"
 #include "AudioRender.h"
 
-void *openPandaAudioInstance(float sampleRate,float virtual_sampleRate,long bufferSize,int inChannels, int outChannels,char *device) {
-	AudioRender *newInst = new AudioRender(sampleRate,virtual_sampleRate,bufferSize,inChannels,outChannels,device);
-	if(newInst->status) return newInst;
+void *openAudioInstance(float sampleRate,long bufferSize,int inChannels, int outChannels,char *device) {
+	AudioRender *newInst = new AudioRender();
+	bool res = newInst->ConfigureAudioProc(sampleRate,bufferSize,outChannels,inChannels,device);
+	if(res) return newInst;
 	return NULL;
 }
 
-void closePandaAudioInstance(void *instance) {
+void closeAudioInstance(void *instance) {
 	if(instance) {
 		AudioRender *inst = (AudioRender*)instance;
 		inst->StopAudio();
@@ -25,7 +26,7 @@ void closePandaAudioInstance(void *instance) {
 	}
 }
 
-int startPandaAudioProcess(void *instance) {
+int startAudioProcess(void *instance) {
 	if(instance) {
 		AudioRender *inst = (AudioRender*)instance;
 		return inst->StartAudio();
@@ -33,7 +34,7 @@ int startPandaAudioProcess(void *instance) {
 	return FALSE;
 }
 
-int stopPandaAudioProcess(void *instance) {
+int stopAudioProcess(void *instance) {
 	if(instance) {
 		AudioRender *inst = (AudioRender*)instance;
 		return inst->StopAudio();
@@ -41,18 +42,18 @@ int stopPandaAudioProcess(void *instance) {
 	return FALSE;
 }
 
-float **getPandaAudioInputs(void *instance) {
+float **getAudioInputs(void *instance) {
 	if(instance) {
 		AudioRender *inst = (AudioRender*)instance;
-		return inst->inBuffers;
+		return inst->cInBuffers;
 	}
 	return NULL;
 }
 
-float **getPandaAudioOutputs(void *instance) {
+float **getAudioOutputs(void *instance) {
 	if(instance) {
 		AudioRender *inst = (AudioRender*)instance;
-		return inst->outBuffers;
+		return inst->cOutBuffers;
 	}
 	return NULL;
 }
@@ -60,7 +61,7 @@ float **getPandaAudioOutputs(void *instance) {
 void * getHostData(void *instance) {
 	if(instance) {
 		AudioRender *inst = (AudioRender*)instance;
-		return inst->jackData;
+		return inst->cData;
 	}
 	return NULL;
 }
@@ -68,25 +69,20 @@ void * getHostData(void *instance) {
 void setHostData(void *instance, void* hostData) {
 	if(instance) {
 		AudioRender *inst = (AudioRender*)instance;
-		inst->jackData = hostData;
+		inst->cData = hostData;
 	}
 }
 
-void setCycleFun(void *instance,JackRunCyclePtr fun) {
+void setCycleFun(void *instance,RenderCyclePtr fun) {
 	if(instance) {
 		AudioRender *inst = (AudioRender*)instance;
-		inst->f_JackRunCycle = fun;
+		inst->cRenderCallback = fun;
 	}
 }
 
 void setParameter(void *instance,int id,void *data) {
 	if(instance) {
-		AudioRender *inst = (AudioRender*)instance;
-		switch(id) {
-			case 'v_sr':
-				inst->vir_SampleRate = *(float*)data;
-				break;
-		}
+		//AudioRender *inst = (AudioRender*)instance;
 	}
 }
 

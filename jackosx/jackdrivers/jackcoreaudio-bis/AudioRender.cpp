@@ -1,7 +1,7 @@
  /*
  *  AudioRender.cpp
- *  Under Artistic License.
- *  This code is part of Panda framework (moduleloader.cpp)
+ *  Under LGPL License.
+ *  This code is part of Panda AUHAL driver.
  *  http://xpanda.sourceforge.net
  *
  *  Created by Johnny Petrantoni on Fri Jan 30 2004.
@@ -12,15 +12,6 @@
 #include "AudioRender.h"
 #include <unistd.h>
 #define DEBUG 1
-//#undef DEBUG
-
-float AudioRender::gSampleRate = 0.0;
-long AudioRender::gBufferSize = 0;
-int AudioRender::gInputChannels = 0;
-int AudioRender::gOutputChannels = 0;
-AudioRender *AudioRender::theRender = NULL;
-bool AudioRender::isProcessing = false;
-const AudioTimeStamp *AudioRender::gTime;
 
 extern "C" void JCALog(char *fmt,...) {
 #ifdef DEBUG
@@ -32,25 +23,6 @@ extern "C" void JCALog(char *fmt,...) {
 #endif
 }
 
-void PrintStreamDesc (AudioStreamBasicDescription *inDesc)
-{
-    if (!inDesc) {
-        JCALog ("Can't print a NULL desc!\n");
-        return;
-    }
-    
-    JCALog ("- - - - - - - - - - - - - - - - - - - -\n");
-    JCALog ("  Sample Rate:%f\n", inDesc->mSampleRate);
-    JCALog("  Format ID:%.*s\n", (int) sizeof(inDesc->mFormatID), (char*)&inDesc->mFormatID);
-    JCALog ("  Format Flags:%lX\n", inDesc->mFormatFlags);
-    JCALog ("  Bytes per Packet:%ld\n", inDesc->mBytesPerPacket);
-    JCALog ("  Frames per Packet:%ld\n", inDesc->mFramesPerPacket);
-    JCALog ("  Bytes per Frame:%ld\n", inDesc->mBytesPerFrame);
-    JCALog ("  Channels per Frame:%ld\n", inDesc->mChannelsPerFrame);
-    JCALog ("  Bits per Channel:%ld\n", inDesc->mBitsPerChannel);
-    JCALog ("- - - - - - - - - - - - - - - - - - - -\n");
-}
-
 OSStatus	AudioRender::MyRender(void 				*inRefCon, 
 				AudioUnitRenderActionFlags 	*ioActionFlags, 
 				const AudioTimeStamp 		*inTimeStamp, 
@@ -59,16 +31,17 @@ OSStatus	AudioRender::MyRender(void 				*inRefCon,
 				AudioBufferList 			*ioData)
 
 {
-	
 	AudioRender *x = (AudioRender*)inRefCon;
 	
-	AudioUnitRender(x->device_au,ioActionFlags,inTimeStamp,1,inNumberFrames,x->inputsBufs);
+	memcpy(&x->cTime,inTimeStamp,sizeof(AudioTimeStamp));
+	
+	AudioUnitRender(x->cDeviceAu,ioActionFlags,inTimeStamp,1,inNumberFrames,x->cInputsBufs);
 		
 	for(UInt32 i=0;i<ioData->mNumberBuffers;i++) {
-		x->outBuffers[i] = (float*)ioData->mBuffers[i].mData;
+		x->cOutBuffers[i] = (float*)ioData->mBuffers[i].mData;
 	}
 	
-	x->f_JackRunCycle(x->jackData,inNumberFrames);
+	x->cRenderCallback(x->cData,inNumberFrames);
 	
 	return noErr;
 }
@@ -81,301 +54,266 @@ OSStatus	AudioRender::MyRenderInput(void 				*inRefCon,
 				AudioBufferList 			*ioData)
 
 {
-	
 	AudioRender *x = (AudioRender*)inRefCon;
+
+	memcpy(&x->cTime,inTimeStamp,sizeof(AudioTimeStamp));
 	
-	AudioUnitRender(x->device_au,ioActionFlags,inTimeStamp,1,inNumberFrames,x->inputsBufs);
+	AudioUnitRender(x->cDeviceAu,ioActionFlags,inTimeStamp,1,inNumberFrames,x->cInputsBufs);
 	
-	x->f_JackRunCycle(x->jackData,inNumberFrames);
+	x->cRenderCallback(x->cData,inNumberFrames);
 	
 	return noErr;
 }
 
 
-AudioRender::AudioRender(float sampleRate,float virtual_sampleRate,long bufferSize,int inChannels, int outChannels, char *device) : 	vSampleRate(sampleRate),vBufferSize(bufferSize) 
-{
-    inBuffers=NULL;
-    outBuffers=NULL;
-	vir_SampleRate = virtual_sampleRate;
-	
-    status = ConfigureAudioProc(sampleRate,bufferSize,outChannels,inChannels,device);
-	
-	AudioRender::gSampleRate = vSampleRate;
-    AudioRender::gBufferSize = vBufferSize;
-    AudioRender::gInputChannels = vInChannels;
-    AudioRender::gOutputChannels = vChannels;
-    AudioRender::theRender = this;
-    isProcessing = false;
-	
-    if(status) {
-        inBuffers = (float**)malloc(sizeof(float*)*vInChannels);
-        outBuffers = (float**)malloc(sizeof(float*)*vChannels);
-		inputsBufs = (AudioBufferList*)malloc(offsetof(AudioBufferList,mBuffers[vInChannels]));
-		inputsBufs->mNumberBuffers = vInChannels;
-		for(int i=0;i<vInChannels;i++) {
-			inBuffers[i] = (float*)malloc(sizeof(float)*vBufferSize);
-			inputsBufs->mBuffers[i].mData = inBuffers[i];
-			inputsBufs->mBuffers[i].mNumberChannels = 1;
-		}
-		JCALog("AudioRender created.\n");
-		JCALog("HALUnit version.\n");
-	} else JCALog("error while creating AudioRender.\n");
+AudioRender::AudioRender() {
+    cInBuffers=NULL;
+    cOutBuffers=NULL;
+	cStatus = kNotConfigured;
 }
 
 AudioRender::~AudioRender() {
-	if(status) {
-		if(isProcessing) AudioOutputUnitStop (device_au);
-		CloseComponent(device_au);
-		status = false;
-		for(int i =0;i<vInChannels;i++) {
-			free(inBuffers[i]);
+	if(cStatus==kRenderOn) {
+		AudioOutputUnitStop(cDeviceAu);
+		cStatus = kRenderOff;
+	}
+	if(cStatus==kRenderOff) {
+		AudioUnitUninitialize(cDeviceAu);
+		CloseComponent(cDeviceAu);
+		cStatus = kNotConfigured;
+		for(int i=0;i<cInChannels;i++) {
+			if(cInBuffers[i]) free(cInBuffers[i]);
 		}
-		free(inputsBufs);
-		free(inBuffers);
-		free(outBuffers);
+		if(cInputsBufs) free(cInputsBufs);
+		if(cInBuffers) free(cInBuffers);
+		if(cOutBuffers) free(cOutBuffers);
 	}
 }
 
-bool AudioRender::ConfigureAudioProc(float sampleRate,long bufferSize,int channels,int inChannels,char *device) {
+bool AudioRender::ConfigureAudioProc(float sampleRate,long bufferSize,int outChannels,int inChannels,char *device_name) {
 
-OSStatus err,error;
-    UInt32 size;
-    Boolean isWritable;
+	OSStatus err = noErr;
+	ComponentResult error = noErr;
+    UInt32 size = 0;
+    Boolean isWritable = FALSE;
 
 	ComponentDescription cd = {kAudioUnitType_Output, kAudioUnitSubType_HALOutput,kAudioUnitManufacturer_Apple, 0, 0};
-	Component HALOutput = FindNextComponent(nil, &cd);
+	Component HALOutput = FindNextComponent(NULL,&cd);
 	
-	err = OpenAComponent(HALOutput, &device_au);
+	error = OpenAComponent(HALOutput,&cDeviceAu);
 
-	err = AudioUnitInitialize(device_au);
-		
-	JCALog("Wanted DEVICE: %s\n",device);
+	error = AudioUnitInitialize(cDeviceAu); // maybe at the end of the function.
 	
-    err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices,&size,&isWritable);
-    if(err!=noErr) return false;
-    
-    int manyDevices = size/sizeof(AudioDeviceID);
-    
-    AudioDeviceID devices[manyDevices];
-    err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices,&size,&devices);
-    if(err!=noErr) return false;
+	if(strcmp(device_name,"DEFAULT")==0) {
+		if(outChannels>0) err = AudioHardwareGetProperty(kAudioHardwarePropertyDefaultOutputDevice,&size,&cDevice);
+		else err = AudioHardwareGetProperty(kAudioHardwarePropertyDefaultInputDevice,&size,&cDevice);
+		if(err!=noErr) return false;
+	} else {
+		JCALog("Wanted DEVICE: %s\n",device_name);
 	
-	bool found = false;
+		err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices,&size,&isWritable);
+		if(err!=noErr) return false;
     
-    for(int i=0;i<manyDevices;i++) {
-        size = sizeof(char)*256;
-        char name[256];
-        err = AudioDeviceGetProperty(devices[i],0,false,kAudioDevicePropertyDeviceName,&size,&name);
-		JCALog("Read DEVICE: %s\n",name);
-        if(err!=noErr) return false;
-		if(strncmp(device,name,strlen(device))==0) {  
-			JCALog("Found DEVICE: %s %ld\n",name,device);
-			vDevice = devices[i];
-			found = true;
+		int manyDevices = size/sizeof(AudioDeviceID);
+    
+		AudioDeviceID devices[manyDevices];
+		err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices,&size,&devices[0]);
+		if(err!=noErr) return false;
+	
+		bool found = false;
+		char name[60];
+	
+		for(int i=0;i<manyDevices;i++) {
+			size = sizeof(char)*60;
+			bzero(&name[0],size);
+			err = AudioDeviceGetProperty(devices[i],0,false,kAudioDevicePropertyDeviceName,&size,&name[0]);
+			JCALog("Reading device: %s\n",name);
+			if(err!=noErr) return false;
+			if(strncmp(device_name,name,strlen(device_name))==0) {  
+				JCALog("Found device: %s %ld\n",name,device_name);
+				cDevice = devices[i];
+				found = true;
+			}
 		}
-    }
 	
-	if(!found) { JCALog("Cannot find device \"%s\".\n",device); return false; }
-
-	error = AudioUnitSetProperty(device_au,kAudioOutputUnitProperty_CurrentDevice,kAudioUnitScope_Global,0,&vDevice,sizeof(AudioDeviceID));
+		if(!found) { 
+			JCALog("Cannot find device \"%s\".\n",device_name); 
+			return false;
+		}
+	}
+	
+	error = AudioUnitSetProperty(cDeviceAu,kAudioOutputUnitProperty_CurrentDevice,kAudioUnitScope_Global,0,&cDevice,sizeof(AudioDeviceID));
 	if(error) { JCALog("error: calling AudioUnitSetProperty - kAudioOutputUnitProperty_CurrentDevice\n"); return false; }
 
 	UInt32 data = 1;
-	error = AudioUnitSetProperty(device_au,kAudioOutputUnitProperty_EnableIO,kAudioUnitScope_Output,0,&data,sizeof(data));
-	if(error) { JCALog("error: calling AudioUnitSetProperty - kAudioOutputUnitProperty_EnableIO\n"); return false; }
+	
+	error = AudioUnitSetProperty(cDeviceAu,kAudioOutputUnitProperty_EnableIO,kAudioUnitScope_Output,0,&data,sizeof(data));
+	if(error) { JCALog("error: calling AudioUnitSetProperty - kAudioOutputUnitProperty_EnableIO,kAudioUnitScope_Output\n"); return false; }
 	
 	if(inChannels>0) {
-
 		data = 1;
-		error = AudioUnitSetProperty(device_au,kAudioOutputUnitProperty_EnableIO,kAudioUnitScope_Input,1,&data,sizeof(data));
-		if(error) { JCALog("error: calling AudioUnitSetProperty - kAudioOutputUnitProperty_EnableIO2\n"); return false; }
-		
+		error = AudioUnitSetProperty(cDeviceAu,kAudioOutputUnitProperty_EnableIO,kAudioUnitScope_Input,1,&data,sizeof(data));
+		if(error) { JCALog("error: calling AudioUnitSetProperty - kAudioOutputUnitProperty_EnableIO,kAudioUnitScope_Input\n"); return false; }
 	}
 	
 	size = sizeof(AudioStreamBasicDescription);
     AudioStreamBasicDescription SR;
-    err = AudioDeviceGetProperty(vDevice,0,false,kAudioDevicePropertyStreamFormat,&size,&SR);
+    err = AudioDeviceGetProperty(cDevice,0,false,kAudioDevicePropertyStreamFormat,&size,&SR);
     if(err!=noErr) return false;
 
-	vSampleRate = (float)SR.mSampleRate;
+	cSampleRate = (float)SR.mSampleRate;
     
-    if((float)SR.mSampleRate!=sampleRate) {
+    if(cSampleRate!=sampleRate) {
         JCALog("trying to set a new sample rate\n");
         UInt32 theSize = sizeof(AudioStreamBasicDescription);
         SR.mSampleRate = (Float64)sampleRate;
-        err = AudioDeviceSetProperty(vDevice,NULL,0,false,kAudioDevicePropertyStreamFormat,theSize,&SR);
+        err = AudioDeviceSetProperty(cDevice,NULL,0,false,kAudioDevicePropertyStreamFormat,theSize,&SR);
         if(err!=noErr) JCALog("Cannot set a new sample rate\n");
         else {
             size = sizeof(AudioStreamBasicDescription);
             AudioStreamBasicDescription newCheckSR;
-            err = AudioDeviceGetProperty(vDevice,0,false,kAudioDevicePropertyStreamFormat,&size,&newCheckSR);
-            if(err!=noErr) return false;
-            vSampleRate = (float)newCheckSR.mSampleRate;
+            err = AudioDeviceGetProperty(cDevice,0,false,kAudioDevicePropertyStreamFormat,&size,&newCheckSR);
+            if(err==noErr) cSampleRate = (float)newCheckSR.mSampleRate;
         }
     }
 	
-	UInt32 bufFrame;
+	JCALog("Sample Rate: %f.\n",cSampleRate);
+	
+	UInt32 bufFrames;
     size = sizeof(UInt32);
-    err = AudioDeviceGetProperty(vDevice,0,false,kAudioDevicePropertyBufferFrameSize,&size,&bufFrame);
+    err = AudioDeviceGetProperty(cDevice,0,false,kAudioDevicePropertyBufferFrameSize,&size,&bufFrames);
     if(err!=noErr) return false;
             
-    vBufferSize = (long) bufFrame;
+    cBufferSize = (long)bufFrames;
     
-    if((long)bufFrame!=bufferSize) { 
+    if(cBufferSize!=bufferSize) { 
         JCALog("I'm trying to set a new buffer size\n");
         UInt32 theSize = sizeof(UInt32);
         UInt32 newBufferSize = (UInt32) bufferSize;
-        err = AudioDeviceSetProperty(vDevice,NULL,0,false,kAudioDevicePropertyBufferFrameSize,theSize,&newBufferSize);
+        err = AudioDeviceSetProperty(cDevice,NULL,0,false,kAudioDevicePropertyBufferFrameSize,theSize,&newBufferSize);
         if(err!=noErr) JCALog("Cannot set a new buffer size\n");
         else {	
             UInt32 newBufFrame;
             size = sizeof(UInt32);
-            err = AudioDeviceGetProperty(vDevice,0,false,kAudioDevicePropertyBufferFrameSize,&size,&newBufFrame);
-            if(err!=noErr) return false;
-            vBufferSize = (long)newBufFrame;
+            err = AudioDeviceGetProperty(cDevice,0,false,kAudioDevicePropertyBufferFrameSize,&size,&newBufFrame);
+            if(err==noErr) cBufferSize = (long)newBufFrame;
         }
     }
     
-    JCALog("BUFFER SIZE: %ld\n",vBufferSize);
+    JCALog("Buffer Size: %ld\n",cBufferSize);
 	
-	error = AudioUnitSetProperty (device_au,kAudioUnitProperty_MaximumFramesPerSlice,kAudioUnitScope_Global,0,(UInt32*)&bufferSize,sizeof (UInt32));
+	error = AudioUnitSetProperty (cDeviceAu,kAudioUnitProperty_MaximumFramesPerSlice,kAudioUnitScope_Global,0,(UInt32*)&cBufferSize,sizeof(UInt32));
 	if(error) { JCALog("error: calling AudioUnitSetProperty - kAudioUnitProperty_MaximumFramesPerSlice\n"); return false; }
 	
-	vBufferSize = bufferSize;
-
-	Boolean writable = false;
-	UInt32 propsize;
-	
-	error = AudioUnitGetPropertyInfo(device_au,kAudioOutputUnitProperty_ChannelMap,kAudioUnitScope_Input,1, &propsize, &writable);
+	error = AudioUnitGetPropertyInfo(cDeviceAu,kAudioOutputUnitProperty_ChannelMap,kAudioUnitScope_Input,1,&size,&isWritable);
 	if(error) JCALog("error: calling AudioUnitSetProperty - kAudioOutputUnitProperty_ChannelMap-INFO 1\n");
 	
-	long nChannels = propsize / sizeof(SInt32);
+	long in_nChannels = size / sizeof(SInt32);
 	
-	
-	error = AudioUnitGetPropertyInfo(device_au,kAudioOutputUnitProperty_ChannelMap,kAudioUnitScope_Output,0, &propsize, &writable);
+	error = AudioUnitGetPropertyInfo(cDeviceAu,kAudioOutputUnitProperty_ChannelMap,kAudioUnitScope_Output,0, &size,&isWritable);
 	if(error) JCALog("error: calling AudioUnitSetProperty - kAudioOutputUnitProperty_ChannelMap-INFO 0\n");
 
-	long out_nChannels = propsize / sizeof(SInt32);
+	long out_nChannels = size / sizeof(SInt32);
 	
+	if(outChannels>out_nChannels) { JCALog("This device hasn't required output channels.\n"); return false; }
+	if(inChannels>in_nChannels) { JCALog("This device hasn't required input channels.\n"); return false; }
 	
+	cOutChannels = outChannels;
+	cInChannels = inChannels;
 	
-	if(channels>out_nChannels) { JCALog("This device hasn't required output channels.\n"); return false; }
-	if(inChannels>nChannels) { JCALog("This device hasn't required input channels.\n"); return false; }
+	JCALog("Input Channels: %ld\n",cInChannels);
+	JCALog("Output Channels: %ld\n",cOutChannels);
 	
-	vChannels = channels;
-	vInChannels = inChannels;
-	
-	JCALog("INPUT CHANNELS: %ld\n",vInChannels);
-	JCALog("OUTPUT CHANNELS: %ld\n",vChannels);
-	
-	if(vChannels<out_nChannels) {
+	if(cOutChannels<out_nChannels) {
 		SInt32 chanArr[out_nChannels];
 		for(int i=0;i<out_nChannels;i++) {
 			chanArr[i] = -1;
 		}
-		for(int i=0;i<vChannels;i++) {
+		for(int i=0;i<cOutChannels;i++) {
 			chanArr[i] = i;
 		}
-		error = AudioUnitSetProperty(device_au,kAudioOutputUnitProperty_ChannelMap,kAudioUnitScope_Output,0,&chanArr[0],sizeof(SInt32)*out_nChannels);
+		error = AudioUnitSetProperty(cDeviceAu,kAudioOutputUnitProperty_ChannelMap,kAudioUnitScope_Output,0,&chanArr[0],sizeof(SInt32)*out_nChannels);
 		if(error) JCALog("error: calling AudioUnitSetProperty - kAudioOutputUnitProperty_ChannelMap 0\n");
 	}
-	if(vInChannels<nChannels) {
-		SInt32 chanArr[nChannels];
-		for(int i=0;i<nChannels;i++) {
+	
+	if(cInChannels<in_nChannels) {
+		SInt32 chanArr[in_nChannels];
+		for(int i=0;i<in_nChannels;i++) {
 			chanArr[i] = -1;
 		}
-		for(int i=0;i<vInChannels;i++) {
+		for(int i=0;i<cInChannels;i++) {
 			chanArr[i] = i;
 		}
-		AudioUnitSetProperty(device_au,kAudioOutputUnitProperty_ChannelMap,kAudioUnitScope_Input,1,&chanArr[0],sizeof(SInt32)*nChannels);
+		AudioUnitSetProperty(cDeviceAu,kAudioOutputUnitProperty_ChannelMap,kAudioUnitScope_Input,1,&chanArr[0],sizeof(SInt32)*in_nChannels);
 		if(error) JCALog("error: calling AudioUnitSetProperty - kAudioOutputUnitProperty_ChannelMap 1\n");
 	}
-
-	Float64 strSampleRate = 0;
-	if(vir_SampleRate != 0) {
-		JCALog("trying to set a virtual sample rate.\n");
-		strSampleRate = vir_SampleRate;
-	} else strSampleRate = sampleRate;
 	
 	AudioStreamBasicDescription dstFormat;
-	dstFormat.mSampleRate = strSampleRate;
+	dstFormat.mSampleRate = cSampleRate;
     dstFormat.mFormatID = kAudioFormatLinearPCM;
-    dstFormat.mFormatFlags = kLinearPCMFormatFlagIsBigEndian |
-                                kLinearPCMFormatFlagIsNonInterleaved |
-                                kLinearPCMFormatFlagIsPacked |
-                                kLinearPCMFormatFlagIsFloat;
+    dstFormat.mFormatFlags = kLinearPCMFormatFlagIsBigEndian | kLinearPCMFormatFlagIsNonInterleaved | kLinearPCMFormatFlagIsPacked | kLinearPCMFormatFlagIsFloat;
     dstFormat.mBytesPerPacket = sizeof(float);
     dstFormat.mFramesPerPacket = 1;
     dstFormat.mBytesPerFrame = sizeof(float);
-    dstFormat.mChannelsPerFrame = vChannels;
+    dstFormat.mChannelsPerFrame = cOutChannels;
     dstFormat.mBitsPerChannel = 32;
 	
-	error = AudioUnitSetProperty(device_au,kAudioUnitProperty_StreamFormat,kAudioUnitScope_Input,0,&dstFormat,sizeof(AudioStreamBasicDescription));
+	error = AudioUnitSetProperty(cDeviceAu,kAudioUnitProperty_StreamFormat,kAudioUnitScope_Input,0,&dstFormat,sizeof(AudioStreamBasicDescription));
 	if(error) JCALog("error: calling AudioUnitSetProperty - kAudioUnitProperty_StreamFormat kAudioUnitScope_Input\n");
 	
-	dstFormat.mChannelsPerFrame = vInChannels;
+	dstFormat.mChannelsPerFrame = cInChannels;
 		
-	error = AudioUnitSetProperty(device_au,kAudioUnitProperty_StreamFormat,kAudioUnitScope_Output,1,&dstFormat,sizeof(AudioStreamBasicDescription));
+	error = AudioUnitSetProperty(cDeviceAu,kAudioUnitProperty_StreamFormat,kAudioUnitScope_Output,1,&dstFormat,sizeof(AudioStreamBasicDescription));
 	if(error) JCALog("error: calling AudioUnitSetProperty - kAudioUnitProperty_StreamFormat kAudioUnitScope_Output\n");
 	
-	/*
-	if(vir_SampleRate!=0) {
-		UInt32 maxQuality = 127;
-		error = AudioUnitSetProperty(device_au,kAudioUnitProperty_RenderQuality,kAudioUnitScope_Global,0,&maxQuality,sizeof(UInt32));
-		if(error) JCALog("error: calling AudioUnitSetProperty - kAudioUnitProperty_RenderQuality\n");
-		error = AudioUnitSetProperty(device_au,kAudioUnitProperty_RenderQuality,kAudioUnitScope_Global,1,&maxQuality,sizeof(UInt32));
-		if(error) JCALog("error: calling AudioUnitSetProperty - kAudioUnitProperty_RenderQuality\n");
-	}
-	*/
-	
-	
-	if(vInChannels>0 && vChannels==0) {
+	if(cInChannels>0 && cOutChannels==0) {
 		AURenderCallbackStruct output;
 		output.inputProc = MyRenderInput;
 		output.inputProcRefCon = this;
-
-		error = AudioUnitSetProperty (device_au, kAudioUnitProperty_SetRenderCallback,kAudioUnitScope_Output,1,&output,sizeof(output));
+		error = AudioUnitSetProperty (cDeviceAu, kAudioUnitProperty_SetRenderCallback,kAudioUnitScope_Output,1,&output,sizeof(output));
 		if (error) { JCALog ("AudioUnitSetProperty - kAudioUnitProperty_SetRenderCallback 1\n"); return false; }
 	} else {
 		AURenderCallbackStruct output;
 		output.inputProc = MyRender;
 		output.inputProcRefCon = this;
-
-		error = AudioUnitSetProperty (device_au, kAudioUnitProperty_SetRenderCallback,kAudioUnitScope_Input,0,&output,sizeof(output));
+		error = AudioUnitSetProperty (cDeviceAu, kAudioUnitProperty_SetRenderCallback,kAudioUnitScope_Input,0,&output,sizeof(output));
 		if (error) { JCALog ("AudioUnitSetProperty - kAudioUnitProperty_SetRenderCallback 0\n"); return false; }
 	}
+	
+	cInBuffers = (float**)malloc(sizeof(float*)*cInChannels);
+	cOutBuffers = (float**)malloc(sizeof(float*)*cOutChannels);
+	cInputsBufs = (AudioBufferList*)malloc(offsetof(AudioBufferList,mBuffers[cInChannels]));
+	cInputsBufs->mNumberBuffers = cInChannels;
+	for(int i=0;i<cInChannels;i++) {
+		cInBuffers[i] = (float*)malloc(sizeof(float)*cBufferSize);
+		cInputsBufs->mBuffers[i].mData = cInBuffers[i];
+		cInputsBufs->mBuffers[i].mNumberChannels = 1;
+	}
+	
+	cStatus = kRenderOff;
 	
     return true;
 	
 }
 
 bool AudioRender::StartAudio() {
-	if(status) {
-		OSStatus err = AudioOutputUnitStart (device_au);
+	if(cStatus==kRenderOff) {
+		OSStatus err = AudioOutputUnitStart(cDeviceAu);
 		if(err!=noErr) return false;
-		AudioRender::isProcessing = true;
+		cStatus = kRenderOn;
 		return true;
 	} 
     return false;
 }
 
 bool AudioRender::StopAudio() {
-	if(status) {
-		OSStatus err = AudioOutputUnitStop (device_au);
+	if(cStatus==kRenderOn) {
+		OSStatus err = AudioOutputUnitStop(cDeviceAu);
 		if(err!=noErr) return false;
-		AudioRender::isProcessing = false;
+		cStatus = kRenderOff;
 		return true;
 	}
     return false;
-}
-
-float **AudioRender::getADC() {
-    if(AudioRender::theRender==NULL) return NULL;
-    return AudioRender::theRender->inBuffers;
-}
-float **AudioRender::getDAC() {
-    if(AudioRender::theRender==NULL) return NULL;
-    return AudioRender::theRender->outBuffers;
 }
 
 

@@ -32,11 +32,10 @@
 	Feb 13, 2004: Johnny Petrantoni: new driver design based on AUHAL.
 	April 7, 2004: Johnny Petrantoni: option -I in order to use AudioDeviceID.
 	April 8,2008: S.Letz: fix a bug in GetDeviceNameFromID and a problem with "dirty buffers" when no ouput connections are made.
-									 
+	May 7, 2004: Johnny Petrantoni: Improved c++ code,cpu load counter fixed(jack_init_time() now links) and fixed GetDeviceNameFromID.
+										 
 	TODO:
-	- fix cpu load behavior.
 	- multiple-device processing.
-	- try to improve virtual sample-rate.
 	
    
 */
@@ -52,10 +51,10 @@ const int CAVersion = 1;
 
 void JCALog(char *fmt,...);
 
-OSStatus GetDeviceNameFromID(AudioDeviceID id, char* name) 
+OSStatus GetDeviceNameFromID(AudioDeviceID id, char name[60]) 
 {
-	UInt32 size = strlen(name);
-	return AudioDeviceGetProperty(id,0,false,kAudioDevicePropertyDeviceName,&size,name);
+	UInt32 size = sizeof(char)*60;
+	return AudioDeviceGetProperty(id,0,false,kAudioDevicePropertyDeviceName,&size,&name[0]);
 }
 
 int coreaudio_runCycle(void *driver,long bufferSize) {
@@ -217,14 +216,14 @@ coreaudio_driver_write (coreaudio_driver_t *driver, jack_nframes_t nframes)
 
 static int
 coreaudio_driver_audio_start (coreaudio_driver_t *driver)
-{
-	return (!startPandaAudioProcess(driver->stream)) ? -1 : 0;
+{        
+	return (!startAudioProcess(driver->stream)) ? -1 : 0;
 }
 
 static int
 coreaudio_driver_audio_stop (coreaudio_driver_t *driver)
 {
-	return (!stopPandaAudioProcess(driver->stream)) ? -1 : 0;
+	return (!stopAudioProcess(driver->stream)) ? -1 : 0;
 }
 
 static int
@@ -234,20 +233,20 @@ coreaudio_driver_bufsize (coreaudio_driver_t* driver, jack_nframes_t nframes)
 	/* This gets called from the engine server thread, so it must
 	 * be serialized with the driver thread.  Stopping the audio
 	 * also stops that thread. */
+	 	 
+	closeAudioInstance(driver->stream);
 	 
-	closePandaAudioInstance(driver->stream);
-	 
-	driver->stream = openPandaAudioInstance((float)driver->device_frame_rate,(float)driver->frame_rate,driver->frames_per_cycle,driver->capturing,driver->playing,&driver->driver_name[0]);
+	driver->stream = openAudioInstance((float)driver->device_frame_rate,driver->frames_per_cycle,driver->capturing,driver->playing,&driver->driver_name[0]);
 	 
 	if(!driver->stream) return FALSE;
 	
 	setHostData(driver->stream,driver);
 	setCycleFun(driver->stream,coreaudio_runCycle);
 	 
-	driver->incoreaudio = getPandaAudioInputs(driver->stream);
-	driver->outcoreaudio = getPandaAudioOutputs(driver->stream);
+	driver->incoreaudio = getAudioInputs(driver->stream);
+	driver->outcoreaudio = getAudioOutputs(driver->stream);
 
-	return startPandaAudioProcess(driver->stream);
+	return startAudioProcess(driver->stream);
 }
 
 
@@ -257,7 +256,7 @@ static jack_driver_t *
 coreaudio_driver_new (char *name, 
 				jack_client_t* client,
 				jack_nframes_t frames_per_cycle,
-				jack_nframes_t rate,jack_nframes_t v_srate,
+				jack_nframes_t rate,
 				int capturing,
 				int playing,
 				int chan_in, 
@@ -279,7 +278,6 @@ coreaudio_driver_new (char *name,
 	}
 
 	driver->frames_per_cycle = frames_per_cycle;
-	driver->frame_rate = v_srate != 0 ? v_srate : rate;
 	driver->device_frame_rate = rate;
 	driver->capturing = capturing;
 	driver->playing = playing;
@@ -295,31 +293,33 @@ coreaudio_driver_new (char *name,
 	driver->stream = NULL;
 	
 	char deviceName[60];
+	bzero(&deviceName[0],sizeof(char)*60);
 	
 	if(!driver_name) {
 		if (GetDeviceNameFromID(deviceID,deviceName) != noErr) goto error; 
 	} else {
 		strcpy(&deviceName[0],driver_name);
 	}
-	
-	driver->stream = openPandaAudioInstance((float)rate,(float) v_srate,frames_per_cycle,chan_in,chan_out,&deviceName[0]);
+		
+	driver->stream = openAudioInstance((float)rate,frames_per_cycle,chan_in,chan_out,&deviceName[0]);
+
 	if(!driver->stream) goto error;
 		
 	driver->client = client; 
-	driver->period_usecs = (((float) driver->frames_per_cycle) / driver->frame_rate) * 1000000.0f;
+	driver->period_usecs = (((float)driver->frames_per_cycle) / driver->device_frame_rate) * 1000000.0f;
 	
 	setHostData(driver->stream,driver);
 	setCycleFun(driver->stream,coreaudio_runCycle);
 	
-	driver->incoreaudio = getPandaAudioInputs(driver->stream);
-	driver->outcoreaudio = getPandaAudioOutputs(driver->stream);
+	driver->incoreaudio = getAudioInputs(driver->stream);
+	driver->outcoreaudio = getAudioOutputs(driver->stream);
 	
 	driver->playback_nchannels = chan_out;
 	driver->capture_nchannels = chan_in;
 	
 	strcpy(&driver->driver_name[0],&deviceName[0]);
 	
-	//jack_init_time();
+	jack_init_time();
 	 
 	return((jack_driver_t *) driver);
 
@@ -336,7 +336,7 @@ static void
 coreaudio_driver_delete (coreaudio_driver_t *driver)
 {
 	/* Close coreaudio stream and terminate */
-	closePandaAudioInstance(driver->stream);
+	closeAudioInstance(driver->stream);
 	free(driver);
 }
 
@@ -351,8 +351,8 @@ driver_get_descriptor ()
 	unsigned int i;
 	desc = calloc (1, sizeof (jack_driver_desc_t));
 
-	strcpy (desc->name, "auhal");
-	desc->nparams = 12;
+	strcpy (desc->name, "coreaudio");
+	desc->nparams = 11;
 	desc->params = calloc (desc->nparams,
 			       sizeof (jack_driver_param_desc_t));
 
@@ -411,14 +411,6 @@ driver_get_descriptor ()
 	desc->params[i].value.ui   = 48000U;
 	strcpy (desc->params[i].short_desc, "Sample rate");
 	strcpy (desc->params[i].long_desc, desc->params[i].short_desc);
-	
-	i++;
-	strcpy (desc->params[i].name, "virtual_rate");
-	desc->params[i].character  = 'v';
-	desc->params[i].type       = JackDriverParamUInt;
-	desc->params[i].value.ui   = 48000U;
-	strcpy (desc->params[i].short_desc, "Virtual Sample rate");
-	strcpy (desc->params[i].long_desc, desc->params[i].short_desc);
 
 	i++;
 	strcpy (desc->params[i].name, "period");
@@ -465,7 +457,6 @@ driver_initialize (jack_client_t *client, const JSList * params)
 {
 	jack_nframes_t srate = 44100;
 	jack_nframes_t frames_per_interrupt = 512;
-	jack_nframes_t v_srate = 0;
 	
 	int capture = FALSE;
 	int playback = FALSE;
@@ -516,10 +507,6 @@ driver_initialize (jack_client_t *client, const JSList * params)
 		case 'r':
 			srate = param->value.ui;
 			break;
-			
-		case 'v':
-			v_srate = param->value.ui;
-			break;
                                     
 		case 'p':
 			frames_per_interrupt = (unsigned int) param->value.ui;
@@ -558,8 +545,8 @@ driver_initialize (jack_client_t *client, const JSList * params)
 		playback = TRUE;
 	}
 
-	return coreaudio_driver_new ("auhal", client, frames_per_interrupt,
-				     srate,v_srate, capture, playback, chan_in, chan_out, dither,name,deviceID);
+	return coreaudio_driver_new ("coreaudio", client, frames_per_interrupt,
+				     srate, capture, playback, chan_in, chan_out, dither,name,deviceID);
 }
 
 
