@@ -1,0 +1,53 @@
+"Start Jack" = "Demarrer";
+"Stop Jack" = "Arreter";
+"Jack is Off" = "Jack est arrete";
+"Jack is On" = "Jack est en route";
+
+/* ALERTS */
+"Please Wait..." = "Attendez...";
+"Jack server is starting..." = "Le serveur Jack demarre...";
+"Jack server is closing..." = "Le serveur jack s'arrete...";
+"Cannot start Jack server,\nPlease check the console or retry after a system reboot." = "Le serveur Jack ne demarre pas,\nVerifiez les preferences ou essayez de nouveau apres redemarrage.";
+"Jack server error, try manually (from Dock menu) to close jackd.." = "Erreur du serveur Jack, try manually (from Dock menu) to close jackd..";
+"Are you sure?" = "Etes vous sur?";
+"No" = "Non";
+"Yes" = "Oui";
+"There are no clients running." = "Il n'y a pas de client actif.";
+"Error:" = "Erreur:";
+"Fatal error:" = "Erreur fatale:";
+"Warning:" = "Attention:";
+"Cannot initialize CoreAudio services, check JackPilot preferences or quit. " = "Les services CoreAudio ne peuvent pas etres initialises, Verifiez les preferences de JackPilot ou quittez. ";
+"Preferences" = "Preferences";
+"Quit" = "Quitter";
+"Cannot initialize CoreAudio services, JackPilot will quit. " = "Les services CoreAudio ne peuvent pas etres initialises, JackPilot va quitter. ";
+"Cannot initialize CoreAudio services, check preferences. " = "Les services CoreAudio ne peuvent pas etres initialises, verifiez les preferences. ";
+"Cannot find last audio device, please check preferences. " = "Le dernier peripherique utilise est introuvable, verifiez les preferences. ";
+"Use default" = "Utiliez le peripherique pas defaut";
+"Jack Audio Server CoreAudio driver is not installed or is corrupted. " = "Le driver Jack Router CoreAudio n'est pas installe ou est endommage. ";
+"Ok" = "Ok";
+"Sorry..." = "Attention...";
+"You must have \"Connections Manager\" window opened, and JACK must be ON." = "Vous devez avoir la fenetre \"Gestionnaire de Connections\" ouverte, et JACK doit etre actif.";
+"CANNOT BE RESTORED. If you need this connection you must open client application and retry" = "IMPOSSIBLE DE RESTAURER. Si vous avez besoin de cette connection, vous devez ouvrir l'application et reessayer";
+"Retry" = "Reessayer";
+"Abort" = "Abandonner";
+"Skip" = "Laisser";
+"The physical driver used with this setup was " = "Le driver physique utilise avec cette configuration ";
+", now Jack is using " = ", maintenant Jack utilise ";
+", do you want to restore connections to the used with driver " = ", voulez vous restorer les connections avec le driver ";
+
+/* "You have %d clients running, they will stop working or maybe crash!!\n" */
+"You have " = "Vous avez ";
+" clients running, they will stop working or maybe crash!!" = " client(s) actif(s), il(s) vont s'arreter de fonctionner et peut etre planter!!";
+
+/* PLUG-INS */
+"Open Instance" = "Demarrer";
+"Close Instance" = "Arreter";
+"Open Editor" = "Edition";
+
+
+/* ABOUT */
+"not installed." = "non installe.";
+"Maybe too old." = "Peut etre trop ancien.";
+"corrupted" = "endommage";
+
+
