@@ -68,12 +68,6 @@ JARInsert::JARInsert(long host_buffer_size)
 	}
 	
 	free(newName);
-			
-	float *out1 = (float*) jack_port_get_buffer(c_outPorts[0],(jack_nframes_t)c_jBufferSize);
-	float *out2 = (float*) jack_port_get_buffer(c_outPorts[1],(jack_nframes_t)c_jBufferSize);
-			
-	if(out1) memset(out1,0x0,sizeof(float)*c_jBufferSize);
-	if(out2) memset(out2,0x0,sizeof(float)*c_jBufferSize);
 	
 	#if 0
 	if(!c_isRunning) { 
@@ -130,12 +124,6 @@ JARInsert::JARInsert()
 	}
 	
 	free(newName);
-			
-	float *out1 = (float*) jack_port_get_buffer(c_outPorts[0],(jack_nframes_t)c_jBufferSize);
-	float *out2 = (float*) jack_port_get_buffer(c_outPorts[1],(jack_nframes_t)c_jBufferSize);
-			
-	if(out1) memset(out1,0x0,sizeof(float)*c_jBufferSize);
-	if(out2) memset(out2,0x0,sizeof(float)*c_jBufferSize);
 	
 	#if 0
 	if(!c_isRunning) { 
