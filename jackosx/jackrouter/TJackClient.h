@@ -44,10 +44,16 @@ extern "C"
 #define  MAX_JACK_PORTS 128
 
     void JARLog(char *fmt, ...);
+	
+	// Special property fo access from Jack plug-ins (AU, VST)
 
     enum {
         kAudioDevicePropertyGetJackClient = 'jasg',
-        kAudioDevicePropertyReleaseJackClient = 'jasr'
+        kAudioDevicePropertyReleaseJackClient = 'jasr',
+		kAudioDevicePropertyAllocateJackPortVST = 'japv',  
+		kAudioDevicePropertyAllocateJackPortAU = 'japa',
+		kAudioDevicePropertyGetJackPort = 'japg',
+		kAudioDevicePropertyReleaseJackPort = 'japr'
     };
 
     // The IOProc context
@@ -81,12 +87,13 @@ extern "C"
 
             jack_port_t* fInputPortList[MAX_JACK_PORTS];  // Jack input ports
             jack_port_t* fOutputPortList[MAX_JACK_PORTS];  // Jack output ports
+			map<int, pair<float*, jack_port_t*> > fPlugInPorts; // Map of temp buffers and associated Jack ports to be used by plug-ins
 
             AudioBufferList* fInputList;	// CoreAudio input buffers
             AudioBufferList* fOutputList;	// CoreAudio output buffers
 
             float** fOuputListTemp;	// Intermediate output buffers
-
+		
             map<AudioDeviceIOProc, TProcContext> fAudioIOProcList;   // Table of IOProc
 
             long fProcRunning;	// Counter of running IOProc
@@ -120,6 +127,12 @@ extern "C"
             static bool fFirstActivate;
 
             static void SetTime(AudioTimeStamp* timeVal, long curTime, UInt64 time);
+			
+			bool AllocatePlugInPortVST(int num);
+			bool AllocatePlugInPortAU(int num);
+			bool AllocatePlugInPort(int num, char* name);
+			float* GetPlugInPort(int num);
+			void ReleasePlugInPort(int num);
 
         public:
 

@@ -236,17 +236,24 @@ History
 10-12-04 : Version 0.64 : S Letz
 		Implement XRun and BufferSize change notifications.
 		
-15-12-04 : Version 0.65 : Notification sent by JackPilot when the jack server start and stops : allows applications
-		to dynamically see when jack server is available.
+15-12-04 : Version 0.65 : : S Letz
+		Notification sent by JackPilot when the jack server start and stops : allows applications to dynamically see when jack server is available.
  
-13-01-05 : Version 0.66 : Correct RestoreConnections issue : RestoreConnections is called only once for the first Activate. 
-		Correct bug in Process in the "several proc" case : output buffer need to be cleared
+13-01-05 : Version 0.66 : S Letz
+		Correct RestoreConnections issue : RestoreConnections is called only once for the first Activate. Correct bug in Process in the "several proc" case :
+		output buffer need to be cleared.
 		
-24-01-05 : Version 0.67 : Correct Final Cut Pro crash by changing the way DeviceGetProperty for kAudioDevicePropertyStreams behaves.
+24-01-05 : Version 0.67 : S Letz
+		Correct Final Cut Pro crash by changing the way DeviceGetProperty for kAudioDevicePropertyStreams behaves.
  
-03-02-05 : Version 0.68 : Ouput buffer are produced in fOuputListTemp buffer before being copied to jack port buffers (to solve a dirty buffer looping problem)
+03-02-05 : Version 0.68 : S Letz
+		Ouput buffer are produced in fOuputListTemp buffer before being copied to jack port buffers (to solve a dirty buffer looping problem in QT player).
  
-03-02-05 : Version 0.69 : Correct (again...) RestoreConnections: AutoConnect if called only for the *first* activation, otherwise RestoreConnections is used.
+03-02-05 : Version 0.69 : S Letz
+		Correct (again...) RestoreConnections: AutoConnect if called only for the *first* activation, otherwise RestoreConnections is used.
+
+15-02-05 : Version 0.70 : S Letz
+		To solve dirty buffer problems : new management of audio buffers for plug-ins: they are now allocated and managed on JAR side. 
  
 		 
 TODO :
@@ -684,7 +691,7 @@ int TJackClient::BufferSize(jack_nframes_t nframes, void *arg)
 
 /* Jack Process callback */
 //------------------------------------------------------------------------
-int TJackClient::Process(jack_nframes_t nframes, void *arg)
+int TJackClient::Process(jack_nframes_t nframes, void* arg)
 {
     OSStatus err;
     AudioTimeStamp inNow;
@@ -698,7 +705,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
     SetTime(&inNow, curTime, time);
     SetTime(&inInputTime, curTime - TJackClient::fBufferSize, time);
     SetTime(&inOutputTime, curTime + TJackClient::fBufferSize, time);
-
+	
     // One IOProc
     if (client->GetProcNum() == 1) {
 
@@ -757,7 +764,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
 
             // Copy intermediate buffer in client buffer
             for (int i = 0; i < TJackClient::fOutputChannels; i++) {
-                memcpy((float *)jack_port_get_buffer(client->fOutputPortList[i], nframes), client->fOuputListTemp[i], nframes*sizeof(float));
+                memcpy((float*)jack_port_get_buffer(client->fOutputPortList[i], nframes), client->fOuputListTemp[i], nframes*sizeof(float));
             }
         }
 
@@ -826,7 +833,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
                 if (context.fStreamUsage) {
                     for (int i = 0; i < TJackClient::fOutputChannels; i++) {
                         if (context.fOutput[i]) {
-                            float * output = (float *)jack_port_get_buffer(client->fOutputPortList[i], nframes);
+                            float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
                             if (k == 1) {	// first proc : copy
                                 for (unsigned int j = 0; j < nframes; j++) {
                                     output[j] = ((float*)client->fOutputList->mBuffers[i].mData)[j];
@@ -841,7 +848,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
 
                 } else {
                     for (int i = 0; i < TJackClient::fOutputChannels; i++) {
-                        float * output = (float *)jack_port_get_buffer(client->fOutputPortList[i], nframes);
+                        float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
                         if (k == 1) {	// first proc : copy
                             for (unsigned int j = 0; j < nframes; j++) {
                                 output[j] = ((float*)client->fOutputList->mBuffers[i].mData)[j];
@@ -856,6 +863,14 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
             }
         }
     }
+	
+	// Copy temp buffers from plug-ins into the jack buffers
+	map<int, pair<float*, jack_port_t*> >::const_iterator it;
+	for (it = client->fPlugInPorts.begin(); it != client->fPlugInPorts.end(); it++) {
+		pair<float*, jack_port_t*> obj = it->second;
+		memcpy((float*)jack_port_get_buffer(obj.second, nframes), obj.first, nframes * sizeof(float));
+		memset(obj.first, 0, nframes * sizeof(float));
+	}
 
     return 0;
 }
@@ -873,18 +888,18 @@ TJackClient::TJackClient()
     fInputList->mNumberBuffers = TJackClient::fInputChannels;
     fOutputList->mNumberBuffers = TJackClient::fOutputChannels;
 
-    fOuputListTemp = (float **)malloc(sizeof(float*) * TJackClient::fOutputChannels);
+    fOuputListTemp = (float**)malloc(sizeof(float*) * TJackClient::fOutputChannels);
     assert(fOuputListTemp);
 
     for (int i = 0; i < TJackClient::fOutputChannels; i++) {
-        fOuputListTemp[i] = (float *)malloc(sizeof(float) * TJackClient::fBufferSize);
+        fOuputListTemp[i] = (float*)malloc(sizeof(float) * TJackClient::fBufferSize);
         assert(fOuputListTemp[i]);
     }
 
     for (int i = 0; i < MAX_JACK_PORTS; i++) {
-        fInputPortList[i] = 0;
-        fOutputPortList[i] = 0;
-    }
+        fInputPortList[i] = NULL;
+        fOutputPortList[i] = NULL;
+	}
 
     fProcRunning = 0;
     fExternalClientNum = 0;
@@ -902,6 +917,60 @@ TJackClient::~TJackClient()
     for (int i = 0; i < TJackClient::fOutputChannels; i++)
         free(fOuputListTemp[i]);
     free(fOuputListTemp);
+}
+
+//------------------------------------------------------------------------
+bool TJackClient::AllocatePlugInPortVST(int num)
+{
+    JARLog("AllocatePlugInPortVST %ld\n", num);
+	char name[256];
+	sprintf(name, "VSTsend%d", num);
+	return AllocatePlugInPort(num, name);
+}
+
+//------------------------------------------------------------------------
+bool TJackClient::AllocatePlugInPortAU(int num)
+{
+    JARLog("AllocatePlugInPortAU %ld\n", num);
+	char name[256];
+	sprintf(name, "AUsend%d", num);
+	return AllocatePlugInPort(num, name);
+}
+
+//------------------------------------------------------------------------
+bool TJackClient::AllocatePlugInPort(int num, char* name)
+{
+    jack_port_t* port = jack_port_register(fClient, name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
+	if (!port) return false;
+	
+	float* buffer = (float*)malloc(sizeof(float) * TJackClient::fBufferSize);
+	if (!buffer) return false;
+	
+	memset(buffer, 0, TJackClient::fBufferSize * sizeof(float));
+	fPlugInPorts[num] = make_pair(buffer, port);
+	return true;
+}
+
+//------------------------------------------------------------------------
+float* TJackClient::GetPlugInPort(int num)
+{
+	JARLog("GetPlugInPort %ld\n", num);
+	
+	pair<float*, jack_port_t*> obj = fPlugInPorts[num];
+	return obj.first;
+}
+
+//------------------------------------------------------------------------
+void TJackClient::ReleasePlugInPort(int num)
+{
+	JARLog("ReleasePlugInPort %ld\n", num);
+	
+	pair<float*, jack_port_t*> obj = fPlugInPorts[num];
+	assert(obj.first);
+	assert(obj.second);
+	free(obj.first);
+	jack_port_unregister(fClient, obj.second);
+	fPlugInPorts.erase(num); /// TO CHECK : RT access ??
 }
 
 //------------------------------------------------------------------------
@@ -1647,7 +1716,6 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                     char* data = (char*) outPropertyData;
                     strcpy(data, TJackClient::fDeviceName.c_str());
                     *ioPropertyDataSize = TJackClient::fDeviceName.size() + 1;
-                    //JARLog("DeviceGetProperty : kAudioDevicePropertyDeviceName write %ld\n",TJackClient::fDeviceName.size() + 1);
                 }
                 break;
             }
@@ -2108,7 +2176,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
             err = kAudioHardwareUnknownPropertyError;
             break;
 
-            // Special Property to access Jack client from application code
+            // Special Property to access Jack client from application (plug-in) code
         case kAudioDevicePropertyGetJackClient: {
                 if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
                     *ioPropertyDataSize = sizeof(jack_client_t*);
@@ -2130,20 +2198,26 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                 break;
             }
 
-            // Special Property to release Jack client from application code
+            // Special Property to release Jack client from plug-in code
         case kAudioDevicePropertyReleaseJackClient: {
                 DecRefExternal();
                 break;
             }
-
-        case kAudioDevicePropertySupportsMixing: {
+			
+			// Special Property to allocate Jack port from plug-in code
+        case kAudioDevicePropertyGetJackPort: {
+                *(float**)outPropertyData = GetJackClient()->GetPlugInPort(*ioPropertyDataSize);
+                break;
+            }
+		
+		case kAudioDevicePropertySupportsMixing: {
                 if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
                     *ioPropertyDataSize = sizeof(UInt32);
                 } else if (*ioPropertyDataSize < sizeof(UInt32)) {
                     JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n", *ioPropertyDataSize);
                     err = kAudioHardwareBadPropertySizeError;
                 } else {
-                    *(UInt32*) outPropertyData = 1; // support Mixing
+                    *(UInt32*)outPropertyData = 1; // support Mixing
                     *ioPropertyDataSize = sizeof(UInt32);
                 }
                 break;
@@ -2197,7 +2271,6 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                 }
                 break;
             }
-
 
             // Redirect call on used CoreAudio driver
         case kAudioDevicePropertyClockSource:
@@ -2278,6 +2351,22 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
             err = kAudioHardwareNoError;
             break;
 #endif
+			// Special Property to allocate Jack port from plug-in code
+        case kAudioDevicePropertyAllocateJackPortVST: {
+                err = (GetJackClient()->AllocatePlugInPortVST(inPropertyDataSize)) ? kAudioHardwareNoError : kAudioHardwareBadPropertySizeError;
+                break;
+            }
+		
+		 case kAudioDevicePropertyAllocateJackPortAU: {
+				err = (GetJackClient()->AllocatePlugInPortAU(inPropertyDataSize)) ? kAudioHardwareNoError : kAudioHardwareBadPropertySizeError;
+				break;
+            }
+	
+		      // Special Property to release Jack port from plug-in code
+        case kAudioDevicePropertyReleaseJackPort: {
+                GetJackClient()->ReleasePlugInPort(inPropertyDataSize);
+                break;
+            }
 
         case kAudioDevicePropertyBufferSize:
             JARLog("kAudioDevicePropertyBufferSize %ld \n", *(UInt32*) inPropertyData);
