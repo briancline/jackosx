@@ -166,7 +166,7 @@ History
 		kAudioDevicePropertyUsesVariableBufferFrameSizes not supported in DeviceGetPropertyInfo. 
 		Return a result in DeviceGetPropertyInfo even when outSize is null.
 		Change management of kAudioDevicePropertyDataSource and kAudioDevicePropertyDataSources.
-		Idea for Panther default system driver problem. Update ReadPrefs.         
+		Idea for Panther default system driver problem. Update ReadPref.         
 
 09-01-04 : Version 0.46 : S Letz 
 		Ugly hack to solve the iTunes deconnection problem.
@@ -191,6 +191,7 @@ History
 24-01-04 : Version 0.51 : S Letz  Johnny Petrantoni
         Implement kAudioDevicePropertyIOProcStreamUsage. Implement kAudioDevicePropertyUsesVariableBufferFrameSizes in in DeviceGetProperty.
         This solve the iMovie 3.03 crash. Improve debug code using Johnny's code.  Reject "jackd" as a possible client.
+		Fixed ReadPref bug introduced when improving Debug code.
         
 TODO :
     
@@ -332,7 +333,7 @@ void TJackClient::SaveConnections()
         if ((connections = jack_port_get_connections (fOutputPortList[i])) != 0) {
             for (int j = 0; connections[j]; j++) {
                 fConnections.push_back(make_pair(jack_port_name(fOutputPortList[i]),connections[j]));
-             }
+			}
             free (connections);
         } 
     }
@@ -2839,10 +2840,9 @@ bool TJackClient::ReadPref()
         prefURL = CFURLCreateFromFSRef(kCFAllocatorSystemDefault, &prefFolderRef);
         if (prefURL) {
             CFURLGetFileSystemRepresentation(prefURL,FALSE,buf,256);
-            JARLog(path,"%s/JAS.jpil",buf);
+            sprintf(path,"%s/JAS.jpil",buf);
             FILE *prefFile;
             if ((prefFile = fopen(path, "rt"))) {
-                JARLog("Reading Preferences\n");
                 int nullo;
                 fscanf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",
                         &TJackClient::fInputChannels,
@@ -2857,6 +2857,8 @@ bool TJackClient::ReadPref()
                         &nullo,
                         &TJackClient::fDefaultSystem);                
                 fclose(prefFile);
+				JARLog("Reading Preferences fInputChannels: %ld fOutputChannels: %ld fAutoConnect: %ld fDefaultInput: %ld fDefaultOutput: %ld fDefaultSystem: %ld\n",
+					TJackClient::fInputChannels,TJackClient::fOutputChannels,TJackClient::fAutoConnect,TJackClient::fDefaultInput,TJackClient::fDefaultOutput,TJackClient::fDefaultSystem);
                 return true;
             }
         }
