@@ -720,7 +720,7 @@ TJackClient::~TJackClient()
 //------------------------------------------------------------------------
 bool TJackClient::Open()
 {
-    char* id_name = ottieniNomeFromPid((int)getpid()); 
+    char* id_name = bequite_getNameFromPid((int)getpid()); 
     
     if ((fClient = jack_client_new(id_name)) == NULL) {
 		JARLog("jack server not running?\n");
@@ -761,7 +761,7 @@ error:
 //------------------------------------------------------------------------
 bool TJackClient::OpenExternal()
 {
-    char* id_name = ottieniNomeFromPid((int)getpid()); 
+    char* id_name = bequite_getNameFromPid((int)getpid()); 
     
     if ((fClient = jack_client_new(id_name)) == NULL) {
 		JARLog("jack server not running?\n");
@@ -2941,7 +2941,7 @@ bool TJackClient::CheckRunning(AudioHardwarePlugInRef inSelf)
 OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
 {
     OSStatus err = kAudioHardwareNoError;
-    char* id_name = ottieniNomeFromPid((int)getpid());
+    char* id_name = bequite_getNameFromPid((int)getpid());
 
     JARLog ("Initialize [inSelf, name] : %ld %s \n", (long)inSelf, id_name);
 	
@@ -3042,7 +3042,7 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
 //---------------------------------------------------------------------------------------------------------------------------------
 OSStatus TJackClient::Teardown(AudioHardwarePlugInRef inSelf)
 {
-    char* id_name = ottieniNomeFromPid((int)getpid());
+    char* id_name = bequite_getNameFromPid((int)getpid());
 	
 	JARLog ("Teardown [inSelf, name] : %ld %s \n", (long)inSelf, id_name);
 	OSStatus err; 
