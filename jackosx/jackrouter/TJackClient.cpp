@@ -1719,24 +1719,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 			}
 			break;
 		}
-         
-		/*				               
-		case kAudioDevicePropertyLatency:
-		{
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
-				*ioPropertyDataSize = sizeof(UInt32);
-			}else if (*ioPropertyDataSize < sizeof(UInt32)){
-				JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
-				err = kAudioHardwareBadPropertySizeError;
-			}else{
-				*(UInt32*) outPropertyData = 512; // TO BE IMPLEMENTED
-				*ioPropertyDataSize = sizeof(UInt32);
-				JARLog("DeviceGetProperty::kAudioDevicePropertyLatency %ld \n",*(UInt32*) outPropertyData);
-			}
-			break;
-		}
-		*/
-        
+           
         case kAudioDevicePropertyHogMode:
         {
 			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
