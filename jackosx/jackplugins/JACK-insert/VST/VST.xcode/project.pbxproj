@@ -6,8 +6,6 @@
 	objectVersion = 39;
 	objects = {
 		014CEA420018CDE011CA2923 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -21,8 +19,6 @@
 			name = Development;
 		};
 		014CEA430018CDE011CA2923 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -58,7 +54,7 @@
 		};
 		089C166AFE841209C02AAC07 = {
 			children = (
-				B2CE540E05CA4EA200667293,
+				4B53CC6307C0D83B007E636C,
 				B2FF4ECC0529FBBF001F90A7,
 				08FB77AFFE84173DC02AAC07,
 				089C1671FE841209C02AAC07,
@@ -118,6 +114,280 @@
 //192
 //193
 //194
+//4B0
+//4B1
+//4B2
+//4B3
+//4B4
+		4B53CC6307C0D83B007E636C = {
+			children = (
+				4B53CC6407C0D83B007E636C,
+				4B53CC6507C0D83B007E636C,
+				4B53CC6607C0D83B007E636C,
+				4B53CC6707C0D83B007E636C,
+				4B53CC6807C0D83B007E636C,
+				4B53CC6907C0D83B007E636C,
+				4B53CC6A07C0D83B007E636C,
+				4B53CC6B07C0D83B007E636C,
+				4B53CC6C07C0D83B007E636C,
+				4B53CC6D07C0D83B007E636C,
+				4B53CC6E07C0D83B007E636C,
+				4B53CC6F07C0D83B007E636C,
+				4B53CC7007C0D83B007E636C,
+				4B53CC7107C0D83B007E636C,
+				4B53CC7207C0D83B007E636C,
+				4B53CC7307C0D83B007E636C,
+				4B53CC7407C0D83B007E636C,
+			);
+			isa = PBXGroup;
+			name = VSTSDK;
+			path = "../VST-VST_CFM/VSTSDK";
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
+		};
+		4B53CC6407C0D83B007E636C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = AEffect.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4B53CC6507C0D83B007E636C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = aeffectx.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4B53CC6607C0D83B007E636C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.h;
+			path = AEffEditor.hpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4B53CC6707C0D83B007E636C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			path = aeffguieditor.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4B53CC6807C0D83B007E636C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = aeffguieditor.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4B53CC6907C0D83B007E636C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			path = AudioEffect.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4B53CC6A07C0D83B007E636C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.h;
+			path = AudioEffect.hpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4B53CC6B07C0D83B007E636C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			path = audioeffectx.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4B53CC6C07C0D83B007E636C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = audioeffectx.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4B53CC6D07C0D83B007E636C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			path = vstcontrols.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4B53CC6E07C0D83B007E636C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = vstcontrols.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4B53CC6F07C0D83B007E636C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = vstfxstore.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4B53CC7007C0D83B007E636C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			path = vstgui.cpp;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4B53CC7107C0D83B007E636C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = vstgui.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4B53CC7207C0D83B007E636C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = vstplugscarbon.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4B53CC7307C0D83B007E636C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = vstplugsmac.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4B53CC7407C0D83B007E636C = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = vstplugsmacho.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		4B53CC7507C0D83B007E636C = {
+			fileRef = 4B53CC6407C0D83B007E636C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B53CC7607C0D83B007E636C = {
+			fileRef = 4B53CC6507C0D83B007E636C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B53CC7707C0D83B007E636C = {
+			fileRef = 4B53CC6607C0D83B007E636C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B53CC7807C0D83B007E636C = {
+			fileRef = 4B53CC6707C0D83B007E636C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B53CC7907C0D83B007E636C = {
+			fileRef = 4B53CC6807C0D83B007E636C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B53CC7A07C0D83B007E636C = {
+			fileRef = 4B53CC6907C0D83B007E636C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B53CC7B07C0D83B007E636C = {
+			fileRef = 4B53CC6A07C0D83B007E636C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B53CC7C07C0D83B007E636C = {
+			fileRef = 4B53CC6B07C0D83B007E636C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B53CC7D07C0D83B007E636C = {
+			fileRef = 4B53CC6C07C0D83B007E636C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B53CC7E07C0D83B007E636C = {
+			fileRef = 4B53CC6D07C0D83B007E636C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B53CC7F07C0D83B007E636C = {
+			fileRef = 4B53CC6E07C0D83B007E636C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B53CC8007C0D83B007E636C = {
+			fileRef = 4B53CC6F07C0D83B007E636C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B53CC8107C0D83B007E636C = {
+			fileRef = 4B53CC7007C0D83B007E636C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B53CC8207C0D83B007E636C = {
+			fileRef = 4B53CC7107C0D83B007E636C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B53CC8307C0D83B007E636C = {
+			fileRef = 4B53CC7207C0D83B007E636C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B53CC8407C0D83B007E636C = {
+			fileRef = 4B53CC7307C0D83B007E636C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4B53CC8507C0D83B007E636C = {
+			fileRef = 4B53CC7407C0D83B007E636C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//4B0
+//4B1
+//4B2
+//4B3
+//4B4
 //B20
 //B21
 //B22
@@ -140,8 +410,7 @@
 			sourceTree = "<group>";
 		};
 		B22EE371052900E3008EDF11 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = CoreAudio.framework;
 			path = /System/Library/Frameworks/CoreAudio.framework;
@@ -149,8 +418,7 @@
 			sourceTree = "<absolute>";
 		};
 		B23C897004CB1A7E00F1E491 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = Jack.framework;
 			path = /Library/Frameworks/Jack.framework;
@@ -158,8 +426,7 @@
 			sourceTree = "<absolute>";
 		};
 		B282F7CF04CB1F3900ECBF7F = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = Carbon.framework;
 			path = /System/Library/Frameworks/Carbon.framework;
@@ -270,31 +537,6 @@
 			settings = {
 			};
 		};
-		B2CE540E05CA4EA200667293 = {
-			children = (
-				B2CE546305CA503600667293,
-				B2CE546405CA503600667293,
-				B2CE546505CA503600667293,
-				B2CE546605CA503600667293,
-				B2CE546705CA503600667293,
-				B2CE546805CA503600667293,
-				B2CE546905CA503600667293,
-				B2CE546A05CA503600667293,
-				B2CE546B05CA503600667293,
-				B2CE546C05CA503600667293,
-				B2CE546D05CA503600667293,
-				B2CE546E05CA503600667293,
-				B2CE546F05CA503600667293,
-				B2CE547005CA503600667293,
-				B2CE547105CA503600667293,
-				B2CE547205CA503600667293,
-				B2CE547305CA503600667293,
-			);
-			isa = PBXGroup;
-			name = VSTSDK;
-			refType = 4;
-			sourceTree = "<group>";
-		};
 		B2CE543105CA4ECD00667293 = {
 			buildActionMask = 2147483647;
 			dstPath = "";
@@ -323,261 +565,6 @@
 		};
 		B2CE543C05CA4EF600667293 = {
 			fileRef = B2FF4ECD0529FC02001F90A7;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		B2CE546305CA503600667293 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			name = AEffect.h;
-			path = VSTSDK/AEffect.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		B2CE546405CA503600667293 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			name = aeffectx.h;
-			path = VSTSDK/aeffectx.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		B2CE546505CA503600667293 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.cpp.h;
-			name = AEffEditor.hpp;
-			path = VSTSDK/AEffEditor.hpp;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		B2CE546605CA503600667293 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.cpp.cpp;
-			name = aeffguieditor.cpp;
-			path = VSTSDK/aeffguieditor.cpp;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		B2CE546705CA503600667293 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			name = aeffguieditor.h;
-			path = VSTSDK/aeffguieditor.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		B2CE546805CA503600667293 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.cpp.cpp;
-			name = AudioEffect.cpp;
-			path = VSTSDK/AudioEffect.cpp;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		B2CE546905CA503600667293 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.cpp.h;
-			name = AudioEffect.hpp;
-			path = VSTSDK/AudioEffect.hpp;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		B2CE546A05CA503600667293 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.cpp.cpp;
-			name = audioeffectx.cpp;
-			path = VSTSDK/audioeffectx.cpp;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		B2CE546B05CA503600667293 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			name = audioeffectx.h;
-			path = VSTSDK/audioeffectx.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		B2CE546C05CA503600667293 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.cpp.cpp;
-			name = vstcontrols.cpp;
-			path = VSTSDK/vstcontrols.cpp;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		B2CE546D05CA503600667293 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			name = vstcontrols.h;
-			path = VSTSDK/vstcontrols.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		B2CE546E05CA503600667293 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			name = vstfxstore.h;
-			path = VSTSDK/vstfxstore.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		B2CE546F05CA503600667293 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.cpp.cpp;
-			name = vstgui.cpp;
-			path = VSTSDK/vstgui.cpp;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		B2CE547005CA503600667293 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			name = vstgui.h;
-			path = VSTSDK/vstgui.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		B2CE547105CA503600667293 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			name = vstplugscarbon.h;
-			path = VSTSDK/vstplugscarbon.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		B2CE547205CA503600667293 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			name = vstplugsmac.h;
-			path = VSTSDK/vstplugsmac.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		B2CE547305CA503600667293 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			name = vstplugsmacho.h;
-			path = VSTSDK/vstplugsmacho.h;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		B2CE547405CA503600667293 = {
-			fileRef = B2CE546305CA503600667293;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		B2CE547505CA503600667293 = {
-			fileRef = B2CE546405CA503600667293;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		B2CE547605CA503600667293 = {
-			fileRef = B2CE546505CA503600667293;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		B2CE547705CA503600667293 = {
-			fileRef = B2CE546605CA503600667293;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		B2CE547805CA503600667293 = {
-			fileRef = B2CE546705CA503600667293;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		B2CE547905CA503600667293 = {
-			fileRef = B2CE546805CA503600667293;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		B2CE547A05CA503600667293 = {
-			fileRef = B2CE546905CA503600667293;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		B2CE547B05CA503600667293 = {
-			fileRef = B2CE546A05CA503600667293;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		B2CE547C05CA503600667293 = {
-			fileRef = B2CE546B05CA503600667293;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		B2CE547D05CA503600667293 = {
-			fileRef = B2CE546C05CA503600667293;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		B2CE547E05CA503600667293 = {
-			fileRef = B2CE546D05CA503600667293;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		B2CE547F05CA503600667293 = {
-			fileRef = B2CE546E05CA503600667293;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		B2CE548005CA503600667293 = {
-			fileRef = B2CE546F05CA503600667293;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		B2CE548105CA503600667293 = {
-			fileRef = B2CE547005CA503600667293;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		B2CE548205CA503600667293 = {
-			fileRef = B2CE547105CA503600667293;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		B2CE548305CA503600667293 = {
-			fileRef = B2CE547205CA503600667293;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		B2CE548405CA503600667293 = {
-			fileRef = B2CE547305CA503600667293;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -614,21 +601,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2FF4EC30529FBB0001F90A7,
-				B2CE547405CA503600667293,
-				B2CE547505CA503600667293,
-				B2CE547605CA503600667293,
-				B2CE547805CA503600667293,
-				B2CE547A05CA503600667293,
-				B2CE547C05CA503600667293,
-				B2CE547E05CA503600667293,
-				B2CE547F05CA503600667293,
-				B2CE548105CA503600667293,
-				B2CE548205CA503600667293,
-				B2CE548305CA503600667293,
-				B2CE548405CA503600667293,
 				B2CB9AFD06F46796002CF3C1,
 				B2CB9AFF06F46796002CF3C1,
 				B2CB9B0106F46796002CF3C1,
+				4B53CC7507C0D83B007E636C,
+				4B53CC7607C0D83B007E636C,
+				4B53CC7707C0D83B007E636C,
+				4B53CC7907C0D83B007E636C,
+				4B53CC7B07C0D83B007E636C,
+				4B53CC7D07C0D83B007E636C,
+				4B53CC7F07C0D83B007E636C,
+				4B53CC8007C0D83B007E636C,
+				4B53CC8207C0D83B007E636C,
+				4B53CC8307C0D83B007E636C,
+				4B53CC8407C0D83B007E636C,
+				4B53CC8507C0D83B007E636C,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -646,14 +633,14 @@
 			files = (
 				B2FF4EC20529FBB0001F90A7,
 				B2FF4ED30529FE06001F90A7,
-				B2CE547705CA503600667293,
-				B2CE547905CA503600667293,
-				B2CE547B05CA503600667293,
-				B2CE547D05CA503600667293,
-				B2CE548005CA503600667293,
 				B2CB9AFC06F46796002CF3C1,
 				B2CB9AFE06F46796002CF3C1,
 				B2CB9B0006F46796002CF3C1,
+				4B53CC7807C0D83B007E636C,
+				4B53CC7A07C0D83B007E636C,
+				4B53CC7C07C0D83B007E636C,
+				4B53CC7E07C0D83B007E636C,
+				4B53CC8107C0D83B007E636C,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -688,6 +675,7 @@
 				B2CE543905CA4EEB00667293,
 			);
 			buildSettings = {
+				HEADER_SEARCH_PATHS = "../VST-VST_CFM/VSTSDK";
 				OPTIMIZATION_CFLAGS = "-O3";
 				OTHER_CFLAGS = "-DDEBUG=1";
 				OTHER_LDFLAGS = "";
@@ -737,8 +725,7 @@
 		};
 		B2FF4EC10529FBA9001F90A7 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = "JACK-insert.vst";
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;

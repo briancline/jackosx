@@ -182,12 +182,14 @@ bool JARInsert::AllocBSizeAlign(long host_buffer_size)
 {
     c_hBufferSize = host_buffer_size;
     if (c_jBufferSize > c_hBufferSize) {  
+		
         if (((host_buffer_size - 1) & host_buffer_size) != 0) {
 			JARILog("Bad buffer size for BSizeAlign host_buffer_size %ld \n",host_buffer_size);
             c_error = kErrInvalidBSize;
             Flush();
             return false;
         }
+		
         c_bsAI1 = new BSizeAlign(c_hBufferSize, c_jBufferSize);
         c_bsAI2 = new BSizeAlign(c_hBufferSize, c_jBufferSize);
         c_bsAO1 = new BSizeAlign(c_jBufferSize, c_hBufferSize);
@@ -217,7 +219,7 @@ bool JARInsert::AllocBSizeAlign(long host_buffer_size)
 int JARInsert::Process(float** in_buffer, float** out_buffer, long host_nframes)
 {
     if (c_hBufferSize != host_nframes) {
-        JARILog("CRITICAL ERROR: Host Buffer Size mismatch, NOT PROCESSING!!.\n");
+        JARILog("CRITICAL ERROR: Host Buffer Size mismatch, NOT PROCESSING!! %ld c_hBufferSize  %ld host_nframes \n", c_hBufferSize, host_nframes);
         return 1;
     }
     if (c_rBufOn) {
@@ -225,8 +227,6 @@ int JARInsert::Process(float** in_buffer, float** out_buffer, long host_nframes)
         float* out2 = c_outPorts[1];
         float* in1 = (float*) jack_port_get_buffer(c_inPorts[0], (jack_nframes_t)c_jBufferSize);
         float* in2 = (float*) jack_port_get_buffer(c_inPorts[1], (jack_nframes_t)c_jBufferSize);
-		
-		//JARILog("Process 0 host_nframes %ld c_jBufferSize %ld \n",host_nframes,c_jBufferSize);
 		
 		c_bsAI1->AddBuffer(in_buffer[0]);
         c_bsAI2->AddBuffer(in_buffer[1]);
@@ -247,15 +247,13 @@ int JARInsert::Process(float** in_buffer, float** out_buffer, long host_nframes)
             c_bsAI2->GetBuffer(out2);
     } else {
         if (c_jBufferSize != host_nframes) {
-            JARILog("CRITICAL ERROR: Host Buffer Size mismatch, NOT PROCESSING!!.\n");
+            JARILog("CRITICAL ERROR: Host Buffer Size mismatch, NOT PROCESSING!! %ld c_hBufferSize  %ld host_nframes \n", c_hBufferSize, host_nframes);
             return 1;
         }
 		float* out1 = c_outPorts[0];
         float* out2 = c_outPorts[1];
         float* in1 = (float*) jack_port_get_buffer(c_inPorts[0], (jack_nframes_t)c_jBufferSize);
         float* in2 = (float*) jack_port_get_buffer(c_inPorts[1], (jack_nframes_t)c_jBufferSize);
-		
-		//JARILog("Process 1 host_nframes %ld c_jBufferSize %ld \n",host_nframes,c_jBufferSize);
 		
 		memcpy(out1, in_buffer[0], sizeof(float)*c_jBufferSize);
         memcpy(out2, in_buffer[1], sizeof(float)*c_jBufferSize);

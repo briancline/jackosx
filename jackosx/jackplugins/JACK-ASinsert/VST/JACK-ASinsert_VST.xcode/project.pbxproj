@@ -240,16 +240,9 @@
 			dstPath = ..;
 			dstSubfolderSpec = 7;
 			files = (
-				B2CE543C05CA4EF600667293,
 			);
 			isa = PBXCopyFilesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B2CE543C05CA4EF600667293 = {
-			fileRef = B2FF4ECD0529FC02001F90A7;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		B2CE546305CA503600667293 = {
 			fileEncoding = 30;
@@ -598,7 +591,7 @@
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
 				PREFIX_HEADER = vstplugsmacho.h;
-				PRODUCT_NAME = "JACK-ASinsert";
+				PRODUCT_NAME = "JACK-ASinsert2";
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = vst;
@@ -617,7 +610,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>JACK-ASinsert</string>
+	<string>JACK-ASinsert2</string>
 	<key>CFBundleGetInfoString</key>
 	<string>© 2003, Johnny Petrantoni.</string>
 	<key>CFBundleIconFile</key>
@@ -644,7 +637,7 @@
 			explicitFileType = wrapper.cfbundle;
 			fallbackIsa = PBXFileReference;
 			isa = PBXBundleReference;
-			path = "JACK-ASinsert.vst";
+			path = "JACK-ASinsert2.vst";
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};

@@ -88,8 +88,6 @@
 			sourceTree = "<group>";
 		};
 		B2CE55EB05CA605900667293 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 			};
@@ -97,8 +95,6 @@
 			name = Development;
 		};
 		B2CE55EC05CA605900667293 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 			};
