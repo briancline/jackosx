@@ -278,7 +278,7 @@ struct stereoList
 typedef struct stereoList stereoList;
 
 //------------------------------------------------------------------------
-static void JARLog(char *fmt,...) 
+void JARLog(char *fmt,...) 
 {
 	if (TJackClient::fDebug) {
 		va_list ap;

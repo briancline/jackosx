@@ -42,6 +42,8 @@ extern "C" {
 #define JACK_CLIENT_NAME_LEN 256
 #define  MAX_JACK_PORTS 128
 
+void JARLog(char *fmt,...);
+
 enum {
     kAudioDevicePropertyGetJackClient  = 'jasg', 
     kAudioDevicePropertyReleaseJackClient  = 'jasr'

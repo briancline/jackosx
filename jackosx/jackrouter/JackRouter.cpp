@@ -30,6 +30,7 @@
 extern "C" {
 #endif
 
+//#define PRINTDEBUG 1
 
 // The layout for an instance of MyType.
 typedef struct _MyType {
@@ -37,7 +38,6 @@ typedef struct _MyType {
     CFUUIDRef _factoryID;
     UInt32 _refCount;
 } MyType;
-        
 
 // Forward declaration for the IUnknown implementation.
 static void _deallocMyType(MyType * obj);
@@ -49,19 +49,19 @@ static HRESULT myQueryInterface(void * obj, REFIID iid, LPVOID *ppv)
     CFUUIDRef interfaceID = CFUUIDCreateFromUUIDBytes(NULL, iid);
     
 #if PRINTDEBUG
-    printf ("JAS: mQueryInterface %ld\n",iid);
+    printf("JAS: mQueryInterface %ld\n",iid);
 #endif
     
     // Test the requested ID against the valid interfaces.
 #ifdef kAudioHardwarePlugInInterface2ID
     if (CFEqual(interfaceID, kAudioHardwarePlugInInterfaceID) || CFEqual(interfaceID, kAudioHardwarePlugInInterface2ID)) {
     #if PRINTDEBUG
-         printf ("JAS: mQueryInterface : kAudioHardwarePlugInInterface2ID\n");
+         printf("JAS: mQueryInterface : kAudioHardwarePlugInInterface2ID\n");
     #endif
 #else
     if (CFEqual(interfaceID, kAudioHardwarePlugInInterfaceID)) {
     #if PRINTDEBUG
-         printf ("JAS: mQueryInterface : kAudioHardwarePlugInInterfaceID\n");
+         printf("JAS: mQueryInterface : kAudioHardwarePlugInInterfaceID\n");
     #endif
 #endif
         // If the TestInterface was requested, bump the ref count,
@@ -92,7 +92,7 @@ static HRESULT myQueryInterface(void * obj, REFIID iid, LPVOID *ppv)
 static ULONG myAddRef(void * obj)
 {
 #if PRINTDEBUG
-	printf ("JAS: myAddRef\n");
+	printf("JAS: myAddRef\n");
 #endif
 	
     ((MyType *)obj)->_refCount += 1;
@@ -104,7 +104,7 @@ static ULONG myAddRef(void * obj)
 static ULONG myRelease(void * obj)
 {
 #if PRINTDEBUG
-	printf ("JAS: myRelease\n");
+	printf("JAS: myRelease\n");
 #endif
 
     ((MyType *)obj)->_refCount -= 1;
@@ -173,7 +173,7 @@ static AudioHardwarePlugInInterface testInterfaceFtbl = {
 static MyType *_allocMyType(CFUUIDRef factoryID)
 {
 #if PRINTDEBUG
-	printf ("JAS: _allocMyType\n");
+	printf("JAS: _allocMyType\n");
 #endif
 	
     // Allocate memory for the new instance.
@@ -217,7 +217,7 @@ void *MyFactory(CFAllocatorRef allocator, CFUUIDRef typeID)
 
     if (CFEqual(typeID, kAudioHardwarePlugInTypeID)) {
     #if PRINTDEBUG
-		printf ("JAS: MyFactory kAudioHardwarePlugInTypeID\n");
+		printf("JAS: MyFactory kAudioHardwarePlugInTypeID\n");
     #endif
     
     #ifdef kAudioHardwarePlugInInterface2ID	  
