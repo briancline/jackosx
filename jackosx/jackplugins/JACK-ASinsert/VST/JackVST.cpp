@@ -96,10 +96,10 @@ JackVST::JackVST (audioMasterCallback audioMaster)
         status = kIsOn;
         instances += 2;
 		
+		ID = rand();
+		
 		JackVST::classInstances.push_front(this);
 		
-		ID = rand();
-        
     } 
 
 }
@@ -187,6 +187,8 @@ int JackVST::jackProcess(jack_nframes_t nframes, void *arg) {
 	for(it = JackVST::classInstances.begin(); it != JackVST::classInstances.end(); ++it) {
 		if(*it) {
 			JackVST *c = *it;
+			if(!c) break;
+			if(c->status == kIsOff) break;
 			float *inBuffers[2];
 			for(int i=0;i<c->nInPorts;i++) {
 				inBuffers[i] = (float*) jack_port_get_buffer(c->inPorts[i],nframes);
@@ -241,12 +243,16 @@ void JackVST::flush() {
 	
 	list<JackVST*>::iterator it;
 	
+	printf("actually there are %ld instances.\n",JackVST::classInstances.size());
+	
 	for(it = JackVST::classInstances.begin(); it != JackVST::classInstances.end(); ++it) {
 		if(*it) {
 			JackVST *c = *it;
-			if(c->ID == ID) { JackVST::classInstances.erase(it); break; }
+			if(c->ID == ID) { printf("removing instance\n"); JackVST::classInstances.erase(it); break; }
 		}
 	}
+	
+	printf("now there are %ld instances.\n",JackVST::classInstances.size());
         
 	free(vRBufferIn[0]);
 	free(vRBufferIn[1]);
@@ -256,18 +262,20 @@ void JackVST::flush() {
 	RingBuffer_Flush(&sRingBufferIn[1]);
 	RingBuffer_Flush(&sRingBufferOut[0]);
 	RingBuffer_Flush(&sRingBufferOut[1]);
-            
+	            
 	for(int i=0;i<nInPorts;i++) {
 		jack_port_unregister(JackVST::client,inPorts[i]);
+		printf("unregistering in port %d.\n",i);
 		JackVST::sRetainPorts--;
 	}
 	free(inPorts);
 	for(int i=0;i<nOutPorts;i++) {
 		jack_port_unregister(JackVST::client,outPorts[i]);
+		printf("unregistering out port %d.\n",i);
 		JackVST::sRetainPorts--;
 	}
 	free(outPorts);
-		
+			
 	if(!JackVST::sRetainPorts) { 
 		printf("closing client.\n"); 
 		jack_deactivate(JackVST::client); 
