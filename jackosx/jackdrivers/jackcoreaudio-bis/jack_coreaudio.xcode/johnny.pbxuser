@@ -1,45 +1,5 @@
 // !$*UTF8*$!
 {
-	B217F2BE05DC595900954965 = {
-		fRef = B2CE564C05CA622100667293;
-		isa = PBXTextBookmark;
-		name = 000000;
-		rLen = 6;
-		rLoc = 9916;
-		rType = 0;
-		vrLen = 1795;
-		vrLoc = 8531;
-	};
-	B217F2BF05DC595900954965 = {
-		fRef = B2CE564C05CA622100667293;
-		isa = PBXTextBookmark;
-		name = 000000;
-		rLen = 6;
-		rLoc = 9916;
-		rType = 0;
-		vrLen = 1795;
-		vrLoc = 8531;
-	};
-	B217F2C205DC5FCF00954965 = {
-		fRef = B2CE579E05CA654200667293;
-		isa = PBXTextBookmark;
-		name = MyRenderInput;
-		rLen = 13;
-		rLoc = 2199;
-		rType = 0;
-		vrLen = 1459;
-		vrLoc = 1762;
-	};
-	B217F2C305DC5FCF00954965 = {
-		fRef = B2CE579E05CA654200667293;
-		isa = PBXTextBookmark;
-		name = MyRenderInput;
-		rLen = 13;
-		rLoc = 2199;
-		rType = 0;
-		vrLen = 1459;
-		vrLoc = 1762;
-	};
 	B217F2C605DC5FDC00954965 = {
 		fRef = B2CE579D05CA654200667293;
 		isa = PBXTextBookmark;
@@ -49,26 +9,6 @@
 		rType = 0;
 		vrLen = 1686;
 		vrLoc = 510;
-	};
-	B217F2C705DC5FDC00954965 = {
-		fRef = B2CE579D05CA654200667293;
-		isa = PBXTextBookmark;
-		name = "AudioRender.h: 61";
-		rLen = 0;
-		rLoc = 1889;
-		rType = 0;
-		vrLen = 1686;
-		vrLoc = 510;
-	};
-	B217F31505DC61B400954965 = {
-		fRef = B2CE579E05CA654200667293;
-		isa = PBXTextBookmark;
-		name = "if(vInChannels>0 && vChannels==0) {\n\t\tAURenderCallbackStruct output;\n\t\toutput.inputProc = MyRenderInput;\n\t\toutput.inputProcRefCon = this;\n\n\t\terror = AudioUnitSetProperty (device_au, kAudioUnitProperty_SetRenderCallback,kAudioUnitScope_Output,1,&output,sizeof(output));\n\t\tif (error) { JCALog (\"AudioUnitSetProperty - kAudioUnitProperty_SetRenderCallback 1\\n\"); return false; }\n\t} else {\n\t\tAURenderCallbackStruct output;\n\t\toutput.inputProc = MyRender;\n\t\toutput.inputProcRefCon = this;\n\n\t\terror = AudioUnitSetProperty (device_au, kAudioUnitProperty_SetRenderCallback,kAudioUnitScope_Input,0,&output,sizeof(output));\n\t\tif (error) { JCALog (\"AudioUnitSetProperty - kAudioUnitProperty_SetRenderCallback 0\\n\"); return false; }\n\t}";
-		rLen = 722;
-		rLoc = 12138;
-		rType = 0;
-		vrLen = 2303;
-		vrLoc = 10711;
 	};
 	B221889705D7BEB60048229E = {
 		fRef = B22188CC05D7BF0A0048229E;
@@ -139,6 +79,90 @@
 	B229DF2B05D806080005A37C = {
 		isa = PBXTargetBookmark;
 		trg = B2CE561E05CA61BD00667293;
+	};
+	B232841005E0194400944D13 = {
+		fRef = B2CE564C05CA622100667293;
+		isa = PBXTextBookmark;
+		name = "(((float) driver->frames_per_cycle) / driver->frame_rate) * 1000000.0f;";
+		rLen = 71;
+		rLoc = 9954;
+		rType = 0;
+		vrLen = 1657;
+		vrLoc = 8990;
+	};
+	B232841205E0194400944D13 = {
+		fRef = B2CE564C05CA622100667293;
+		isa = PBXTextBookmark;
+		name = "(((float) driver->frames_per_cycle) / driver->frame_rate) * 1000000.0f;";
+		rLen = 71;
+		rLoc = 9954;
+		rType = 0;
+		vrLen = 1657;
+		vrLoc = 8990;
+	};
+	B232841505E0195F00944D13 = {
+		fRef = B232841D05E0196E00944D13;
+		isa = PBXTextBookmark;
+		name = "int jackALLoad(void) {\n    FILE *prefFile;\n    char *path;\n    path = (char*)alloca(256*sizeof(char));\n    sprintf(path,\"%s/Library/Preferences/JAS.jpil\",homePath);\n    if ((prefFile = fopen(path, \"rt\")) == NULL) {\n        inch = 2;\n        outch = 2;\n        autoc = 1;\n        defInput = FALSE;\n        defOutput = FALSE;\n        defSystem = FALSE;\n        return 1;\n    } else {\n    int nullo;\n    fscanf(prefFile,\"\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\",&inch,&nullo,&outch,&nullo,&autoc,&nullo,&defInput,&nullo,&defOutput,&nullo,&defSystem); \n    \n    fclose(prefFile);\n    }\n    return 1;\n}\n";
+		rLen = 603;
+		rLoc = 6573;
+		rType = 0;
+		vrLen = 1255;
+		vrLoc = 5970;
+	};
+	B232841605E0195F00944D13 = {
+		fRef = B232841A05E0196E00944D13;
+		isa = PBXTextBookmark;
+		name = "int jackALLoad(void) {\n    FILE *prefFile;\n    char *path;\n    path = (char*)alloca(256*sizeof(char));\n    sprintf(path,\"%s/Library/Preferences/JAS.jpil\",homePath);\n    if ((prefFile = fopen(path, \"rt\")) == NULL) {\n        inch = 2;\n        outch = 2;\n        autoc = 1;\n        defInput = FALSE;\n        defOutput = FALSE;\n        defSystem = FALSE;\n        return 1;\n    } else {\n    int nullo;\n    fscanf(prefFile,\"\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\\t%d\",&inch,&nullo,&outch,&nullo,&autoc,&nullo,&defInput,&nullo,&defOutput,&nullo,&defSystem); \n    \n    fclose(prefFile);\n    }\n    return 1;\n}\n";
+		rLen = 603;
+		rLoc = 6573;
+		rType = 0;
+		vrLen = 1255;
+		vrLoc = 5970;
+	};
+	B232841A05E0196E00944D13 = {
+		isa = PBXFileReference;
+		name = jackfun.c;
+		path = "/Volumes/Archivio HD/Development/jackosx/TO PUT/JackPilot/src/jackfun.c";
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B232841D05E0196E00944D13 = {
+		isa = PBXFileReference;
+		name = jackfun.c;
+		path = "/Volumes/Archivio HD/Development/jackosx/TO PUT/JackPilot/src/jackfun.c";
+		refType = 0;
+		sourceTree = "<absolute>";
+	};
+	B232842205E01C6100944D13 = {
+		fRef = B2CE579E05CA654200667293;
+		isa = PBXTextBookmark;
+		name = JCALog;
+		rLen = 6;
+		rLoc = 641;
+		rType = 0;
+		vrLen = 1558;
+		vrLoc = 0;
+	};
+	B232842305E01C6100944D13 = {
+		fRef = B2CE579E05CA654200667293;
+		isa = PBXTextBookmark;
+		name = JCALog;
+		rLen = 6;
+		rLoc = 641;
+		rType = 0;
+		vrLen = 1558;
+		vrLoc = 0;
+	};
+	B232842505E01CC000944D13 = {
+		fRef = B2CE564C05CA622100667293;
+		isa = PBXTextBookmark;
+		name = "coreaudio_driver.c: 23";
+		rLen = 0;
+		rLoc = 924;
+		rType = 0;
+		vrLen = 2143;
+		vrLoc = 0;
 	};
 	B23C035005D005D100B86C32 = {
 		fRef = B2EFA46C05CA7C8700CC0BE7;
@@ -502,7 +526,7 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 98326750;
+			PBXPerProjectTemplateStateSaveDate = 98572596;
 			PBXPrepackagedSmartGroups_v2 = (
 				{
 					PBXTransientLocationAtTop = bottom;
@@ -692,7 +716,7 @@
 						PBXProjectWorkspaceModule_EmbeddedNavigatorGroup = {
 							PBXSplitModuleInNavigatorKey = {
 								Split0 = {
-									bookmark = B217F31505DC61B400954965;
+									bookmark = B232842505E01CC000944D13;
 									history = (
 										B2CE574D05CA64B100667293,
 										B2E09EB005CAC33000835B0B,
@@ -724,9 +748,10 @@
 										B2EE7DE105DA5E91003A2BBE,
 										B2EE7E0805DA6255003A2BBE,
 										B2BBAC8F05DA6CFD0074DD1C,
-										B217F2BE05DC595900954965,
 										B217F2C605DC5FDC00954965,
-										B217F2C205DC5FCF00954965,
+										B232841505E0195F00944D13,
+										B232842205E01C6100944D13,
+										B232841005E0194400944D13,
 									);
 									prevStack = (
 										B2CE562405CA61BE00667293,
@@ -758,9 +783,9 @@
 										B2EE7DE305DA5E91003A2BBE,
 										B2EE7DF405DA5EC1003A2BBE,
 										B2EE7E0405DA6013003A2BBE,
-										B217F2BF05DC595900954965,
-										B217F2C305DC5FCF00954965,
-										B217F2C705DC5FDC00954965,
+										B232841205E0194400944D13,
+										B232841605E0195F00944D13,
+										B232842305E01C6100944D13,
 									);
 								};
 								SplitCount = 1;
@@ -810,7 +835,7 @@
 								);
 								PBXSmartGroupTreeModuleOutlineStateSelectionKey = (
 									(
-										13,
+										12,
 										8,
 										0,
 									),
@@ -1057,22 +1082,23 @@
 				};
 				RubberWindowFrame = "0 103 1440 774 0 0 1440 878 ";
 			};
-			PBXWorkspaceStateSaveDate = 98326750;
+			PBXWorkspaceStateSaveDate = 98572596;
 		};
 		perUserProjectItems = {
-			B217F2BE05DC595900954965 = B217F2BE05DC595900954965;
-			B217F2BF05DC595900954965 = B217F2BF05DC595900954965;
-			B217F2C205DC5FCF00954965 = B217F2C205DC5FCF00954965;
-			B217F2C305DC5FCF00954965 = B217F2C305DC5FCF00954965;
 			B217F2C605DC5FDC00954965 = B217F2C605DC5FDC00954965;
-			B217F2C705DC5FDC00954965 = B217F2C705DC5FDC00954965;
-			B217F31505DC61B400954965 = B217F31505DC61B400954965;
 			B221889705D7BEB60048229E = B221889705D7BEB60048229E;
 			B22188B905D7BEDF0048229E = B22188B905D7BEDF0048229E;
 			B22188BD05D7BEE10048229E = B22188BD05D7BEE10048229E;
 			B22188BE05D7BEE10048229E = B22188BE05D7BEE10048229E;
 			B221890305D7C5080048229E = B221890305D7C5080048229E;
 			B229DF2B05D806080005A37C = B229DF2B05D806080005A37C;
+			B232841005E0194400944D13 = B232841005E0194400944D13;
+			B232841205E0194400944D13 = B232841205E0194400944D13;
+			B232841505E0195F00944D13 = B232841505E0195F00944D13;
+			B232841605E0195F00944D13 = B232841605E0195F00944D13;
+			B232842205E01C6100944D13 = B232842205E01C6100944D13;
+			B232842305E01C6100944D13 = B232842305E01C6100944D13;
+			B232842505E01CC000944D13 = B232842505E01CC000944D13;
 			B23C035005D005D100B86C32 = B23C035005D005D100B86C32;
 			B266F0FA05D44F9400845F09 = B266F0FA05D44F9400845F09;
 			B266F0FB05D44F9400845F09 = B266F0FB05D44F9400845F09;
@@ -1249,9 +1275,9 @@
 	};
 	B2CE564C05CA622100667293 = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1187, 7657}}";
-			sepNavSelRange = "{9916, 6}";
-			sepNavVisRect = "{{0, 3644}, {1187, 700}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1187, 7671}}";
+			sepNavSelRange = "{924, 0}";
+			sepNavVisRect = "{{0, 0}, {1187, 700}}";
 			sepNavWindowFrame = "{{15, 315}, {750, 558}}";
 		};
 	};
@@ -1350,9 +1376,9 @@
 	};
 	B2CE579E05CA654200667293 = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1187, 5361}}";
-			sepNavSelRange = "{12138, 722}";
-			sepNavVisRect = "{{0, 4243}, {1187, 700}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1187, 5907}}";
+			sepNavSelRange = "{641, 6}";
+			sepNavVisRect = "{{0, 0}, {1187, 700}}";
 			sepNavWindowFrame = "{{15, 315}, {750, 558}}";
 		};
 	};
@@ -1629,7 +1655,7 @@
 		fileReference = B2CE564C05CA622100667293;
 		functionName = "coreaudio_driver_bufsize()";
 		isa = PBXFileBreakpoint;
-		lineNumber = 230;
+		lineNumber = 231;
 		state = 1;
 	};
 	B2EE7DBB05DA5E1E003A2BBE = {
@@ -1637,7 +1663,7 @@
 		isa = PBXTextBookmark;
 		name = "coreaudio_driver.c: 294";
 		rLen = 0;
-		rLoc = 9559;
+		rLoc = 9658;
 		rType = 0;
 		vrLen = 1688;
 		vrLoc = 8727;
@@ -1783,7 +1809,7 @@
 		isa = PBXTextBookmark;
 		name = "AudioRender.cpp: 267";
 		rLen = 0;
-		rLoc = 11044;
+		rLoc = 12088;
 		rType = 0;
 		vrLen = 2241;
 		vrLoc = 8445;
