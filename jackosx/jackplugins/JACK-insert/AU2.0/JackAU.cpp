@@ -25,7 +25,7 @@ COMPONENT_ENTRY(ElCAJAS);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 AUChannelInfo	ElCAJAS::m_aobSupportedNumChannels[ ElCAJAS::kNumSupportedNumChannels ] = 
-    { { 2, 2 } };
+    { {1,2},{2,2} };
 
 ElCAJAS::ElCAJAS(AudioUnit component) : AUEffectBase(component),c_jar(NULL),c_error(0)
 {
@@ -46,7 +46,7 @@ UInt32		ElCAJAS::SupportedNumChannels ( const AUChannelInfo**	outInfo )
 
 ComponentResult	ElCAJAS::Initialize()
 {    
-	c_jar = new JARInsert();
+	c_jar = new JARInsert('au  ');
 	c_error = c_jar->GetError();
 	return noErr;
 }
@@ -65,7 +65,7 @@ ComponentResult		ElCAJAS::ChangeStreamFormat(		AudioUnitScope					inScope,
 {
 	if(inScope==1) {
 		int reqChans = inNewFormat.NumberChannels();
-		if(reqChans!=2) return kAudioUnitErr_FormatNotSupported;
+		if(reqChans>2 || reqChans<1) return kAudioUnitErr_FormatNotSupported;
 		else return noErr;
 	} else if(inScope==2) {
 		int reqChans = inNewFormat.NumberChannels();
@@ -128,6 +128,7 @@ OSStatus	ElCAJAS::ProcessBufferLists( AudioUnitRenderActionFlags &	ioActionFlags
 				inBuf[i] = (float*)inBuffer.mBuffers[i].mData;
 				outBuf[i] = (float*)outBuffer.mBuffers[i].mData;
 			}
+			if(inBuffer.mNumberBuffers==1) memcpy(inBuf[1],inBuf[0],sizeof(float)*inFramesToProcess);
 			if(!c_jar->CanProcess()) c_jar->AllocBSizeAlign(inFramesToProcess);
 			c_jar->Process(inBuf,outBuf);
 		} else for(i=0;i<(int)outBuffer.mNumberBuffers;i++) memset(outBuffer.mBuffers[i].mData,0x0,outBuffer.mBuffers[i].mDataByteSize);
@@ -135,7 +136,7 @@ OSStatus	ElCAJAS::ProcessBufferLists( AudioUnitRenderActionFlags &	ioActionFlags
 		if(c_error == 0 && c_jar) {
 			float *buffer = (float*)inBuffer.mBuffers[0].mData;
 			float inBufs[2][inFramesToProcess];
-			for(i=0;i<2;i++) {
+			for(i=0;i<2 && i<(int)inBuffer.mBuffers[0].mNumberChannels;i++) {
 				long nframes = inFramesToProcess;
 				long count = 0;
 				while(count<nframes) {
@@ -143,6 +144,7 @@ OSStatus	ElCAJAS::ProcessBufferLists( AudioUnitRenderActionFlags &	ioActionFlags
 					count++;
 				}
 			}
+			if(inBuffer.mBuffers[0].mNumberChannels==1) memcpy(inBufs[1],inBufs[0],sizeof(float)*inFramesToProcess);
 			buffer = (float*)outBuffer.mBuffers[0].mData;
 			float outBufs[2][inFramesToProcess];
 			for(i=0;i<2;i++) {

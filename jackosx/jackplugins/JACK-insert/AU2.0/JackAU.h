@@ -71,7 +71,7 @@ private:
 	int c_error;
 	
     enum {
-        kNumSupportedNumChannels = 1,
+        kNumSupportedNumChannels = 2,
     };
 	
     static AUChannelInfo	m_aobSupportedNumChannels[ kNumSupportedNumChannels ];
