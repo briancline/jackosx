@@ -6,12 +6,13 @@
 #import "JPPlugin.h"
 #import "JackCon1.3.h"
 
-OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean isInput) {
-    OSStatus					err = noErr;
-    UInt32						outSize;
-    Boolean						outWritable;
-    AudioBufferList				*bufferList = nil;
-    short						i;
+OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean isInput) 
+{
+    OSStatus			err = noErr;
+    UInt32				outSize;
+    Boolean				outWritable;
+    AudioBufferList		*bufferList = nil;
+    short				i;
 
     *channelCount = 0;
     err =  AudioDeviceGetPropertyInfo(device, 0, isInput, kAudioDevicePropertyStreamConfiguration,  &outSize, &outWritable);
@@ -204,7 +205,6 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
 		
 		if(needsRel) [self reloadPref:nil];
     }
-	
 }
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
@@ -261,7 +261,6 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
 	if(![Utility savePref:openedPlugs prefType:'PlOp'])NSLog(@"Cannot plugins instances");
 	#endif
 	//____
-	
 	return NSTerminateNow;
 }
 
@@ -414,7 +413,6 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
     strcat(stringa,interface);
     strcat(stringa,"\"");
     
-    
     int a;
 	id pannelloDiAlert = NSGetAlertPanel(LOCSTR(@"Please Wait..."),LOCSTR(@"Jack server is starting..."),nil,nil,nil);
     NSModalSession modalSession = [NSApp beginModalSessionForWindow:pannelloDiAlert];
@@ -501,8 +499,6 @@ end:
         [interfaceBox setEnabled:YES];
         [samplerateText setEnabled:YES];
         [jackdMode setEnabled:YES];
-        
-        
     }
 }
 
@@ -535,7 +531,6 @@ end:
         case 1:
             return;
             break;
-            
     }
 }
 
@@ -567,12 +562,8 @@ end:
 
 -(void) setupTimer
 {
-   
     update_timer = [[NSTimer scheduledTimerWithTimeInterval: 1.0 target: self selector: @selector(cpuMeasure) userInfo:nil repeats:YES] retain];		
-    
     [[NSRunLoop currentRunLoop] addTimer: update_timer forMode: NSDefaultRunLoopMode];
-
-
 }
 
 -(void) stopTimer
@@ -674,7 +665,6 @@ end:
         NSLog(@"Task succeeded.");
     else
         NSLog(@"Task failed.");
-
 }
 
 - (IBAction)getJackInfo:(id)sender {
@@ -735,30 +725,30 @@ end:
 - (IBAction)openPrefWin:(id)sender {
     [self reloadPref:sender];
 	if(sender) {
-    NSArray *prefs = [Utility getPref:'audi'];
-    if(prefs) {
-		BOOL needsReload = NO;
-		
-        [driverBox selectItemWithTitle:[prefs objectAtIndex:0]];
-		if(![[driverBox title] isEqualToString:[prefs objectAtIndex:0]]) [driverBox selectItemAtIndex:0];
-		
-        [interfaceBox selectItemWithTitle:[prefs objectAtIndex:1]];
-		if(![[interfaceBox title] isEqualToString:[prefs objectAtIndex:1]]) [interfaceBox selectItemAtIndex:0];
-		
-        [samplerateText selectItemWithTitle:[prefs objectAtIndex:2]];
-		if(![[samplerateText title] isEqualToString:[prefs objectAtIndex:2]]) [samplerateText selectItemAtIndex:0];
-		
-        [bufferText selectItemWithTitle:[prefs objectAtIndex:3]];
-		if(![[bufferText title] isEqualToString:[prefs objectAtIndex:3]]) [bufferText selectItemAtIndex:0];
-		
-        [channelsTest selectItemWithTitle:[prefs objectAtIndex:4]];
-		if(![[channelsTest title] isEqualToString:[prefs objectAtIndex:4]]) { needsReload = YES; [channelsTest selectItemAtIndex:0]; }
-		
-		[inputChannels selectItemWithTitle:[prefs objectAtIndex:5]];
-		if(![[inputChannels title] isEqualToString:[prefs objectAtIndex:5]]) { needsReload = YES; [inputChannels selectItemAtIndex:0]; }
-		
-		if(needsReload) [self reloadPref:nil];
-    }
+		NSArray *prefs = [Utility getPref:'audi'];
+		if(prefs) {
+			BOOL needsReload = NO;
+			
+			[driverBox selectItemWithTitle:[prefs objectAtIndex:0]];
+			if(![[driverBox title] isEqualToString:[prefs objectAtIndex:0]]) [driverBox selectItemAtIndex:0];
+			
+			[interfaceBox selectItemWithTitle:[prefs objectAtIndex:1]];
+			if(![[interfaceBox title] isEqualToString:[prefs objectAtIndex:1]]) [interfaceBox selectItemAtIndex:0];
+			
+			[samplerateText selectItemWithTitle:[prefs objectAtIndex:2]];
+			if(![[samplerateText title] isEqualToString:[prefs objectAtIndex:2]]) [samplerateText selectItemAtIndex:0];
+			
+			[bufferText selectItemWithTitle:[prefs objectAtIndex:3]];
+			if(![[bufferText title] isEqualToString:[prefs objectAtIndex:3]]) [bufferText selectItemAtIndex:0];
+			
+			[channelsTest selectItemWithTitle:[prefs objectAtIndex:4]];
+			if(![[channelsTest title] isEqualToString:[prefs objectAtIndex:4]]) { needsReload = YES; [channelsTest selectItemAtIndex:0]; }
+			
+			[inputChannels selectItemWithTitle:[prefs objectAtIndex:5]];
+			if(![[inputChannels title] isEqualToString:[prefs objectAtIndex:5]]) { needsReload = YES; [inputChannels selectItemAtIndex:0]; }
+			
+			if(needsReload) [self reloadPref:nil];
+		}
 	}
     
     [prefWindow center];
@@ -849,9 +839,9 @@ end:
     stringa = (char*)malloc(sizeof(char)*480);
 	memset(stringa,0x0,sizeof(char)*480);
     
-    strcpy(stringa,"/usr/local/bin/./jackd -R -d ");
+    strcpy(stringa,"/usr/local/bin/./jackd -v -R -d ");
     strcat(stringa,driver);
-    strcat(stringa," -r ");
+	strcat(stringa," -r ");
     strcat(stringa,samplerate);
     strcat(stringa," -p ");
     strcat(stringa,buffersize);
@@ -869,7 +859,6 @@ end:
 		strcat(stringa,interface);
 	}
     
-    
     int a;
     id pannelloDiAlert = NSGetAlertPanel(LOCSTR(@"Please Wait..."),LOCSTR(@"Jack server is starting..."),nil,nil,nil);
     NSModalSession modalSession = [NSApp beginModalSessionForWindow:pannelloDiAlert];
@@ -878,7 +867,6 @@ end:
     NSReleaseAlertPanel(pannelloDiAlert);
 
     /*
-    
     if(checkJack()!=0){
         ottieniPorte();
         jackstat = 1;
@@ -896,43 +884,40 @@ end:
         [self error:@"Cannot start Jack server,\nPlease check the console or retry after a system reboot."]; 
         writeStatus(0); 
     }
-    
     */
     
     free(stringa); free(driver); free(samplerate); free(buffersize); free(channels); free(in_channels); free(interface); 
 }
 
 - (IBAction) closeJackDeamon:(id) sender {
-        [managerWin orderOut:sender];
-        if(checkJack()!=0) {    
-			[self sendJackStatusToPlugins:NO];
-            id pannelloDiAlert = NSGetAlertPanel(LOCSTR(@"Please Wait..."),LOCSTR(@"Jack server is closing..."),nil,nil,nil);
-            NSModalSession modalSession = [NSApp beginModalSessionForWindow:pannelloDiAlert];
-            closeJack();
-            
-            sleep(4);
-            [NSApp endModalSession:modalSession];
-            NSReleaseAlertPanel(pannelloDiAlert);
-        }
-        
-        [self stopTimer];
-        jackstat = 0; 
-        writeStatus(0); 
-        [isonBut setStringValue:LOCSTR(@"Jack is Off")];
-        [loadText setFloatValue:0.0f];
-        [cpuLoadBar setDoubleValue:0.0];
-        [startBut setTitle:LOCSTR(@"Start Jack")];
-        [toggleDock setTitle:LOCSTR(@"Start Jack")];
-        [connectionsNumb setIntValue:0];
-        [bufferText setEnabled:YES];
-        [channelsTest setEnabled:YES];
-		[inputChannels setEnabled:YES];
-        [driverBox setEnabled:YES];
-        [interfaceBox setEnabled:YES];
-        [samplerateText setEnabled:YES];
-		[routingBut setEnabled:NO];
-    
-    
+	[managerWin orderOut:sender];
+	if(checkJack()!=0) {    
+		[self sendJackStatusToPlugins:NO];
+		id pannelloDiAlert = NSGetAlertPanel(LOCSTR(@"Please Wait..."),LOCSTR(@"Jack server is closing..."),nil,nil,nil);
+		NSModalSession modalSession = [NSApp beginModalSessionForWindow:pannelloDiAlert];
+		closeJack();
+		
+		sleep(4);
+		[NSApp endModalSession:modalSession];
+		NSReleaseAlertPanel(pannelloDiAlert);
+	}
+	
+	[self stopTimer];
+	jackstat = 0; 
+	writeStatus(0); 
+	[isonBut setStringValue:LOCSTR(@"Jack is Off")];
+	[loadText setFloatValue:0.0f];
+	[cpuLoadBar setDoubleValue:0.0];
+	[startBut setTitle:LOCSTR(@"Start Jack")];
+	[toggleDock setTitle:LOCSTR(@"Start Jack")];
+	[connectionsNumb setIntValue:0];
+	[bufferText setEnabled:YES];
+	[channelsTest setEnabled:YES];
+	[inputChannels setEnabled:YES];
+	[driverBox setEnabled:YES];
+	[interfaceBox setEnabled:YES];
+	[samplerateText setEnabled:YES];
+	[routingBut setEnabled:NO];
 }
 
 - (int) launchJackCarbon:(id) sender {
@@ -964,7 +949,6 @@ end:
 		[args addObject:[prefs objectAtIndex:5]];
 		[args addObject:@"-I"];
 		
-		
 		char interfaceArr[60];
 		char *interface = &interfaceArr[0];
 		
@@ -985,8 +969,7 @@ end:
 		AudioDeviceID devices[manyDevices];
 		err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices,&size,&devices);
 		if(err!=noErr) return 1;
-	
-    
+	 
 		int i;
 	
 		for(i=0;i<manyDevices;i++) {
@@ -1009,7 +992,6 @@ end:
 		[NSApp endModalSession:modalSession];
 		NSReleaseAlertPanel(pannelloDiAlert);
     }
-    
     return 0;
 }
 
@@ -1113,12 +1095,9 @@ end:
 		}
 
 		JPLog("got samplerates ok\n");
-    
-		free(SRs);
-    
+  		free(SRs);
     }
-
-    
+   
     Float64 actualSr;
     size = sizeof(Float64);
     err = AudioDeviceGetProperty(vDevice,0,false,kAudioDevicePropertyNominalSampleRate,&size,&actualSr);
@@ -1189,9 +1168,7 @@ end:
 	}
     
     JPLog("set old buffersize ok\n");
-    
     return YES;
-
 }
 
 - (BOOL)writeDevNames {
@@ -1241,7 +1218,6 @@ end:
 	}
     
 	jackdStartMode = NO;
-    
     return YES;
 }
 
@@ -1362,7 +1338,6 @@ end:
 	}
 	
 	[pluginsMenu removeItem:[pluginsMenu itemAtIndex:[pluginsMenu numberOfItems]-1]];
-	
 }
 
 - (void) openPluginEditor:(id)sender {
@@ -1370,8 +1345,5 @@ end:
 	[plug openEditor];
 }
 #endif
-
-
-
 
 @end

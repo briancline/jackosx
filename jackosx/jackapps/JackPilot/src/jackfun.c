@@ -20,7 +20,8 @@ int flag;
 char coreAudioDevice[256];
 int defInput,defOutput,defSystem;
 
-int openJack(const char *stringa) {
+int openJack(const char *stringa) 
+{
     JPLog("%s\n",stringa);
     int a;
     if(firsttime==0) {
@@ -36,10 +37,11 @@ int openJack(const char *stringa) {
     return a;
 }
 
-int closeJack(void) {
+int closeJack(void) 
+{
 	if(client!=NULL) jack_client_close(client);
 	
-	#if 1
+#if 1
     int pid;
 	unsigned short count = 0;
 	do {
@@ -48,11 +50,11 @@ int closeJack(void) {
 		if(pid!=0) { kill(pid,SIGUSR2); } //SIGUSR2 is the one that should work (look at jackd.c or engine.c) but doesn't work...
 		count++;
 	} while(pid!=0);
-    #else
+#else
 	my_system2("killall jackd"); //this works but to re-start jackd you must close and re open JP (look console logs)
 	my_system2("killall jackd");
 	my_system2("killall jackd");
-	#endif
+#endif
 	
 	return 1;
 }
@@ -100,7 +102,8 @@ my_system2 (const char *command)
   return status;
 }
 
-int checkJack(void) {
+int checkJack(void) 
+{
     int quanti;
     quanti = quantiProc();
     int i;
@@ -113,12 +116,14 @@ int checkJack(void) {
     return 0;
 }
 
-int openJackClient(void) {
+int openJackClient(void) 
+{
     client = jack_client_new("JackPilot");
     return 1;
 }
 
-int ottieniPorte(void) {
+int ottieniPorte(void) 
+{
     if(client!=NULL) {
         if(jplist!=NULL) {
             free(jplist);
@@ -129,7 +134,8 @@ int ottieniPorte(void) {
     return 1;
 }
 
-int portaPerNumero(int n,char *nomeOut,unsigned long *tipo) {
+int portaPerNumero(int n, char *nomeOut, unsigned long *tipo) 
+{
     ottieniPorte();
     if(jplist[n]!=NULL) {
         strcpy(nomeOut,jplist[n]);
@@ -139,7 +145,8 @@ int portaPerNumero(int n,char *nomeOut,unsigned long *tipo) {
     return 0;
 }
 
-int numeroPorte(void) {
+int numeroPorte(void) 
+{
     if(jplist!=NULL) { 
         int i = 0;
         while(*jplist!=NULL) {
@@ -155,7 +162,8 @@ int numeroPorte(void) {
     return 0;
 }
 
-int getConnections(void) {
+int getConnections(void) 
+{
     nConnect=0;
     ottieniPorte();
     int a = numeroPorte();
@@ -172,11 +180,11 @@ int getConnections(void) {
             nConnect += g;
         }
     }
-    
     return nConnect;
 }
 
-int numeroConn(void) {
+int numeroConn(void) 
+{
     int i = 0;
     while(*connec!=NULL) {
         *connec++;
@@ -189,24 +197,28 @@ int numeroConn(void) {
     return i;
 }
 
-
-void writeStatus(int n) {
+void writeStatus(int n) 
+{
     status = n;
 }
 
-int getStatus(void) {
+int getStatus(void) 
+{
     return status;
 } 
 
-int connectPorts(char*da,char*a) {
+int connectPorts(char* da, char* a) 
+{
     return jack_connect (client,da,a);
 }
 
-int disconnectPorts( char*da, char*a) {
+int disconnectPorts(char* da, char* a) 
+{
     return jack_disconnect (client,da,a);
 }
 
-int connessionePerNumero(int n,char *nomeOut) {
+int connessionePerNumero(int n, char* nomeOut) 
+{
     char porta[256];
     jack_port_t* jp;
     strcpy(nomeOut,"");
@@ -226,7 +238,8 @@ int connessionePerNumero(int n,char *nomeOut) {
     return 0;
 }
 
-int connessionePerNumero2(int n,char **nomeOut) {
+int connessionePerNumero2(int n, char** nomeOut) 
+{
     int many = 0;
     char porta[256];
     jack_port_t* jp;
@@ -235,21 +248,21 @@ int connessionePerNumero2(int n,char **nomeOut) {
     jp = jack_port_by_name(client,&porta[0]);
     if(jp==NULL) return 0;
     connec = jack_port_get_all_connections(client,jp);
-    if(connec!=NULL) {
-        int nu = numeroConn();
-        int i;
-    if(nomeOut!=NULL) {
-        for (i=0;i<nu;i++){
-            if(connec[i]!=NULL && nomeOut[i]!=NULL) strcpy(nomeOut[i],connec[i]);
-        }
-    }
-        many = nu;
-    }
+	if(connec!=NULL) {
+		int nu = numeroConn();
+		int i;
+		if(nomeOut!=NULL) {
+			for (i=0;i<nu;i++){
+				if(connec[i]!=NULL && nomeOut[i]!=NULL) strcpy(nomeOut[i],connec[i]);
+			}
+		}
+		many = nu;
+	}
     return many;
 }
 
-
-float cpuLoad(void){
+float cpuLoad(void)
+{
     if(client!=NULL) {
         float load =  (float)jack_cpu_load(client);
         return load;
@@ -257,14 +270,16 @@ float cpuLoad(void){
     return 0.0f;
 }
 
-unsigned long getTipoByName(const char* name) {
+unsigned long getTipoByName(const char* name)
+{
     jack_port_t* jp;
     jp = jack_port_by_name(client,name);
     if(jp!=NULL) return jack_port_flags(jp);
     return 0;
 }
 
-int loadPrefStat(void) {
+int loadPrefStat(void) 
+{
     FILE *jackpref;
     char *path;
     path = (char*)alloca(256*sizeof(char));
@@ -284,7 +299,8 @@ int loadPrefStat(void) {
     return 0;
 }
 
-int savePrefStat(int DRIVER,int INTERFACE,int SR,int BUF,int CH) {
+int savePrefStat(int DRIVER, int INTERFACE, int SR, int BUF, int CH) 
+{
     FILE *jackpref;
     char *path;
     path = (char*)alloca(256*sizeof(char));
@@ -294,11 +310,8 @@ int savePrefStat(int DRIVER,int INTERFACE,int SR,int BUF,int CH) {
     }
     
     fprintf(jackpref,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",DRIVER,-1,INTERFACE,-1,SR,-1,BUF,-1,CH);  
-    
     fclose(jackpref);
-    
     return 0;
-    
 }
 
 int getSR(void) {
@@ -315,11 +328,11 @@ int getCHAN(void) {
 }
 
 int getInterface(void) {
-    
     return interface;
 }
 
-int jackALStore(int inCH,int outCH,int AUTOC,int DEFinput,int DEFoutput,int DEFsystem) {
+int jackALStore(int inCH, int outCH, int AUTOC, int DEFinput, int DEFoutput, int DEFsystem) 
+{
     FILE *prefFile;
     char *path;
     path = (char*)alloca(256*sizeof(char));
@@ -327,15 +340,14 @@ int jackALStore(int inCH,int outCH,int AUTOC,int DEFinput,int DEFoutput,int DEFs
     if ((prefFile = fopen(path, "wt")) == NULL) {
         return 22;
     } else {
-            
-    fprintf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",inCH, -1, outCH,-1,AUTOC,-1,DEFinput,-1,DEFoutput,-1,DEFsystem); 
-    
-    fclose(prefFile);
+  		fprintf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",inCH, -1, outCH,-1,AUTOC,-1,DEFinput,-1,DEFoutput,-1,DEFsystem); 
+ 		fclose(prefFile);
     }
     return 1;
 }
 
-int jackALLoad(void) {
+int jackALLoad(void) 
+{
     FILE *prefFile;
     char *path;
     path = (char*)alloca(256*sizeof(char));
@@ -349,10 +361,9 @@ int jackALLoad(void) {
         defSystem = FALSE;
         return 1;
     } else {
-    int nullo;
-    fscanf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",&inch,&nullo,&outch,&nullo,&autoc,&nullo,&defInput,&nullo,&defOutput,&nullo,&defSystem); 
-    
-    fclose(prefFile);
+		int nullo;
+		fscanf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",&inch,&nullo,&outch,&nullo,&autoc,&nullo,&defInput,&nullo,&defOutput,&nullo,&defSystem); 
+ 		fclose(prefFile);
     }
     return 1;
 }
@@ -381,7 +392,9 @@ int getAutoC(void) {
     return autoc;
 }
 
-int nomeCliente(int n,char *nome) { //!!Fix me, why lots of malloc for only one name!!
+int nomeCliente(int n, char* nome) 
+{ 
+	//!!Fix me, why lots of malloc for only one name!!
     char **array;
     int nporte = numeroPorte();
     array = (char**)malloc(nporte*sizeof(char*));
@@ -400,13 +413,15 @@ int nomeCliente(int n,char *nome) { //!!Fix me, why lots of malloc for only one 
     return 1;
 }
 
-int quantiClienti(void) {
+int quantiClienti(void) 
+{
     int quanti;
     ottieniNomeClienti(NULL,&quanti);
     return quanti;
 }
 
-int ottieniNomeClienti(char **nome, int *quanti) {
+int ottieniNomeClienti(char** nome, int* quanti) 
+{
     ottieniPorte();
     int nPorts = numeroPorte();
     int i;
@@ -428,7 +443,8 @@ int ottieniNomeClienti(char **nome, int *quanti) {
     return 0;
 }
 
-void writeHomePath(char *path) {
+void writeHomePath(char *path) 
+{
     if(homePath!=NULL) free(homePath);
     homePath = (char*)malloc(sizeof(char)*strlen(path)+1);
 	memset(homePath,0x0,sizeof(char)*strlen(path)+1);
@@ -439,25 +455,25 @@ int getFlagOfJack(void) {
     return flag;
 }
 
-jack_client_t *getClient(void) {
+jack_client_t* getClient(void) {
     return client;
 }
 
-void getCurrentAudioDevice(char *outName) {
+void getCurrentAudioDevice(char* outName) {
     if(outName!=NULL) strcpy(outName,&coreAudioDevice[0]);
 }
-void setCurrentAudioDevice(char *inName) {
+void setCurrentAudioDevice(char* inName) {
     if(inName!=NULL) strcpy(&coreAudioDevice[0],inName);
 }
 
 extern int s_debug;
 
 void JPLog(char *fmt,...) {
-if(s_debug) {
-    va_list ap;
-    va_start(ap, fmt);
-    fprintf(stderr,"JP: ");
-    vfprintf(stderr, fmt, ap);
-    va_end(ap);
-}
+	if(s_debug) {
+		va_list ap;
+		va_start(ap, fmt);
+		fprintf(stderr,"JP: ");
+		vfprintf(stderr, fmt, ap);
+		va_end(ap);
+	}
 }
