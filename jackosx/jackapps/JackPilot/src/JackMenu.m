@@ -1203,7 +1203,7 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
 		memset(&name[0],0x0,sizeof(char)*256);
         err = AudioDeviceGetProperty(devices[i],0,false,kAudioDevicePropertyDeviceName,&size,&name[0]);
         if(err!=noErr) return NO;        
-        if(strcmp(&name[0],"Jack Router")!=0) {
+        if(strcmp(&name[0],"Jack Router")!=0 && strcmp(&name[0],"iSight")!=0) {
 			JPLog("Adding device: %s.\n",name);
             NSString *s_name = [NSString stringWithCString:&name[0]];
             [interfaceBox addItemWithTitle:s_name];
