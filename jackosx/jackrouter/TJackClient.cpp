@@ -208,7 +208,7 @@ History
 		Correct use of AudioHardwareStreamsCreated and AudioHardwareStreamsDied functions (they are using an array of streamIDs)
 
 10-09-04 : Version 0.56 : S Letz
-		Correct DeviceSetProperty: some properties can be "set" event there is no Jack client running other like kAudioDevicePropertyIOProcStreamUsage not.
+		Correct DeviceSetProperty: some properties can be "set" even there is no Jack client running other like kAudioDevicePropertyIOProcStreamUsage not.
 
 14-09-04 : Version 0.57 : S Letz
 		Improve the external (Jack plugins) management : now internal and external "clients" are distinguished. Correct Save/Restore connections bug.
@@ -222,6 +222,10 @@ History
 
 26-10-04 : Version 0.60 : S Letz
 		Previous connection state takes precedence over auto-connection state.
+
+15-11-04 : Version 0.61 : S Letz
+		Correct kAudioStreamPropertyPhysicalFormat setting problems. This finally solve the NI applications issue...
+		Correct DeviceGetPropertyInfo and StreamGetPropertyInfo for properties that can be set.
 		 
 TODO :
     
@@ -287,7 +291,8 @@ static void JARLog(char *fmt,...)
 }
 
 //------------------------------------------------------------------------
-static void Print4CharCode(char* msg, long c)	{ 
+static void Print4CharCode(char* msg, long c)	
+{ 
 #ifdef PRINTDEBUG 
 	UInt32 __4CC_number = (c);		
 	char __4CC_string[5];		
@@ -1184,6 +1189,9 @@ OSStatus TJackClient::DeviceGetPropertyInfo(AudioHardwarePlugInRef inSelf,
 			break;
 				
 		case kAudioDevicePropertyLatency:
+			if (outSize) *outSize = sizeof(UInt32); 
+			break;
+			
 		case kAudioDevicePropertyBufferSize:
 		case kAudioDevicePropertyBufferFrameSize:
 			if (outSize) *outSize = sizeof(UInt32); 
@@ -1200,6 +1208,7 @@ OSStatus TJackClient::DeviceGetPropertyInfo(AudioHardwarePlugInRef inSelf,
 		case kAudioDevicePropertyBufferSizeRange:
 		case kAudioDevicePropertyBufferFrameSizeRange:
 			if (outSize) *outSize = sizeof(AudioValueRange); 
+			if (outWritable) *outWritable = true;
 			break;
 				
 		case kAudioDevicePropertyStreams:
@@ -1234,6 +1243,7 @@ OSStatus TJackClient::DeviceGetPropertyInfo(AudioHardwarePlugInRef inSelf,
 					*outSize = sizeof(void*) + sizeof(UInt32) + sizeof(UInt32)*TJackClient::fOutputChannels; 
 				JARLog("DeviceGetPropertyInfo::kAudioDevicePropertyIOProcStreamUsage %ld %ld\n", isInput, *outSize);
 			}
+			if (outWritable) *outWritable = true;
 			break;
 				
 		case kAudioDevicePropertyPreferredChannelsForStereo:
@@ -1241,8 +1251,13 @@ OSStatus TJackClient::DeviceGetPropertyInfo(AudioHardwarePlugInRef inSelf,
 			break;
 				
 		case kAudioDevicePropertyNominalSampleRate:
+			if (outSize) *outSize = sizeof(Float64);
+			if (outWritable) *outWritable = true;
+			break;
+			
 		case kAudioDevicePropertyActualSampleRate:
 			if (outSize) *outSize = sizeof(Float64);
+			if (outWritable) *outWritable = true;
 			break;
 
 		case kAudioDevicePropertyAvailableNominalSampleRates:
@@ -1354,7 +1369,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 	{
     
     #ifdef kAudioHardwarePlugInInterface2ID
-        // For applications that needs a output channels map, and for audio midi setup (that will not crash)
+        // For applications that needs an output channels map, and for audio midi setup (that will not crash)
         case kAudioDevicePropertyPreferredChannelLayout:                
         {
 			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
@@ -1623,7 +1638,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 			 
 				*ioPropertyDataSize = sizeof(AudioStreamBasicDescription);
 				
-				res &= (desc->mSampleRate != 0) ? (desc->mSampleRate == fSampleRate) : true;
+				res &= (desc->mSampleRate != 0) ? (desc->mSampleRate == TJackClient::fSampleRate) : true;
 				res &= (desc->mFormatID != 0) ? (desc->mFormatID == kIOAudioStreamSampleFormatLinearPCM) : true;
 				res &= (desc->mFormatFlags != 0) ? (desc->mFormatFlags == kJackStreamFormat) : true;
 				res &= (desc->mBytesPerPacket != 0) ? (desc->mBytesPerPacket == 4) : true;
@@ -1660,7 +1675,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 			   
 				*ioPropertyDataSize = sizeof(AudioStreamBasicDescription);
 				
-				if (desc->mSampleRate != 0) desc->mSampleRate = fSampleRate;
+				if (desc->mSampleRate != 0) desc->mSampleRate = TJackClient::fSampleRate;
 				if (desc->mFormatID != 0) desc->mFormatID = kIOAudioStreamSampleFormatLinearPCM;
 				if (desc->mFormatFlags != 0) desc->mFormatFlags = kJackStreamFormat;
 				if (desc->mBytesPerPacket != 0) desc->mBytesPerPacket = 4;
@@ -1688,31 +1703,10 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 			}
 			break;
         }
-               
-        case kAudioDevicePropertyStreamFormat:
-        case kAudioStreamPropertyPhysicalFormat:
-        {
-			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
-				*ioPropertyDataSize = sizeof(AudioStreamBasicDescription);
-			}else if (*ioPropertyDataSize < sizeof(AudioStreamBasicDescription)){
-				JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
-				err = kAudioHardwareBadPropertySizeError;
-			}else{
-				AudioStreamBasicDescription* streamDesc = (AudioStreamBasicDescription*) outPropertyData;
-				streamDesc->mSampleRate = fSampleRate;
-				streamDesc->mFormatID = kIOAudioStreamSampleFormatLinearPCM;
-				streamDesc->mFormatFlags = kJackStreamFormat;
-				streamDesc->mBytesPerPacket = 4;
-				streamDesc->mFramesPerPacket = 1;
-				streamDesc->mBytesPerFrame = 4;
-				streamDesc->mChannelsPerFrame = 1;
-				streamDesc->mBitsPerChannel = 32;
-				*ioPropertyDataSize = sizeof(AudioStreamBasicDescription);
-			}
-			break;
-		}
-                
+   			
+		case kAudioDevicePropertyStreamFormat:
         case kAudioDevicePropertyStreamFormats:
+		case kAudioStreamPropertyPhysicalFormat:
         case kAudioStreamPropertyPhysicalFormats:
 		{
 			if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
@@ -1722,7 +1716,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 				err = kAudioHardwareBadPropertySizeError;
 			}else{
 				AudioStreamBasicDescription* streamDescList = (AudioStreamBasicDescription*) outPropertyData;
-				streamDescList[0].mSampleRate = fSampleRate;
+				streamDescList[0].mSampleRate = TJackClient::fSampleRate;
 				streamDescList[0].mFormatID = kIOAudioStreamSampleFormatLinearPCM;
 				streamDescList[0].mFormatFlags = kJackStreamFormat;
 				streamDescList[0].mBytesPerPacket = 4;
@@ -1761,7 +1755,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 				err = kAudioHardwareBadPropertySizeError;
 			}else{
 				Float64* valRange = (Float64*)outPropertyData;
-				*valRange = fSampleRate;
+				*valRange = TJackClient::fSampleRate;
 				*ioPropertyDataSize = sizeof(Float64);
 			}
 			break;
@@ -1777,7 +1771,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 			}else{
 				Float64* valRange = (Float64*)outPropertyData;
 				bool running = (TJackClient::fJackClient) ? TJackClient::fJackClient->IsRunning() : false; 
-				*valRange = (running) ? fSampleRate : 0.0f;
+				*valRange = (running) ? TJackClient::fSampleRate : 0.0f;
 				*ioPropertyDataSize = sizeof(Float64);
 			}
 			break;
@@ -1792,8 +1786,8 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 				err = kAudioHardwareBadPropertySizeError;
 			}else{
 				AudioValueRange* valRange = (AudioValueRange*)outPropertyData;
-				valRange->mMinimum = fSampleRate;
-				valRange->mMaximum = fSampleRate;
+				valRange->mMinimum = TJackClient::fSampleRate;
+				valRange->mMaximum = TJackClient::fSampleRate;
 				*ioPropertyDataSize = sizeof(AudioValueRange);
 			}
 			break;
@@ -2303,6 +2297,10 @@ OSStatus TJackClient::StreamGetPropertyInfo(AudioHardwarePlugInRef inSelf,
 			case kAudioDevicePropertyStreamFormats:				
 			case kAudioStreamPropertyPhysicalFormat:
 			case kAudioStreamPropertyPhysicalFormats:
+				if (outSize) *outSize = sizeof(AudioStreamBasicDescription);
+				if (outWritable) *outWritable = true;
+				break;
+				
 			case kAudioStreamPropertyPhysicalFormatSupported:
 			case kAudioStreamPropertyPhysicalFormatMatch:
 				if (outSize) *outSize = sizeof(AudioStreamBasicDescription);
@@ -2490,7 +2488,7 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
 					err = kAudioHardwareBadPropertySizeError;
 				}else{
 					AudioStreamBasicDescription* streamDesc = (AudioStreamBasicDescription*) outPropertyData;
-					streamDesc->mSampleRate = fSampleRate;
+					streamDesc->mSampleRate = TJackClient::fSampleRate;
 					streamDesc->mFormatID = kIOAudioStreamSampleFormatLinearPCM;
 					streamDesc->mFormatFlags = kJackStreamFormat;
 					streamDesc->mBytesPerPacket = 4;
@@ -2513,7 +2511,7 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
 					err = kAudioHardwareBadPropertySizeError;
 				}else{
 					AudioStreamBasicDescription* streamDescList = (AudioStreamBasicDescription*) outPropertyData;
-					streamDescList[0].mSampleRate = fSampleRate;
+					streamDescList[0].mSampleRate = TJackClient::fSampleRate;
 					streamDescList[0].mFormatID = kIOAudioStreamSampleFormatLinearPCM;
 					streamDescList[0].mFormatFlags = kJackStreamFormat;
 					streamDescList[0].mBytesPerPacket = 4;
@@ -2687,12 +2685,31 @@ OSStatus TJackClient::StreamSetProperty(AudioHardwarePlugInRef inSelf,
             case kAudioStreamPropertyDirection:
             case kAudioStreamPropertyTerminalType:
             case kAudioStreamPropertyStartingChannel:
-            case kAudioStreamPropertyPhysicalFormat:
-            case kAudioStreamPropertyPhysicalFormats:
+            
             case kAudioStreamPropertyPhysicalFormatSupported:
             case kAudioStreamPropertyPhysicalFormatMatch:
                 err = kAudioHardwareUnknownPropertyError;
                 break;
+				
+			case kAudioStreamPropertyPhysicalFormat:
+			case kAudioStreamPropertyPhysicalFormats:
+			{
+				if (inPropertyDataSize < sizeof(AudioStreamBasicDescription)){
+					JARLog("StreamSetProperty : kAudioHardwareBadPropertySizeError %ld\n",inPropertyDataSize);
+					err = kAudioHardwareBadPropertySizeError;
+				}else{
+					AudioStreamBasicDescription* streamDesc = (AudioStreamBasicDescription*) inPropertyData;
+					err = (streamDesc->mSampleRate == TJackClient::fSampleRate
+							&& streamDesc->mFormatID == kIOAudioStreamSampleFormatLinearPCM
+							&& streamDesc->mFormatFlags == kJackStreamFormat
+							&& streamDesc->mBytesPerPacket == 4
+							&& streamDesc->mFramesPerPacket == 1
+							&& streamDesc->mBytesPerFrame == 4
+							&& streamDesc->mChannelsPerFrame == 1
+							&& streamDesc->mBitsPerChannel == 32) ? kAudioHardwareNoError : kAudioDeviceUnsupportedFormatError;
+				}
+				break;
+			}
             
             case kAudioDevicePropertyDeviceName:						
             case kAudioDevicePropertyDeviceNameCFString:				
