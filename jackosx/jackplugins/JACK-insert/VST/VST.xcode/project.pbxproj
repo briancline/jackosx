@@ -718,7 +718,7 @@
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
-	<string>com.elementicaotici.JACK-insertV</string>
+	<string>gpl.jackosx.com.JACK-insert.vst</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -726,11 +726,11 @@
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.5</string>
 	<key>CFBundleSignature</key>
 	<string>ElCa</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>1.5</string>
 </dict>
 </plist>
 ";
