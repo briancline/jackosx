@@ -1,0 +1,300 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 39;
+	objects = {
+		089C1669FE841209C02AAC07 = {
+			buildSettings = {
+			};
+			buildStyles = (
+				4F9091AC011F3BD104CA0E50,
+				4F9091AD011F3BD104CA0E50,
+			);
+			hasScannedForEncodings = 1;
+			isa = PBXProject;
+			mainGroup = 089C166AFE841209C02AAC07;
+			projectDirPath = "";
+			targets = (
+				089C1673FE841209C02AAC07,
+			);
+		};
+		089C166AFE841209C02AAC07 = {
+			children = (
+				08FB77ADFE841716C02AAC07,
+				089C167CFE841241C02AAC07,
+				089C1671FE841209C02AAC07,
+				19C28FB4FE9D528D11CA2CBB,
+			);
+			isa = PBXGroup;
+			name = testModule;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C1671FE841209C02AAC07 = {
+			children = (
+				B20DA2DC063856CD006E1947,
+				B27AE6F405603A6700980793,
+			);
+			isa = PBXGroup;
+			name = "External Frameworks and Libraries";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C1673FE841209C02AAC07 = {
+			buildPhases = (
+				089C1674FE841209C02AAC07,
+				089C1675FE841209C02AAC07,
+				089C1676FE841209C02AAC07,
+				089C1677FE841209C02AAC07,
+				089C1679FE841209C02AAC07,
+			);
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "\"/Volumes/Archivio HD/Development/xpanda/Panda/Modules/PandaLua/PLua\"";
+				LIBRARY_STYLE = BUNDLE;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-bundle -undefined suppress -flat_namespace";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = PandaLuaSupport;
+				SECTORDER_FLAGS = "";
+				USE_GCC3_PFE_SUPPORT = NO;
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = jpplugin;
+			};
+			dependencies = (
+			);
+			isa = PBXBundleTarget;
+			name = testModule;
+			productName = testModule;
+			productReference = 4F9091AB011F3BD104CA0E50;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>PandaLuaSupport</string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.elementicaotici.JackPilot.pandaluasupport</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>BNDL</string>
+	<key>CFBundleSignature</key>
+	<string>ElCa</string>
+	<key>CFBundleVersion</key>
+	<string>0.0.1d1</string>
+	<key>CSResourcesFileMapped</key>
+	<true/>
+</dict>
+</plist>
+";
+		};
+		089C1674FE841209C02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		089C1675FE841209C02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+				089C1680FE841241C02AAC07,
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		089C1676FE841209C02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+				B25FA009060CC723005E0147,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		089C1677FE841209C02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+				B29A7E3905607892003DAC04,
+				B20DA2DD063856CD006E1947,
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		089C1679FE841209C02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		089C167CFE841241C02AAC07 = {
+			children = (
+				089C167DFE841241C02AAC07,
+			);
+			isa = PBXGroup;
+			name = Resources;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C167DFE841241C02AAC07 = {
+			children = (
+				089C167EFE841241C02AAC07,
+			);
+			isa = PBXVariantGroup;
+			name = InfoPlist.strings;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C167EFE841241C02AAC07 = {
+			fileEncoding = 10;
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
+			name = English;
+			path = English.lproj/InfoPlist.strings;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C1680FE841241C02AAC07 = {
+			fileRef = 089C167DFE841241C02AAC07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		08FB77ADFE841716C02AAC07 = {
+			children = (
+				B25FA007060CC723005E0147,
+			);
+			isa = PBXGroup;
+			name = Source;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+//080
+//081
+//082
+//083
+//084
+//190
+//191
+//192
+//193
+//194
+		19C28FB4FE9D528D11CA2CBB = {
+			children = (
+				4F9091AB011F3BD104CA0E50,
+			);
+			isa = PBXGroup;
+			name = Products;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+//190
+//191
+//192
+//193
+//194
+//4F0
+//4F1
+//4F2
+//4F3
+//4F4
+		4F9091AB011F3BD104CA0E50 = {
+			explicitFileType = wrapper.cfbundle;
+			fallbackIsa = PBXFileReference;
+			isa = PBXBundleReference;
+			path = PandaLuaSupport.jpplugin;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F9091AC011F3BD104CA0E50 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OPTIMIZATION_CFLAGS = "-O0";
+				ZERO_LINK = YES;
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		4F9091AD011F3BD104CA0E50 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+//4F0
+//4F1
+//4F2
+//4F3
+//4F4
+//B20
+//B21
+//B22
+//B23
+//B24
+		B20DA2DC063856CD006E1947 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = PandaLua.framework;
+			path = /Library/Frameworks/PandaLua.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		B20DA2DD063856CD006E1947 = {
+			fileRef = B20DA2DC063856CD006E1947;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B25FA007060CC723005E0147 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = main.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B25FA009060CC723005E0147 = {
+			fileRef = B25FA007060CC723005E0147;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B27AE6F405603A6700980793 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = Panda.framework;
+			path = /Library/Frameworks/Panda.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		B29A7E3905607892003DAC04 = {
+			fileRef = B27AE6F405603A6700980793;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+	};
+	rootObject = 089C1669FE841209C02AAC07;
+}

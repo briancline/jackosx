@@ -1,0 +1,643 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 39;
+	objects = {
+		089C1669FE841209C02AAC07 = {
+			buildSettings = {
+			};
+			buildStyles = (
+				4F9091AC011F3BD104CA0E50,
+				4F9091AD011F3BD104CA0E50,
+			);
+			hasScannedForEncodings = 1;
+			isa = PBXProject;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+				Italian,
+			);
+			mainGroup = 089C166AFE841209C02AAC07;
+			projectDirPath = "";
+			targets = (
+				089C1673FE841209C02AAC07,
+			);
+		};
+		089C166AFE841209C02AAC07 = {
+			children = (
+				B2EB2A0A05C53A3800724495,
+				08FB77ADFE841716C02AAC07,
+				089C167CFE841241C02AAC07,
+				089C1671FE841209C02AAC07,
+				19C28FB4FE9D528D11CA2CBB,
+			);
+			isa = PBXGroup;
+			name = testModule;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C1671FE841209C02AAC07 = {
+			children = (
+				B259B39F06A01E6A00E7CA9D,
+				B2B57786060269A8008E0D75,
+				B26EFC8D05C6805700BC87DF,
+				B26EFBC705C67F9500BC87DF,
+				B26EF9FC05C67EEE00BC87DF,
+			);
+			isa = PBXGroup;
+			name = "External Frameworks and Libraries";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C1673FE841209C02AAC07 = {
+			buildPhases = (
+				089C1674FE841209C02AAC07,
+				089C1675FE841209C02AAC07,
+				089C1676FE841209C02AAC07,
+				089C1677FE841209C02AAC07,
+				089C1679FE841209C02AAC07,
+				B2EB282205C5313100724495,
+				B28F8A11070B3699000D143F,
+				B26E8B3A070B3903006BDA03,
+			);
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "\"/Volumes/Archivio HD/Development/jackosx/TO PUT/JackPilot/Plug-Ins/jack-udp\" \"/Volumes/Archivio HD/Development/xpanda/Panda/libs\"";
+				LIBRARY_STYLE = BUNDLE;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-bundle -undefined suppress -flat_namespace";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = NetJack;
+				SECTORDER_FLAGS = "";
+				USE_GCC3_PFE_SUPPORT = NO;
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = jpmodule;
+			};
+			dependencies = (
+			);
+			isa = PBXBundleTarget;
+			name = TestPlugin;
+			productName = testModule;
+			productReference = 4F9091AB011F3BD104CA0E50;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>NetJack</string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.elementicaotici.JP.NetJack</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>BNDL</string>
+	<key>CFBundleSignature</key>
+	<string>ElCa</string>
+	<key>CFBundleVersion</key>
+	<string>0.0.1d1</string>
+	<key>CSResourcesFileMapped</key>
+	<true/>
+</dict>
+</plist>
+";
+		};
+		089C1674FE841209C02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+				B2EB283D05C5322500724495,
+				B22C795505C94A0500888525,
+				B259B39006A01E4800E7CA9D,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		089C1675FE841209C02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+				089C1680FE841241C02AAC07,
+				B2EB281C05C5312200724495,
+				B28F8977070B352D000D143F,
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		089C1676FE841209C02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+				08FB77B3FE8417CDC02AAC07,
+				B2EB283E05C5322500724495,
+				B22C795605C94A0500888525,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		089C1677FE841209C02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+				B26EF9FD05C67EEE00BC87DF,
+				B26EFBC805C67F9500BC87DF,
+				B26EFC8E05C6805700BC87DF,
+				B2B57787060269A8008E0D75,
+				B259B38306A01E3900E7CA9D,
+				B259B3A006A01E6A00E7CA9D,
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		089C1679FE841209C02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		089C167CFE841241C02AAC07 = {
+			children = (
+				B26E8B43070B3931006BDA03,
+				B28F8A01070B3661000D143F,
+				B28F8976070B352D000D143F,
+				089C167DFE841241C02AAC07,
+			);
+			isa = PBXGroup;
+			name = Resources;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C167DFE841241C02AAC07 = {
+			children = (
+				089C167EFE841241C02AAC07,
+			);
+			isa = PBXVariantGroup;
+			name = InfoPlist.strings;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C167EFE841241C02AAC07 = {
+			fileEncoding = 10;
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
+			name = English;
+			path = English.lproj/InfoPlist.strings;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C1680FE841241C02AAC07 = {
+			fileRef = 089C167DFE841241C02AAC07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		08FB77ADFE841716C02AAC07 = {
+			children = (
+				B259B38F06A01E4800E7CA9D,
+				B259B38206A01E3900E7CA9D,
+				B2EB281B05C5312200724495,
+				B2EB283C05C5322500724495,
+				B22C795305C94A0500888525,
+				B22C795405C94A0500888525,
+			);
+			isa = PBXGroup;
+			name = Source;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		08FB77B2FE8417CDC02AAC07 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = interface.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		08FB77B3FE8417CDC02AAC07 = {
+			fileRef = 08FB77B2FE8417CDC02AAC07;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+				);
+			};
+		};
+//080
+//081
+//082
+//083
+//084
+//190
+//191
+//192
+//193
+//194
+		19C28FB4FE9D528D11CA2CBB = {
+			children = (
+				4F9091AB011F3BD104CA0E50,
+			);
+			isa = PBXGroup;
+			name = Products;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+//190
+//191
+//192
+//193
+//194
+//4F0
+//4F1
+//4F2
+//4F3
+//4F4
+		4F9091AB011F3BD104CA0E50 = {
+			explicitFileType = wrapper.cfbundle;
+			isa = PBXFileReference;
+			path = NetJack.jpmodule;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F9091AC011F3BD104CA0E50 = {
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OPTIMIZATION_CFLAGS = "-O3";
+				ZERO_LINK = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		4F9091AD011F3BD104CA0E50 = {
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+//4F0
+//4F1
+//4F2
+//4F3
+//4F4
+//B20
+//B21
+//B22
+//B23
+//B24
+		B22C792505C945A700888525 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = English;
+			path = English.lproj/NetJack.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B22C795305C94A0500888525 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = Jack_udp.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B22C795405C94A0500888525 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = Jack_udp.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B22C795505C94A0500888525 = {
+			fileRef = B22C795305C94A0500888525;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B22C795605C94A0500888525 = {
+			fileRef = B22C795405C94A0500888525;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B259B38206A01E3900E7CA9D = {
+			isa = PBXFileReference;
+			lastKnownFileType = archive.ar;
+			name = libNetPanda.a;
+			path = "/Volumes/Archivio HD/Development/xpanda/Panda/libs/libNetPanda.a";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		B259B38306A01E3900E7CA9D = {
+			fileRef = B259B38206A01E3900E7CA9D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B259B38F06A01E4800E7CA9D = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = NetPanda.h;
+			path = "/Volumes/Archivio HD/Development/xpanda/libNetPanda/NetPanda.h";
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		B259B39006A01E4800E7CA9D = {
+			fileRef = B259B38F06A01E4800E7CA9D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B259B39F06A01E6A00E7CA9D = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = Panda.framework;
+			path = /Library/Frameworks/Panda.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		B259B3A006A01E6A00E7CA9D = {
+			fileRef = B259B39F06A01E6A00E7CA9D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B26E8B3A070B3903006BDA03 = {
+			buildActionMask = 2147483647;
+			dstPath = Italian.lproj;
+			dstSubfolderSpec = 7;
+			files = (
+				B26E8B53070B3944006BDA03,
+				B26E8B54070B3946006BDA03,
+				B26E8B55070B3949006BDA03,
+			);
+			isa = PBXCopyFilesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B26E8B3F070B3922006BDA03 = {
+			fileRef = B28F8A01070B3661000D143F;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B26E8B43070B3931006BDA03 = {
+			children = (
+				B26E8B44070B3931006BDA03,
+				B26E8B46070B3931006BDA03,
+				B26E8B48070B3931006BDA03,
+			);
+			isa = PBXGroup;
+			path = Italian.lproj;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B26E8B44070B3931006BDA03 = {
+			children = (
+				B26E8B45070B3931006BDA03,
+			);
+			isa = PBXVariantGroup;
+			name = InfoPlist.strings;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B26E8B45070B3931006BDA03 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
+			name = Italian;
+			path = InfoPlist.strings;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B26E8B46070B3931006BDA03 = {
+			children = (
+				B26E8B47070B3931006BDA03,
+			);
+			isa = PBXVariantGroup;
+			name = Localizable.strings;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B26E8B47070B3931006BDA03 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
+			name = Italian;
+			path = Localizable.strings;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B26E8B48070B3931006BDA03 = {
+			children = (
+				B26E8B49070B3931006BDA03,
+			);
+			isa = PBXVariantGroup;
+			name = NetJack.nib;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B26E8B49070B3931006BDA03 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = Italian;
+			path = NetJack.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B26E8B53070B3944006BDA03 = {
+			fileRef = B26E8B44070B3931006BDA03;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B26E8B54070B3946006BDA03 = {
+			fileRef = B26E8B46070B3931006BDA03;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B26E8B55070B3949006BDA03 = {
+			fileRef = B26E8B48070B3931006BDA03;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B26EF9FC05C67EEE00BC87DF = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = Cocoa.framework;
+			path = /System/Library/Frameworks/Cocoa.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		B26EF9FD05C67EEE00BC87DF = {
+			fileRef = B26EF9FC05C67EEE00BC87DF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B26EFBC705C67F9500BC87DF = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = AppKit.framework;
+			path = /System/Library/Frameworks/AppKit.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		B26EFBC805C67F9500BC87DF = {
+			fileRef = B26EFBC705C67F9500BC87DF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B26EFC8D05C6805700BC87DF = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = Foundation.framework;
+			path = /System/Library/Frameworks/Foundation.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		B26EFC8E05C6805700BC87DF = {
+			fileRef = B26EFC8D05C6805700BC87DF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B28F8976070B352D000D143F = {
+			children = (
+				B22C792505C945A700888525,
+			);
+			isa = PBXVariantGroup;
+			name = NetJack.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B28F8977070B352D000D143F = {
+			fileRef = B28F8976070B352D000D143F;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B28F8A01070B3661000D143F = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
+			name = Localizable.strings;
+			path = English.lproj/Localizable.strings;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B28F8A11070B3699000D143F = {
+			buildActionMask = 2147483647;
+			dstPath = English.lproj;
+			dstSubfolderSpec = 7;
+			files = (
+				B26E8B3F070B3922006BDA03,
+			);
+			isa = PBXCopyFilesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2B57786060269A8008E0D75 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = Jack.framework;
+			path = /Library/Frameworks/Jack.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		B2B57787060269A8008E0D75 = {
+			fileRef = B2B57786060269A8008E0D75;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B2EB281B05C5312200724495 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			path = PkgInfo;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B2EB281C05C5312200724495 = {
+			fileRef = B2EB281B05C5312200724495;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B2EB282205C5313100724495 = {
+			buildActionMask = 2147483647;
+			dstPath = Contents;
+			dstSubfolderSpec = 1;
+			files = (
+				B2EB282705C5315300724495,
+			);
+			isa = PBXCopyFilesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2EB282705C5315300724495 = {
+			fileRef = B2EB281B05C5312200724495;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B2EB283B05C5322500724495 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = JPPlugin.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B2EB283C05C5322500724495 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = my_plugin.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		B2EB283D05C5322500724495 = {
+			fileRef = B2EB283B05C5322500724495;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B2EB283E05C5322500724495 = {
+			fileRef = B2EB283C05C5322500724495;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		B2EB2A0A05C53A3800724495 = {
+			children = (
+				B2EB283B05C5322500724495,
+				08FB77B2FE8417CDC02AAC07,
+			);
+			isa = PBXGroup;
+			name = API;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+	};
+	rootObject = 089C1669FE841209C02AAC07;
+}

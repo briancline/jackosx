@@ -1,0 +1,231 @@
+<?xml version="1.0" standalone="yes"?>
+<object class="NSIBObjectData">
+  <string name="targetFramework">IBCarbonFramework</string>
+  <object name="rootObject" class="NSCustomObject" id="1">
+    <string name="customClass">NSApplication</string>
+  </object>
+  <array count="29" name="allObjects">
+    <object class="IBCarbonMenu" id="29">
+      <string name="title">main</string>
+      <array count="1" name="items">
+        <object class="IBCarbonMenuItem" id="205">
+          <string name="title">jackd</string>
+          <object name="submenu" class="IBCarbonMenu" id="206">
+            <string name="title">jackd</string>
+            <array count="2" name="items">
+              <object class="IBCarbonMenuItem" id="208">
+                <string name="title">About jackd</string>
+                <int name="keyEquivalentModifier">0</int>
+                <ostype name="command">abou</ostype>
+              </object>
+              <object class="IBCarbonMenuItem" id="207">
+                <boolean name="separator">TRUE</boolean>
+              </object>
+            </array>
+            <string name="name">_NSAppleMenu</string>
+          </object>
+        </object>
+      </array>
+      <string name="name">_NSMainMenu</string>
+    </object>
+    <reference idRef="205"/>
+    <reference idRef="206"/>
+    <reference idRef="207"/>
+    <reference idRef="208"/>
+    <object class="IBCarbonRootControl" id="212">
+      <string name="bounds">0 0 120 420 </string>
+      <array count="2" name="subviews">
+        <object class="IBCarbonStaticText" id="216">
+          <string name="bounds">19 18 67 326 </string>
+          <string name="title">Jack Audio Server Deamon..                      (c) 2001-2003 Paul Davis, Grame and others.          Carbon Adaption by Johnny Petrantoni.</string>
+        </object>
+        <object class="IBCarbonButton" id="214">
+          <string name="bounds">80 326 100 396 </string>
+          <string name="title">OK</string>
+          <ostype name="command">ok  </ostype>
+          <int name="buttonType">1</int>
+        </object>
+      </array>
+    </object>
+    <reference idRef="214"/>
+    <object class="IBCarbonWindow" id="215">
+      <string name="windowRect">308 409 428 829 </string>
+      <string name="title">About jackd</string>
+      <reference name="rootControl" idRef="212"/>
+      <boolean name="hasCloseBox">FALSE</boolean>
+      <boolean name="hasCollapseBox">FALSE</boolean>
+      <boolean name="hasHorizontalZoom">FALSE</boolean>
+      <boolean name="isResizable">FALSE</boolean>
+      <boolean name="hasVerticalZoom">FALSE</boolean>
+      <int name="carbonWindowClass">5</int>
+      <int name="windowPosition">7</int>
+    </object>
+    <reference idRef="216"/>
+    <object class="IBCarbonButton" id="217">
+      <string name="bounds">80 326 100 396 </string>
+      <string name="title">OK</string>
+      <ostype name="command">ok  </ostype>
+      <int name="buttonType">1</int>
+    </object>
+    <object class="IBCarbonWindow" id="218">
+      <string name="windowRect">291 378 411 798 </string>
+      <string name="title">WARNING</string>
+      <object name="rootControl" class="IBCarbonRootControl" id="220">
+        <string name="bounds">0 0 120 420 </string>
+        <array count="3" name="subviews">
+          <object class="IBCarbonIcon" id="219">
+            <string name="bounds">20 24 68 72 </string>
+            <int name="contentResID">2</int>
+          </object>
+          <object class="IBCarbonStaticText" id="221">
+            <string name="bounds">20 80 68 353 </string>
+            <string name="title">You can quit Jack Audio Server Deamon only by using JackPilot.</string>
+          </object>
+          <reference idRef="217"/>
+        </array>
+      </object>
+      <int name="carbonWindowClass">1</int>
+      <int name="windowPosition">7</int>
+    </object>
+    <reference idRef="219"/>
+    <reference idRef="220"/>
+    <reference idRef="221"/>
+    <object class="IBCarbonButton" id="223">
+      <string name="bounds">80 326 100 396 </string>
+      <string name="title">OK</string>
+      <ostype name="command">ok  </ostype>
+      <int name="buttonType">1</int>
+    </object>
+    <object class="IBCarbonWindow" id="224">
+      <string name="windowRect">311 398 431 818 </string>
+      <string name="title">WARNING</string>
+      <object name="rootControl" class="IBCarbonRootControl" id="226">
+        <string name="bounds">0 0 120 420 </string>
+        <array count="3" name="subviews">
+          <object class="IBCarbonIcon" id="227">
+            <string name="bounds">20 24 68 72 </string>
+            <int name="contentResID">0</int>
+          </object>
+          <object class="IBCarbonStaticText" id="225">
+            <string name="bounds">20 80 68 263 </string>
+            <string name="title">ERROR: -1.                 Cannot create JACK engine.</string>
+          </object>
+          <reference idRef="223"/>
+        </array>
+      </object>
+      <int name="carbonWindowClass">1</int>
+      <int name="windowPosition">7</int>
+    </object>
+    <reference idRef="225"/>
+    <reference idRef="226"/>
+    <reference idRef="227"/>
+    <object class="IBCarbonStaticText" id="238">
+      <string name="bounds">20 80 68 263 </string>
+      <string name="title">ERROR: -2.                      Audio driver error.      Check your preferences.</string>
+    </object>
+    <object class="IBCarbonIcon" id="239">
+      <string name="bounds">20 24 68 72 </string>
+      <int name="contentResID">0</int>
+    </object>
+    <object class="IBCarbonWindow" id="240">
+      <string name="windowRect">441 535 561 955 </string>
+      <string name="title">WARNING</string>
+      <object name="rootControl" class="IBCarbonRootControl" id="242">
+        <string name="bounds">0 0 120 420 </string>
+        <array count="3" name="subviews">
+          <reference idRef="239"/>
+          <reference idRef="238"/>
+          <object class="IBCarbonButton" id="241">
+            <string name="bounds">80 326 100 396 </string>
+            <string name="title">OK</string>
+            <ostype name="command">ok  </ostype>
+            <int name="buttonType">1</int>
+          </object>
+        </array>
+      </object>
+      <int name="carbonWindowClass">1</int>
+      <int name="windowPosition">7</int>
+    </object>
+    <reference idRef="241"/>
+    <reference idRef="242"/>
+    <object class="IBCarbonIcon" id="243">
+      <string name="bounds">20 24 68 72 </string>
+      <int name="contentResID">0</int>
+    </object>
+    <object class="IBCarbonStaticText" id="244">
+      <string name="bounds">20 80 68 263 </string>
+      <string name="title">ERROR: -2.                      Cannot run JACK engine.</string>
+    </object>
+    <object class="IBCarbonWindow" id="245">
+      <string name="windowRect">461 555 581 975 </string>
+      <string name="title">WARNING</string>
+      <object name="rootControl" class="IBCarbonRootControl" id="247">
+        <string name="bounds">0 0 120 420 </string>
+        <array count="3" name="subviews">
+          <reference idRef="243"/>
+          <reference idRef="244"/>
+          <object class="IBCarbonButton" id="246">
+            <string name="bounds">80 326 100 396 </string>
+            <string name="title">OK</string>
+            <ostype name="command">ok  </ostype>
+            <int name="buttonType">1</int>
+          </object>
+        </array>
+      </object>
+      <int name="carbonWindowClass">1</int>
+      <int name="windowPosition">7</int>
+    </object>
+    <reference idRef="246"/>
+    <reference idRef="247"/>
+  </array>
+  <array count="29" name="allParents">
+    <reference idRef="1"/>
+    <reference idRef="29"/>
+    <reference idRef="205"/>
+    <reference idRef="206"/>
+    <reference idRef="206"/>
+    <reference idRef="215"/>
+    <reference idRef="212"/>
+    <reference idRef="1"/>
+    <reference idRef="212"/>
+    <reference idRef="220"/>
+    <reference idRef="1"/>
+    <reference idRef="220"/>
+    <reference idRef="218"/>
+    <reference idRef="220"/>
+    <reference idRef="226"/>
+    <reference idRef="1"/>
+    <reference idRef="226"/>
+    <reference idRef="224"/>
+    <reference idRef="226"/>
+    <reference idRef="242"/>
+    <reference idRef="242"/>
+    <reference idRef="1"/>
+    <reference idRef="242"/>
+    <reference idRef="240"/>
+    <reference idRef="247"/>
+    <reference idRef="247"/>
+    <reference idRef="1"/>
+    <reference idRef="247"/>
+    <reference idRef="245"/>
+  </array>
+  <dictionary count="8" name="nameTable">
+    <string>About</string>
+    <reference idRef="215"/>
+    <string>About1</string>
+    <reference idRef="218"/>
+    <string>Files Owner</string>
+    <reference idRef="1"/>
+    <string>IBCarbonIcon</string>
+    <reference idRef="227"/>
+    <string>MenuBar</string>
+    <reference idRef="29"/>
+    <string>err-1</string>
+    <reference idRef="224"/>
+    <string>err-2</string>
+    <reference idRef="240"/>
+    <string>err-3</string>
+    <reference idRef="245"/>
+  </dictionary>
+  <unsigned_int name="nextObjectID">248</unsigned_int>
+</object>

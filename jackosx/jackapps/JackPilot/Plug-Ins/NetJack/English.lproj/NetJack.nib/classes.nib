@@ -1,0 +1,21 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {toggleOnOff = id; }; 
+            CLASS = "Jack_udp"; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                buffersize = id; 
+                channels = id; 
+                ipaddress = id; 
+                mode = id; 
+                "on_off_button" = id; 
+                portn = id; 
+                window = id; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

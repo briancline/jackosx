@@ -1,0 +1,5 @@
+
+Jan 21, 2004:
+Change to actual architecture of loadscheme & savescheme from posix to NextStep-COCOA (NSDictionary).
+
+

@@ -1,0 +1,53 @@
+"Start Jack" = "Start";
+"Stop Jack" = "Stop";
+"Jack is Off" = "Jack is Off";
+"Jack is On" = "Jack is On";
+
+/* ALERTS */
+"Please Wait..." = "Please Wait...";
+"Jack server is starting..." = "Jack server is starting...";
+"Jack server is closing..." = "Jack server is closing...";
+"Cannot start Jack server,\nPlease check the console or retry after a system reboot." = "Cannot start Jack server,\nPlease check preferences or retry after a system reboot.";
+"Jack server error, try manually (from Dock menu) to close jackd.." = "Jack server error, try manually (from Dock menu) to close jackd..";
+"Are you sure?" = "Are you sure?";
+"No" = "No";
+"Yes" = "Yes";
+"There are no clients running." = "There are no clients running.";
+"Error:" = "Error:";
+"Fatal error:" = "Fatal error:";
+"Warning:" = "Warning:";
+"Cannot initialize CoreAudio services, check JackPilot preferences or quit. " = "Cannot initialize CoreAudio services, check JackPilot preferences or quit. ";
+"Preferences" = "Preferences";
+"Quit" = "Quit";
+"Cannot initialize CoreAudio services, JackPilot will quit. " = "Cannot initialize CoreAudio services, JackPilot will quit. ";
+"Cannot initialize CoreAudio services, check preferences. " = "Cannot initialize CoreAudio services, check preferences. ";
+"Cannot find last audio device, please check preferences. " = "Cannot find last audio device, please check preferences. ";
+"Use default" = "Use default";
+"Jack Audio Server CoreAudio driver is not installed or is corrupted. " = "Jack Router CoreAudio driver is not installed or is corrupted. ";
+"Ok" = "Ok";
+"Sorry..." = "Sorry...";
+"You must have \"Connections Manager\" window opened, and JACK must be ON." = "You must have \"Connections Manager\" window opened, and JACK must be ON.";
+"CANNOT BE RESTORED. If you need this connection you must open client application and retry" = "CANNOT BE RESTORED. If you need this connection you must open client application and retry";
+"Retry" = "Retry";
+"Abort" = "Abort";
+"Skip" = "Skip";
+"The physical driver used with this setup was " = "The physical driver used with this setup was ";
+", now Jack is using " = ", now Jack is using ";
+", do you want to restore connections to the used with driver " = ", do you want to restore connections to the used with driver ";
+
+/* "You have %d clients running, they will stop working or maybe crash!!\n" */
+"You have " = "You have ";
+" clients running, they will stop working or maybe crash!!" = " clients running, they will stop working or maybe crash!!";
+
+/* PLUG-INS */
+"Open Instance" = "Start";
+"Close Instance" = "Stop";
+"Open Editor" = "Edit";
+
+
+/* ABOUT */
+"not installed." = "not installed.";
+"Maybe too old." = "Maybe too old.";
+"corrupted" = "corrupted";
+
+

@@ -1,0 +1,8 @@
+"Start Transmission" = "Accendi";
+"Stop Transmission" = "Spegni";
+"Cannot initialize NetJack:" = "Non posso fare partire NetJack:";
+"Invalid configuration, check parameters." = "Configurazione non valida, controlla i parametri.";
+"Ok" = "Ok";
+
+
+"/Contents/Resources/English.lproj/NetJack.nib" = "/Contents/Resources/Italian.lproj/NetJack.nib" // relative position of your localized nib file

@@ -1,0 +1,53 @@
+"Start Jack" = "Accendi";
+"Stop Jack" = "Spegni";
+"Jack is Off" = "Jack spento";
+"Jack is On" = "Jack acceso";
+
+/* ALERTS */
+"Please Wait..." = "Attendi...";
+"Jack server is starting..." = "Jack server si sta avviando...";
+"Jack server is closing..." = "Jack server si sta spegnendo...";
+"Cannot start Jack server,\nPlease check the console or retry after a system reboot." = "Non posso avviare Jack,\nControlla le preferenze o prova dopo un riavvio.";
+"Jack server error, try manually (from Dock menu) to close jackd.." = "errore del Jack server, prova manualmente (dal Dock menu) a chiudere jackd..";
+"Are you sure?" = "Sei sicuro?";
+"No" = "No";
+"Yes" = "Si";
+"There are no clients running." = "Non ci sono clients.";
+"Error:" = "Errore:";
+"Fatal error:" = "Errore fatale:";
+"Warning:" = "Attenzione:";
+"Cannot initialize CoreAudio services, check JackPilot preferences or quit. " = "Non posso inizializzare CoreAudio, controlla le preferenze o esci. ";
+"Preferences" = "Preferenze";
+"Quit" = "Esci";
+"Cannot initialize CoreAudio services, JackPilot will quit. " = "Non posso inizializzare CoreAudio, ecso da JackPilot. ";
+"Cannot initialize CoreAudio services, check preferences. " = "Non posso inizializzare CoreAudio, controlla le preferenze. ";
+"Cannot find last audio device, please check preferences. " = "Non riesco a trovare l'ultimo dispositivo audio, per favore controlla le preferenze. ";
+"Use default" = "Usa predefinito";
+"Jack Audio Server CoreAudio driver is not installed or is corrupted. " = "Jack Router CoreAudio driver non è installato o è corrotto. ";
+"Ok" = "Ok";
+"Sorry..." = "Mi dispiace...";
+"You must have \"Connections Manager\" window opened, and JACK must be ON." = "Devi avere la finestra \"Gestione Connessioni\" aperta, e JACK deve essere partito.";
+"CANNOT BE RESTORED. If you need this connection you must open client application and retry" = "NON POSSO CARICARE. Se hai bisogno di questa connessione devi aprire l'applicazione richiesta e riprovare";
+"Retry" = "Riprova";
+"Abort" = "Abbandona";
+"Skip" = "Vai avanti";
+"The physical driver used with this setup was " = "Il dispositivo audio usato in questo setup era ";
+", now Jack is using " = ", adesso Jack sta usando ";
+", do you want to restore connections to the used with driver " = ", vuoi ricaricare le connesionni usando l'attuale driver ";
+
+/* "You have %d clients running, they will stop working or maybe crash!!\n" */
+"You have " = "Hai ";
+" clients running, they will stop working or maybe crash!!" = " clients aperti, questi finiranno di funzionare!!";
+
+/* PLUG-INS */
+"Open Instance" = "Apri";
+"Close Instance" = "Chiudi";
+"Open Editor" = "Modifica";
+
+
+/* ABOUT */
+"not installed." = "non installato.";
+"Maybe too old." = "Forse troppo vecchio.";
+"corrupted" = "corrotto";
+
+

@@ -1,0 +1,18 @@
+
+function HelloPanda(MODULE_ID,Args)
+	print("ModuleID: "..MODULE_ID)
+	table.foreach(Args,print)
+	return 0
+end
+
+function FlushModule()
+	print("flushing")
+end
+
+function OpenEditor(MODULE_ID,Var)
+	print("OpenEditor")
+end
+
+function JackStatusChanged(MODULE_ID,Var)
+	print("JackStatusChanged")
+end
