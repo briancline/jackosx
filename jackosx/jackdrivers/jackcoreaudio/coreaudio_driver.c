@@ -380,6 +380,8 @@ coreaudio_driver_delete (coreaudio_driver_t *driver)
 {
         /* Close coreaudio stream and terminate */
 	closePandaAudioInstance(driver->stream);
+	free(driver->channelsPerStream);
+	free(driver->out_channelsPerStream);
 	free(driver);
 }
 
