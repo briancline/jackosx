@@ -268,7 +268,6 @@ int nConnections = 0;
                     int test;
                     test = disconnectPorts(buf,daCh);
                     if(test!=0) test = disconnectPorts(daCh,buf);
-                    
                 }
             }
         }
@@ -311,7 +310,6 @@ int nConnections = 0;
                     int test;
                     test = disconnectPorts(buf,daCh);
                     if(test!=0) test = disconnectPorts(daCh,buf);
-                    
                 }
             }
         }
@@ -524,7 +522,7 @@ int nConnections = 0;
     FILE *schemeFile;
     if ((schemeFile = fopen(&filename[0], "rt")) == NULL) {
         return;
-		} else {
+	} else {
 		
 		ottieniPorte();
 		int chisono = numeroPorte();
@@ -532,33 +530,30 @@ int nConnections = 0;
 		
 		int quanteConn = getConnections()/2;
 		
-		if(quanteConn!=0) {
-		
-		for(i = 0;i<chisono;i++) {
+		if (quanteConn!=0) {
 			
-			NSString *chi2;
-			chi2 = [datiTab2 getCHisono2:i];
-			[chi2 getCString:aCh];
-			
-			int quanteCc = connessionePerNumero2(i,NULL);
-			
-			char **thebuf;
-			thebuf = (char**)alloca(quanteCc*sizeof(char*));
-			int aa;
-			for(aa=0;aa<quanteCc;aa++) {
-				thebuf[aa] = (char*)alloca(256*sizeof(char));
+			for(i = 0;i<chisono;i++) {
+				
+				NSString *chi2;
+				chi2 = [datiTab2 getCHisono2:i];
+				[chi2 getCString:aCh];
+				
+				int quanteCc = connessionePerNumero2(i,NULL);
+				
+				char **thebuf;
+				thebuf = (char**)alloca(quanteCc*sizeof(char*));
+				int aa;
+				for(aa=0;aa<quanteCc;aa++) {
+					thebuf[aa] = (char*)alloca(256*sizeof(char));
+				}
+				
+				connessionePerNumero2(i,thebuf);
+				
+				for(aa=0;aa<quanteCc;aa++) {
+					int test = disconnectPorts(aCh,thebuf[aa]);
+					if(test!=0) test = disconnectPorts(thebuf[aa],aCh);
+				}
 			}
-			
-			connessionePerNumero2(i,thebuf);
-			
-			for(aa=0;aa<quanteCc;aa++) {
-				int test = disconnectPorts(aCh,thebuf[aa]);
-				if(test!=0) test = disconnectPorts(thebuf[aa],aCh);
-			}
-			
-			
-		}
-		
 		}
 		
 		int howMany;
@@ -633,7 +628,6 @@ int nConnections = 0;
 			sprintf(&buffer[0],"%s and %s\n",strDA,strA);
 			NSString *warnStr;
 			warnStr = [NSString stringWithCString:buffer];
-			
 			
 			char checkAudio[256];
 			char audioDeviceName[256];
@@ -753,7 +747,6 @@ int nConnections = 0;
 			
 			int test;
 			
-			
 			test = connectPorts(strDA,strA);
 			if(test!=0) test = connectPorts(strA,strDA);
 			
@@ -784,7 +777,6 @@ int nConnections = 0;
     [self reload:sender];
     
     }else NSRunAlertPanel(LOCSTR(@"Sorry..."),LOCSTR(@"You must have \"Connections Manager\" window opened, and JACK must be ON."),LOCSTR(@"Ok"),nil,nil);
-
 }
 
 - (void)fillPortsArray {
@@ -879,11 +871,9 @@ int nConnections = 0;
         
         int rigo1 = [tabellaSend selectedRow];
         int rigo2 = [tabellaConnect selectedRow];
-        
-        int i;
-        
         int nrows1 = [tabellaSend numberOfRows];
         int nrows2 = [tabellaConnect numberOfRows];
+		int i;
         
         NSMutableArray *lista1 = [NSMutableArray array];
         NSMutableArray *lista2 = [NSMutableArray array];
