@@ -53,7 +53,11 @@ JackVST::JackVST (audioMasterCallback audioMaster)
 	canProcessReplacing ();	// supports both accumulating and replacing output
 	strcpy (fProgramName, "Default");	// default program name
 	fStatus = kIsOff;
-		
+}
+
+//-------------------------------------------------------------------------------------------------------
+bool JackVST::Open()
+{
 	if (CkeckClient()) {
 	
 		fInPorts = (jack_port_t**)malloc(sizeof(jack_port_t*)*MAX_PORTS);
@@ -87,13 +91,16 @@ JackVST::JackVST (audioMasterCallback audioMaster)
 		fInstances += MAX_PORTS;
 		JackVST::fPlugInList.push_front(this);
 		jack_activate(JackVST::fJackClient); 
+		return true;
+	}else{
+		return false;
 	}
 }
 
 //-------------------------------------------------------------------------------------------------------
 JackVST::~JackVST ()
 {
-	if(fStatus == kIsOn) Flush();
+	if(fStatus == kIsOn) Close();
 }
 
 //-------------------------------------------------------------------------------------------------------
@@ -209,7 +216,7 @@ void JackVST::processReplacing (float **inputs, float **outputs, long sampleFram
 }
 
 //-----------------------------------------------------------------------------------------
-void JackVST::Flush()
+void JackVST::Close()
 {
 	fStatus = kIsOff;
 	list<JackVST*>::iterator it;

@@ -74,9 +74,14 @@ class JackVST : public AudioEffectX
 		virtual long getVendorVersion () { return 1000; }
 		
 		virtual VstPlugCategory getPlugCategory () { return kPlugCategEffect; }
+		
+		bool Open();
+		void Close();
+	
 	    
 	private:
-	
+		bool CkeckClient();
+		
 		// Global state
 		static list<JackVST*> fPlugInList;
         static int JackProcess(jack_nframes_t nframes, void *arg);
@@ -99,8 +104,7 @@ class JackVST : public AudioEffectX
 		float fGain;
 		char fProgramName[32];
 		
-        void Flush();
-		bool CkeckClient();
+       
  };
 
 

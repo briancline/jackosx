@@ -20,8 +20,6 @@
 
 #include "JackVST.hpp"
 
-bool oome = false;
-
 #define MACX 1
 
 #if MAC
@@ -51,17 +49,14 @@ AEffect *main (audioMasterCallback audioMaster)
 		return 0;  // old version
 
 	// Create the AudioEffect
-	JackVST* effect = new JackVST (audioMaster);
-	if (!effect)
-		return 0;
-
-	// Check if no problem in constructor of JackVST
-	if (oome)
-	{
+	JackVST* effect = new JackVST(audioMaster);
+	bool res = effect->Open();
+	if (res){
+		return effect->getAeffect();
+	}else{
 		delete effect;
 		return 0;
 	}
-	return effect->getAeffect ();
 }
 
 #if MAC
