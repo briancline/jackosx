@@ -37,10 +37,13 @@ int JARInsert::c_instances = 0;
 
 JARInsert::JARInsert(long host_buffer_size) 
 	: c_error(0),c_client(NULL),c_isRunning(false),c_rBufOn(false),c_needsDeactivate(false),c_hBufferSize(host_buffer_size)
-{
-	bool res = OpenAudioClient();
-	if(!res) { c_error = -16; return; }
-	
+{	
+	if(!OpenAudioClient()) { 
+		JARILog("Cannot find jack client.\n");
+		SHOWALERT("Cannot find jack client for this application, check if Jack server is running.");
+		return; 
+	}
+		
 	int nPorts = 2;
         
 	c_inPorts = (jack_port_t**)malloc(sizeof(jack_port_t*)*nPorts);
@@ -71,13 +74,15 @@ JARInsert::JARInsert(long host_buffer_size)
 			
 	if(out1) memset(out1,0x0,sizeof(float)*c_jBufferSize);
 	if(out2) memset(out2,0x0,sizeof(float)*c_jBufferSize);
-        
+	
+	#if 1
 	if(!c_isRunning) { 
 		JARILog("Jack client activated\n"); 
 		jack_activate(c_client); 
 		c_needsDeactivate = true;
 	} else c_needsDeactivate = false;
-        
+	#endif
+		
 	JARInsert::c_instances += 2;
             
 	if(c_jBufferSize>c_hBufferSize) {
@@ -86,7 +91,7 @@ JARInsert::JARInsert(long host_buffer_size)
 		c_bsAO1 = new BSizeAlign(c_jBufferSize,c_hBufferSize);
 		c_bsAO2 = new BSizeAlign(c_jBufferSize,c_hBufferSize);
 		if(c_bsAI1->Ready() && c_bsAI2->Ready() && c_bsAO1->Ready() && c_bsAO2->Ready()) c_rBufOn = true;
-		else { c_error = -75; Flush(); return; }
+		else { c_error = -94; Flush(); return; }
 	}
 	
 	c_canProcess = true;
@@ -95,9 +100,12 @@ JARInsert::JARInsert(long host_buffer_size)
 JARInsert::JARInsert() 
 	: c_error(0),c_client(NULL),c_isRunning(false),c_rBufOn(false),c_needsDeactivate(false),c_hBufferSize(0)
 {
-	bool res = OpenAudioClient();
-	if(!res) { c_error = -16; return; }
-	
+	if(!OpenAudioClient()) { 
+		JARILog("Cannot find jack client.\n");
+		SHOWALERT("Cannot find jack client for this application, check if Jack server is running.");
+		return; 
+	}
+		
 	int nPorts = 2;
         
 	c_inPorts = (jack_port_t**)malloc(sizeof(jack_port_t*)*nPorts);
@@ -128,13 +136,15 @@ JARInsert::JARInsert()
 			
 	if(out1) memset(out1,0x0,sizeof(float)*c_jBufferSize);
 	if(out2) memset(out2,0x0,sizeof(float)*c_jBufferSize);
-        
+	
+	#if 1
 	if(!c_isRunning) { 
 		JARILog("Jack client activated\n"); 
 		jack_activate(c_client); 
 		c_needsDeactivate = true;
 	} else c_needsDeactivate = false;
-        
+    #endif    
+	
 	JARInsert::c_instances += 2;
 	
 	c_canProcess = false;
@@ -152,7 +162,7 @@ bool JARInsert::AllocBSizeAlign(long host_buffer_size) {
 		c_bsAO1 = new BSizeAlign(c_jBufferSize,c_hBufferSize);
 		c_bsAO2 = new BSizeAlign(c_jBufferSize,c_hBufferSize);
 		if(c_bsAI1->Ready() && c_bsAI2->Ready() && c_bsAO1->Ready() && c_bsAO2->Ready()) c_rBufOn = true;
-		else { c_error = -90; Flush(); return false; }
+		else { c_error = -165; Flush(); return false; }
 	}
 	c_canProcess = true;
 	if(c_rBufOn) JARILog("Using BSizeAlign.\n");
@@ -198,6 +208,7 @@ bool JARInsert::OpenAudioClient() {
     Boolean isWritable;
     
     err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices,&size,&isWritable);
+	if(err!=noErr) { c_error = -211; return false; }
     
     int nDevices = size/sizeof(AudioDeviceID);
 	
@@ -205,6 +216,7 @@ bool JARInsert::OpenAudioClient() {
 
     AudioDeviceID *device = (AudioDeviceID*)calloc(nDevices,sizeof(AudioDeviceID));
     err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices,&size,device);
+	if(err!=noErr) { c_error = -219; return false; }
     
     for(int i=0;i<nDevices;i++) {
 	
@@ -212,19 +224,25 @@ bool JARInsert::OpenAudioClient() {
 
         char name[256];
         size = sizeof(char)*256;
-        AudioDeviceGetProperty(device[i],0,true,kAudioDevicePropertyDeviceName,&size,&name);
-		
-        JARILog("Name: %s\n",name);
+        err = AudioDeviceGetProperty(device[i],0,true,kAudioDevicePropertyDeviceName,&size,&name);
+		if(err==noErr) { 
+			JARILog("Name: %s\n",name);
 
-        if(strcmp(&name[0],"Jack Audio Server")==0 || strcmp(&name[0],"Jack Router")==0) { 
-			c_jackDevID=device[i]; 
-			if(device!=NULL) free(device); 
-			err = AudioDeviceGetProperty(c_jackDevID,0,true,kAudioDevicePropertyGetJackClient,&size,&c_client);
-			err = AudioDeviceGetProperty(c_jackDevID,0,true,kAudioDevicePropertyDeviceIsRunning,&size,&c_isRunning);
-			if(c_client!=NULL) return true;
-			else return false;
+			if(strcmp(&name[0],"Jack Audio Server")==0 || strcmp(&name[0],"Jack Router")==0) { 
+				c_jackDevID=device[i]; 
+				if(device!=NULL) free(device); 
+				err = AudioDeviceGetProperty(c_jackDevID,0,true,kAudioDevicePropertyGetJackClient,&size,&c_client);
+				if(err!=noErr) { c_error = -235; return false; }
+				#if 1
+				err = AudioDeviceGetProperty(c_jackDevID,0,true,kAudioDevicePropertyDeviceIsRunning,&size,&c_isRunning);
+				if(err!=noErr) { c_error = -238; return false; }
+				#endif
+				if(c_client!=NULL) { c_error = 0; return true; }
+				else return false;
+			}
 		}
     }
+	c_error = -245;
 	return false;
 }
 
@@ -238,11 +256,13 @@ void JARInsert::Flush() {
 			delete c_bsAI2;
         }
 		
+		#if 1
         if(c_needsDeactivate) { 
 			JARILog("Needs Deactivate client\n");
 			jack_deactivate(c_client); 
 		}
-    
+		#endif
+		
         for(int i=0;i<c_nInPorts;i++) {
             jack_port_unregister(c_client,c_inPorts[i]);
         }

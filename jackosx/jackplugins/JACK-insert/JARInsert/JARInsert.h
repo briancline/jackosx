@@ -21,12 +21,18 @@
 	e-mail: johnny@meskalina.it web: http://www.meskalina.it 
 */
  
- #define DEBUG 1
+#define DEBUG 1
 
 #include <Jack/Jack.h>
 #include <Carbon/Carbon.h>
 #include <CoreAudio/CoreAudio.h>
 #include "BSizeAlign.h"
+
+#define SHOWALERT(err_str_) \
+printf("JARInsert Critical Log: error = %d.\n",c_error); \
+CFStringRef str = CFStringCreateWithCString(NULL,err_str_,NULL); \
+CFUserNotificationDisplayNotice(0,kCFUserNotificationCautionAlertLevel,NULL,NULL,NULL,\
+CFSTR("JACK-insert"),str,CFSTR("Ok"));
 
 enum {
     kAudioDevicePropertyGetJackClient  = 'jasg', kAudioDevicePropertyReleaseJackClient  = 'jasr'
