@@ -48,61 +48,59 @@ class GuiComm {
 
 class JackVST : public AudioEffectX
 {
-public:
-	JackVST (audioMasterCallback audioMaster);
-	~JackVST ();
-	// Processes
-        GuiComm laGui;
-	virtual void process (float **inputs, float **outputs, long sampleFrames);
-	virtual void processReplacing (float **inputs, float **outputs, long sampleFrames);
-
-	// Program
-	virtual void setProgramName (char *name);
-	virtual void getProgramName (char *name);
-
-	// Parameters
-	virtual void setParameter (long index, float value);
-	virtual float getParameter (long index);
-	virtual void getParameterLabel (long index, char *label);
-	virtual void getParameterDisplay (long index, char *text);
-	virtual void getParameterName (long index, char *text);
-
-	virtual bool getEffectName (char* name);
-	virtual bool getVendorString (char* text);
-	virtual bool getProductString (char* text);
-	virtual long getVendorVersion () { return 1000; }
+	public:
 	
-	virtual VstPlugCategory getPlugCategory () { return kPlugCategEffect; }
-        static int instances;
-        
-        
-private:
-        UInt32 isRunning;
-        bool needsDeactivate;
-        int manyInBuffers;
-		
-        float *vRBufferIn[MAX_PORTS];
-        float *vRBufferOut[MAX_PORTS];
+		JackVST (audioMasterCallback audioMaster);
+		~JackVST ();
+		// Processes
+			GuiComm laGui;
+		virtual void process (float **inputs, float **outputs, long sampleFrames);
+		virtual void processReplacing (float **inputs, float **outputs, long sampleFrames);
 
-        RingBuffer sRingBufferIn[MAX_PORTS];
-        RingBuffer sRingBufferOut[MAX_PORTS];
-		
-        long jBufferSize;
-		int ID;
+		// Program
+		virtual void setProgramName (char *name);
+		virtual void getProgramName (char *name);
 
-		static list<JackVST*> classInstances;
-        static int jackProcess(jack_nframes_t nframes, void *arg);
-        static jack_client_t *client;
-        jack_port_t **inPorts;
-        jack_port_t **outPorts;
-        int nInPorts,nOutPorts;
-        int conto;
-        bool jackIsOn;
+		// Parameters
+		virtual void setParameter (long index, float value);
+		virtual float getParameter (long index);
+		virtual void getParameterLabel (long index, char *label);
+		virtual void getParameterDisplay (long index, char *text);
+		virtual void getParameterName (long index, char *text);
+
+		virtual bool getEffectName (char* name);
+		virtual bool getVendorString (char* text);
+		virtual bool getProductString (char* text);
+		virtual long getVendorVersion () { return 1000; }
+		
+		virtual VstPlugCategory getPlugCategory () { return kPlugCategEffect; }
+	    
+	private:
+	
+		// Global state
+		static list<JackVST*> fPlugInList;
+        static int JackProcess(jack_nframes_t nframes, void *arg);
+        static jack_client_t * fJackClient;
+		static int fInstances;
+      	
+		float* fRBufferIn[MAX_PORTS];
+        float* fRBufferOut[MAX_PORTS];
+		
+		RingBuffer fRingBufferIn[MAX_PORTS];
+        RingBuffer fRingBufferOut[MAX_PORTS];
+		
+        long fBufferSize;
+		
+        jack_port_t ** fInPorts;
+        jack_port_t ** fOutPorts;
+        int fInPortsNum,fOutPortsNum;
+        bool fJackIsOn;
+		int fStatus;
 		float fGain;
-		char programName[32];
-        void flush();
-        int status;
+		char fProgramName[32];
 		
-};
+        void Flush();
+		bool CkeckClient();
+ };
 
 
