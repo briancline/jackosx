@@ -49,7 +49,7 @@ extern "C"
         kAudioDevicePropertyGetJackClient = 'jasg',
         kAudioDevicePropertyReleaseJackClient = 'jasr'
     };
-	
+
     // The IOProc context
 
     struct TProcContext {
@@ -71,16 +71,16 @@ extern "C"
         }
     };
 
-	// The CoreAudio/Jack client
+    // The CoreAudio/Jack client
 
     class TJackClient {
-	
-		private:
 
-            jack_client_t * fClient;	// Jack client
+        private:
 
-            jack_port_t * fInputPortList[MAX_JACK_PORTS];  // Jack input ports
-            jack_port_t * fOutputPortList[MAX_JACK_PORTS];  // Jack output ports
+            jack_client_t* fClient;	// Jack client
+
+            jack_port_t* fInputPortList[MAX_JACK_PORTS];  // Jack input ports
+            jack_port_t* fOutputPortList[MAX_JACK_PORTS];  // Jack output ports
 
             AudioBufferList* fInputList;	// CoreAudio input buffers
             AudioBufferList* fOutputList;	// CoreAudio output buffers
@@ -111,31 +111,32 @@ extern "C"
             static string fDeviceManufacturer;
             static bool fDeviceRunning;
             static bool fConnected2HAL;
-	
+
             static AudioDeviceID fDeviceID;
             static AudioStreamID fStreamIDList[128];
 
             static AudioDeviceID fCoreAudioDriver;		// The CoreAudio driver currently loaded by Jack
-     
+
+            static bool fFirstActivate;
+
             static void SetTime(AudioTimeStamp* timeVal, long curTime, UInt64 time);
-		
+
         public:
 
             TJackClient();
             virtual ~TJackClient();
-			
-			static AudioHardwarePlugInRef fPlugInRef;
-			static bool fNotification;
 
-            static int Process(jack_nframes_t nframes, void *arg);
-            static int BufferSize(jack_nframes_t nframes, void *arg);
-            static int XRun(void *arg);
+            static AudioHardwarePlugInRef fPlugInRef;
+            static bool fNotification;
+			static bool fDebug;
+
+            static int Process(jack_nframes_t nframes, void* arg);
+            static int BufferSize(jack_nframes_t nframes, void* arg);
+            static int XRun(void* arg);
 
             static TJackClient* GetJackClient();
             static void ClearJackClient();
             static void KillJackClient();
-
-            static bool fDebug;
 
             bool Open();
             void Close();
@@ -155,7 +156,7 @@ extern "C"
             void Start(AudioDeviceIOProc proc);
             void Stop(AudioDeviceIOProc proc);
 
-			static void CheckFirstRef();
+            static void CheckFirstRef();
             static void CheckLastRef();
             static void IncRefInternal();
             static void DecRefInternal();
@@ -169,18 +170,17 @@ extern "C"
 
             static bool ReadPref();
             static void Shutdown(void *arg);
-            static jack_client_t * CheckServer(AudioHardwarePlugInRef inSelf);
+            static jack_client_t* CheckServer(AudioHardwarePlugInRef inSelf);
             static bool CheckRunning(AudioHardwarePlugInRef inSelf);
 
             void SaveConnections();
-            bool RestoreConnections();
-			
-			// Plug-in API
+            void RestoreConnections();
+
+            // Plug-in API
 
             static OSStatus	Initialize(AudioHardwarePlugInRef inSelf);
             static OSStatus Teardown(AudioHardwarePlugInRef inSelf);
-			static OSStatus Teardown1(AudioHardwarePlugInRef inSelf);
-
+       
             static OSStatus DeviceAddIOProc(AudioHardwarePlugInRef inSelf,
                                             AudioDeviceID inDevice,
                                             AudioDeviceIOProc proc,

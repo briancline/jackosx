@@ -238,14 +238,16 @@ History
 		
 15-12-04 : Version 0.65 : Notification sent by JackPilot when the jack server start and stops : allows applications
 		to dynamically see when jack server is available.
-
+ 
 13-01-05 : Version 0.66 : Correct RestoreConnections issue : RestoreConnections is called only once for the first Activate. 
 		Correct bug in Process in the "several proc" case : output buffer need to be cleared
 		
 24-01-05 : Version 0.67 : Correct Final Cut Pro crash by changing the way DeviceGetProperty for kAudioDevicePropertyStreams behaves.
-
+ 
 03-02-05 : Version 0.68 : Ouput buffer are produced in fOuputListTemp buffer before being copied to jack port buffers (to solve a dirty buffer looping problem)
-
+ 
+03-02-05 : Version 0.69 : Correct (again...) RestoreConnections: AutoConnect if called only for the *first* activation, otherwise RestoreConnections is used.
+ 
 		 
 TODO :
     
@@ -295,6 +297,7 @@ AudioStreamID TJackClient::fCoreAudioDriver = 0;
 AudioHardwarePlugInRef TJackClient::fPlugInRef = 0;
 
 bool TJackClient::fNotification = false;
+bool TJackClient::fFirstActivate = true;
 
 #define kJackStreamFormat kAudioFormatFlagIsPacked|kLinearPCMFormatFlagIsFloat|kAudioFormatFlagIsBigEndian|kAudioFormatFlagIsNonInterleaved
 
@@ -374,57 +377,56 @@ static void printError(OSStatus err)
 #ifdef JACK_NOTIFICATION
 
 //---------------------------------------------------------------------------------------------------------------------------------
-static void startCallback(CFNotificationCenterRef 	center, 
-						void*					 	observer, 
-						CFStringRef 				name, 
-						const void* 				object, 
-						CFDictionaryRef 			userInfo)
+static void startCallback(CFNotificationCenterRef center,
+                          void*	observer,
+                          CFStringRef name,
+                          const void* object,
+                          CFDictionaryRef userInfo)
 {
-	OSStatus err = TJackClient::Initialize(TJackClient::fPlugInRef);
-    JARLog("com.grame.jackserver.start notification %ld\n",err);
+    OSStatus err = TJackClient::Initialize(TJackClient::fPlugInRef);
+    JARLog("com.grame.jackserver.start notification %ld\n", err);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
-static void stopCallback(CFNotificationCenterRef 	center, 
-						void*					 	observer, 
-						CFStringRef 				name, 
-						const void* 				object, 
-						CFDictionaryRef 			userInfo)
+static void stopCallback(CFNotificationCenterRef center,
+                         void*	observer,
+                         CFStringRef name,
+                         const void* object,
+                         CFDictionaryRef userInfo)
 {
     OSStatus err = TJackClient::Teardown1(TJackClient::fPlugInRef);
-	JARLog("com.grame.jackserver.stop notification %ld\n",err);
+    JARLog("com.grame.jackserver.stop notification %ld\n", err);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
-
-static void StartNotification() 
+static void StartNotification()
 {
-	if (!TJackClient::fNotification) {
-		CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(), 
-										NULL, startCallback, CFSTR("com.grame.jackserver.start"), 
-										CFSTR("com.grame.jackserver"), CFNotificationSuspensionBehaviorDeliverImmediately);
+    if (!TJackClient::fNotification) {
+        CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(),
+                                        NULL, startCallback, CFSTR("com.grame.jackserver.start"),
+                                        CFSTR("com.grame.jackserver"), CFNotificationSuspensionBehaviorDeliverImmediately);
 
-		CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(), 
-										NULL, stopCallback, CFSTR("com.grame.jackserver.stop"), 
-										CFSTR("com.grame.jackserver"), CFNotificationSuspensionBehaviorDeliverImmediately);
-		TJackClient::fNotification = true;
-	}
+        CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(),
+                                        NULL, stopCallback, CFSTR("com.grame.jackserver.stop"),
+                                        CFSTR("com.grame.jackserver"), CFNotificationSuspensionBehaviorDeliverImmediately);
+        TJackClient::fNotification = true;
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
 static void StopNotification()
 {
-	if (TJackClient::fNotification) {
-		CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(),NULL,
-			CFSTR("com.grame.jackserver.start"),CFSTR("com.grame.jackserver"));
-			
-		CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(),NULL,
-			CFSTR("com.grame.jackserver.stop"),CFSTR("com.grame.jackserver"));
-		TJackClient::fNotification = false;
-	}
+    if (TJackClient::fNotification) {
+        CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(), NULL,
+                                           CFSTR("com.grame.jackserver.start"), CFSTR("com.grame.jackserver"));
+
+        CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(), NULL,
+                                           CFSTR("com.grame.jackserver.stop"), CFSTR("com.grame.jackserver"));
+        TJackClient::fNotification = false;
+    }
 }
 
-#endif 
+#endif
 
 //------------------------------------------------------------------------
 void TJackClient::SaveConnections()
@@ -468,11 +470,10 @@ void TJackClient::SaveConnections()
 }
 
 //------------------------------------------------------------------------
-bool TJackClient::RestoreConnections()
+void TJackClient::RestoreConnections()
 {
     JARLog("--------------------------------------------------------\n");
     JARLog("RestoreConnections size : %ld\n", fConnections.size());
-    bool res = false;
 
     list<pair<string, string> >::const_iterator it;
 
@@ -480,11 +481,9 @@ bool TJackClient::RestoreConnections()
         pair<string, string> connection = *it;
         JARLog("connections : %s %s\n", connection.first.c_str(), connection.second.c_str());
         jack_connect(fClient, connection.first.c_str(), connection.second.c_str());
-        res = true;
     }
 
     fConnections.clear();
-    return res;
 }
 
 //------------------------------------------------------------------------
@@ -522,8 +521,8 @@ void TJackClient::ClearJackClient()
 //------------------------------------------------------------------------
 void TJackClient::KillJackClient()
 {
-	JARLog("KillJackClient\n");
-	 
+    JARLog("KillJackClient\n");
+
     if (TJackClient::fJackClient) {
         TJackClient::fJackClient->Desactivate();
         TJackClient::fJackClient->Close();
@@ -538,8 +537,8 @@ void TJackClient::CheckFirstRef()
     assert(TJackClient::fJackClient);
 
     if (TJackClient::fJackClient->fExternalClientNum + TJackClient::fJackClient->fInternalClientNum == 1) {
-		TJackClient::fJackClient->Activate();
-	}
+        TJackClient::fJackClient->Activate();
+    }
 }
 
 //------------------------------------------------------------------------
@@ -559,18 +558,6 @@ void TJackClient::CheckLastRef()
 }
 
 //------------------------------------------------------------------------
-/*
-void TJackClient::IncRefInternal()
-{
-    assert(TJackClient::fJackClient);
-    TJackClient::fJackClient->fInternalClientNum++;
-    JARLog("IncRefInternal : %ld\n", TJackClient::fJackClient->fInternalClientNum);
-    if (TJackClient::fJackClient->fInternalClientNum == 1)
-        TJackClient::fJackClient->AllocatePorts();
-    TJackClient::fJackClient->Activate();
-}
-*/
-
 void TJackClient::IncRefInternal()
 {
     assert(TJackClient::fJackClient);
@@ -578,8 +565,8 @@ void TJackClient::IncRefInternal()
     JARLog("IncRefInternal : %ld\n", TJackClient::fJackClient->fInternalClientNum);
     if (TJackClient::fJackClient->fInternalClientNum == 1) {
         TJackClient::fJackClient->AllocatePorts();
-	}
-	CheckFirstRef();
+    }
+    CheckFirstRef();
 }
 
 //------------------------------------------------------------------------
@@ -594,16 +581,6 @@ void TJackClient::DecRefInternal()
 }
 
 //------------------------------------------------------------------------
-/*
-void TJackClient::IncRefExternal()
-{
-    assert(TJackClient::fJackClient);
-    TJackClient::fJackClient->fExternalClientNum++;
-    JARLog("IncRefExternal : %ld\n", TJackClient::fJackClient->fExternalClientNum);
-    TJackClient::fJackClient->Activate();
-}
-*/
-
 void TJackClient::IncRefExternal()
 {
     assert(TJackClient::fJackClient);
@@ -627,7 +604,7 @@ void TJackClient::Shutdown (void *arg)
     TJackClient::fDeviceRunning = false;
     JARLog("Shutdown\n");
     //ClearJackClient();
-	KillJackClient();
+    KillJackClient();
     OSStatus err = AudioHardwareDevicePropertyChanged(TJackClient::fPlugInRef,
                    TJackClient::fDeviceID,
                    0,
@@ -729,11 +706,11 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
         TProcContext context = val.second;
 
         if (context.fStatus) { // If proc is started
-		
-			for (int i = 0; i < TJackClient::fOutputChannels; i++) {
-				// Use an intermediate buffer
-				memset(client->fOuputListTemp[i], 0, nframes*sizeof(float));
-			}
+
+            for (int i = 0; i < TJackClient::fOutputChannels; i++) {
+                // Use an intermediate buffer
+                memset(client->fOuputListTemp[i], 0, nframes*sizeof(float));
+            }
 
             if (context.fStreamUsage) {
 
@@ -748,7 +725,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
 
                 for (int i = 0; i < TJackClient::fOutputChannels; i++) {
                     if (context.fOutput[i]) {
-    					client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
+                        client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
                     } else {
                         client->fOutputList->mBuffers[i].mData = NULL;
                     }
@@ -761,7 +738,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
                 }
 
                 for (int i = 0; i < TJackClient::fOutputChannels; i++) {
-					client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
+                    client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
                 }
             }
 
@@ -777,22 +754,22 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
                 if (err != kAudioHardwareNoError)
                     JARLog("Process error %ld\n", err);
             }
-			
-			// Copy intermediate buffer in client buffer
-			for (int i = 0; i < TJackClient::fOutputChannels; i++) {
-				memcpy((float *)jack_port_get_buffer(client->fOutputPortList[i], nframes), client->fOuputListTemp[i], nframes*sizeof(float));
-			}
+
+            // Copy intermediate buffer in client buffer
+            for (int i = 0; i < TJackClient::fOutputChannels; i++) {
+                memcpy((float *)jack_port_get_buffer(client->fOutputPortList[i], nframes), client->fOuputListTemp[i], nframes*sizeof(float));
+            }
         }
 
     } else if (client->GetProcNum() > 1) { // Several IOProc : need mixing
 
         for (int i = 0; i < TJackClient::fOutputChannels; i++) {
-            // Use a mixing buffer
+            // Use a intermediate mixing buffer
             memset(client->fOuputListTemp[i], 0, nframes*sizeof(float));
         }
-		
+
         map<AudioDeviceIOProc, TProcContext>::iterator iter;
-		int k;
+        int k;
         for (k = 1, iter = client->fAudioIOProcList.begin(); iter != client->fAudioIOProcList.end(); iter++, k++) {
 
             pair<AudioDeviceIOProc, TProcContext> val = *iter;
@@ -850,36 +827,36 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
                     for (int i = 0; i < TJackClient::fOutputChannels; i++) {
                         if (context.fOutput[i]) {
                             float * output = (float *)jack_port_get_buffer(client->fOutputPortList[i], nframes);
-							if (k == 1) {	// first proc : copy 
-								for (unsigned int j = 0; j < nframes; j++) {
-									output[j] = ((float*)client->fOutputList->mBuffers[i].mData)[j];
-								}
-							} else { // other proc : mix
-								for (unsigned int j = 0; j < nframes; j++) {
-									output[j] += ((float*)client->fOutputList->mBuffers[i].mData)[j];
-								}
-							}
+                            if (k == 1) {	// first proc : copy
+                                for (unsigned int j = 0; j < nframes; j++) {
+                                    output[j] = ((float*)client->fOutputList->mBuffers[i].mData)[j];
+                                }
+                            } else { // other proc : mix
+                                for (unsigned int j = 0; j < nframes; j++) {
+                                    output[j] += ((float*)client->fOutputList->mBuffers[i].mData)[j];
+                                }
+                            }
                         }
                     }
 
                 } else {
                     for (int i = 0; i < TJackClient::fOutputChannels; i++) {
                         float * output = (float *)jack_port_get_buffer(client->fOutputPortList[i], nframes);
-						if (k == 1) {	// first proc : copy 
-							for (unsigned int j = 0; j < nframes; j++) {
-								output[j] = ((float*)client->fOutputList->mBuffers[i].mData)[j];
-							}
-						} else { // other proc : mix
-							for (unsigned int j = 0; j < nframes; j++) {
-								output[j] += ((float*)client->fOutputList->mBuffers[i].mData)[j];
-							}
-						}
+                        if (k == 1) {	// first proc : copy
+                            for (unsigned int j = 0; j < nframes; j++) {
+                                output[j] = ((float*)client->fOutputList->mBuffers[i].mData)[j];
+                            }
+                        } else { // other proc : mix
+                            for (unsigned int j = 0; j < nframes; j++) {
+                                output[j] += ((float*)client->fOutputList->mBuffers[i].mData)[j];
+                            }
+                        }
                     }
                 }
             }
         }
     }
-	
+
     return 0;
 }
 
@@ -931,8 +908,8 @@ TJackClient::~TJackClient()
 bool TJackClient::AllocatePorts()
 {
     char in_port_name [JACK_PORT_NAME_LEN];
-	
-	JARLog("AllocatePorts fInputChannels %ld fOutputChannels %ld \n", fInputChannels, fOutputChannels);
+
+    JARLog("AllocatePorts fInputChannels %ld fOutputChannels %ld \n", fInputChannels, fOutputChannels);
 
     for (long i = 0; i < TJackClient::fInputChannels; i++) {
         sprintf(in_port_name, "in%ld", i + 1);
@@ -1023,10 +1000,10 @@ void TJackClient::StopRunning()
 //------------------------------------------------------------------------
 bool TJackClient::Open()
 {
-	pid_t pid = getpid();
+    pid_t pid = getpid();
     char* id_name = bequite_getNameFromPid(pid);
     JARLog("JackClient::Open id %ld name %s\n", pid, id_name);
-	assert(id_name != NULL);
+    assert(id_name != NULL);
 
     if ((fClient = jack_client_new(id_name)) == NULL) {
         JARLog("jack server not running?\n");
@@ -1149,15 +1126,24 @@ void TJackClient::Stop(AudioDeviceIOProc proc)
 //------------------------------------------------------------------------
 bool TJackClient::Activate()
 {
-	JARLog("Activate\n");
-	  
+    JARLog("Activate\n");
+
     if (jack_activate(fClient)) {
         JARLog("cannot activate client");
         return false;
     } else {
         // Previous connection state takes precedence over auto-connection state
-        if (!RestoreConnections())
+        if (TJackClient::fFirstActivate) {
+            JARLog("First activate\n");
             AutoConnect();
+            TJackClient::fFirstActivate = false;
+        } else {
+            RestoreConnections();
+        }
+        /*
+              if (!RestoreConnections())
+                  AutoConnect();
+        */ 
         return true;
     }
 }
@@ -1165,15 +1151,14 @@ bool TJackClient::Activate()
 //------------------------------------------------------------------------
 bool TJackClient::Desactivate()
 {
-	JARLog("Desactivate\n");
-	
+    JARLog("Desactivate\n");
+
     if (jack_deactivate(fClient)) {
         JARLog("cannot deactivate client");
         return false;
     }
     return true;
 }
-
 
 //------------------------------------------------------------------------
 bool TJackClient::AutoConnect()
@@ -1203,9 +1188,9 @@ bool TJackClient::AutoConnect()
                         JARLog("cannot connect input ports\n");
                     }
                 } else {
-					JARLog("AutoConnect input: i %ld fInputPortList[i] %x\n", i, fInputPortList[i]);
+                    JARLog("AutoConnect input: i %ld fInputPortList[i] %x\n", i, fInputPortList[i]);
                     goto error;
-				}
+                }
 
             }
             free (ports);
@@ -1232,9 +1217,9 @@ bool TJackClient::AutoConnect()
                         JARLog("cannot connect ouput ports\n");
                     }
                 } else {
-					JARLog("AutoConnect output: i %ld fOutputPortList[i] %x\n", i, fOutputPortList[i]);
+                    JARLog("AutoConnect output: i %ld fOutputPortList[i] %x\n", i, fOutputPortList[i]);
                     goto error;
-				}
+                }
             }
             free (ports);
         }
@@ -1542,7 +1527,7 @@ OSStatus TJackClient::DeviceGetPropertyInfo(AudioHardwarePlugInRef inSelf,
                 *outSize = sizeof(AudioStreamBasicDescription);
             break;
 
-        case kAudioDevicePropertyStreamFormats:        // TO BE CHECKED
+        case kAudioDevicePropertyStreamFormats:         // TO BE CHECKED
         case kAudioStreamPropertyPhysicalFormats:
             if (outSize)
                 *outSize = sizeof(AudioStreamBasicDescription);
@@ -1659,10 +1644,10 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                     err = kAudioHardwareBadPropertySizeError;
                     JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n", *ioPropertyDataSize);
                 } else {
-				   char* data = (char*) outPropertyData;
+                    char* data = (char*) outPropertyData;
                     strcpy(data, TJackClient::fDeviceName.c_str());
                     *ioPropertyDataSize = TJackClient::fDeviceName.size() + 1;
-					//JARLog("DeviceGetProperty : kAudioDevicePropertyDeviceName write %ld\n",TJackClient::fDeviceName.size() + 1);
+                    //JARLog("DeviceGetProperty : kAudioDevicePropertyDeviceName write %ld\n",TJackClient::fDeviceName.size() + 1);
                 }
                 break;
             }
@@ -1844,15 +1829,15 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                     *ioPropertyDataSize = sizeof(AudioStreamID) * channels;
                 } else if (*ioPropertyDataSize < (sizeof(AudioStreamID)*channels)) {
                     JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n", *ioPropertyDataSize);
-					/*
-					FINAL Cut pro *incorrectly* ask for this property with a two small "ioPropertyDataSize". 
-					The kAudioHardwareBadPropertySizeError value was thus returned but then cause a crash in FCP
-					Now the date size that can be safely written the is returned without any error.....
-					*/
-					AudioStreamID* streamIDList = (AudioStreamID*)outPropertyData;
-					int streams = *ioPropertyDataSize/sizeof(AudioStreamID);
-					
-					JARLog("DeviceGetProperty : kAudioDevicePropertyStreams copy %ld stream\n", streams);
+                    /*
+                    FINAL Cut pro *incorrectly* ask for this property with a two small "ioPropertyDataSize". 
+                    The kAudioHardwareBadPropertySizeError value was thus returned but then cause a crash in FCP
+                    Now the date size that can be safely written the is returned without any error.....
+                    */
+                    AudioStreamID* streamIDList = (AudioStreamID*)outPropertyData;
+                    int streams = *ioPropertyDataSize / sizeof(AudioStreamID);
+
+                    JARLog("DeviceGetProperty : kAudioDevicePropertyStreams copy %ld stream\n", streams);
 
                     if (isInput) {
                         for (int i = 0; i < streams; i++) {
@@ -1865,7 +1850,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                     }
 
                     *ioPropertyDataSize = sizeof(AudioStreamID) * streams;
-					
+
                 } else {
 
                     AudioStreamID* streamIDList = (AudioStreamID*)outPropertyData;
@@ -2147,7 +2132,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 
             // Special Property to release Jack client from application code
         case kAudioDevicePropertyReleaseJackClient: {
-				DecRefExternal();
+                DecRefExternal();
                 break;
             }
 
@@ -3098,14 +3083,14 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
     bool prefOK = ReadPref();
 
     JARLog("Initialize [inSelf, name] : %ld %s \n", (long)inSelf, id_name);
-		
-	TJackClient::fPlugInRef = inSelf;
 
-#ifdef JACK_NOTIFICATION	
-	// Start notifications (but not for JackPilot)
-	if (strcmp(id_name, "JackPilot") != 0) {
-		StartNotification();
-	}
+    TJackClient::fPlugInRef = inSelf;
+
+#ifdef JACK_NOTIFICATION
+    // Start notifications (but not for JackPilot)
+    if (strcmp(id_name, "JackPilot") != 0) {
+        StartNotification();
+    }
 #endif
 
     // Reject "jackd" or "jackdmp" as a possible client (to be improved if other clients need to be rejected)
@@ -3155,7 +3140,7 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
 
     } else {
         JARLog("jack server not running?\n");
-		return kAudioHardwareNotRunningError;
+        return kAudioHardwareNotRunningError;
     }
 
     err = AudioHardwareClaimAudioDeviceID(inSelf, &TJackClient::fDeviceID);
@@ -3202,12 +3187,14 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
 OSStatus TJackClient::Teardown(AudioHardwarePlugInRef inSelf)
 {
     char* id_name = bequite_getNameFromPid((int)getpid());
-  
+
     JARLog("Teardown [inSelf, name] : %ld %s \n", (long)inSelf, id_name);
-	KillJackClient(); // In case the client did not correctly quit itself (like iMovie...)
-#ifdef JACK_NOTIFICATION	
-	StopNotification();
-#endif 
+    KillJackClient(); // In case the client did not correctly quit itself (like iMovie...)
+#ifdef JACK_NOTIFICATION
+
+    StopNotification();
+#endif
+
     OSStatus err = AudioHardwareStreamsDied(inSelf, TJackClient::fDeviceID, TJackClient::fOutputChannels + TJackClient::fInputChannels, &TJackClient::fStreamIDList[0]);
     JARLog("Teardown : AudioHardwareStreamsDied\n");
     printError(err);
@@ -3219,31 +3206,6 @@ OSStatus TJackClient::Teardown(AudioHardwarePlugInRef inSelf)
         JARLog("Teardown : connection to HAL\n");
     } else {
         JARLog("Teardown : no connection to HAL\n");
-    }
-
-    return kAudioHardwareNoError;
-}
-
-//---------------------------------------------------------------------------------------------------------------------------------
-OSStatus TJackClient::Teardown1(AudioHardwarePlugInRef inSelf)
-{
-    char* id_name = bequite_getNameFromPid((int)getpid());
-  
-    JARLog("Teardown1 [inSelf, name] : %ld %s \n", (long)inSelf, id_name);
-	//KillJackClient(); // In case the client did not correctly quit itself (like iMovie...)
-	//ClearJackClient();
-
-    OSStatus err = AudioHardwareStreamsDied(inSelf, TJackClient::fDeviceID, TJackClient::fOutputChannels + TJackClient::fInputChannels, &TJackClient::fStreamIDList[0]);
-    JARLog("Teardown1 : AudioHardwareStreamsDied\n");
-    printError(err);
-
-    if (TJackClient::fConnected2HAL) {
-        err = AudioHardwareDevicesDied(inSelf, 1, &TJackClient::fDeviceID);
-        JARLog("Teardown1 : AudioHardwareDevicesDied\n");
-        printError(err);
-        JARLog("Teardown1 : connection to HAL\n");
-    } else {
-        JARLog("Teardown1 : no connection to HAL\n");
     }
 
     return kAudioHardwareNoError;
