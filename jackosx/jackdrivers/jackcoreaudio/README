@@ -1,0 +1,4 @@
+You must have a side folder named jack with the complete source of the jack-audio-connections-kit, to compile this.
+so for example:
+/Users/xxx/Desktop/jackcoreaudio/
+/Users/xxx/Desktop/jack/
