@@ -1008,19 +1008,26 @@ end:
     
     UInt32 outChannels = 0;
     err = GetTotalChannels(vDevice,&outChannels,false);
-    if(err!=noErr) { NSLog(@"err in GetTotalChannels"); }
-    
-    int vOutChannels = (int)outChannels;
+    if(err!=noErr) { 
+		NSLog(@"err in GetTotalChannels, set to 0");
+			
+		[channelsTest addItemWithTitle:[[NSNumber numberWithInt:0] stringValue]]; 
+		[channelsTest selectItemAtIndex:0];
+	} else {
+		int vOutChannels = (int)outChannels;
 	
-	[channelsTest addItemWithTitle:[[NSNumber numberWithInt:0] stringValue]]; 
-	[channelsTest selectItemAtIndex:0];
+		[channelsTest addItemWithTitle:[[NSNumber numberWithInt:0] stringValue]]; 
+		[channelsTest selectItemAtIndex:0];
 	
-    for(i=0;i<vOutChannels;i++) {
-        [channelsTest addItemWithTitle:[[NSNumber numberWithInt:i+1] stringValue]];
-        [channelsTest selectItemAtIndex:i+1];
-    }
-    JPLog("got output channels ok, %d channels\n",vOutChannels);
+		for(i=0;i<vOutChannels;i++) {
+			[channelsTest addItemWithTitle:[[NSNumber numberWithInt:i+1] stringValue]];
+			[channelsTest selectItemAtIndex:i+1];
+		}
+		JPLog("got output channels ok, %d channels\n",vOutChannels);
+	}
 	
+	//why this!!!?? 
+	/*
 	if(vOutChannels<=0) {
 		err = GetTotalChannels(vDevice,&outChannels,true);
 		if(err!=noErr) { NSLog(@"err in GetTotalChannels"); }
@@ -1035,22 +1042,28 @@ end:
 		JPLog("got input channels ok but output channels are 0, %d input channels\n",vOutChannels);
 		JPLog("JackPilot will use input channels value\n");
 	}
+	*/
 	
 	UInt32 inChannels = 0;
 	err = GetTotalChannels(vDevice,&inChannels,true);
-    if(err!=noErr) { NSLog(@"err in GetTotalChannels"); }
-    
-    int vInChannels = (int)inChannels;
+    if(err!=noErr) { 
+		NSLog(@"err in GetTotalChannels");
+			
+		[inputChannels addItemWithTitle:[[NSNumber numberWithInt:0] stringValue]]; 
+		[inputChannels selectItemAtIndex:0];
+	} else {
+		int vInChannels = (int)inChannels;
 	
-	[inputChannels addItemWithTitle:[[NSNumber numberWithInt:0] stringValue]]; 
-	[inputChannels selectItemAtIndex:0];
+		[inputChannels addItemWithTitle:[[NSNumber numberWithInt:0] stringValue]]; 
+		[inputChannels selectItemAtIndex:0];
 	
-    for(i=0;i<vInChannels;i++) {
-        [inputChannels addItemWithTitle:[[NSNumber numberWithInt:i+1] stringValue]];
-        [inputChannels selectItemAtIndex:i+1];
+		for(i=0;i<vInChannels;i++) {
+			[inputChannels addItemWithTitle:[[NSNumber numberWithInt:i+1] stringValue]];
+			[inputChannels selectItemAtIndex:i+1];
+		}
+		JPLog("got input channels ok, %d channels\n",vInChannels);
     }
-    JPLog("got input channels ok, %d channels\n",vInChannels);
-    
+	
     BOOL sampleRatesOk = YES;
     
     err = AudioDeviceGetPropertyInfo(vDevice,0,false,kAudioDevicePropertyStreamFormats,&size,&isWritable);
