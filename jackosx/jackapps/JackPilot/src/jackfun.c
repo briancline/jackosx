@@ -124,21 +124,24 @@ int openJackClient(void)
     return 1;
 }
 
-int ottieniPorte(void) 
+int ottieniPorte(void)  //why not void instead of int return!!??
 {
-    if (client != NULL) {
+    if(client!=NULL) {
         if (jplist != NULL) {
             free(jplist);
             jplist = NULL;
         }
         jplist = jack_get_ports(client, NULL, NULL, 0);
+		return 1;
     }
+	jplist = NULL;
     return 1;
 }
 
 int portaPerNumero(int n, char *nomeOut, unsigned long *tipo) 
 {
     ottieniPorte();
+	if(!jplist) return 0;
     if (jplist[n] != NULL) {
         strcpy(nomeOut,jplist[n]);
         *tipo = getTipoByName(jplist[n]);        
