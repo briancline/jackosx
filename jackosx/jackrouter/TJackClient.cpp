@@ -824,7 +824,7 @@ int TJackClient::Process(jack_nframes_t nframes, void* arg)
                         client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
                     }
                 }
-
+				
                 err = (val.first) (client->fDeviceID,
                                    &inNow,
                                    client->fInputList,
@@ -832,7 +832,7 @@ int TJackClient::Process(jack_nframes_t nframes, void* arg)
                                    client->fOutputList,
                                    &inOutputTime,
                                    context.fContext);
-
+				
                 if (TJackClient::fDebug) {
                     if (err != kAudioHardwareNoError)
                         JARLog("Process error %ld\n", err);
@@ -854,7 +854,7 @@ int TJackClient::Process(jack_nframes_t nframes, void* arg)
                     }
 
                 } else {
-                    for (int i = 0; i < TJackClient::fOutputChannels; i++) {
+					for (int i = 0; i < TJackClient::fOutputChannels; i++) {
                         float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
                         if (k == 1) {	// first proc : copy
 							memcpy(output, (float*)client->fOutputList->mBuffers[i].mData, nframes*sizeof(float));
@@ -1166,7 +1166,7 @@ bool TJackClient::RemoveIOProc(AudioDeviceIOProc proc)
 //------------------------------------------------------------------------
 void TJackClient::Start(AudioDeviceIOProc proc)
 {
-    if (proc == NULL) { // is supposed to start the hardware
+	if (proc == NULL) { // is supposed to start the hardware
         IncRunning();
         AudioHardwareDevicePropertyChanged(TJackClient::fPlugInRef,
                                            TJackClient::fDeviceID,
@@ -2293,14 +2293,14 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                     if (isInput) {
                         outData->mNumberStreams = TJackClient::fInputChannels;
                         for (int i = 0; i < TJackClient::fInputChannels; i++) {
-                            JARLog("DeviceGetProperty : kAudioDevicePropertyIOProcStreamUsage mStreamIsOn %ld \n", outData->mStreamIsOn[i]);
-                            outData->mStreamIsOn[i] = 1;
+							outData->mStreamIsOn[i] = 1;
+                            JARLog("DeviceGetProperty : kAudioDevicePropertyIOProcStreamUsage input mStreamIsOn %ld \n", outData->mStreamIsOn[i]);
                         }
                     } else {
                         outData->mNumberStreams = TJackClient::fOutputChannels;
                         for (int i = 0; i < TJackClient::fOutputChannels; i++) {
-                            JARLog("DeviceGetProperty : kAudioDevicePropertyIOProcStreamUsage mStreamIsOn %ld \n", outData->mStreamIsOn[i]);
-                            outData->mStreamIsOn[i] = 1;
+							outData->mStreamIsOn[i] = 1;
+                            JARLog("DeviceGetProperty : kAudioDevicePropertyIOProcStreamUsage output mStreamIsOn %ld \n", outData->mStreamIsOn[i]);
                         }
                     }
                     *ioPropertyDataSize = size;
@@ -2495,12 +2495,12 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
                         if (isInput) {
                             for (unsigned int i = 0; i < inData->mNumberStreams; i++) {
                                 iter->second.fInput[i] = inData->mStreamIsOn[i];
-                                JARLog("DeviceSetProperty : input kAudioDevicePropertyIOProcStreamUsage inData->mStreamIsOn %ld \n", inData->mStreamIsOn[i]);
+                                JARLog("DeviceSetProperty : input kAudioDevicePropertyIOProcStreamUsage input inData->mStreamIsOn %ld \n", inData->mStreamIsOn[i]);
                             }
                         } else {
                             for (unsigned int i = 0; i < inData->mNumberStreams; i++) {
                                 iter->second.fOutput[i] = inData->mStreamIsOn[i];
-                                JARLog("DeviceSetProperty : output kAudioDevicePropertyIOProcStreamUsage inData->mStreamIsOn %ld \n", inData->mStreamIsOn[i]);
+                                JARLog("DeviceSetProperty : output kAudioDevicePropertyIOProcStreamUsage output inData->mStreamIsOn %ld \n", inData->mStreamIsOn[i]);
                             }
                         }
                         err = kAudioHardwareNoError;
