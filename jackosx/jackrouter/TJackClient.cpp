@@ -260,6 +260,9 @@ History
 		
 16-02-05 : Version 0.72 : S Letz
 		Management of a set of "blacklisted" clients. Fix plug-in port naming bug.
+		
+22-02-05 : Version 0.73 : S Letz
+		Correct a crash with some applications (like Skype) that cause static variables (like fBlackList) not to be allocated properly : allocation with new.
 		 
 TODO :
     
@@ -311,7 +314,7 @@ AudioHardwarePlugInRef TJackClient::fPlugInRef = 0;
 bool TJackClient::fNotification = false;
 bool TJackClient::fFirstActivate = true;
 
-set<string> TJackClient::fBlackList;
+set<string>* TJackClient::fBlackList;
 
 #define kJackStreamFormat kAudioFormatFlagIsPacked|kLinearPCMFormatFlagIsFloat|kAudioFormatFlagIsBigEndian|kAudioFormatFlagIsNonInterleaved
 
@@ -3135,7 +3138,7 @@ bool TJackClient::ReadPref()
 		char line[500];
 		while (fgets(line, 500, blackListFile)) {
 			sscanf(line, "%s", client_name);
-			TJackClient::fBlackList.insert(client_name);
+			TJackClient::fBlackList->insert(client_name);
 			JARLog("Blacklisted client %s\n", client_name); 
 		}
 	}
@@ -3221,8 +3224,9 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
     char* id_name = bequite_getNameFromPid((int)getpid());
 	
 	// Set of always "blacklisted" clients
-	TJackClient::fBlackList.insert("jackd");
-	TJackClient::fBlackList.insert("jackdmp");
+	fBlackList = new set<string>();
+	TJackClient::fBlackList->insert("jackd");
+	TJackClient::fBlackList->insert("jackdmp");
   
     bool prefOK = ReadPref();
 
@@ -3237,7 +3241,7 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
 #endif
 
     // Reject "blacklisted" clients
-	if (TJackClient::fBlackList.find(id_name) != TJackClient::fBlackList.end()) {
+	if (TJackClient::fBlackList->find(id_name) != TJackClient::fBlackList->end()) {
         JARLog("Rejected client : %s\n", id_name);
         return noErr;
     }
@@ -3351,6 +3355,7 @@ OSStatus TJackClient::Teardown(AudioHardwarePlugInRef inSelf)
         JARLog("Teardown : no connection to HAL\n");
     }
 
+	delete fBlackList;
     return kAudioHardwareNoError;
 }
 

@@ -123,7 +123,7 @@ extern "C"
 
             static AudioDeviceID fDeviceID;
             static AudioStreamID fStreamIDList[128];
-			static set<string> fBlackList;
+			static set<string>* fBlackList;
 
             static AudioDeviceID fCoreAudioDriver;		// The CoreAudio driver currently loaded by Jack
 			static bool fFirstActivate;
