@@ -174,6 +174,8 @@ class TJackClient {
         
         void SaveConnections();
         bool RestoreConnections();
+		
+		static int fVerboseMode;
       
         // Plug-in API
   

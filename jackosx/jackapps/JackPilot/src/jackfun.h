@@ -41,7 +41,7 @@ int getSR(void);
 int getBUF(void);
 int getDRIVER(void);
 int getCHAN(void);
-int jackALStore(int inCH,int outCH,int AUTOC,int DEFinput,int DEFoutput,int DEFsystem);
+int jackALStore(int inCH,int outCH,int AUTOC,int DEFinput,int DEFoutput,int DEFsystem,int LOGSLevel);
 int jackALLoad(void);
 int getInCH(void);
 int getOutCH(void);

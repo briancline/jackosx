@@ -253,6 +253,7 @@ bool TJackClient::fConnected2HAL = false;
 bool TJackClient::fDefaultInput = true;
 bool TJackClient::fDefaultOutput = true;
 bool TJackClient::fDefaultSystem = true;
+int TJackClient::fVerboseMode = 0; // 0 == no logs
 list<pair<string,string> > TJackClient::fConnections; 
 
 string TJackClient::fDeviceName = "Jack Router";
@@ -276,36 +277,38 @@ struct stereoList
 };
 typedef struct stereoList stereoList;
 
-#define PRINTDEBUG 1
-
 //------------------------------------------------------------------------
 static void JARLog(char *fmt,...) 
 {
-#ifdef PRINTDEBUG
-    va_list ap;
-    va_start(ap, fmt);
-    fprintf(stderr,"JAR: ");
-    vfprintf(stderr, fmt, ap);
-    va_end(ap);
-#endif
+	switch(TJackClient::fVerboseMode) {
+		case 0:
+			break;
+		case 1:
+		{
+			va_list ap;
+			va_start(ap, fmt);
+			fprintf(stderr,"JAR: ");
+			vfprintf(stderr, fmt, ap);
+			va_end(ap);
+		}
+		// we should add other levels, such critical logs etc...
+	}
 }
 
 //------------------------------------------------------------------------
-static void Print4CharCode(char* msg, long c)	
-{ 
-#ifdef PRINTDEBUG 
+static void Print4CharCode(char* msg, long c)	{
+	if(TJackClient::fVerboseMode==0) return;
 	UInt32 __4CC_number = (c);		
 	char __4CC_string[5];		
 	memcpy(__4CC_string, &__4CC_number, 4);	
 	__4CC_string[4] = 0;			
 	JARLog("%s'%s'\n", (msg), __4CC_string);
-#endif
 }
 						
 //------------------------------------------------------------------------
 static void printError(OSStatus err) 
 {
-#ifdef PRINTDEBUG
+	if(TJackClient::fVerboseMode==0) return;
     switch (err) {
         case kAudioHardwareNoError:
             JARLog("error code : kAudioHardwareNoError\n");
@@ -340,7 +343,6 @@ static void printError(OSStatus err)
             JARLog("error code : unknown\n");
             break;
     }
-#endif
 }
 
 //------------------------------------------------------------------------
@@ -597,9 +599,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
                                 &inOutputTime, 
                                 context.fContext);
 		                         
-        #if PRINTDEBUG
             if (err != kAudioHardwareNoError) JARLog("Process error %ld\n", err);
-        #endif
         }
                   
     }else if (client->GetProcNum() > 1) { // Several IOProc : need mixing  
@@ -658,9 +658,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
                                     &inOutputTime, 
                                     context.fContext);
 		                                     
-            #if PRINTDEBUG
                 if (err != kAudioHardwareNoError) JARLog("Process error %ld\n", err);
-            #endif
 			
 				// Only mix buffers that are really needed
                 if (context.fStreamUsage) {
@@ -932,11 +930,11 @@ bool TJackClient::AutoConnect()
         }else{
             
             for (int i = 0; i<TJackClient::fInputChannels; i++) {
-                #if PRINTDEBUG
+               if(TJackClient::fVerboseMode!=0) {
                     if (ports[i]) JARLog("ports[i] %s\n",ports[i]);
                     if (fInputPortList[i] && jack_port_name(fInputPortList[i])) 
                         JARLog("jack_port_name(fInputPortList[i]) %s\n",jack_port_name(fInputPortList[i]));
-                #endif
+                }
                 
                 // Stop condition
                 if (ports[i] == 0) break;
@@ -957,11 +955,11 @@ bool TJackClient::AutoConnect()
          }else{
         
             for (int i = 0; i<TJackClient::fOutputChannels; i++) {
-                #if PRINTDEBUG
+                if(TJackClient::fVerboseMode!=0) {
                     if (ports[i]) JARLog("ports[i] %s\n",ports[i]);
                     if (fOutputPortList[i] && jack_port_name(fOutputPortList[i])) 
                         JARLog("jack_port_name(fOutputPortList[i]) %s\n",jack_port_name(fOutputPortList[i]));
-                #endif
+                }
                 
                 // Stop condition
                 if (ports[i] == 0) break;
@@ -2824,7 +2822,8 @@ bool TJackClient::ReadPref()
             FILE *prefFile;
             if ((prefFile = fopen(path, "rt"))) {
                 int nullo;
-                fscanf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",
+                fscanf(
+						prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",
                         &TJackClient::fInputChannels,
                         &nullo,
                         &TJackClient::fOutputChannels,
@@ -2835,7 +2834,10 @@ bool TJackClient::ReadPref()
                         &nullo,
                         &TJackClient::fDefaultOutput,
                         &nullo,
-                        &TJackClient::fDefaultSystem);                
+                        &TJackClient::fDefaultSystem,
+						&nullo,
+						&TJackClient::fVerboseMode
+					);                
                 fclose(prefFile);
 				JARLog("Reading Preferences fInputChannels: %ld fOutputChannels: %ld fAutoConnect: %ld fDefaultInput: %ld fDefaultOutput: %ld fDefaultSystem: %ld\n",
 					TJackClient::fInputChannels,TJackClient::fOutputChannels,TJackClient::fAutoConnect,TJackClient::fDefaultInput,TJackClient::fDefaultOutput,TJackClient::fDefaultSystem);

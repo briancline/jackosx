@@ -6,6 +6,8 @@
 #import "JPPlugin.h"
 #import "JackCon1.3.h"
 
+extern int s_debug;
+
 OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean isInput) 
 {
     OSStatus			err = noErr;
@@ -366,10 +368,10 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
     
     
     if([JALauto state]==NSOnState) {
-        jackALStore([JALin intValue],[JALout intValue],1,[defInput state]==NSOnState ? TRUE : FALSE,[defOutput state]==NSOnState ? TRUE : FALSE,[sysDefOut state]==NSOnState ? TRUE : FALSE);
+        jackALStore([JALin intValue],[JALout intValue],1,[defInput state]==NSOnState ? TRUE : FALSE,[defOutput state]==NSOnState ? TRUE : FALSE,[sysDefOut state]==NSOnState ? TRUE : FALSE,s_debug);
     }
     if([JALauto state]==NSOffState) {
-        jackALStore([JALin intValue],[JALout intValue],0,[defInput state]==NSOnState ? TRUE : FALSE,[defOutput state]==NSOnState ? TRUE : FALSE,[sysDefOut state]==NSOnState ? TRUE : FALSE);
+        jackALStore([JALin intValue],[JALout intValue],0,[defInput state]==NSOnState ? TRUE : FALSE,[defOutput state]==NSOnState ? TRUE : FALSE,[sysDefOut state]==NSOnState ? TRUE : FALSE,s_debug);
     }
     if(jackstat!=1) {
     
@@ -576,10 +578,10 @@ end:
 -(IBAction)jackALstore:(id)sender 
 {
     if([JALauto state]==NSOnState) {
-        if(jackALStore([JALin intValue],[JALout intValue],1,[defInput state]==NSOnState ? TRUE : FALSE,[defOutput state]==NSOnState ? TRUE : FALSE,[sysDefOut state]==NSOnState ? TRUE : FALSE)==22) [self error:@"Cannot save JAS preferences."];
+        if(jackALStore([JALin intValue],[JALout intValue],1,[defInput state]==NSOnState ? TRUE : FALSE,[defOutput state]==NSOnState ? TRUE : FALSE,[sysDefOut state]==NSOnState ? TRUE : FALSE,s_debug)==22) [self error:@"Cannot save JAS preferences."];
     }
     if([JALauto state]==NSOffState) {
-        if(jackALStore([JALin intValue],[JALout intValue],0,[defInput state]==NSOnState ? TRUE : FALSE,[defOutput state]==NSOnState ? TRUE : FALSE,[sysDefOut state]==NSOnState ? TRUE : FALSE)==22) [self error:@"Cannot save JAS preferences."];
+        if(jackALStore([JALin intValue],[JALout intValue],0,[defInput state]==NSOnState ? TRUE : FALSE,[defOutput state]==NSOnState ? TRUE : FALSE,[sysDefOut state]==NSOnState ? TRUE : FALSE,s_debug)==22) [self error:@"Cannot save JAS preferences."];
     }
     
     NSMutableArray *toFile;

@@ -19,6 +19,8 @@ char *homePath = NULL;
 int flag;
 char coreAudioDevice[256];
 int defInput,defOutput,defSystem;
+int verboseLevel = 0;
+extern int s_debug;
 
 int openJack(const char *stringa) 
 {
@@ -325,17 +327,17 @@ int getInterface(void) {
     return interface;
 }
 
-int jackALStore(int inCH, int outCH, int AUTOC, int DEFinput, int DEFoutput, int DEFsystem) 
-{
+int jackALStore(int inCH,int outCH,int AUTOC,int DEFinput,int DEFoutput,int DEFsystem,int LOGSLevel) {
     FILE *prefFile;
     char *path;
     path = (char*)alloca(256*sizeof(char));
     sprintf(path,"%s/Library/Preferences/JAS.jpil",homePath);
     if ((prefFile = fopen(path, "wt")) == NULL) {
         return 22;
-    } else {
-  		fprintf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",inCH, -1, outCH,-1,AUTOC,-1,DEFinput,-1,DEFoutput,-1,DEFsystem); 
- 		fclose(prefFile);
+    } else {	
+		verboseLevel = LOGSLevel;
+		fprintf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",inCH, -1, outCH,-1,AUTOC,-1,DEFinput,-1,DEFoutput,-1,DEFsystem,-1,verboseLevel); 
+		fclose(prefFile);
     }
     return 1;
 }
@@ -353,11 +355,13 @@ int jackALLoad(void)
         defInput = FALSE;
         defOutput = FALSE;
         defSystem = FALSE;
+		verboseLevel = 0;
         return 1;
     } else {
 		int nullo;
-		fscanf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",&inch,&nullo,&outch,&nullo,&autoc,&nullo,&defInput,&nullo,&defOutput,&nullo,&defSystem); 
- 		fclose(prefFile);
+		fscanf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",&inch,&nullo,&outch,&nullo,&autoc,&nullo,&defInput,&nullo,&defOutput,&nullo,&defSystem,&nullo,&verboseLevel); 
+    
+		fclose(prefFile);
     }
     return 1;
 }
@@ -460,14 +464,12 @@ void setCurrentAudioDevice(char* inName) {
     if(inName!=NULL) strcpy(&coreAudioDevice[0],inName);
 }
 
-extern int s_debug;
-
 void JPLog(char *fmt,...) {
-	if(s_debug) {
-		va_list ap;
-		va_start(ap, fmt);
-		fprintf(stderr,"JP: ");
-		vfprintf(stderr, fmt, ap);
-		va_end(ap);
-	}
+if(verboseLevel!=0) {
+    va_list ap;
+    va_start(ap, fmt);
+    fprintf(stderr,"JP: ");
+    vfprintf(stderr, fmt, ap);
+    va_end(ap);
+}
 }

@@ -8,12 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 
-int s_debug = FALSE;
+int s_debug = 0;
 
 int main(int argc, const char *argv[])
 {
 	if(argv[1]) {
-		if(argv[1][0]=='d') s_debug = TRUE;
+		if(argv[1][0]=='d') s_debug = 1;
 	}
     return NSApplicationMain(argc, argv);
 }
