@@ -1011,36 +1011,34 @@ end:
     
     AudioDeviceID vDevice = selDevID; 
     
-    UInt32 Channels = 0;
-    
-    err = GetTotalChannels(vDevice,&Channels,false);
+    UInt32 outChannels = 0;
+    err = GetTotalChannels(vDevice,&outChannels,false);
     if(err!=noErr) { NSLog(@"err in GetTotalChannels"); }
     
-    int vChannels = (int)Channels;
+    int vOutChannels = (int)outChannels;
 	
 	[channelsTest addItemWithTitle:[[NSNumber numberWithInt:0] stringValue]]; 
 	[channelsTest selectItemAtIndex:0];
 	
-    for(i=0;i<vChannels;i++) {
+    for(i=0;i<vOutChannels;i++) {
         [channelsTest addItemWithTitle:[[NSNumber numberWithInt:i+1] stringValue]];
         [channelsTest selectItemAtIndex:i+1];
     }
-    JPLog("got output channels ok, %d channels\n",vChannels);
+    JPLog("got output channels ok, %d channels\n",vOutChannels);
 	
-	if(vChannels<=0) {
-		err = GetTotalChannels(vDevice,&Channels,true);
+	if(vOutChannels<=0) {
+		err = GetTotalChannels(vDevice,&outChannels,true);
 		if(err!=noErr) { NSLog(@"err in GetTotalChannels"); }
 		
-		vChannels = (int)Channels;
+		vOutChannels = (int)outChannels;
         
-		for(i=0;i<vChannels;i++) {
+		for(i=0;i<vOutChannels;i++) {
 			[channelsTest addItemWithTitle:[[NSNumber numberWithInt:i+1] stringValue]];
 			[channelsTest selectItemAtIndex:i+1];
 		}
 		
-		JPLog("got input channels ok but output channels are 0, %d input channels\n",vChannels);
+		JPLog("got input channels ok but output channels are 0, %d input channels\n",vOutChannels);
 		JPLog("JackPilot will use input channels value\n");
-		
 	}
 	
 	UInt32 inChannels = 0;
