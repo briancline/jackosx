@@ -1,0 +1,10 @@
+You must have a side folder named jack with the complete source of the jack-audio-connections-kit, to compile this.
+so for example:
+/Users/xxx/Desktop/jackcoreaudio-.../
+/Users/xxx/Desktop/jack/
+
+!!!VERY IMPORTANT!!!:
+You must use jack 0.82 to compile and use this.
+
+example:
+/usr/local/bin/./jackd -R -d coreaudio -r 44100 -p 512 -ci 2 -co 2 -n "Built-in Audio"
