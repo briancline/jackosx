@@ -144,6 +144,7 @@ class TJackClient {
        
         bool Activate();
         bool Desactivate();
+		bool AutoConnect();
         
         void Start(AudioDeviceIOProc proc);
         void Stop(AudioDeviceIOProc proc);
@@ -172,7 +173,7 @@ class TJackClient {
         static bool CheckRunning(AudioHardwarePlugInRef inSelf);
         
         void SaveConnections();
-        void RestoreConnections();
+        bool RestoreConnections();
       
         // Plug-in API
   

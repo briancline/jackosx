@@ -219,6 +219,9 @@ History
 		
 15-10-04 : Version 0.59 : S Letz
 		Redirect kAudioDevicePropertySafetyOffset and kAudioDevicePropertyLatency properties on the real driver.
+
+26-10-04 : Version 0.60 : S Letz
+		Previous connection state takes precedence over autoconnections state.
 		 
 TODO :
     
@@ -376,10 +379,11 @@ void TJackClient::SaveConnections()
 }
 
 //------------------------------------------------------------------------
-void TJackClient::RestoreConnections()
+bool TJackClient::RestoreConnections()
 {
 	JARLog("--------------------------------------------------------\n");
     JARLog("RestoreConnections\n");
+	bool res = false;
 
     list<pair<string,string> >::const_iterator it;
     
@@ -387,9 +391,11 @@ void TJackClient::RestoreConnections()
         pair<string,string> connection = *it;
 		JARLog("connections : %s %s\n", connection.first.c_str(),connection.second.c_str());
         jack_connect(fClient,connection.first.c_str(),connection.second.c_str());
+		res = true;
     }
     
     fConnections.clear();
+	return res;
 }
 
 //------------------------------------------------------------------------
@@ -778,6 +784,7 @@ void TJackClient::DisposePorts()
 bool TJackClient::Open()
 {
     char* id_name = bequite_getNameFromPid((int)getpid()); 
+	JARLog("JackClient::Open %s\n", id_name);
     
     if ((fClient = jack_client_new(id_name)) == NULL) {
 		JARLog("jack server not running?\n");
@@ -899,14 +906,23 @@ void TJackClient::Stop(AudioDeviceIOProc proc)
 //------------------------------------------------------------------------
 bool TJackClient::Activate()
 {
-    const char **ports;
-    
-    if (jack_activate(fClient)) {
+	if (jack_activate(fClient)) {
 		JARLog("cannot activate client");
-		goto error;
-    }
-    
-    if (TJackClient::fAutoConnect) {
+		return false;
+    }else{
+		// Previous connection state takes precedence over autoconnections state
+		if (!RestoreConnections()) 
+			AutoConnect();
+		return true;
+	}
+}
+
+//------------------------------------------------------------------------
+bool TJackClient::AutoConnect()
+{
+    const char **ports;
+  
+	if (TJackClient::fAutoConnect) {
     
         if ((ports = jack_get_ports(fClient, NULL, NULL, JackPortIsPhysical|JackPortIsOutput)) == NULL) {
 			JARLog("cannot find any physical capture ports\n");
@@ -956,13 +972,12 @@ bool TJackClient::Activate()
             }
             free (ports);
         }
- 	}
+	}
 	
-	RestoreConnections();
-    return true;
+	return true;
     
  error:
-    JARLog("Jack_Activate error\n");
+    JARLog("AutoConnect error\n");
     return false;
 }
 
