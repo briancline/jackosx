@@ -1050,9 +1050,7 @@ OSStatus TJackClient::DeviceRead(AudioHardwarePlugInRef inSelf, AudioDeviceID in
 OSStatus TJackClient::DeviceGetCurrentTime(AudioHardwarePlugInRef inSelf,AudioDeviceID inDevice, AudioTimeStamp* outTime)
 {
     if (TJackClient::fJackClient){
-        JARLog("DeviceGetCurrentTime : %ld\n",TJackClient::fJackClient->GetTime());
-        
-        outTime->mSampleTime = TJackClient::fJackClient->GetTime();
+		outTime->mSampleTime = TJackClient::fJackClient->GetTime();
         outTime->mHostTime = AudioGetCurrentHostTime();
         outTime->mRateScalar = 1.0;
         outTime->mWordClockTime = 0;
@@ -1068,6 +1066,7 @@ OSStatus TJackClient::DeviceTranslateTime(AudioHardwarePlugInRef inSelf,
                                         const AudioTimeStamp* inTime,
                                         AudioTimeStamp* outTime)
 {
+	JARLog("--------------------------------------------------------\n");
 	JARLog("DeviceTranslateTime : not yet implemented\n");
 	return kAudioHardwareUnsupportedOperationError;
 }
