@@ -80,7 +80,6 @@
 		};
 		089C1671FE841209C02AAC07 = {
 			children = (
-				4B2BD92105B08A1400E4FA05,
 				B2CF85200505FCF600B94C9A,
 				0AA1909FFE8422F4C02AAC07,
 				6BCFE50A04CFE4B100A8650F,
@@ -108,6 +107,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-framework Jack";
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = JackRouter;
 				SECTORDER_FLAGS = "";
@@ -130,7 +130,7 @@
 	<key>CFBundleExecutable</key>
 	<string>JackRouter</string>
 	<key>CFBundleGetInfoString</key>
-	<string>JackRouter version 0.5.1, @2004 Grame</string>
+	<string>JackRouter version 0.5.2, @2004 Grame</string>
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
@@ -146,7 +146,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>0.5.1</string>
+	<string>0.5.2</string>
 	<key>CFPlugInDynamicRegisterFunction</key>
 	<string></string>
 	<key>CFPlugInDynamicRegistration</key>
@@ -215,7 +215,6 @@
 				6BDF9F1A04DE970300000064,
 				6BDF9F1B04DE971700000064,
 				B2CF85210505FCF600B94C9A,
-				4B2BD92205B08A1400E4FA05,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -320,20 +319,6 @@
 //4B2
 //4B3
 //4B4
-		4B2BD92105B08A1400E4FA05 = {
-			isa = PBXFileReference;
-			lastKnownFileType = wrapper.framework;
-			name = Jack.framework;
-			path = /Library/Frameworks/Jack.framework;
-			refType = 0;
-			sourceTree = "<absolute>";
-		};
-		4B2BD92205B08A1400E4FA05 = {
-			fileRef = 4B2BD92105B08A1400E4FA05;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		4B61EDA405BFF2FC0093DF43 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;

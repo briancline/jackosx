@@ -193,6 +193,9 @@ History
         This solve the iMovie 3.03 crash. Improve debug code using Johnny's code.  Reject "jackd" as a possible client.
 		Fixed ReadPref bug introduced when improving Debug code. Add kAudioHardwarePropertyBootChimeVolumeScalar in DeviceGetPropertyInfo.
 		Correct bug in CheckServer.
+		
+12-07-04 : Version 0.52 : S Letz
+		Check TJackClient::fJackClient in SetProperty.
         
 TODO :
     
@@ -411,7 +414,7 @@ void TJackClient::ClearJackClient()
 {
     JARLog("ClearJackClient\n");
 
-    if(TJackClient::fJackClient){
+    if (TJackClient::fJackClient){
         TJackClient::fJackClient->ClearIOProc();
         delete TJackClient::fJackClient;
         TJackClient::fJackClient = NULL;
@@ -806,7 +809,7 @@ void TJackClient::Close()
 //------------------------------------------------------------------------
 bool TJackClient::AddIOProc(AudioDeviceIOProc proc, void* context) 
 {
-    if(fAudioIOProcList.find(proc) == fAudioIOProcList.end()) {
+    if (fAudioIOProcList.find(proc) == fAudioIOProcList.end()) {
         fAudioIOProcList.insert(make_pair(proc,TProcContext(context)));
         JARLog("AddIOProc fAudioIOProcList.size %ld \n",fAudioIOProcList.size());
         return true;
@@ -819,7 +822,7 @@ bool TJackClient::AddIOProc(AudioDeviceIOProc proc, void* context)
 //------------------------------------------------------------------------
 bool TJackClient::RemoveIOProc(AudioDeviceIOProc proc)
 {
-    if(fAudioIOProcList.find(proc) != fAudioIOProcList.end()) {
+    if (fAudioIOProcList.find(proc) != fAudioIOProcList.end()) {
         fAudioIOProcList.erase(proc);
         JARLog("fAudioIOProcList size %ld \n",fAudioIOProcList.size());
         return true;
@@ -840,7 +843,7 @@ void TJackClient::Start(AudioDeviceIOProc proc)
 															0, 
 															0, 
 															kAudioDevicePropertyDeviceIsRunning);
-	}else {
+	}else{
 		map<AudioDeviceIOProc,TProcContext>::iterator iter = fAudioIOProcList.find(proc);
 		if (iter != fAudioIOProcList.end()) {
 			if (!iter->second.fStatus) { // check multiple start of the proc
@@ -2116,11 +2119,15 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
 		Print4CharCode ("DeviceSetProperty ",inPropertyID);
         OSStatus err = kAudioHardwareNoError;
         
-        if (inDevice != TJackClient::fDeviceID)
-        {
+        if (inDevice != TJackClient::fDeviceID){
             JARLog ("DeviceSetProperty called for invalid device ID\n");
             return kAudioHardwareBadDeviceError;
         }
+		
+		if (TJackClient::fJackClient == NULL) {
+			JARLog ("DeviceSetProperty called when then Jack server is not running \n");
+			return kAudioHardwareBadDeviceError;
+		}
 
         switch (inPropertyID)
         {
@@ -2208,7 +2215,7 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
 					JARLog("DeviceSetProperty : kAudioDevicePropertyIOProcStreamUsage size %ld\n",inPropertyDataSize);
 					JARLog("DeviceSetProperty : kAudioDevicePropertyIOProcStreamUsage proc %x\n",(AudioDeviceIOProc)inData->mIOProc);
 					JARLog("DeviceSetProperty : kAudioDevicePropertyIOProcStreamUsage mNumberStreams %ld\n",inData->mNumberStreams);
-			
+				
 					map<AudioDeviceIOProc,TProcContext>::iterator iter = TJackClient::fJackClient->fAudioIOProcList.find((AudioDeviceIOProc)inData->mIOProc);
 					
 					if (iter == TJackClient::fJackClient->fAudioIOProcList.end()) {
