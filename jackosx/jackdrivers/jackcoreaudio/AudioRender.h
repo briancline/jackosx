@@ -48,7 +48,8 @@ class AudioRender {
         static int gOutputChannels;
         static bool isProcessing;
         static const AudioTimeStamp *gTime;
-		int *isInterleaved;
+		int *isInterleaved,*numberOfStreams,*channelsPerStream,*out_numberOfStreams,*out_channelsPerStream;
+		int n_streams,n_out_streams;
     private:
         static OSStatus process(AudioDeviceID inDevice,const AudioTimeStamp* inNow,const AudioBufferList* inInputData,const AudioTimeStamp* 
 					inInputTime,AudioBufferList* outOutputData,const AudioTimeStamp* inOutputTime,void* inClientData);

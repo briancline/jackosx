@@ -96,10 +96,8 @@ bool AudioRender::ConfigureAudioProc(float sampleRate,long bufferSize,int channe
     AudioDeviceID devices[manyDevices];
     err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices,&size,&devices);
     if(err!=noErr) return false;
-    
-    size = sizeof(AudioDeviceID);
-    err = AudioHardwareGetProperty(kAudioHardwarePropertyDefaultInputDevice,&size,&vDevice);
-    if(err!=noErr) return false;
+	
+	bool found = false;
     
     for(int i=0;i<manyDevices;i++) {
         size = sizeof(char)*256;
@@ -110,8 +108,11 @@ bool AudioRender::ConfigureAudioProc(float sampleRate,long bufferSize,int channe
 		if(strncmp(device,name,strlen(device))==0) { // steph : name seems to be limited to 32 character, thus compare the common part only 
 			JCALog("Found DEVICE: %s %ld\n",name,device);
 			vDevice = devices[i];
+			found = true;
 		}
     }
+	
+	if(!found) { JCALog("Cannot find device \"%s\".\n",device); return false; }
     
     char deviceName[256];
     err = AudioDeviceGetProperty(vDevice,0,false,kAudioDevicePropertyDeviceName,&size,&deviceName);
@@ -129,6 +130,8 @@ bool AudioRender::ConfigureAudioProc(float sampleRate,long bufferSize,int channe
     
     
     vChannels = (int)SR.mChannelsPerFrame*(size/sizeof(AudioStreamID));
+	
+	n_out_streams = size/sizeof(AudioStreamID);
 	
 	if(channels>vChannels) { JCALog("cannot find requested output channels\n"); return false; }
 	
@@ -149,6 +152,8 @@ bool AudioRender::ConfigureAudioProc(float sampleRate,long bufferSize,int channe
     
     
     vInChannels = (int)inSR.mChannelsPerFrame*(size/sizeof(AudioStreamID));
+	
+	n_streams = size/sizeof(AudioStreamID);
 
 endInChan:
 	
@@ -254,9 +259,11 @@ OSStatus AudioRender::process(AudioDeviceID inDevice,const AudioTimeStamp* inNow
 		}
 	} else {
 		for(unsigned int b=0;b<inInputData->mNumberBuffers;b++) {
+			classe->channelsPerStream[b] = (int)inInputData->mBuffers[b].mNumberChannels;
 			classe->inBuffers[b] = (float*)inInputData->mBuffers[b].mData; // but jack will read only the inBuffers[0], anyway that should not be a problem.
 		}
 		for(unsigned int b=0;b<outOutputData->mNumberBuffers;b++) {
+			classe->out_channelsPerStream[b] = (int)outOutputData->mBuffers[b].mNumberChannels;
 			classe->outBuffers[b] = (float*)outOutputData->mBuffers[b].mData; // but jack will read only the outBuffers[0], anyway that should not be a problem.
 		}
 	}

@@ -26,6 +26,9 @@
 									 but no cpu load is displayed.
 	Feb 03, 2004: Johnny Petrantoni: some little fix.
 	Feb 03, 2004: Stephane Letz: some fix in AudioRender.cpp code.
+	Feb 03, 2004: Johnny Petrantoni: removed the default device stuff (useless, in jackosx, because JackPilot manages this behavior), 
+									 the device must be specified. and all parameter must be correct.
+	Feb 04, 2004: Johnny Petrantoni: now the driver supports interfaces with multiple interleaved streams (such as the MOTU 828).
 									 
 	TODO:
 	- fix cpu load behavior.
@@ -166,6 +169,8 @@ coreaudio_driver_read (coreaudio_driver_t *driver, jack_nframes_t nframes)
         JSList *node;
 		int i;
 		
+		int b = 0;
+		
         for (chn = 0, node = driver->capture_ports; node; node = jack_slist_next (node), chn++) {
                 
                 port = (jack_port_t *)node->data;
@@ -177,10 +182,17 @@ coreaudio_driver_read (coreaudio_driver_t *driver, jack_nframes_t nframes)
 						memcpy(buf,in,sizeof(float)*nframes);
 					}
 				} else {
-					if (jack_port_connected (port) && (driver->incoreaudio[0] != NULL)) {
-						int channels = driver->capture_nchannels;
+					if (jack_port_connected (port) && (driver->incoreaudio[b] != NULL)) {
+						int channels = driver->channelsPerStream[b];
+						if(channels<=chn) {
+							b++;
+							if(driver->numberOfStreams>1 && b<driver->numberOfStreams) {
+								channels = driver->channelsPerStream[b];
+								chn = 0;
+							} else return 0;
+						}
 						if(channels>0) {
-							float *in = driver->incoreaudio[0];
+							float *in = driver->incoreaudio[b];
 							buf = jack_port_get_buffer (port, nframes); 
 							for (i = 0; i< nframes; i++) buf[i] = in[channels*i+chn];
 						}
@@ -202,6 +214,8 @@ coreaudio_driver_write (coreaudio_driver_t *driver, jack_nframes_t nframes)
         jack_port_t *port;
         JSList *node;
 		int i;
+		
+		int b = 0;
 		                
         for (chn = 0, node = driver->playback_ports; node; node = jack_slist_next (node), chn++) {
                 
@@ -214,10 +228,17 @@ coreaudio_driver_write (coreaudio_driver_t *driver, jack_nframes_t nframes)
 						memcpy(out,buf,sizeof(float)*nframes);
 					}
 				} else {
-					if (jack_port_connected (port) && (driver->outcoreaudio[0] != NULL)) {
-                        int channels = driver->playback_nchannels;
+					if (jack_port_connected (port) && (driver->outcoreaudio[b] != NULL)) {
+						int channels = driver->out_channelsPerStream[b];
+						if(channels<=chn) {
+							b++;
+							if(driver->out_numberOfStreams>1 && b<driver->out_numberOfStreams) {
+								channels = driver->out_channelsPerStream[b];
+								chn = 0;
+							} else return 0;
+						}
 						if(channels>0) {
-							float *out = driver->outcoreaudio[0];
+							float *out = driver->outcoreaudio[b];
 							buf = jack_port_get_buffer (port, nframes);
 							for (i = 0; i< nframes; i++) out[channels*i+chn] = buf[i];
 						}
@@ -321,6 +342,17 @@ coreaudio_driver_new (char *name,
 	setHostData(driver->stream,driver);
 	setCycleFun(driver->stream,coreaudio_runCycle);
 	setParameter(driver->stream,'inte',&driver->isInterleaved);
+	setParameter(driver->stream,'nstr',&driver->numberOfStreams);
+	setParameter(driver->stream,'nstO',&driver->out_numberOfStreams);
+	
+	JCALog("There are %d input streams.\n",driver->numberOfStreams);
+	JCALog("There are %d output streams.\n",driver->out_numberOfStreams);
+	
+	driver->channelsPerStream = (int*)malloc(sizeof(int)*driver->numberOfStreams);
+	driver->out_channelsPerStream = (int*)malloc(sizeof(int)*driver->out_numberOfStreams);
+	
+	setParameter(driver->stream,'cstr',driver->channelsPerStream);
+	setParameter(driver->stream,'cstO',driver->out_channelsPerStream);
 	
 	driver->incoreaudio = getPandaAudioInputs(driver->stream);
 	driver->outcoreaudio = getPandaAudioOutputs(driver->stream);
@@ -336,7 +368,7 @@ coreaudio_driver_new (char *name,
 
 error:
 
-	fprintf(stderr, "Cannot open the coreaudio stream\n"); 
+	JCALog("Cannot open the coreaudio stream\n"); 
 	free(driver);
 	return NULL;
 }
