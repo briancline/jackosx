@@ -277,6 +277,29 @@
 //4A2
 //4A3
 //4A4
+//4B0
+//4B1
+//4B2
+//4B3
+//4B4
+		4BA6469B072FE87800590705 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp -R Localization/French.lproj build/JackPilot.app/Contents/Resources/";
+		};
+//4B0
+//4B1
+//4B2
+//4B3
+//4B4
 //B20
 //B21
 //B22
@@ -687,6 +710,7 @@
 				B2FF9D7205EFEE4A00F1AD06,
 				B2FF9DA305EFEFB900F1AD06,
 				B20C52C706F496020065B021,
+				4BA6469B072FE87800590705,
 			);
 			buildSettings = {
 				OPTIMIZATION_CFLAGS = "-O3";
