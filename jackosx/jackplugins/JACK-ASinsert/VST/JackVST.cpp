@@ -157,21 +157,21 @@ void JackVST::getParameterLabel(long index, char *label)
 //------------------------------------------------------------------------
 bool JackVST::getEffectName (char* name)
 {
-	strcpy (name, "JACK-insert");
+	strcpy (name, "JACK-ASinsert");
 	return true;
 }
 
 //------------------------------------------------------------------------
 bool JackVST::getProductString (char* text)
 {
-	strcpy (text, "JACK-insert");
+	strcpy (text, "JACK-ASinsert");
 	return true;
 }
 
 //------------------------------------------------------------------------
 bool JackVST::getVendorString (char* text)
 {
-	strcpy (text, "(c) 2003, Johnny Petrantoni.");
+	strcpy (text, "(c) 2004, Johnny Petrantoni.");
 	return true;
 }
 

@@ -623,11 +623,11 @@
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
-	<string>com.elementicaotici.JACK-insertV</string>
+	<string>com.elementicaotici.JACK-ASinsert</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>JACK-insert</string>
+	<string>JACK-ASinsert</string>
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
