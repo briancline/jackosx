@@ -196,8 +196,6 @@ endInChan:
         UInt32 theSize = sizeof(AudioStreamBasicDescription);
         SR.mSampleRate = (Float64)sampleRate;
         err = AudioDeviceSetProperty(vDevice,NULL,0,false,kAudioDevicePropertyStreamFormat,theSize,&SR);
-		//JCALog("sleeping for 3 seconds to make sure that sample rate changes.\n"); it seems that the problems is on the jack server shm.
-		//sleep(3);
         if(err!=noErr) { JCALog("Cannot set a new sample rate.\n"); return false; }
         else {
             size = sizeof(AudioStreamBasicDescription);
