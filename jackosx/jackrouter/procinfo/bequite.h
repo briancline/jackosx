@@ -24,11 +24,11 @@
 extern "C" {
 #endif
 
-int quantiProc(void) ;
-char* ottieniNome(int n) ;
-int ottieniPid(int n);
-int ottieniFlag(int n);
-char * ottieniNomeFromPid(int pid);
+int manyProcesses(void) ;
+char* bequite_get_name(int n) ;
+int bequite_get_pid(int n);
+int bequite_get_flag(int n);
+char * bequite_getNameFromPid(int pid);
 
 #ifdef __cplusplus
 }

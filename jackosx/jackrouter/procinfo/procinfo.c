@@ -21,7 +21,7 @@
 #include "procinfo.h"
 
 
-static kinfo_proc* GetBSDProcessList(size_t *procCount, kinfo_proc infop)
+kinfo_proc* GetBSDProcessList(size_t *procCount, kinfo_proc infop)
 // Returns a list of all BSD processes on the system. This routine
 // allocates the list and puts it in *procList and a count of the
 // number of entries in *procCount. You are responsible for freeing
@@ -87,7 +87,6 @@ static kinfo_proc* GetBSDProcessList(size_t *procCount, kinfo_proc infop)
 }
 
 kinfo_proc *test(int *quanti) {
-    kinfo_proc a;
     size_t b;
     kinfo_proc test;
     kinfo_proc *uu;

@@ -28,7 +28,7 @@ typedef struct processo {
     int pid;
 } InfoProc;
 
-int quantiProc() {
+int manyProcesses() {
     kinfo_proc *pInfo;
     int quanti;
     pInfo = test(&quanti);
@@ -45,17 +45,17 @@ InfoProc ottieniInfo(int n) {
     return result;
 }
 
-char* ottieniNome(int n) {
+char* bequite_get_name(int n) {
     kinfo_proc *pInfo;
     int quanti;
     pInfo = test(&quanti);
     char *result;
     result = pInfo[n].kp_proc.p_comm;
-    if(ottieniFlag(n)==1) strcat(result," #stopped#");
+    if(bequite_get_flag(n)==1) strcat(result," #stopped#");
     return result;
 }
 
-int ottieniPid(int n) {
+int bequite_get_pid(int n) {
     kinfo_proc *pInfo;
     int quanti;
     pInfo = test(&quanti);
@@ -63,14 +63,14 @@ int ottieniPid(int n) {
 }
 
 void stop(int n) {
-    kill(ottieniPid(n),SIGSTOP);
+    kill(bequite_get_pid(n),SIGSTOP);
 }
 
 void reStart(int n) {
-    kill(ottieniPid(n),SIGCONT);
+    kill(bequite_get_pid(n),SIGCONT);
 }
 
-int ottieniFlag(int n) {
+int bequite_get_flag(int n) {
     kinfo_proc *pInfo;
     int quanti;
     pInfo = test(&quanti);
@@ -82,12 +82,12 @@ int ottieniFlag(int n) {
     return result;
 }
 
-char * ottieniNomeFromPid(int pid) {
-    int quanti = quantiProc();
+char * bequite_getNameFromPid(int pid) {
+    int quanti = manyProcesses();
     int i;
     for (i = 0;i<quanti;i++) {
-        if(pid==ottieniPid(i)) {
-            if(strcmp("LaunchCFMApp",ottieniNome(i))==0) { //Look for the name using CARBON (for CFM applications)
+        if(pid==bequite_get_pid(i)) {
+            if(strcmp("LaunchCFMApp",bequite_get_name(i))==0) { //Look for the name using CARBON (for CFM applications)
                 OSErr err;
                 ProcessSerialNumber process;
                 CFStringRef nomeStr;
@@ -95,15 +95,15 @@ char * ottieniNomeFromPid(int pid) {
                 if(err==noErr) {
                     err = CopyProcessName(&process,&nomeStr);
                 }
-                if(err!=noErr) return ottieniNome(i);
+                if(err!=noErr) return bequite_get_name(i);
                 else {
                     char *resu;
-                    resu = CFStringGetCStringPtr(nomeStr,NULL);
+                    resu = (char*) CFStringGetCStringPtr(nomeStr,NULL);
                     return resu;
                 }
 
             }
-            return ottieniNome(i);
+            return bequite_get_name(i);
         }
     }
     return NULL;

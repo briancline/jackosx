@@ -28,6 +28,6 @@
 
 typedef struct kinfo_proc kinfo_proc;
 
-static kinfo_proc* GetBSDProcessList( size_t *procCount,kinfo_proc infop);
+kinfo_proc* GetBSDProcessList( size_t *procCount,kinfo_proc infop);
 
 kinfo_proc* test(int *quanti);
