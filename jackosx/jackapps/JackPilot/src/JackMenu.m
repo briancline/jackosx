@@ -839,7 +839,7 @@ end:
     stringa = (char*)malloc(sizeof(char)*480);
 	memset(stringa,0x0,sizeof(char)*480);
     
-    strcpy(stringa,"/usr/local/bin/./jackd -v -R -d ");
+    strcpy(stringa,"/usr/local/bin/./jackd -R -d ");
     strcat(stringa,driver);
 	strcat(stringa," -r ");
     strcat(stringa,samplerate);
@@ -849,7 +849,7 @@ end:
     strcat(stringa,channels);
 	strcat(stringa," -i ");
     strcat(stringa,in_channels);
-	if(!useCoreAudio) {
+	if (!useCoreAudio) {
 		strcat(stringa," -n ");
 		strcat(stringa,"\"");
 		strcat(stringa,interface);

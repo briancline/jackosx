@@ -24,13 +24,13 @@ int openJack(const char *stringa)
 {
     JPLog("%s\n",stringa);
     int a;
-    if(firsttime==0) {
+    if (firsttime == 0) {
         int test;
         test = checkJack();
         if(test!=0) { return 1; }
     }
     a = my_system(stringa);
-    if(a==1) { 
+    if (a == 1) { 
         nConnect = 0;
         a = checkJack();
     }
@@ -39,17 +39,11 @@ int openJack(const char *stringa)
 
 int closeJack(void) 
 {
-	if(client!=NULL) jack_client_close(client);
+	if (client != NULL) jack_client_close(client);
 	
 #if 1
-    int pid;
-	unsigned short count = 0;
-	do {
-		if(count==10) return 0;
-		pid = checkJack();
-		if(pid!=0) { kill(pid,SIGUSR2); } //SIGUSR2 is the one that should work (look at jackd.c or engine.c) but doesn't work...
-		count++;
-	} while(pid!=0);
+    int pid = checkJack();
+	if (pid!=0) { kill(pid,SIGQUIT); } //SIGUSR2 is the one that should work (look at jackd.c or engine.c) but doesn't work...
 #else
 	my_system2("killall jackd"); //this works but to re-start jackd you must close and re open JP (look console logs)
 	my_system2("killall jackd");
@@ -84,7 +78,7 @@ my_system (const char *command)
 int 
 my_system2 (const char *command)
 {
-  firsttime=1;
+  firsttime = 1;
   int status;
   pid_t pid;
 
@@ -124,8 +118,8 @@ int openJackClient(void)
 
 int ottieniPorte(void) 
 {
-    if(client!=NULL) {
-        if(jplist!=NULL) {
+    if (client!=NULL) {
+        if (jplist!=NULL) {
             free(jplist);
             jplist = NULL;
         }
@@ -137,7 +131,7 @@ int ottieniPorte(void)
 int portaPerNumero(int n, char *nomeOut, unsigned long *tipo) 
 {
     ottieniPorte();
-    if(jplist[n]!=NULL) {
+    if (jplist[n] != NULL) {
         strcpy(nomeOut,jplist[n]);
         *tipo = getTipoByName(jplist[n]);        
         return 1;
@@ -147,9 +141,9 @@ int portaPerNumero(int n, char *nomeOut, unsigned long *tipo)
 
 int numeroPorte(void) 
 {
-    if(jplist!=NULL) { 
+    if (jplist != NULL) { 
         int i = 0;
-        while(*jplist!=NULL) {
+        while(*jplist != NULL) {
             *jplist++;
             i++;
         }
@@ -168,11 +162,11 @@ int getConnections(void)
     ottieniPorte();
     int a = numeroPorte();
     int i;
-    for (i=0;i<a;i++) {
+    for (i=0; i<a ;i++) {
         const char **aa;
         jack_port_t *jp;
         jp = jack_port_by_name(client,jplist[i]);
-        if(jp!=NULL) if((aa = jack_port_get_all_connections(client,jp))!=NULL) {
+        if (jp!=NULL) if((aa = jack_port_get_all_connections(client,jp))!=NULL) {
             int g = 0;
             while(aa[g]!=NULL) {
                 g++;
@@ -191,7 +185,7 @@ int numeroConn(void)
         i++;
     }
     int a;
-    for(a=0; a< i;a++) {
+    for(a=0; a<i ;a++) {
         *connec--;
     }
     return i;
@@ -209,12 +203,12 @@ int getStatus(void)
 
 int connectPorts(char* da, char* a) 
 {
-    return jack_connect (client,da,a);
+    return jack_connect(client,da,a);
 }
 
 int disconnectPorts(char* da, char* a) 
 {
-    return jack_disconnect (client,da,a);
+    return jack_disconnect(client,da,a);
 }
 
 int connessionePerNumero(int n, char* nomeOut) 
@@ -225,13 +219,13 @@ int connessionePerNumero(int n, char* nomeOut)
     unsigned long tipo;
     portaPerNumero(n,&porta[0],&tipo);
     jp = jack_port_by_name(client,&porta[0]);
-    if(jp==NULL) return 0;
+    if (jp==NULL) return 0;
     connec = jack_port_get_all_connections(client,jp);
-    if(connec!=NULL) {
+    if (connec!=NULL) {
         int nu = numeroConn();
         int i;
-        for (i=0;i<nu;i++){
-            if(connec[i] && nomeOut) strcat(nomeOut,connec[i]);
+        for (i=0; i<nu ;i++){
+            if (connec[i] && nomeOut) strcat(nomeOut,connec[i]);
             return 1;
         }
     }
@@ -246,14 +240,14 @@ int connessionePerNumero2(int n, char** nomeOut)
     unsigned long tipo;
     portaPerNumero(n,&porta[0],&tipo);
     jp = jack_port_by_name(client,&porta[0]);
-    if(jp==NULL) return 0;
+    if (jp == NULL) return 0;
     connec = jack_port_get_all_connections(client,jp);
-	if(connec!=NULL) {
+	if (connec!=NULL) {
 		int nu = numeroConn();
 		int i;
-		if(nomeOut!=NULL) {
-			for (i=0;i<nu;i++){
-				if(connec[i]!=NULL && nomeOut[i]!=NULL) strcpy(nomeOut[i],connec[i]);
+		if (nomeOut!=NULL) {
+			for (i=0; i<nu; i++){
+				if (connec[i]!=NULL && nomeOut[i]!=NULL) strcpy(nomeOut[i],connec[i]);
 			}
 		}
 		many = nu;
@@ -274,7 +268,7 @@ unsigned long getTipoByName(const char* name)
 {
     jack_port_t* jp;
     jp = jack_port_by_name(client,name);
-    if(jp!=NULL) return jack_port_flags(jp);
+    if (jp!=NULL) return jack_port_flags(jp);
     return 0;
 }
 
