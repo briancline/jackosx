@@ -1,6 +1,6 @@
 /*
  *  AudioRender.h
- *  Under Artistic License.
+ *  Under LGPL License.
  *  This code is part of Panda framework (moduleloader.hpp)
  *  http://xpanda.sourceforge.net
  *

@@ -48,6 +48,21 @@ const int CAVersion = 1;
 
 void JCALog(char *fmt,...);
 
+char * GetDeviceNameFromID(AudioDeviceID id) {
+	
+	char name[60];
+	UInt32 size;
+	
+	OSStatus err = AudioDeviceGetProperty(id,0,false,kAudioDevicePropertyDeviceName,&size,&name[0]);
+	if(err) return NULL;
+	else {
+		char *res = (char*)calloc(60,sizeof(char));
+		strcpy(res,&name[0]);
+		return res;
+	}
+	
+}
+
 int coreaudio_runCycle(void *driver,long bufferSize) {
 	coreaudio_driver_t * ca_driver = (coreaudio_driver_t*)driver;
 	ca_driver->last_wait_ust = jack_get_microseconds();
@@ -302,7 +317,7 @@ coreaudio_driver_new (char *name,
 				int chan_in, 
 				int chan_out,
 				DitherAlgorithm dither,
-				char* driver_name)
+				char* driver_name,AudioDeviceID deviceID)
 {
 	coreaudio_driver_t *driver;
 	
@@ -331,9 +346,19 @@ coreaudio_driver_new (char *name,
 	driver->start = (JackDriverStartFunction) coreaudio_driver_audio_start;
 	driver->stop = (JackDriverStopFunction) coreaudio_driver_audio_stop;
 	driver->stream = NULL;
-       
 	
-	driver->stream = openPandaAudioInstance((float)rate,frames_per_cycle,chan_in,chan_out,driver_name);
+	char deviceName[60];
+	
+	if(!driver_name) {
+		char *name_ptr = GetDeviceNameFromID(deviceID);
+		if(!name_ptr) goto error;
+		strcpy(&deviceName[0],name_ptr);
+		free(name_ptr);
+	} else {
+		strcpy(&deviceName[0],driver_name);
+	}
+	
+	driver->stream = openPandaAudioInstance((float)rate,frames_per_cycle,chan_in,chan_out,&deviceName[0]);
 	if(!driver->stream) goto error;
 	
 	driver->client = client; 
@@ -360,7 +385,7 @@ coreaudio_driver_new (char *name,
 	driver->playback_nchannels = chan_out;
 	driver->capture_nchannels = chan_in;
 	
-	strcpy(&driver->driver_name[0],driver_name);
+	strcpy(&driver->driver_name[0],&deviceName[0]);
 	
 	jack_init_time();
 	 
@@ -397,7 +422,7 @@ driver_get_descriptor ()
 	desc = calloc (1, sizeof (jack_driver_desc_t));
 
 	strcpy (desc->name, "coreaudio");
-	desc->nparams = 10;
+	desc->nparams = 11;
 	desc->params = calloc (desc->nparams,
 			       sizeof (jack_driver_param_desc_t));
 
@@ -466,6 +491,14 @@ driver_get_descriptor ()
 	strcpy (desc->params[i].long_desc, desc->params[i].short_desc);
 	
 	i++;
+	strcpy (desc->params[i].name, "device ID");
+	desc->params[i].character  = 'I';
+	desc->params[i].type       = JackDriverParamUInt;
+	desc->params[i].value.ui   = 0U;
+	strcpy (desc->params[i].short_desc, "AudioDeviceID of device");
+	strcpy (desc->params[i].long_desc, desc->params[i].short_desc);
+	
+	i++;
 	strcpy (desc->params[i].name, "name");
 	desc->params[i].character  = 'n';
 	desc->params[i].type       = JackDriverParamString;
@@ -502,7 +535,8 @@ driver_initialize (jack_client_t *client, const JSList * params)
 	DitherAlgorithm dither = None;
 	const JSList * node;
 	const jack_driver_param_t * param;
-	char* name = "";
+	char* name = NULL;
+	AudioDeviceID deviceID = 0;
 
 	for (node = params; node; node = jack_slist_next (node)) {
 		param = (const jack_driver_param_t *) node->data;
@@ -547,6 +581,10 @@ driver_initialize (jack_client_t *client, const JSList * params)
 		case 'p':
 			frames_per_interrupt = (unsigned int) param->value.ui;
 			break;
+			
+		case 'I':
+			deviceID = (AudioDeviceID) param->value.ui;
+			break;
                                     
 		case 'z':
 			switch ((int) param->value.c) {
@@ -578,7 +616,7 @@ driver_initialize (jack_client_t *client, const JSList * params)
 	}
 
 	return coreaudio_driver_new ("coreaudio", client, frames_per_interrupt,
-				     srate, capture, playback, chan_in, chan_out, dither,name);
+				     srate, capture, playback, chan_in, chan_out, dither,name,deviceID);
 }
 
 

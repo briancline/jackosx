@@ -1,7 +1,7 @@
 /*
  *  AudioRenderBridge.c
  *  jack_coreaudio
- *  Under Artistic License.
+ *  Under LGPL License.
  *
  *  Created by Johnny Petrantoni on Fri Jan 30 2004.
  *  Copyright (c) 2004 Johnny Petrantoni. All rights reserved.

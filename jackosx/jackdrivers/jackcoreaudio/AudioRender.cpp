@@ -1,6 +1,6 @@
  /*
  *  AudioRender.cpp
- *  Under Artistic License.
+ *  Under LGPL License.
  *  This code is part of Panda framework (moduleloader.cpp)
  *  http://xpanda.sourceforge.net
  *
@@ -68,6 +68,7 @@ AudioRender::AudioRender(float sampleRate,long bufferSize,int inChannels, int ou
         inBuffers = (float**)malloc(sizeof(float*)*vInChannels);
         outBuffers = (float**)malloc(sizeof(float*)*vChannels);
 		JCALog("AudioRender created.\n");
+		JCALog("Standard driver.\n");
 	} else JCALog("error while creating AudioRender.\n");
 }
 
