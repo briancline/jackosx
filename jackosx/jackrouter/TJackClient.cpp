@@ -212,6 +212,9 @@ History
 
 14-09-04 : Version 0.57 : S Letz
 		Improve the external (Jack plugins) management : now internal and external "clients" are distinguished. Correct Save/Restore connections bug.
+		
+03-10-04 : Version 0.58 : S Letz
+		Correct bug in bequite_getNameFromPid. This solve the Band-in-a Box bug.
 		 
 TODO :
     

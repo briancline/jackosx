@@ -77,31 +77,35 @@ int bequite_get_flag(int n) {
     int stat;
     stat = pInfo[n].kp_proc.p_stat;
     int result;
-    if (stat!=4) result = 0;
-    if (stat==4) result = 1;
+    if (stat != 4) result = 0;
+    if (stat == 4) result = 1;
     return result;
 }
 
-char * bequite_getNameFromPid(int pid) {
+char* bequite_getNameFromPid(int pid) {
     int quanti = manyProcesses();
     int i;
-    for (i = 0;i<quanti;i++) {
-        if(pid==bequite_get_pid(i)) {
-            if(strcmp("LaunchCFMApp",bequite_get_name(i))==0) { //Look for the name using CARBON (for CFM applications)
+    for (i = 0; i < quanti; i++) {
+        if (pid == bequite_get_pid(i)) {
+            if (strcmp("LaunchCFMApp",bequite_get_name(i)) == 0) { //Look for the name using CARBON (for CFM applications)
                 OSErr err;
                 ProcessSerialNumber process;
                 CFStringRef nomeStr;
                 err = GetCurrentProcess(&process);
-                if(err==noErr) {
-                    err = CopyProcessName(&process,&nomeStr);
-                }
-                if(err!=noErr) return bequite_get_name(i);
+                if (err == noErr) 
+					err = CopyProcessName(&process,&nomeStr);
+				if (err != noErr) 
+					return bequite_get_name(i);
                 else {
-                    char *resu;
-                    resu = (char*) CFStringGetCStringPtr(nomeStr,NULL);
-                    return resu;
+                    char* name = (char*) CFStringGetCStringPtr(nomeStr,NULL);
+					Boolean ret;
+					if (name == NULL) {
+						char buffer[128]; // A locally stack allocated buffer.....
+						return (CFStringGetCString(nomeStr,buffer,128,NULL)) ? buffer : NULL;
+					}else{
+						return name;
+					}
                 }
-
             }
             return bequite_get_name(i);
         }
