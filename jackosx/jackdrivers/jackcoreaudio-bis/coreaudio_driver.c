@@ -31,6 +31,7 @@
 	Feb 04, 2004: Johnny Petrantoni: now the driver supports interfaces with multiple interleaved streams (such as the MOTU 828).
 	Feb 13, 2004: Johnny Petrantoni: new driver design based on AUHAL.
 	April 7, 2004: Johnny Petrantoni: option -I in order to use AudioDeviceID.
+	April 8,2008: S.Letz: fix a bug in GetDeviceNameFromID and a problem with "dirty buffers" when no ouput connections are made.
 									 
 	TODO:
 	- fix cpu load behavior.
@@ -51,19 +52,10 @@ const int CAVersion = 1;
 
 void JCALog(char *fmt,...);
 
-char * GetDeviceNameFromID(AudioDeviceID id) {
-	
-	char name[60];
-	UInt32 size;
-	
-	OSStatus err = AudioDeviceGetProperty(id,0,false,kAudioDevicePropertyDeviceName,&size,&name[0]);
-	if(err) return NULL;
-	else {
-		char *res = (char*)calloc(60,sizeof(char));
-		strcpy(res,&name[0]);
-		return res;
-	}
-	
+OSStatus GetDeviceNameFromID(AudioDeviceID id, char* name) 
+{
+	UInt32 size = strlen(name);
+	return AudioDeviceGetProperty(id,0,false,kAudioDevicePropertyDeviceName,&size,name);
 }
 
 int coreaudio_runCycle(void *driver,long bufferSize) {
@@ -191,11 +183,9 @@ coreaudio_driver_read (coreaudio_driver_t *driver, jack_nframes_t nframes)
 					buf = jack_port_get_buffer (port, nframes); 
 					memcpy(buf,in,sizeof(float)*nframes);
 				}
-				
-        }
+       }
        
-        driver->engine->transport_cycle_start (driver->engine,
-					       jack_get_microseconds ());
+        driver->engine->transport_cycle_start (driver->engine,jack_get_microseconds ());
         return 0;
 }          
 
@@ -207,16 +197,20 @@ coreaudio_driver_write (coreaudio_driver_t *driver, jack_nframes_t nframes)
         jack_port_t *port;
         JSList *node;
 				                
-        for (chn = 0, node = driver->playback_ports; node; node = jack_slist_next (node), chn++) {
+		for (chn = 0, node = driver->playback_ports; node; node = jack_slist_next (node), chn++) {
                 
                 port = (jack_port_t *)node->data;
 				
-				if (jack_port_connected (port) && (driver->outcoreaudio[chn] != NULL)) {
+				if (driver->outcoreaudio[chn] != NULL) {
 					float *out = driver->outcoreaudio[chn];
-					buf = jack_port_get_buffer (port, nframes);
-					memcpy(out,buf,sizeof(float)*nframes);
+					if (jack_port_connected (port)) {
+						buf = jack_port_get_buffer (port, nframes);
+						memcpy(out,buf,sizeof(float)*nframes);
+					}else{
+						memset(out,0,sizeof(float)*nframes);
+					}
 				}
-        }
+		}
         
         return 0;
 }
@@ -224,14 +218,13 @@ coreaudio_driver_write (coreaudio_driver_t *driver, jack_nframes_t nframes)
 static int
 coreaudio_driver_audio_start (coreaudio_driver_t *driver)
 {
-        
 	return (!startPandaAudioProcess(driver->stream)) ? -1 : 0;
 }
 
 static int
 coreaudio_driver_audio_stop (coreaudio_driver_t *driver)
 {
-        return (!stopPandaAudioProcess(driver->stream)) ? -1 : 0;
+	return (!stopPandaAudioProcess(driver->stream)) ? -1 : 0;
 }
 
 static int
@@ -241,7 +234,6 @@ coreaudio_driver_bufsize (coreaudio_driver_t* driver, jack_nframes_t nframes)
 	/* This gets called from the engine server thread, so it must
 	 * be serialized with the driver thread.  Stopping the audio
 	 * also stops that thread. */
-	 
 	 
 	closePandaAudioInstance(driver->stream);
 	 
@@ -254,11 +246,9 @@ coreaudio_driver_bufsize (coreaudio_driver_t* driver, jack_nframes_t nframes)
 	 
 	driver->incoreaudio = getPandaAudioInputs(driver->stream);
 	driver->outcoreaudio = getPandaAudioOutputs(driver->stream);
-	 
 
 	return startPandaAudioProcess(driver->stream);
 }
-
 
 
 /** create a new driver instance
@@ -307,13 +297,11 @@ coreaudio_driver_new (char *name,
 	char deviceName[60];
 	
 	if(!driver_name) {
-		char *name_ptr = GetDeviceNameFromID(deviceID);
-		strcpy(&deviceName[0],name_ptr);
-		free(name_ptr);
+		if (GetDeviceNameFromID(deviceID,deviceName) != noErr) goto error; 
 	} else {
 		strcpy(&deviceName[0],driver_name);
 	}
-		
+	
 	driver->stream = openPandaAudioInstance((float)rate,(float) v_srate,frames_per_cycle,chan_in,chan_out,&deviceName[0]);
 	if(!driver->stream) goto error;
 		
@@ -347,7 +335,7 @@ error:
 static void
 coreaudio_driver_delete (coreaudio_driver_t *driver)
 {
-        /* Close coreaudio stream and terminate */
+	/* Close coreaudio stream and terminate */
 	closePandaAudioInstance(driver->stream);
 	free(driver);
 }
