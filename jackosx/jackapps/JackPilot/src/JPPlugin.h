@@ -6,7 +6,6 @@
 #include <Panda/panda.h>
 #include <Panda/variables.h>
 
-
 enum { 
 	kJackIsOff,kJackIsOn
 };

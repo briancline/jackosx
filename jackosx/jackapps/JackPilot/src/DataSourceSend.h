@@ -15,7 +15,6 @@
     NSMutableArray *portIsConnected;
     int tipoCliente;
     int isConnected;
-    
 }
 
 -(int)getNPorte;
@@ -26,7 +25,6 @@
 -(int)getIsConn;
 -(void)destroy;
 @end
-
 
 @interface tableDataB : NSObject {
     int quanteporte;
@@ -60,7 +58,6 @@
 - (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item;
 - (BOOL)outlineView:(NSOutlineView *)outlineView shouldEditTableColumn:(NSTableColumn *)tableColumn item:(id)item ;
 
-    
 -(void)writeData: (id)sender text:(NSMutableArray*)testo1 text2:(int*)testo2 text3:(int*)portSelected text4:(int*)quantePCli text5:(int*)chiSelected;
 -(id)getCHisono: (int)numero;
 -(NSMutableArray*)getPorteSelected;

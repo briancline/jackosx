@@ -6,7 +6,6 @@
 #import <Foundation/Foundation.h>
 #include "jackfun.h"
 
-
 @interface tableData : NSObject {
     int quanteporte;
     //char *porta;

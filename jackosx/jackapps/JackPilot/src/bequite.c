@@ -39,7 +39,6 @@ char* ottieniNome(int n) {
     return result;
 }
 
-
 int ottieniPid(int n) {
     kinfo_proc *pInfo;
     int quanti;

@@ -381,85 +381,85 @@ OSStatus GetTotalChannels (AudioDeviceID device, UInt32	*channelCount, Boolean i
 		[verboseBox state]==NSOnState ? 1 : 0);
     }
     if(jackstat!=1) {
-    
-    goto end;
-    
-    NSString *str;
-    str = [NSString stringWithCString:"/./CarbonJackd -R -d "];
-    
-    char *driver;
-    driver = (char*)malloc(sizeof(char*)*[[driverBox stringValue] length]+2);
-    [[driverBox titleOfSelectedItem] getCString:driver];
-    char *samplerate;
-    samplerate = (char*)malloc(sizeof(char*)*[[samplerateText stringValue] length]+2);
-    [[samplerateText titleOfSelectedItem] getCString:samplerate];
-    char *buffersize;
-    buffersize = (char*)malloc(sizeof(char*)*[[bufferText stringValue] length]+2);
-    [[bufferText titleOfSelectedItem] getCString:buffersize];
-    char *channels;
-    channels = (char*)malloc(sizeof(char*)*[[channelsTest stringValue] length]+2);
-    [[channelsTest titleOfSelectedItem] getCString:channels];
-    char *interface;
-    NSString *interfaccia = [NSString init];
-    interfaccia = [interfaceBox titleOfSelectedItem];
-    interface = (char*)malloc(sizeof(char*)*[interfaccia length]+2);
-    [interfaccia getCString:interface];
-    
-    char *stringa;
-    stringa = (char*)malloc(sizeof(char*)*480);
-    [jpPath getCString:stringa];
-    
-    strcat(stringa,"/./CarbonJackd -R -d ");
-    strcat(stringa,driver);
-    strcat(stringa," -r ");
-    strcat(stringa,samplerate);
-    strcat(stringa," -p ");
-    strcat(stringa,buffersize);
-    strcat(stringa," -c ");
-    strcat(stringa,channels);
-    strcat(stringa," -n ");
-    strcat(stringa,"\"");
-    strcat(stringa,interface);
-    strcat(stringa,"\"");
-    
-    int a;
-	id pannelloDiAlert = NSGetAlertPanel(LOCSTR(@"Please Wait..."),LOCSTR(@"Jack server is starting..."),nil,nil,nil);
-    NSModalSession modalSession = [NSApp beginModalSessionForWindow:pannelloDiAlert];
-    a = openJack(stringa);
-    [NSApp endModalSession:modalSession];
-    NSReleaseAlertPanel(pannelloDiAlert);
+		
+		goto end;
+		
+		NSString *str;
+		str = [NSString stringWithCString:"/./CarbonJackd -R -d "];
+		
+		char *driver;
+		driver = (char*)malloc(sizeof(char*)*[[driverBox stringValue] length]+2);
+		[[driverBox titleOfSelectedItem] getCString:driver];
+		char *samplerate;
+		samplerate = (char*)malloc(sizeof(char*)*[[samplerateText stringValue] length]+2);
+		[[samplerateText titleOfSelectedItem] getCString:samplerate];
+		char *buffersize;
+		buffersize = (char*)malloc(sizeof(char*)*[[bufferText stringValue] length]+2);
+		[[bufferText titleOfSelectedItem] getCString:buffersize];
+		char *channels;
+		channels = (char*)malloc(sizeof(char*)*[[channelsTest stringValue] length]+2);
+		[[channelsTest titleOfSelectedItem] getCString:channels];
+		char *interface;
+		NSString *interfaccia = [NSString init];
+		interfaccia = [interfaceBox titleOfSelectedItem];
+		interface = (char*)malloc(sizeof(char*)*[interfaccia length]+2);
+		[interfaccia getCString:interface];
+		
+		char *stringa;
+		stringa = (char*)malloc(sizeof(char*)*480);
+		[jpPath getCString:stringa];
+		
+		strcat(stringa,"/./CarbonJackd -R -d ");
+		strcat(stringa,driver);
+		strcat(stringa," -r ");
+		strcat(stringa,samplerate);
+		strcat(stringa," -p ");
+		strcat(stringa,buffersize);
+		strcat(stringa," -c ");
+		strcat(stringa,channels);
+		strcat(stringa," -n ");
+		strcat(stringa,"\"");
+		strcat(stringa,interface);
+		strcat(stringa,"\"");
+		
+		int a;
+		id pannelloDiAlert = NSGetAlertPanel(LOCSTR(@"Please Wait..."),LOCSTR(@"Jack server is starting..."),nil,nil,nil);
+		NSModalSession modalSession = [NSApp beginModalSessionForWindow:pannelloDiAlert];
+		a = openJack(stringa);
+		[NSApp endModalSession:modalSession];
+		NSReleaseAlertPanel(pannelloDiAlert);
 
-end:
-    {
-    
-    openJackClient();
-    
-    if(checkJack()!=0 && getClient()!=NULL){
-        ottieniPorte();
-        jackstat = 1;
-        writeStatus(1); 
-        [isonBut setStringValue:LOCSTR(@"Jack is On")];
-        [startBut setTitle:LOCSTR(@"Stop Jack")]; [toggleDock setTitle:LOCSTR(@"Stop Jack")];
-        [self setupTimer];
-        [bufferText setEnabled:NO];
-        [channelsTest setEnabled:NO];
-		[inputChannels setEnabled:NO];
-        [driverBox setEnabled:NO];
-        [interfaceBox setEnabled:NO];
-        [samplerateText setEnabled:NO];
-        [jackdMode setEnabled:NO];
-        [self sendJackStatusToPlugins:YES];
-		[routingBut setEnabled:YES];
-		[[JackConnections getSelf] JackCallBacks];
-    }
-    else { 
-        jackstat = 0; 
-        [self error:LOCSTR(@"Cannot start Jack server,\nPlease check the console or retry after a system reboot.")]; 
-        writeStatus(0); 
-    }
-    //free(stringa); free(driver); free(samplerate); free(buffersize); free(channels); free(interface); 
-	}
-    [self jackALstore:sender];
+	end:
+		{
+		
+		openJackClient();
+		
+		if(checkJack()!=0 && getClient()!=NULL){
+			ottieniPorte();
+			jackstat = 1;
+			writeStatus(1); 
+			[isonBut setStringValue:LOCSTR(@"Jack is On")];
+			[startBut setTitle:LOCSTR(@"Stop Jack")]; [toggleDock setTitle:LOCSTR(@"Stop Jack")];
+			[self setupTimer];
+			[bufferText setEnabled:NO];
+			[channelsTest setEnabled:NO];
+			[inputChannels setEnabled:NO];
+			[driverBox setEnabled:NO];
+			[interfaceBox setEnabled:NO];
+			[samplerateText setEnabled:NO];
+			[jackdMode setEnabled:NO];
+			[self sendJackStatusToPlugins:YES];
+			[routingBut setEnabled:YES];
+			[[JackConnections getSelf] JackCallBacks];
+		}
+		else { 
+			jackstat = 0; 
+			[self error:LOCSTR(@"Cannot start Jack server,\nPlease check the console or retry after a system reboot.")]; 
+			writeStatus(0); 
+		}
+		//free(stringa); free(driver); free(samplerate); free(buffersize); free(channels); free(interface); 
+		}
+		[self jackALstore:sender];
     }
 }
 

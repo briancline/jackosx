@@ -34,8 +34,6 @@
     return isConnected;
 }
 
-
-
 -(id)getNomeCliente {
     if(nomeCliente==NULL) return @"NIL";
     //NSLog(@"Name required");
@@ -109,9 +107,7 @@
     }
    
     nomeCliente = (char*)malloc(sizeof(char)*256);
-    
     strcpy(nomeCliente,nome);
-    
     tipoCliente = tipo;
 }
 
@@ -125,8 +121,6 @@
 }
 
 @end
-
-
 
 @implementation tableDataB
 
@@ -254,62 +248,58 @@
         *quanteXCli = 1;
         *needsRelo=2;
     }
-
-    
 }
 
 -(void)writeData: (id)sender text:(NSMutableArray*)testo1 text2:(int*)testo2 text3:(int*)portSelected text4:(int*)quantePCli text5:(int*)chiSelected
 {	
-        chi = chiSelected;
-        quanteXCli = quantePCli;
-        needsRelo = testo2;
-        porteSelected = portSelected;
-        int n;
-        ottieniPorte();
-        stat = 1;
-        n=numeroPorte();
-        quanteporte=n;
-        data = [[NSMutableArray array] retain];
-        itemsToRelease = [[NSMutableArray array] retain];
-        quantiItem = 0;
-		
-		NSMutableArray *names_to_verify = [NSMutableArray array];
-        
-        quantiCli = quantiClienti();
-        
-        int i;
-        for (i=0;i<quantiCli;i++) {
-			NSEnumerator *enumerator = [names_to_verify objectEnumerator];
-			id anObject;
-			BOOL bypass = NO;
+	chi = chiSelected;
+	quanteXCli = quantePCli;
+	needsRelo = testo2;
+	porteSelected = portSelected;
+	int n;
+	ottieniPorte();
+	stat = 1;
+	n=numeroPorte();
+	quanteporte=n;
+	data = [[NSMutableArray array] retain];
+	itemsToRelease = [[NSMutableArray array] retain];
+	quantiItem = 0;
+	
+	NSMutableArray *names_to_verify = [NSMutableArray array];
+	quantiCli = quantiClienti();
+	
+	int i;
+	for (i=0;i<quantiCli;i++) {
+		NSEnumerator *enumerator = [names_to_verify objectEnumerator];
+		id anObject;
+		BOOL bypass = NO;
 
-            DatiSend *dataToSend = [DatiSend alloc];
-            char *nomeCli;
-            nomeCli = (char*)alloca(256*sizeof(char));
-            nomeCliente(i,nomeCli);
-            int tipoPorta = getTipoByName(nomeCli);
-            NSString *testclient = [NSString init];
-            testclient = [NSString stringWithCString:nomeCli];
-            
-			NSArray *split1 = [testclient componentsSeparatedByString:@":"];
-			NSString *pre_name = [split1 objectAtIndex:0];
-			
-			while (anObject = [enumerator nextObject]) {
-				NSArray *split0 = [anObject componentsSeparatedByString:@":"];
-				if([[split0 objectAtIndex:0] isEqualToString:pre_name]) { JPLog("I've found an old client name, bypassing.\n"); bypass = YES; }
-			}
-			
-			if(bypass) continue;
-			
-			NSMutableArray *nomi = [self getPortsForClient:testclient withData:testo1];
-            if(nomi!=nil) {
-                [dataToSend setData:[nomi count] nomiPorte:nomi nomeCliente:nomeCli kind:tipoPorta];
-                [data addObject:dataToSend];
-                quantiItem++;
-            }
-			[names_to_verify addObject:testclient];
-        }
-                
+		DatiSend *dataToSend = [DatiSend alloc];
+		char *nomeCli;
+		nomeCli = (char*)alloca(256*sizeof(char));
+		nomeCliente(i,nomeCli);
+		int tipoPorta = getTipoByName(nomeCli);
+		NSString *testclient = [NSString init];
+		testclient = [NSString stringWithCString:nomeCli];
+		
+		NSArray *split1 = [testclient componentsSeparatedByString:@":"];
+		NSString *pre_name = [split1 objectAtIndex:0];
+		
+		while (anObject = [enumerator nextObject]) {
+			NSArray *split0 = [anObject componentsSeparatedByString:@":"];
+			if([[split0 objectAtIndex:0] isEqualToString:pre_name]) { JPLog("I've found an old client name, bypassing.\n"); bypass = YES; }
+		}
+		
+		if(bypass) continue;
+		
+		NSMutableArray *nomi = [self getPortsForClient:testclient withData:testo1];
+		if(nomi!=nil) {
+			[dataToSend setData:[nomi count] nomiPorte:nomi nomeCliente:nomeCli kind:tipoPorta];
+			[data addObject:dataToSend];
+			quantiItem++;
+		}
+		[names_to_verify addObject:testclient];
+	}
 }
 
 -(void)flush: (id)sender
@@ -383,7 +373,6 @@
     NSString *stringa;
     stringa = [NSString stringWithCString:porta];
     return stringa;
-
 }
 
 -(void)setWhatKind: (int)n

@@ -4,8 +4,6 @@
 
 #import <Foundation/Foundation.h>
 
-
-
 @interface Utility : NSObject {
     
 }

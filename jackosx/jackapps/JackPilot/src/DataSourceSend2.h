@@ -15,7 +15,6 @@
     NSMutableArray *portIsConnected;
     int tipoCliente;
     int isConnected;
-    
 }
 
 -(int)getNPorte;
@@ -26,7 +25,6 @@
 -(int)getIsConn;
 -(void)destroy;
 @end
-
 
 @interface tableDataC : NSObject {
     int quanteporte;

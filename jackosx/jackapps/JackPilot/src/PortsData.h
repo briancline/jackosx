@@ -5,7 +5,6 @@
 #import "DataSourceSend.h"
 #include <stdio.h>
 
-
 @interface portsArrData : NSObject {
     NSString *nomePorta;
     char *nomeP;

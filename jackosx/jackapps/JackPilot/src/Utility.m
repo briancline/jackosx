@@ -4,8 +4,6 @@
 
 #import "Utility.h"
 
-
-
 id newplist;
 
 @implementation Utility
@@ -142,6 +140,5 @@ id newplist;
     };
     return nil;
 }
-
 
 @end

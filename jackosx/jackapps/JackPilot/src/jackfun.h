@@ -13,7 +13,6 @@
 #include <Jack/jack.h>
 #include <Carbon/Carbon.h>
 
-
 int getDefInput(void);
 int getDefOutput(void);
 int getSysOut(void);

@@ -16,7 +16,6 @@
 	// this will change panda paths to JackPilot plugins path
 	changeModulesSearchDirectory(newPath);
 	changeModulesBundleExtension(newExt);
-	//
 	
 	char modName[60];
 	[plugName getCString:&modName[0]];
@@ -36,7 +35,7 @@
 		//TRYING AS PLUA SCRIPT
 		char *pl_args[1];
 		pl_args[0] = &modPath[0];
-		P_ID PLua = OpenModule("PandaLuaSupport",1,pl_args);
+		int PLua = OpenModule("PandaLuaSupport",1,pl_args);
 		if(PLua != -1) plugin_ID = PLua;
 	}
 	
@@ -59,7 +58,7 @@
 			//TRYING AS PLUA SCRIPT
 			char *pl_args[1];
 			pl_args[0] = &modPath[0];
-			P_ID PLua = OpenModule("PandaLuaSupport",1,pl_args);
+			int PLua = OpenModule("PandaLuaSupport",1,pl_args);
 			if(PLua != -1) plugin_ID = PLua;
 		}
 	}
@@ -113,6 +112,5 @@ error:
 		released = YES;
 	}
 }
-
 
 @end

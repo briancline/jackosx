@@ -4,10 +4,7 @@
 
 #import "tableData.h"
 
-
 @implementation tableData
-
-
 
 - (int)numberOfRowsInTableView:(NSTableView *)aTableView 
 {	
@@ -42,8 +39,7 @@
     objectValueForTableColumn:(NSTableColumn *)aTableColumn
     row:(int)rowIndex
 {
-    
-    if(arrayOk==nil || [arrayOk count]==0) return nil;
+	if(arrayOk==nil || [arrayOk count]==0) return nil;
     NSString *res = [arrayOk objectAtIndex:rowIndex];
     NSArray *list = [res componentsSeparatedByString:@":"];
     if([list count]==3) {
@@ -52,14 +48,13 @@
         return res2;
     }
     return res;
-    
-}
+ }
 
 -(void)writeData: (id)sender text:(int*)testo1 text2:(int*)testo2 text3:(int*)needsReload
 {	
-        quanteSel = testo1;
-        porteSelected = testo2;
-        needsRelo = needsReload;
+	quanteSel = testo1;
+	porteSelected = testo2;
+	needsRelo = needsReload;
 }
 
 -(void)flush: (id)sender
@@ -68,7 +63,7 @@
 
 -(id)getCHisono: (int)numero
 {
-            return [arrayOk objectAtIndex:numero];
+	return [arrayOk objectAtIndex:numero];
 }
 
 -(void)setWhatKind: (int)n
@@ -118,6 +113,5 @@
         if([ports isKindOfClass:[NSString class]]) [arrayOk addObject:ports];
     }
 }
-
 
 @end

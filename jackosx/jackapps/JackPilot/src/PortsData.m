@@ -7,8 +7,6 @@
 
 @implementation portsArrData
 
-
-
 -(void)setName:(const char *)nome {
     nomePorta = [NSString init];
     nomePorta = [NSString stringWithCString:nome];
