@@ -1448,7 +1448,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 			}else{
 				CFStringRef theUIDString = NULL;
 				CFStringRef* outString = (CFStringRef*) outPropertyData;
-				theUIDString = CFStringCreateWithCString(NULL, "JackAudioServer:0", CFStringGetSystemEncoding());
+				theUIDString = CFStringCreateWithCString(NULL, "JackRouter:0", CFStringGetSystemEncoding());
 				*outString = theUIDString;
 				*ioPropertyDataSize = sizeof(CFStringRef);
 			}
