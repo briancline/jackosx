@@ -118,8 +118,7 @@ class TJackClient {
         static AudioDeviceID fCoreAudioDriver;		// The CoreAudio driver currently loaded by Jack
         static AudioHardwarePlugInRef fPlugInRef;
         
-        static bool ExtractString(char* dst, const char* src, char sep);
-		static void SetTime(AudioTimeStamp* timeVal, long curTime, UInt64 time);
+  		static void SetTime(AudioTimeStamp* timeVal, long curTime, UInt64 time);
 
     public:
      
@@ -165,7 +164,6 @@ class TJackClient {
 		
 		void StopRunning() {fProcRunning = 0;}
            
-        static bool QueryDevices(jack_client_t * client);
         static bool ReadPref();
         static void Shutdown(void *arg);
         static jack_client_t * CheckServer(AudioHardwarePlugInRef inSelf);

@@ -227,8 +227,11 @@ History
 		Correct kAudioStreamPropertyPhysicalFormat setting problems. This finally solve the NI applications issue...
 		Correct DeviceGetPropertyInfo and StreamGetPropertyInfo for properties that can be set. Debug activated with pref file.
 
-29-11-04 : Version 0.62 : S Letz
+08-12-04 : Version 0.62 : S Letz
 		Correct internal output/input port connections bug : output ports are no more cleared. CoreAudio and PortAudio drivers are corrected also.
+
+29-11-04 : Version 0.63 : S Letz
+		Remove QueryDevices. The CoreAudio driver AudioDeviceID is now read in the JAS.pil preference file.
 		 
 TODO :
     
@@ -2741,14 +2744,16 @@ bool TJackClient::ReadPref()
                         &nullo,
                         &TJackClient::fDefaultSystem,
 						&nullo,
-						&TJackClient::fDebug
+						&TJackClient::fDebug,
 						&nullo,
-						&nullo, //Johnny: Stephane, here it is the AudioDevID
+						&TJackClient::fCoreAudioDriver
 					);                
                 fclose(prefFile);
-				JARLog("Reading Preferences fInputChannels: %ld fOutputChannels: %ld fAutoConnect: %ld fDefaultInput: %ld fDefaultOutput: %ld fDefaultSystem: %ld\n",
-					TJackClient::fInputChannels,TJackClient::fOutputChannels,TJackClient::fAutoConnect,TJackClient::fDefaultInput,TJackClient::fDefaultOutput,TJackClient::fDefaultSystem);
-                return true;
+				JARLog("Reading Preferences fInputChannels: %ld fOutputChannels: %ld fAutoConnect: %ld\n", 
+					TJackClient::fInputChannels,TJackClient::fOutputChannels,TJackClient::fAutoConnect);
+				JARLog("Reading Preferences fDefaultInput: %ld fDefaultOutput: %ld fDefaultSystem: %ld fDeviceID: %ld\n", 
+					TJackClient::fInputChannels,TJackClient::fOutputChannels,TJackClient::fAutoConnect,TJackClient::fCoreAudioDriver);
+				return true;
             }
         }
     }
@@ -2756,7 +2761,7 @@ bool TJackClient::ReadPref()
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
-jack_client_t *  TJackClient::CheckServer(AudioHardwarePlugInRef inSelf)
+jack_client_t*  TJackClient::CheckServer(AudioHardwarePlugInRef inSelf)
 {
     jack_client_t * client;
     char name [JACK_CLIENT_NAME_LEN];
@@ -2831,6 +2836,7 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
 {
     OSStatus err = kAudioHardwareNoError;
     char* id_name = bequite_getNameFromPid((int)getpid());
+	bool prefOK = ReadPref();
 
     JARLog("Initialize [inSelf, name] : %ld %s \n", (long)inSelf, id_name);
 	
@@ -2853,11 +2859,9 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
     
     if (client = TJackClient::CheckServer(inSelf)){
         
-        if (!QueryDevices(client)) return kAudioHardwareBadDeviceError;
-        
         const char **ports;
         
-        if (!ReadPref()) {
+        if (!prefOK) {
         
             int i = 0;
             if ((ports = jack_get_ports(client, NULL, NULL, JackPortIsPhysical|JackPortIsOutput)) != NULL) {
@@ -2951,137 +2955,3 @@ OSStatus TJackClient::Teardown(AudioHardwarePlugInRef inSelf)
     return kAudioHardwareNoError;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
-bool TJackClient::ExtractString(char* dst, const char* src, char sep)
-{
-    unsigned int i;
-	
-	JARLog("ExtractString %s \n", src);
-    
-    // Look for the first sep character
-    for (i = 0; i < strlen(src); i++) if (src[i] == sep) break;
-    
-    // Move to the character after sep
-    i++;
-    
-    // Copy between the first and second sep character
-    for (unsigned int j = 0; j < strlen(src); j++) {
-    
-        assert((j+i) < strlen(src));
-        assert(j < JACK_PORT_NAME_LEN);
-        
-        dst[j] = src[j+i];
-        if(src[j+i] == sep) {
-            dst[j] = 0; // end string
-            return true;
-        }
-    }
-    return false;
-}
-  
-//---------------------------------------------------------------------------------------------------------------------------------
-bool TJackClient::QueryDevices(jack_client_t * client)
-{
-    OSStatus err = noErr;
-    UInt32   outSize;
-    Boolean  outWritable;
-    int      numCoreDevices;
-    AudioDeviceID * coreDeviceIDs;
-     
-    // Get Jack CoreAudio driver name
-    const char **ports;
-    char port_name [JACK_PORT_NAME_LEN];
-    
-    port_name[0] = 0; // null string
-    
-    if ((ports = jack_get_ports(client, NULL, NULL, JackPortIsPhysical|JackPortIsOutput)) == NULL) {
-		JARLog("cannot find any physical capture ports\n");
-	}else{
-         
-		// string of the form "portaudio:Built-in audio :out1"
-		if (!ExtractString(port_name,ports[0],':')) {
-			JARLog("error : can not extract Jack CoreAudio driver name\n");
-		}
-      
-		JARLog("name %s : len %ld\n", port_name, strlen(port_name));
-        free (ports);
-    }
-    
-    if ((ports = jack_get_ports(client, NULL, NULL, JackPortIsPhysical|JackPortIsInput)) == NULL) {
-        JARLog("cannot find any physical playback ports\n");
-    }else{
-          
-		// string of the form "portaudio:Built-in audio :in1" 
-		if (!ExtractString(port_name,ports[0],':')) {
-			JARLog("error : can not extract Jack CoreAudio driver name\n");
-		}      
-    
-        JARLog("NAME %s : len %ld\n", port_name, strlen(port_name));
-        free (ports);
-    }
-    
-    TJackClient::fCoreAudioDriver = 0;
-	
-	// Find out how many Core Audio devices there are, if any
-    outSize = sizeof(outWritable);
-	
-	err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices, &outSize, &outWritable);
-	JARLog("AudioHardwareGetPropertyInfo : outSize %ld\n", outSize);
-   
-	if (err != noErr) {
-		JARLog("couldn't get info about list of audio devices %ld \n", err);
-		printError(err);
-		return false;
-	}
-       
-    // Calculate the number of device available
-    numCoreDevices = outSize/sizeof(AudioDeviceID);
-
-    // Bail if there aren't any devices
-    if (numCoreDevices < 1) {
-        JARLog("no Devices Available\n");
-        return false;
-    }
-    
-    // Make space for the devices we are about to get
-    coreDeviceIDs = (AudioDeviceID *)malloc(outSize);
-
-    // Get an array of AudioDeviceIDs
-    err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices, &outSize, (void *)coreDeviceIDs);
-    if (err != noErr) {
-        JARLog("couldn't get list of audio device IDs %ld\n", err);
-        return false;
-    }
-
-    // Look for the CoreAudio device corresponding to the previously found CoreAudio Jack driver
-    char name[256];
-    int len = strlen(port_name);
-    
-    for (int i = 0; i<numCoreDevices; i++) {
-    
-        err = AudioDeviceGetPropertyInfo(coreDeviceIDs[i], 0, true, kAudioDevicePropertyDeviceName, &outSize, &outWritable);
-        
-        if (err != noErr) {
-			JARLog("couldn't get info about names of audio devices %ld \n", err);
-			return false;
-        }
-       
-        err = AudioDeviceGetProperty(coreDeviceIDs[i], 0, true, kAudioDevicePropertyDeviceName, &outSize, (void *)name);
-     
-        if (err != noErr) {
-            JARLog("couldn't get name of device IDs %ld\n", err);
-			return false;
-        }else {
-			JARLog("device name %ld %s \n", coreDeviceIDs[i], name);
-		}
-         
-        if (strncmp(name,port_name,len) == 0) {
-            JARLog("found Jack CoreAudio driver : %s \n",name);
-			TJackClient::fCoreAudioDriver = coreDeviceIDs[i];
-        }
-    }
-    
-    free(coreDeviceIDs);
-    return true;
-}
- 
