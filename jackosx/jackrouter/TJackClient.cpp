@@ -196,6 +196,9 @@ History
 		
 12-07-04 : Version 0.52 : S Letz
 		Check TJackClient::fJackClient in SetProperty.
+
+13-07-04 : Version 0.53 : S Letz
+		Correct bug in kAudioDevicePropertyIOProcStreamUsage management.
         
 TODO :
     
@@ -543,12 +546,8 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
 			if (context.fStreamUsage) {
 			
 				// Only set up buffers that are really needed
-				client->fInputList->mNumberBuffers = 0;
-				client->fOutputList->mNumberBuffers = 0;
-			
 				for (int i = 0; i<TJackClient::fInputChannels; i++) {
 					if (context.fInput[i]) {
-						client->fInputList->mNumberBuffers++;
 						client->fInputList->mBuffers[i].mData = (float *)jack_port_get_buffer(client->fInputPortList[i], nframes);
 					}else{
 						client->fInputList->mBuffers[i].mData = NULL;
@@ -557,14 +556,13 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
 				
 				for (int i = 0; i<TJackClient::fOutputChannels; i++) {
 					if (context.fOutput[i]) {
-						client->fOutputList->mNumberBuffers++;
 						client->fOutputList->mBuffers[i].mData = (float *)jack_port_get_buffer(client->fOutputPortList[i], nframes);
 					}else{
 						client->fOutputList->mBuffers[i].mData = NULL;
 					}
 				}
 			
-			}else {
+			}else{
 				// Non Interleaved 
 				for (int i = 0; i<TJackClient::fInputChannels; i++) {
 					client->fInputList->mBuffers[i].mData = (float *)jack_port_get_buffer(client->fInputPortList[i], nframes);
@@ -574,7 +572,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
 					client->fOutputList->mBuffers[i].mData = (float *)jack_port_get_buffer(client->fOutputPortList[i], nframes);
 				}
             }
-				
+			
 			err = (val.first) (client->fDeviceID, 
                                 &inNow, 
                                 client->fInputList, 
@@ -588,7 +586,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
         #endif
         }
                   
-    }else if (client->GetProcNum() > 1){
+    }else if (client->GetProcNum() > 1) { // Several IOProc : need mixing  
 	
 		for (int i = 0; i<TJackClient::fOutputChannels; i++) {
             // Use an intermediate mixing buffer
@@ -606,13 +604,8 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
 				if (context.fStreamUsage) {
 						
 					// Only set up buffers that are really needed
-					client->fInputList->mNumberBuffers = 0;
-					client->fOutputList->mNumberBuffers = 0;
-						
-					// Several IOProc : need mixing 
 					for (int i = 0; i<TJackClient::fInputChannels; i++) {
 						if (context.fInput[i]) {
-							client->fInputList->mNumberBuffers++;
 							client->fInputList->mBuffers[i].mData = (float *)jack_port_get_buffer(client->fInputPortList[i], nframes);
 						}else{
 							client->fInputList->mBuffers[i].mData = NULL;
@@ -622,7 +615,6 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
 					for (int i = 0; i<TJackClient::fOutputChannels; i++) {
 						// Use an intermediate mixing buffer
 						if (context.fOutput[i]) {
-							client->fOutputList->mNumberBuffers++;
 							client->fOutputList->mBuffers[i].mData = client->fOuputListMixing[i];
 						}else{
 							client->fOutputList->mBuffers[i].mData = NULL;
@@ -630,7 +622,6 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
 					}
 				
 				}else {
-					// Several IOProc : need mixing 
 					for (int i = 0; i<TJackClient::fInputChannels; i++) {
 						client->fInputList->mBuffers[i].mData = (float *)jack_port_get_buffer(client->fInputPortList[i], nframes);
 					}
@@ -663,7 +654,7 @@ int TJackClient::Process(jack_nframes_t nframes, void *arg)
 						}
 					}
 				
-				}else {
+				}else{
 					for (int i = 0; i<TJackClient::fOutputChannels; i++) {
 						float * output = (float *)jack_port_get_buffer(client->fOutputPortList[i], nframes);
 						for (int j = 0; j<nframes; j++) {
@@ -2133,10 +2124,10 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
         {
         
 		#ifdef kAudioHardwarePlugInInterface2ID
-			case kAudioDevicePropertyPreferredChannelLayout:
-				JARLog("kAudioDevicePropertyPreferredChannelLayout\n");
-				err = kAudioHardwareNoError;
-				break;
+				case kAudioDevicePropertyPreferredChannelLayout:
+					JARLog("kAudioDevicePropertyPreferredChannelLayout\n");
+					err = kAudioHardwareNoError;
+					break;
 		#endif
                      
 				case kAudioDevicePropertyBufferSize:
@@ -2441,7 +2432,7 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
         switch (inPropertyID)
         {
 			case kAudioStreamPropertyDirection:
-                {
+			{
                     // steph 14/01/04
 					if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
 						*ioPropertyDataSize = sizeof(UInt32);
@@ -2467,9 +2458,9 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
                         *ioPropertyDataSize = sizeof(UInt32);
                     }
                     break;
-                }
+			}
                 
-		case kAudioStreamPropertyStartingChannel:
+			case kAudioStreamPropertyStartingChannel:
                     // steph 14/01/04
 					if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
 						*ioPropertyDataSize = sizeof(UInt32);
@@ -2483,7 +2474,7 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
                     break;
                 
           	case kAudioStreamPropertyTerminalType:
-                {
+			{
                     // steph 14/01/04
 					if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
 						*ioPropertyDataSize = sizeof(UInt32);
@@ -2509,7 +2500,7 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
                         *ioPropertyDataSize = sizeof(UInt32);
                     }
                     break;
-                }
+			}
                       
             case kAudioDevicePropertyStreamFormat:
          	case kAudioStreamPropertyPhysicalFormat:
