@@ -202,10 +202,13 @@ History
 	
 1-09-04 : Version 0.54 : S Letz
 		Distinguish kAudioDevicePropertyActualSampleRate and kAudioDevicePropertyNominalSampleRate.
-		kAudioDevicePropertyActualSampleRate is rerurned only when the driver is running.
+		kAudioDevicePropertyActualSampleRate is returned only when the driver is running.
 
 1-09-04 : Version 0.55 : S Letz
 		Correct use of AudioHardwareStreamsCreated and AudioHardwareStreamsDied functions (they are using an array of streamIDs)
+
+10-09-04 : Version 0.56 : S Letz
+		Correct DeviceSetProperty: some properties can be "set" event there is no Jack client running other like kAudioDevicePropertyIOProcStreamUsage not.
         
 TODO :
     
@@ -2071,6 +2074,12 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 	return err;
 }
 
+/*
+Some properties like kAudioDevicePropertyBufferSize, kAudioDevicePropertyNominalSampleRate can be "set", even is there is no Jack client running
+
+
+*/
+
 //---------------------------------------------------------------------------------------------------------------------------------
 OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf, 
                                         AudioDeviceID inDevice, 
@@ -2094,12 +2103,7 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
             return kAudioHardwareBadDeviceError;
         }
 		
-		if (TJackClient::fJackClient == NULL) {
-			JARLog("DeviceSetProperty called when then Jack server is not running \n");
-			return kAudioHardwareBadDeviceError;
-		}
-
-        switch (inPropertyID)
+		switch (inPropertyID)
         {
         
 		#ifdef kAudioHardwarePlugInInterface2ID
@@ -2172,36 +2176,44 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
 					
 			case kAudioDevicePropertyIOProcStreamUsage: 
 			{
-				AudioHardwareIOProcStreamUsage* inData  = (AudioHardwareIOProcStreamUsage*)inPropertyData;	
+				// Can only be set when a client is running
+				if (TJackClient::fJackClient == NULL) {
+					JARLog("DeviceSetProperty kAudioDevicePropertyIOProcStreamUsage : called when then Jack server is not running\n");
+					err = kAudioHardwareBadDeviceError;
+				}else{
+
+					AudioHardwareIOProcStreamUsage* inData  = (AudioHardwareIOProcStreamUsage*)inPropertyData;	
+					
+					JARLog("DeviceSetProperty : kAudioDevicePropertyIOProcStreamUsage size %ld\n",inPropertyDataSize);
+					JARLog("DeviceSetProperty : kAudioDevicePropertyIOProcStreamUsage proc %x\n",(AudioDeviceIOProc)inData->mIOProc);
+					JARLog("DeviceSetProperty : kAudioDevicePropertyIOProcStreamUsage mNumberStreams %ld\n",inData->mNumberStreams);
 				
-				JARLog("DeviceSetProperty : kAudioDevicePropertyIOProcStreamUsage size %ld\n",inPropertyDataSize);
-				JARLog("DeviceSetProperty : kAudioDevicePropertyIOProcStreamUsage proc %x\n",(AudioDeviceIOProc)inData->mIOProc);
-				JARLog("DeviceSetProperty : kAudioDevicePropertyIOProcStreamUsage mNumberStreams %ld\n",inData->mNumberStreams);
-			
-				map<AudioDeviceIOProc,TProcContext>::iterator iter = TJackClient::fJackClient->fAudioIOProcList.find((AudioDeviceIOProc)inData->mIOProc);
+					map<AudioDeviceIOProc,TProcContext>::iterator iter = TJackClient::fJackClient->fAudioIOProcList.find((AudioDeviceIOProc)inData->mIOProc);
+					
+					if (iter == TJackClient::fJackClient->fAudioIOProcList.end()) {
+						JARLog("DeviceSetProperty  kAudioDevicePropertyIOProcStreamUsage : Proc not found %x \n",(AudioDeviceIOProc)inData->mIOProc);
+						err = kAudioHardwareUnknownPropertyError;
+					}else {
+						JARLog("DeviceSetProperty kAudioDevicePropertyIOProcStreamUsage : Proc found %x \n",(AudioDeviceIOProc)inData->mIOProc);
 				
-				if (iter == TJackClient::fJackClient->fAudioIOProcList.end()) {
-					JARLog("DeviceSetProperty  kAudioDevicePropertyIOProcStreamUsage : Proc not found %x \n",(AudioDeviceIOProc)inData->mIOProc);
-					err = kAudioHardwareUnknownPropertyError;
-				}else {
-					JARLog("DeviceSetProperty  kAudioDevicePropertyIOProcStreamUsage : Proc FOUND %x \n",(AudioDeviceIOProc)inData->mIOProc);
-			
-					iter->second.fStreamUsage = true; // We need to take care of stream usage in Process
-			
-					if (isInput) {
-						for (int i = 0; i<inData->mNumberStreams; i++) {
-							iter->second.fInput[i] = inData->mStreamIsOn[i];
-							JARLog("DeviceSetProperty : input kAudioDevicePropertyIOProcStreamUsage inData->mStreamIsOn %ld \n",inData->mStreamIsOn[i]);
+						iter->second.fStreamUsage = true; // We need to take care of stream usage in Process
+				
+						if (isInput) {
+							for (int i = 0; i<inData->mNumberStreams; i++) {
+								iter->second.fInput[i] = inData->mStreamIsOn[i];
+								JARLog("DeviceSetProperty : input kAudioDevicePropertyIOProcStreamUsage inData->mStreamIsOn %ld \n",inData->mStreamIsOn[i]);
+							}
+						}else{
+							for (int i = 0; i<inData->mNumberStreams; i++) {
+								iter->second.fOutput[i] = inData->mStreamIsOn[i];
+								JARLog("DeviceSetProperty : output kAudioDevicePropertyIOProcStreamUsage inData->mStreamIsOn %ld \n",inData->mStreamIsOn[i]);
+							}   
 						}
-					}else{
-						for (int i = 0; i<inData->mNumberStreams; i++) {
-							iter->second.fOutput[i] = inData->mStreamIsOn[i];
-							JARLog("DeviceSetProperty : output kAudioDevicePropertyIOProcStreamUsage inData->mStreamIsOn %ld \n",inData->mStreamIsOn[i]);
-						}   
+						err = kAudioHardwareNoError;
 					}
-					err = kAudioHardwareNoError;
-				}
-			}		
+				}	
+				break;
+			}
 																					
 			case kAudioDevicePropertyPreferredChannelsForStereo:		
 			case kAudioDevicePropertyAvailableNominalSampleRates:		
