@@ -149,13 +149,16 @@ JARInsert::~JARInsert() {
 bool JARInsert::AllocBSizeAlign(long host_buffer_size) {
 	c_hBufferSize = host_buffer_size;
 	if(c_jBufferSize>c_hBufferSize) {
+		if(((host_buffer_size-1) & host_buffer_size) != 0) 
+			{ JARILog("Bad buffer size for BSizeAlign.\n"); c_error = kErrInvalidBSize; Flush(); return false; }
 		c_bsAI1 = new BSizeAlign(c_hBufferSize,c_jBufferSize);
 		c_bsAI2 = new BSizeAlign(c_hBufferSize,c_jBufferSize);
 		c_bsAO1 = new BSizeAlign(c_jBufferSize,c_hBufferSize);
 		c_bsAO2 = new BSizeAlign(c_jBufferSize,c_hBufferSize);
 		if(c_bsAI1->Ready() && c_bsAI2->Ready() && c_bsAO1->Ready() && c_bsAO2->Ready()) c_rBufOn = true;
-		else { c_error = kErrInvalidBSize; Flush(); return false; }
-	}
+		else { JARILog("Bad buffer size for BSizeAlign.\n"); c_error = kErrInvalidBSize; Flush(); return false; }
+	} else if(c_jBufferSize<c_hBufferSize) 
+		{ JARILog("Bad buffer size jack<host, must be jack>host || jack==host.\n"); c_error = kErrInvalidBSize; Flush(); return false; }
 	c_canProcess = true;
 	if(c_rBufOn) JARILog("Using BSizeAlign.\n");
 	else JARILog("Not Using BSizeAlign.\n");
@@ -185,6 +188,10 @@ int JARInsert::Process(float **in_buffer,float **out_buffer,long host_nframes) {
 		if(c_bsAI1->CanGet()) c_bsAI1->GetBuffer(out1);
 		if(c_bsAI2->CanGet()) c_bsAI2->GetBuffer(out2);
 	} else {
+		if(c_jBufferSize!=host_nframes) {
+			JARILog("CRITICAL ERROR: Host Buffer Size mismatch, NOT PROCESSING!!.\n");
+			return 1;
+		}
 		float *out1 = (float*) jack_port_get_buffer(c_outPorts[0],(jack_nframes_t)c_jBufferSize);
 		float *out2 = (float*) jack_port_get_buffer(c_outPorts[1],(jack_nframes_t)c_jBufferSize);
 		float *in1 = (float*) jack_port_get_buffer(c_inPorts[0],(jack_nframes_t)c_jBufferSize);
