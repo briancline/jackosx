@@ -41,22 +41,7 @@ extern "C" {
 
 #define JACK_PORT_NAME_LEN 256
 #define JACK_CLIENT_NAME_LEN 256
-
-#define PRINTDEBUG 1
-#define PRINT4CC 1
-
 #define  MAX_JACK_PORTS 128
-
-//#define PRINTDEBUG 0
-//#define PRINT4CC 0
-
-#define	Print4CharCode(msg, c)	{														\
-	UInt32 __4CC_number = (c);		\
-		char __4CC_string[5];		\
-	memcpy(__4CC_string, &__4CC_number, 4);	\
-	__4CC_string[4] = 0;			\
-	printf("%s'%s'\n", (msg), __4CC_string);\
-}
 
 enum {
     kAudioDevicePropertyGetJackClient  = 'jasg', 
