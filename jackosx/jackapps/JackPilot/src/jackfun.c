@@ -6,9 +6,9 @@
 
 #define SHELL "/bin/sh"
 
-int firsttime=0;
+int firsttime = 0;
 int status;
-jack_client_t *client;
+jack_client_t* client = NULL;
 const char** jplist;
 const char **connec;
 int sr,buf,driver,ch;
@@ -40,7 +40,10 @@ int openJack(const char *stringa)
 
 int closeJack(void) 
 {
-	if (client != NULL) jack_client_close(client);
+	if (client != NULL) {
+		jack_client_close(client);
+		client = NULL;
+	}
 	
 #if 1
     int pid = checkJack();
@@ -61,18 +64,18 @@ my_system (const char *command)
   int status;
   pid_t pid;
 
-  pid = fork ();
+  pid = fork();
   if (pid == 0)
     {
-      execl (SHELL, SHELL, "-c", command, NULL);
-      _exit (EXIT_FAILURE);
+      execl(SHELL, SHELL, "-c", command, NULL);
+      _exit(EXIT_FAILURE);
     }
   else if (pid < 0)
     status = -1;
   else {
       status = 1;
       sleep(4);
-      }
+  }
   return status;
 }
 
@@ -119,8 +122,8 @@ int openJackClient(void)
 
 int ottieniPorte(void) 
 {
-    if (client!=NULL) {
-        if (jplist!=NULL) {
+    if (client != NULL) {
+        if (jplist != NULL) {
             free(jplist);
             jplist = NULL;
         }
@@ -258,8 +261,8 @@ int connessionePerNumero2(int n, char** nomeOut)
 
 float cpuLoad(void)
 {
-    if(client!=NULL) {
-        float load =  (float)jack_cpu_load(client);
+    if (client != NULL) {
+        float load = (float)jack_cpu_load(client);
         return load;
     }
     return 0.0f;
@@ -286,8 +289,7 @@ int loadPrefStat(void)
         driver=0;
         interface = 0;
         return 22;
-    }
-    else {
+    } else {
         int nullo;
         fscanf(jackpref,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",&driver, &nullo,&interface,&nullo,&sr,&nullo,&buf,&nullo,&ch); 
     }
@@ -468,11 +470,11 @@ void setCurrentAudioDevice(char* inName) {
 }
 
 void JPLog(char *fmt,...) {
-if(verboseLevel!=0) {
-    va_list ap;
-    va_start(ap, fmt);
-    fprintf(stderr,"JP: ");
-    vfprintf(stderr, fmt, ap);
-    va_end(ap);
-}
+	if(verboseLevel!=0) {
+		va_list ap;
+		va_start(ap, fmt);
+		fprintf(stderr,"JP: ");
+		vfprintf(stderr, fmt, ap);
+		va_end(ap);
+	}
 }
