@@ -89,6 +89,7 @@
                 startBut = NSButton; 
                 sysDefOut = id; 
                 toggleDock = NSMenuItem; 
+                verboseBox = id; 
                 waitPanel = NSPanel; 
                 warnPanel = NSPanel; 
             }; 

@@ -17,6 +17,7 @@
 int getDefInput(void);
 int getDefOutput(void);
 int getSysOut(void);
+int getVerboseLevel(void);
 
 int openJack(const char *stringa);
 int closeJack(void);

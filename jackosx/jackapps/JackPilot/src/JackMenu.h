@@ -20,6 +20,7 @@
     IBOutlet id channelsTest;
     id jackPilWin;
     id jackdMode;
+	id verboseBox;
     IBOutlet NSPopUpButton *driverBox;
     IBOutlet NSPopUpButton *interfaceBox;
     IBOutlet NSTextField *isonBut;

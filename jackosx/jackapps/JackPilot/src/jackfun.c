@@ -20,7 +20,6 @@ int flag;
 char coreAudioDevice[256];
 int defInput,defOutput,defSystem;
 int verboseLevel = 0;
-extern int s_debug;
 
 int openJack(const char *stringa) 
 {
@@ -388,6 +387,10 @@ int getOutCH(void) {
 
 int getAutoC(void) {
     return autoc;
+}
+
+int getVerboseLevel(void) {
+	return verboseLevel;
 }
 
 int nomeCliente(int n, char* nome) 
