@@ -7,15 +7,12 @@
 	objects = {
 		014CEA3E0018CDD111CA2923 = {
 			explicitFileType = wrapper.cfbundle;
-			fallbackIsa = PBXFileReference;
-			isa = PBXBundleReference;
+			isa = PBXFileReference;
 			path = JackRouter.plugin;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		014CEA3F0018CDD111CA2923 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -29,8 +26,6 @@
 			name = Development;
 		};
 		014CEA400018CDD111CA2923 = {
-			buildRules = (
-			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -130,7 +125,7 @@
 	<key>CFBundleExecutable</key>
 	<string>JackRouter</string>
 	<key>CFBundleGetInfoString</key>
-	<string>JackRouter version 0.5.3, @2004 Grame</string>
+	<string>JackRouter version 0.5.4, @2004 Grame</string>
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
@@ -146,7 +141,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>0.5.3</string>
+	<string>0.5.4</string>
 	<key>CFPlugInDynamicRegisterFunction</key>
 	<string></string>
 	<key>CFPlugInDynamicRegistration</key>
@@ -282,8 +277,7 @@
 //0A3
 //0A4
 		0AA1909FFE8422F4C02AAC07 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = CoreFoundation.framework;
 			path = /System/Library/Frameworks/CoreFoundation.framework;
@@ -559,8 +553,7 @@
 //6B3
 //6B4
 		6B72988F04D054E500D1CFAB = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = IOKit.framework;
 			path = /System/Library/Frameworks/IOKit.framework;
@@ -568,8 +561,7 @@
 			sourceTree = "<absolute>";
 		};
 		6B9F593E04D95CAC00000064 = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = Kernel.framework;
 			path = /System/Library/Frameworks/Kernel.framework;
@@ -577,8 +569,7 @@
 			sourceTree = "<absolute>";
 		};
 		6BCFE50A04CFE4B100A8650F = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = CoreAudio.framework;
 			path = /System/Library/Frameworks/CoreAudio.framework;
@@ -701,8 +692,7 @@
 			};
 		};
 		B2CF85200505FCF600B94C9A = {
-			fallbackIsa = PBXFileReference;
-			isa = PBXFrameworkReference;
+			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = Carbon.framework;
 			path = /System/Library/Frameworks/Carbon.framework;

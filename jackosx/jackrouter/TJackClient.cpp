@@ -199,6 +199,10 @@ History
 
 13-07-04 : Version 0.53 : S Letz
 		Correct bug in kAudioDevicePropertyIOProcStreamUsage management.
+	
+1-09-04 : Version 0.54 : S Letz
+		Distinguish kAudioDevicePropertyActualSampleRate and kAudioDevicePropertyNominalSampleRate.
+		kAudioDevicePropertyActualSampleRate is rerurned only when the driver is running.
         
 TODO :
     
@@ -249,7 +253,7 @@ struct stereoList
 };
 typedef struct stereoList stereoList;
 
-#define PRINTDEBUG 1
+//#define PRINTDEBUG 1
 
 //------------------------------------------------------------------------
 static void JARLog(char *fmt,...) 
@@ -1583,11 +1587,11 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                     AudioStreamID* streamIDList = (AudioStreamID*)outPropertyData;
                     
                     if (isInput) {
-                        for (int i = 0; i<channels; i++) {
+                        for (int i = 0; i < channels; i++) {
                             streamIDList[i] = TJackClient::fStreamIDList[i];
                         }
                     }else{
-                        for (int i = 0; i<channels; i++) {
+                        for (int i = 0; i < channels; i++) {
                             streamIDList[i] = TJackClient::fStreamIDList[i+TJackClient::fInputChannels];
                         }
                     }
@@ -1784,7 +1788,22 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 				break;
         }
         
-        case kAudioDevicePropertyNominalSampleRate:
+	    case kAudioDevicePropertyNominalSampleRate:
+	   {
+				// steph 14/01/04
+				if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)){
+					*ioPropertyDataSize = sizeof(Float64);
+				}else if (*ioPropertyDataSize < sizeof(Float64)){
+					JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n",*ioPropertyDataSize);
+					err = kAudioHardwareBadPropertySizeError;
+				}else{
+					Float64* valRange = (Float64*)outPropertyData;
+					*valRange = fSampleRate;
+					*ioPropertyDataSize = sizeof(Float64);
+				}
+				break;
+		}    
+		
         case kAudioDevicePropertyActualSampleRate:
         {
 				// steph 14/01/04
@@ -1795,7 +1814,8 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 					err = kAudioHardwareBadPropertySizeError;
 				}else{
 					Float64* valRange = (Float64*)outPropertyData;
-					*valRange = fSampleRate;
+					bool running = (TJackClient::fJackClient) ? TJackClient::fJackClient->IsRunning() : false; 
+					*valRange = (running) ? fSampleRate : 0.0f;
 					*ioPropertyDataSize = sizeof(Float64);
 				}
 				break;
@@ -3005,7 +3025,7 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
     }
     if (err == kAudioHardwareNoError)
     {
-		for (int i = 0; i<TJackClient::fOutputChannels + TJackClient::fInputChannels; i++) {
+		for (int i = 0; i < TJackClient::fOutputChannels + TJackClient::fInputChannels; i++) {
 			err = AudioHardwareClaimAudioStreamID(inSelf, TJackClient::fDeviceID, &fStreamIDList[i]);
 			JARLog("AudioHardwareClaimAudioStreamID %ld\n", (long)&TJackClient::fStreamIDList[i]);
 			if (err == kAudioHardwareNoError) {
@@ -3050,7 +3070,7 @@ OSStatus TJackClient::Teardown(AudioHardwarePlugInRef inSelf)
     for (int i = 0; i<TJackClient::fOutputChannels + TJackClient::fInputChannels; i++) {
         err = AudioHardwareStreamsDied(inSelf, TJackClient::fDeviceID, i+1, &fStreamIDList[i]);
  		printError(err);
-     }
+	}
     
     if (TJackClient::fConnected2HAL) {
     	err = AudioHardwareDevicesDied(inSelf, 1, &TJackClient::fDeviceID);
@@ -3133,6 +3153,13 @@ bool TJackClient::QueryDevices(jack_client_t * client)
     }
     
     TJackClient::fCoreAudioDriver = 0;
+	
+	// Find out how many Core Audio devices there are, if any
+    //outSize = sizeof(outWritable);
+	
+	err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices, &outSize, &outWritable);
+	JARLog("AudioHardwareGetPropertyInfo : outSize %ld\n", outSize);
+
 
     // Find out how many Core Audio devices there are, if any
     outSize = sizeof(outWritable);
