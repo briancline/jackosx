@@ -21,7 +21,12 @@
 	
 	Johnny Petrantoni, johnny@lato-b.com - Italy, Rome.
     
-	30-01-04, Johnny Petrantoni: first code of the coreaudio driver.
+	Jan 30, 2004: Johnny Petrantoni: first code of the coreaudio driver, based on portaudio driver by Stephane Letz.
+	Feb 02, 2004: Johnny Petrantoni: fixed null cycle, removed double copy of buffers in AudioRender, the driver works fine (tested with Built-in Audio and Hammerfall RME), 
+									 but no cpu load is displayed.
+									 
+	TODO:
+	- fix cpu load behavior.
    
 */
 
@@ -33,6 +38,8 @@
 #include "coreaudio_driver.h"
 
 const int CAVersion = 1;
+
+void JCALog(char *fmt,...);
 
 int coreaudio_runCycle(void *driver,long bufferSize) {
 	coreaudio_driver_t * ca_driver = (coreaudio_driver_t*)driver;
@@ -133,8 +140,17 @@ coreaudio_driver_detach (coreaudio_driver_t *driver, jack_engine_t *engine)
 static int
 coreaudio_driver_null_cycle (coreaudio_driver_t* driver, jack_nframes_t nframes)
 {
-        memset(driver->outcoreaudio, 0, (driver->playback_nchannels * nframes * sizeof(float)));
-        return 0;
+	int i;
+	
+	if(!driver->isInterleaved) {
+		for(i=0;i<driver->playback_nchannels;i++) {
+			memset(driver->outcoreaudio[i], 0x0,nframes * sizeof(float));
+		}
+	} else {
+		memset(driver->outcoreaudio[0], 0x0,nframes * sizeof(float) * driver->playback_nchannels);
+	}
+	
+	return 0;
 }
 
 static int
@@ -144,17 +160,28 @@ coreaudio_driver_read (coreaudio_driver_t *driver, jack_nframes_t nframes)
         channel_t chn;
         jack_port_t *port;
         JSList *node;
-
+		int i;
+		
         for (chn = 0, node = driver->capture_ports; node; node = jack_slist_next (node), chn++) {
                 
                 port = (jack_port_t *)node->data;
-				                
-                if (jack_port_connected (port) && (driver->incoreaudio[chn] != NULL)) {
-                    //int channels = driver->capture_nchannels;
-                    float* in = driver->incoreaudio[chn];
-                    buf = jack_port_get_buffer (port, nframes); 
-					memcpy(buf,in,sizeof(float)*nframes);
-                }
+				
+				if(!driver->isInterleaved) {
+					if (jack_port_connected (port) && (driver->incoreaudio[chn] != NULL)) {
+						float *in = driver->incoreaudio[chn];
+						buf = jack_port_get_buffer (port, nframes); 
+						memcpy(buf,in,sizeof(float)*nframes);
+					}
+				} else {
+					if (jack_port_connected (port) && (driver->incoreaudio[0] != NULL)) {
+						int channels = driver->capture_nchannels;
+						if(channels>0) {
+							float *in = driver->incoreaudio[0];
+							buf = jack_port_get_buffer (port, nframes); 
+							for (i = 0; i< nframes; i++) buf[i] = in[channels*i+chn];
+						}
+					}
+				}
     
         }
        
@@ -170,24 +197,28 @@ coreaudio_driver_write (coreaudio_driver_t *driver, jack_nframes_t nframes)
         channel_t chn;
         jack_port_t *port;
         JSList *node;
-        int i;
-        /* Clear in case of nothing is connected */
-		for(i=0;i<driver->playback_nchannels;i++) {
-			memset(driver->outcoreaudio[i],0x0,sizeof(float)*nframes);
-		}
-		
-                
+		int i;
+		                
         for (chn = 0, node = driver->playback_ports; node; node = jack_slist_next (node), chn++) {
                 
                 port = (jack_port_t *)node->data;
 				
-                
-                if (jack_port_connected (port) && (driver->outcoreaudio[chn] != NULL)) {
-                        //int channels = driver->playback_nchannels;
-                        float* out = driver->outcoreaudio[chn];
+                if(!driver->isInterleaved) {
+					if (jack_port_connected (port) && (driver->outcoreaudio[chn] != NULL)) {
+						float *out = driver->outcoreaudio[chn];
                         buf = jack_port_get_buffer (port, nframes);
 						memcpy(out,buf,sizeof(float)*nframes);
-                }
+					}
+				} else {
+					if (jack_port_connected (port) && (driver->outcoreaudio[0] != NULL)) {
+                        int channels = driver->playback_nchannels;
+						if(channels>0) {
+							float *out = driver->outcoreaudio[0];
+							buf = jack_port_get_buffer (port, nframes);
+							for (i = 0; i< nframes; i++) out[channels*i+chn] = buf[i];
+						}
+					}
+				}
         }
         
         return 0;
@@ -246,7 +277,7 @@ coreaudio_driver_new (char *name,
 {
 	coreaudio_driver_t *driver;
 	
-	printf ("coreaudio beta %d driver\n",CAVersion);
+	JCALog ("coreaudio beta %d driver\n",CAVersion);
 
 	driver = (coreaudio_driver_t *) calloc (1, sizeof (coreaudio_driver_t));
 
@@ -281,6 +312,7 @@ coreaudio_driver_new (char *name,
 	
 	setHostData(driver->stream,driver);
 	setCycleFun(driver->stream,coreaudio_runCycle);
+	setParameter(driver->stream,'inte',&driver->isInterleaved);
 	
 	driver->incoreaudio = getPandaAudioInputs(driver->stream);
 	driver->outcoreaudio = getPandaAudioOutputs(driver->stream);
@@ -436,7 +468,7 @@ driver_initialize (jack_client_t *client, const JSList * params)
 		switch (param->character) {
                 
 		case 'n':
-			name =  param->value.str;
+			name =  (char*)param->value.str;
 			printf("Driver name found %s\n",name);
 			break;
                         

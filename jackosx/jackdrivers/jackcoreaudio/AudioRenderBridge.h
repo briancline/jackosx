@@ -23,6 +23,7 @@ float **getPandaAudioOutputs(void *instance);
 void * getHostData(void *instance);
 void setHostData(void *instance, void* hostData);
 void setCycleFun(void *instance,JackRunCyclePtr fun);
+void setParameter(void *instance,int id,void *data);
 
 #ifdef __cplusplus
 }

@@ -5,6 +5,12 @@
 	};
 	objectVersion = 39;
 	objects = {
+		B269BD8905CE675F008A029D = {
+			fileRef = B2EFA46C05CA7C8700CC0BE7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		B2CE55E905CA605900667293 = {
 			children = (
 				B2CE567505CA626E00667293,
@@ -78,7 +84,7 @@
 				B2CE571405CA642900667293,
 				B2CE57A005CA654200667293,
 				B2CE592205CA6D7E00667293,
-				B2EFA46D05CA7C8700CC0BE7,
+				B269BD8905CE675F008A029D,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -109,7 +115,7 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				HEADER_SEARCH_PATHS = /Users/johnny/Desktop/jack;
+				HEADER_SEARCH_PATHS = "\"/Volumes/Archivio HD/Development/jackosx/jackosx/jackdrivers/jack\"";
 				LIBRARY_STYLE = BUNDLE;
 				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "";
@@ -139,11 +145,11 @@
 		};
 		B2CE563E05CA61FA00667293 = {
 			children = (
-				B2CE564C05CA622100667293,
 				B2CE564D05CA622100667293,
 				B2CE579D05CA654200667293,
-				B2CE579E05CA654200667293,
 				B2CE591F05CA6D7E00667293,
+				B2CE564C05CA622100667293,
+				B2CE579E05CA654200667293,
 				B2CE592005CA6D7E00667293,
 				B2CE576705CA64E600667293,
 			);
@@ -325,24 +331,18 @@
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.c;
 			name = driver.c;
-			path = /Users/johnny/Desktop/jack/libjack/driver.c;
-			refType = 0;
-			sourceTree = "<absolute>";
-		};
-		B2EFA46D05CA7C8700CC0BE7 = {
-			fileRef = B2EFA46C05CA7C8700CC0BE7;
-			isa = PBXBuildFile;
-			settings = {
-			};
+			path = ../jack/libjack/driver.c;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		B2EFA47205CA7C9300CC0BE7 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
 			name = driver.h;
-			path = /Users/johnny/Desktop/jack/jack/driver.h;
-			refType = 0;
-			sourceTree = "<absolute>";
+			path = ../jack/jack/driver.h;
+			refType = 2;
+			sourceTree = SOURCE_ROOT;
 		};
 		B2EFA47305CA7C9300CC0BE7 = {
 			fileRef = B2EFA47205CA7C9300CC0BE7;

@@ -12,6 +12,15 @@
 #include <Carbon/Carbon.h>
 #include <CoreAudio/CoreAudio.h>
 
+
+#define	Print4CharCode(msg, c)	{														\
+	UInt32 __4CC_number = (c);		\
+		char __4CC_string[5];		\
+	memcpy(__4CC_string, &__4CC_number, 4);	\
+	__4CC_string[4] = 0;			\
+	printf("%s'%s'\n", (msg), __4CC_string);\
+}
+
 typedef int (*JackRunCyclePtr)(void * driver,long bufferSize);
 
 class AudioRender {
@@ -39,8 +48,10 @@ class AudioRender {
         static int gOutputChannels;
         static bool isProcessing;
         static const AudioTimeStamp *gTime;
+		int *isInterleaved;
     private:
         static OSStatus process(AudioDeviceID inDevice,const AudioTimeStamp* inNow,const AudioBufferList* inInputData,const AudioTimeStamp* 
 					inInputTime,AudioBufferList* outOutputData,const AudioTimeStamp* inOutputTime,void* inClientData);
         static AudioRender *theRender;
+
 };

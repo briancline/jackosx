@@ -10,6 +10,8 @@
  */
 
 #include "AudioRender.h"
+#define DEBUG 1
+//#undef DEBUG
 
 float AudioRender::gSampleRate = 0.0;
 long AudioRender::gBufferSize = 0;
@@ -18,6 +20,35 @@ int AudioRender::gOutputChannels = 0;
 AudioRender *AudioRender::theRender = NULL;
 bool AudioRender::isProcessing = false;
 const AudioTimeStamp *AudioRender::gTime;
+
+extern "C" void JCALog(char *fmt,...) {
+#ifdef DEBUG
+    va_list ap;
+    va_start(ap, fmt);
+    fprintf(stderr,"JCA: ");
+    vfprintf(stderr, fmt, ap);
+    va_end(ap);
+#endif
+}
+
+void PrintStreamDesc (AudioStreamBasicDescription *inDesc)
+{
+    if (!inDesc) {
+        JCALog ("Can't print a NULL desc!\n");
+        return;
+    }
+    
+    JCALog ("- - - - - - - - - - - - - - - - - - - -\n");
+    JCALog ("  Sample Rate:%f\n", inDesc->mSampleRate);
+    JCALog("  Format ID:%.*s\n", (int) sizeof(inDesc->mFormatID), (char*)&inDesc->mFormatID);
+    JCALog ("  Format Flags:%lX\n", inDesc->mFormatFlags);
+    JCALog ("  Bytes per Packet:%ld\n", inDesc->mBytesPerPacket);
+    JCALog ("  Frames per Packet:%ld\n", inDesc->mFramesPerPacket);
+    JCALog ("  Bytes per Frame:%ld\n", inDesc->mBytesPerFrame);
+    JCALog ("  Channels per Frame:%ld\n", inDesc->mChannelsPerFrame);
+    JCALog ("  Bits per Channel:%ld\n", inDesc->mBitsPerChannel);
+    JCALog ("- - - - - - - - - - - - - - - - - - - -\n");
+}
 
 AudioRender::AudioRender(float sampleRate,long bufferSize,int inChannels, int outChannels, char *device) : 	vSampleRate(sampleRate),vBufferSize(bufferSize) 
 {
@@ -33,32 +64,20 @@ AudioRender::AudioRender(float sampleRate,long bufferSize,int inChannels, int ou
     isProcessing = false;
 	
     if(status) {
-        inBuffers = (float**)malloc(sizeof(float*)*vChannels);
+        inBuffers = (float**)malloc(sizeof(float*)*vInChannels);
         outBuffers = (float**)malloc(sizeof(float*)*vChannels);
-        for(int i =0;i< vChannels;i++) {
-            inBuffers[i] = (float*)malloc(sizeof(float)*vBufferSize);
-        }
-        for(int i =0;i< vChannels;i++) {
-            outBuffers[i] = (float*)malloc(sizeof(float)*vBufferSize);
-            memset(outBuffers[i], 0, vBufferSize*sizeof(float));
-        }
-    }
+	}
+	JCALog("AudioRender created\n");
 }
 
 AudioRender::~AudioRender() {
-if(status) {
-    if(isProcessing) AudioDeviceStop(vDevice,process);
-    OSStatus err = AudioDeviceRemoveIOProc(vDevice,process);
-    if(err==noErr) status = false;
-    for(int i =0;i< vChannels;i++) {
-        free(inBuffers[i]);
-    }
-    for(int i =0;i< vChannels;i++) {
-        free(outBuffers[i]);
-    }
-    free(inBuffers);
-    free(outBuffers);
-}
+	if(status) {
+		if(isProcessing) AudioDeviceStop(vDevice,process);
+		OSStatus err = AudioDeviceRemoveIOProc(vDevice,process);
+		if(err==noErr) status = false;
+		free(inBuffers);
+		free(outBuffers);
+	}
 }
 
 bool AudioRender::ConfigureAudioProc(float sampleRate,long bufferSize,int channels,int inChannels,char *device) {
@@ -92,18 +111,7 @@ bool AudioRender::ConfigureAudioProc(float sampleRate,long bufferSize,int channe
     err = AudioDeviceGetProperty(vDevice,0,false,kAudioDevicePropertyDeviceName,&size,&deviceName);
     if(err!=noErr) return false;
     
-    printf("DEVICE: %s\n",deviceName);
-    
-    /*size = sizeof(AudioBufferList);
-    AudioBufferList bufList;
-    err = AudioDeviceGetProperty(vDevice,0,false,kAudioDevicePropertyStreamConfiguration,&size,&bufList);
-    if(err!=noErr) return false;
-    
-    int nChan = 0;
-    for(unsigned int i = 0;i<bufList.mNumberBuffers;i++) {
-        nChan += (int)bufList.mBuffers[i].mNumberChannels;
-    }*/
-    
+    JCALog("DEVICE: %s.\n",deviceName);
     
     size = sizeof(AudioStreamBasicDescription);
     AudioStreamBasicDescription SR;
@@ -117,7 +125,7 @@ bool AudioRender::ConfigureAudioProc(float sampleRate,long bufferSize,int channe
     vChannels = (int)SR.mChannelsPerFrame*(size/sizeof(AudioStreamID));
     if(vChannels>=channels) vChannels = channels;
     
-    printf("OUTPUT CHANNELS: %d\n",vChannels);
+    JCALog("OUTPUT CHANNELS: %d.\n",vChannels);
     
     err = AudioDeviceGetPropertyInfo(vDevice,0,true,kAudioDevicePropertyStreamFormat,&size,&isWritable);
     if(err!=noErr) { vInChannels = 0; goto endInChan; }
@@ -137,43 +145,41 @@ endInChan:
 
     if(vInChannels>=inChannels) vInChannels = inChannels;
     
-    printf("INPUT CHANNELS: %d\n",vInChannels);
+    JCALog("INPUT CHANNELS: %d.\n",vInChannels);
     
     UInt32 bufFrame;
     size = sizeof(UInt32);
     err = AudioDeviceGetProperty(vDevice,0,false,kAudioDevicePropertyBufferFrameSize,&size,&bufFrame);
     if(err!=noErr) return false;
-    
-    //bufFrame *= SR.mChannelsPerFrame;
-        
+            
     vBufferSize = (long) bufFrame;
     
     if((long)bufFrame!=bufferSize) { 
-        printf("I'm trying to set a new buffer size\n");
+        JCALog("I'm trying to set a new buffer size.\n");
         UInt32 theSize = sizeof(UInt32);
-        UInt32 newBufferSize = (UInt32) bufferSize;///SR.mChannelsPerFrame;
+        UInt32 newBufferSize = (UInt32) bufferSize;
         err = AudioDeviceSetProperty(vDevice,NULL,0,false,kAudioDevicePropertyBufferFrameSize,theSize,&newBufferSize);
-        if(err!=noErr) printf("Cannot set a new buffer size\n");
+        if(err!=noErr) JCALog("Cannot set a new buffer size.\n");
         else {	
             UInt32 newBufFrame;
             size = sizeof(UInt32);
             err = AudioDeviceGetProperty(vDevice,0,false,kAudioDevicePropertyBufferFrameSize,&size,&newBufFrame);
             if(err!=noErr) return false;
-            vBufferSize = (long)newBufFrame;//*SR.mChannelsPerFrame;
+            vBufferSize = (long)newBufFrame;
         }
     }
     
-    printf("BUFFER SIZE: %ld\n",vBufferSize);
+    JCALog("BUFFER SIZE: %ld.\n",vBufferSize);
     
     
     vSampleRate = (float)SR.mSampleRate;
     
     if((float)SR.mSampleRate!=sampleRate) {
-        printf("I'm trying to set a new sample rate\n");
+        JCALog("I'm trying to set a new sample rate.\n");
         UInt32 theSize = sizeof(AudioStreamBasicDescription);
         SR.mSampleRate = (Float64)sampleRate;
         err = AudioDeviceSetProperty(vDevice,NULL,0,false,kAudioDevicePropertyStreamFormat,theSize,&SR);
-        if(err!=noErr) printf("Cannot set a new sample rate\n");
+        if(err!=noErr) JCALog("Cannot set a new sample rate.\n");
         else {
             size = sizeof(AudioStreamBasicDescription);
             AudioStreamBasicDescription newCheckSR;
@@ -183,8 +189,10 @@ endInChan:
         }
     }
     
-    printf("SAMPLE RATE: %f\n",vSampleRate);
-    
+    JCALog("SAMPLE RATE: %f.\n",vSampleRate);
+	
+	PrintStreamDesc(&SR);
+	    
     err = AudioDeviceAddIOProc(vDevice,process,this);
     if(err!=noErr) return false;
     
@@ -192,22 +200,22 @@ endInChan:
 }
 
 bool AudioRender::StartAudio() {
-if(status) {
-    OSStatus err = AudioDeviceStart(vDevice,process);
-    if(err!=noErr) return false;
-    AudioRender::isProcessing = true;
-    return true;
-} 
+	if(status) {
+		OSStatus err = AudioDeviceStart(vDevice,process);
+		if(err!=noErr) return false;
+		AudioRender::isProcessing = true;
+		return true;
+	} 
     return false;
 }
 
 bool AudioRender::StopAudio() {
-if(status) {
-    OSStatus err = AudioDeviceStop(vDevice,process);
-    if(err!=noErr) return false;
-    AudioRender::isProcessing = false;
-    return true;
-}
+	if(status) {
+		OSStatus err = AudioDeviceStop(vDevice,process);
+		if(err!=noErr) return false;
+		AudioRender::isProcessing = false;
+		return true;
+	}
     return false;
 }
 
@@ -218,81 +226,32 @@ OSStatus AudioRender::process(AudioDeviceID inDevice,const AudioTimeStamp* inNow
     int channel = 0;
     
     AudioRender::gTime = inInputTime;
-    
-    for(int i=0;i<classe->vChannels;i++) {
-        memset(classe->outBuffers[i],0x0,sizeof(float)*classe->vBufferSize); 
-    }
-    
-if(inInputData->mNumberBuffers!=0 && inInputData->mBuffers[0].mNumberChannels==1) { //MONO MODE PROCESS
-    long nframes = inInputData->mBuffers[0].mDataByteSize/sizeof(float);
-    
-    for(unsigned int a = 0; a < inInputData->mNumberBuffers;a++) {
-        memcpy(classe->inBuffers[channel],inInputData->mBuffers[a].mData,inInputData->mBuffers[a].mDataByteSize);
-        channel++;
-        if(channel==classe->vInChannels) break;
-    }
-    
-    //Jack RENDER
-	classe->f_JackRunCycle(classe->jackData,classe->vBufferSize);
-     
-    goto output;
-}
-
-if(inInputData->mNumberBuffers!=0 && inInputData->mBuffers[0].mNumberChannels>1) { //NOT MONO MODE PROCESS
-    long nFrames = (inInputData->mBuffers[0].mDataByteSize / sizeof(float))/inInputData->mBuffers[0].mNumberChannels;
-    channel = 0;
-    
-    for(unsigned int b=0;b<inInputData->mNumberBuffers;b++) {
-        for(unsigned int a=0; a<inInputData->mBuffers[b].mNumberChannels; a++) {
-            for(long i=0;i<nFrames;i++) {
-                float *inData = (float*)inInputData->mBuffers[b].mData;
-                classe->inBuffers[channel][i] = inData[a+(i*2)];
-            }
-            channel++;
-            if(channel==classe->vInChannels) break;
-        }
-        if(channel==classe->vInChannels) break;
-    }
-    
-    //Jack RENDER
-    classe->f_JackRunCycle(classe->jackData,classe->vBufferSize);
 	
-}
-
-output:
-
-if(outOutputData->mNumberBuffers!=0 && outOutputData->mBuffers[0].mNumberChannels==1) { //MONO MODE PROCESS
-    channel = 0;
-    
-    for(unsigned int a = 0; a < outOutputData->mNumberBuffers;a++) {
-        memcpy(outOutputData->mBuffers[a].mData,classe->outBuffers[channel],outOutputData->mBuffers[a].mDataByteSize);
-        channel++;
-        if(channel==classe->vChannels) break;
-    }
-    
-    goto end;
-}
-
-if(outOutputData->mNumberBuffers!=0 && outOutputData->mBuffers[0].mNumberChannels>1) { //NOT MONO MODE PROCESS
-    long nFrames = (outOutputData->mBuffers[0].mDataByteSize / sizeof(float))/outOutputData->mBuffers[0].mNumberChannels;
-    
-    channel = 0;
-    
-    for(unsigned int b=0;b<outOutputData->mNumberBuffers;b++) {
-        for(unsigned int a=0; a<outOutputData->mBuffers[b].mNumberChannels; a++) {
-            for(long i=0;i<nFrames;i++) {
-                float *outData = (float*)outOutputData->mBuffers[b].mData;
-                outData[a+(i*2)] = classe->outBuffers[channel][i];
-            }
-            channel++;
-            if(channel==classe->vChannels) break;
-        }
-        if(channel==classe->vChannels) break;
-    }
-
-}
-
-end:
+	if(inInputData->mNumberBuffers!=0 && inInputData->mBuffers[0].mNumberChannels==1) classe->isInterleaved = FALSE;
+	else *classe->isInterleaved = TRUE;
+	
+	if(!classe->isInterleaved) {
+		for(unsigned int a = 0; a < inInputData->mNumberBuffers;a++) {
+			classe->inBuffers[channel] = (float*)inInputData->mBuffers[a].mData;
+			channel++;
+			if(channel==classe->vInChannels) break;
+		}
+		channel = 0;
+		for(unsigned int a = 0; a < outOutputData->mNumberBuffers;a++) {
+			classe->outBuffers[channel] = (float*)outOutputData->mBuffers[a].mData;
+			channel++;
+			if(channel==classe->vChannels) break;
+		}
+	} else {
+		for(unsigned int b=0;b<inInputData->mNumberBuffers;b++) {
+			classe->inBuffers[b] = (float*)inInputData->mBuffers[b].mData; // but jack will read only the inBuffers[0], anyway that should not be a problem.
+		}
+		for(unsigned int b=0;b<outOutputData->mNumberBuffers;b++) {
+			classe->outBuffers[b] = (float*)outOutputData->mBuffers[b].mData; // but jack will read only the outBuffers[0], anyway that should not be a problem.
+		}
+	}
+	
+	classe->f_JackRunCycle(classe->jackData,classe->vBufferSize);
 
     return noErr;
 }
@@ -305,3 +264,7 @@ float **AudioRender::getDAC() {
     if(AudioRender::theRender==NULL) return NULL;
     return AudioRender::theRender->outBuffers;
 }
+
+
+
+

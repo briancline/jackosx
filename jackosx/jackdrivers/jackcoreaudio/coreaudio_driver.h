@@ -64,6 +64,7 @@ typedef struct {
 
         float **incoreaudio;
 		float **outcoreaudio;
+		int isInterleaved;
         char driver_name[256];
         void *   stream;
 

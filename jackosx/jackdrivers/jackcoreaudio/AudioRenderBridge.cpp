@@ -79,3 +79,14 @@ void setCycleFun(void *instance,JackRunCyclePtr fun) {
 	}
 }
 
+void setParameter(void *instance,int id,void *data) {
+	if(instance) {
+		AudioRender *inst = (AudioRender*)instance;
+		switch(id) {
+			case 'inte':
+				inst->isInterleaved = (int*)data;
+				break;
+		}
+	}
+}
+
