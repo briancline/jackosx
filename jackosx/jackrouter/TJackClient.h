@@ -55,7 +55,9 @@ extern "C"
 		kAudioDevicePropertyGetJackPortVST = 'jpgv',
 		kAudioDevicePropertyGetJackPortAU = 'jpga',
 		kAudioDevicePropertyReleaseJackPortVST = 'jprv',
-		kAudioDevicePropertyReleaseJackPortAU = 'jpra'
+		kAudioDevicePropertyReleaseJackPortAU = 'jpra',
+		kAudioDevicePropertyDeactivateJack = 'daja',
+		kAudioDevicePropertyActivateJack = 'aaja'
     };
 
     // The IOProc context
@@ -79,7 +81,6 @@ extern "C"
     };
 
     // The CoreAudio/Jack client
-
     class TJackClient {
 
         private:
@@ -101,7 +102,8 @@ extern "C"
             long fProcRunning;	// Counter of running IOProc
             long fExternalClientNum;	// Counter of external clients (Jack plug-ins)
             long fInternalClientNum;	// Counter of internal client
-
+			bool fActivated;	// Jack activation state
+			
             // Global state
             static TJackClient* fJackClient;
             static list<pair<string, string> > fConnections;  // Connections list
@@ -118,11 +120,12 @@ extern "C"
             static string fDeviceName;
             static string fStreamName;
             static string fDeviceManufacturer;
+			
             static bool fDeviceRunning;
             static bool fConnected2HAL;
 
             static AudioDeviceID fDeviceID;
-            static AudioStreamID fStreamIDList[128];
+            static AudioStreamID fStreamIDList[MAX_JACK_PORTS];
 			static set<string>* fBlackList;
 
             static AudioDeviceID fCoreAudioDriver;		// The CoreAudio driver currently loaded by Jack
@@ -167,6 +170,8 @@ extern "C"
 
             bool Activate();
             bool Desactivate();
+			void SaveActivate();
+			void RestoreActivate();
             bool AutoConnect();
 
             void Start(AudioDeviceIOProc proc);
@@ -193,7 +198,6 @@ extern "C"
             void RestoreConnections();
 
             // HAL Plug-in API
-
             static OSStatus	Initialize(AudioHardwarePlugInRef inSelf);
             static OSStatus Teardown(AudioHardwarePlugInRef inSelf);
        
