@@ -22,6 +22,7 @@ grame@rd.grame.fr
 #ifndef __TJackClient__
 #define __TJackClient__
 
+//#include <pthread.h>
 #include <CoreAudio/CoreAudio.h>
 #include <CoreAudio/AudioHardwarePlugin.h>
 #include <IOKit/audio/IOAudioTypes.h>
@@ -33,6 +34,7 @@ grame@rd.grame.fr
 #include <set>
 #include "bequite.h"
 
+
 using namespace std;
 
 #ifdef __cplusplus
@@ -42,22 +44,22 @@ extern "C"
 
 #define JACK_PORT_NAME_LEN 256
 #define JACK_CLIENT_NAME_LEN 256
-#define  MAX_JACK_PORTS 128
+#define MAX_JACK_PORTS 128
 
     void JARLog(char *fmt, ...);
-	
-	// Special property fo access from Jack plug-ins (AU, VST)
-	enum {
+
+    // Special property fo access from Jack plug-ins (AU, VST)
+    enum {
         kAudioDevicePropertyGetJackClient = 'jasg',
         kAudioDevicePropertyReleaseJackClient = 'jasr',
-		kAudioDevicePropertyAllocateJackPortVST = 'jpav',  
-		kAudioDevicePropertyAllocateJackPortAU = 'jpaa',
-		kAudioDevicePropertyGetJackPortVST = 'jpgv',
-		kAudioDevicePropertyGetJackPortAU = 'jpga',
-		kAudioDevicePropertyReleaseJackPortVST = 'jprv',
-		kAudioDevicePropertyReleaseJackPortAU = 'jpra',
-		kAudioDevicePropertyDeactivateJack = 'daja',
-		kAudioDevicePropertyActivateJack = 'aaja'
+        kAudioDevicePropertyAllocateJackPortVST = 'jpav',
+        kAudioDevicePropertyAllocateJackPortAU = 'jpaa',
+        kAudioDevicePropertyGetJackPortVST = 'jpgv',
+        kAudioDevicePropertyGetJackPortAU = 'jpga',
+        kAudioDevicePropertyReleaseJackPortVST = 'jprv',
+        kAudioDevicePropertyReleaseJackPortAU = 'jpra',
+        kAudioDevicePropertyDeactivateJack = 'daja',
+        kAudioDevicePropertyActivateJack = 'aaja'
     };
 
     // The IOProc context
@@ -89,21 +91,21 @@ extern "C"
 
             jack_port_t* fInputPortList[MAX_JACK_PORTS];	// Jack input ports
             jack_port_t* fOutputPortList[MAX_JACK_PORTS];	// Jack output ports
-			map<int, pair<float*, jack_port_t*> > fPlugInPortsVST;	// Map of temp buffers and associated Jack ports to be used by AU plug-ins
-			map<int, pair<float*, jack_port_t*> > fPlugInPortsAU;	// Map of temp buffers and associated Jack ports to be used by VST plug-ins
+            map<int, pair<float*, jack_port_t*> > fPlugInPortsVST;	// Map of temp buffers and associated Jack ports to be used by AU plug-ins
+            map<int, pair<float*, jack_port_t*> > fPlugInPortsAU;	// Map of temp buffers and associated Jack ports to be used by VST plug-ins
 
             AudioBufferList* fInputList;	// CoreAudio input buffers
             AudioBufferList* fOutputList;	// CoreAudio output buffers
 
             float** fOuputListTemp;	// Intermediate output buffers
-		
+
             map<AudioDeviceIOProc, TProcContext> fAudioIOProcList;   // Table of IOProc
 
             long fProcRunning;	// Counter of running IOProc
             long fExternalClientNum;	// Counter of external clients (Jack plug-ins)
             long fInternalClientNum;	// Counter of internal client
-			bool fActivated;	// Jack activation state
-			
+            bool fActivated;	// Jack activation state
+
             // Global state
             static TJackClient* fJackClient;
             static list<pair<string, string> > fConnections;  // Connections list
@@ -120,35 +122,39 @@ extern "C"
             static string fDeviceName;
             static string fStreamName;
             static string fDeviceManufacturer;
-			
+
             static bool fDeviceRunning;
             static bool fConnected2HAL;
 
             static AudioDeviceID fDeviceID;
             static AudioStreamID fStreamIDList[MAX_JACK_PORTS];
-			static set<string>* fBlackList;
+            static set<string>* fBlackList;
 
             static AudioDeviceID fCoreAudioDriver;		// The CoreAudio driver currently loaded by Jack
-			static bool fFirstActivate;
-			static AudioHardwarePlugInRef fPlugInRef;
+			static char fCoreAudioDriverUID[128];		// The CoreAudio driver currently loaded by Jack
+            static bool fFirstActivate;
+            static AudioHardwarePlugInRef fPlugInRef;
             static bool fNotification;
-		
+
             static void SetTime(AudioTimeStamp* timeVal, long curTime, UInt64 time);
-			
-			// Plug-in management
-			bool AllocatePlugInPortVST(int num);
-			bool AllocatePlugInPortAU(int num);
-			float* GetPlugInPortVST(int num);
-			float* GetPlugInPortAU(int num);
-			void ReleasePlugInPortVST(int num);
-			void ReleasePlugInPortAU(int num);
+
+            // Plug-in management
+            bool AllocatePlugInPortVST(int num);
+            bool AllocatePlugInPortAU(int num);
+            float* GetPlugInPortVST(int num);
+            float* GetPlugInPortAU(int num);
+            void ReleasePlugInPortVST(int num);
+            void ReleasePlugInPortAU(int num);
+
+            bool IsUsedInput(int port);
+            bool IsUsedOutput(int port);
 
         public:
 
             TJackClient();
             virtual ~TJackClient();
 
-			static bool fDebug;
+            static bool fDebug;
             static int Process(jack_nframes_t nframes, void* arg);
             static int BufferSize(jack_nframes_t nframes, void* arg);
             static int XRun(void* arg);
@@ -170,8 +176,8 @@ extern "C"
 
             bool Activate();
             bool Desactivate();
-			void SaveActivate();
-			void RestoreActivate();
+            void SaveActivate();
+            void RestoreActivate();
             bool AutoConnect();
 
             void Start(AudioDeviceIOProc proc);
@@ -196,11 +202,11 @@ extern "C"
 
             void SaveConnections();
             void RestoreConnections();
-
-            // HAL Plug-in API
+			
+	       // HAL Plug-in API
             static OSStatus	Initialize(AudioHardwarePlugInRef inSelf);
             static OSStatus Teardown(AudioHardwarePlugInRef inSelf);
-       
+
             static OSStatus DeviceAddIOProc(AudioHardwarePlugInRef inSelf,
                                             AudioDeviceID inDevice,
                                             AudioDeviceIOProc proc,

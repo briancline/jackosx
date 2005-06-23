@@ -102,7 +102,7 @@
 				HEADER_SEARCH_PATHS = "";
 				INSTALL_PATH = "/Library/Audio/Plug-Ins/HAL";
 				LIBRARY_SEARCH_PATHS = "";
-				OPTIMIZATION_CFLAGS = "-O3";
+				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-framework Jack -framework CoreFoundation";
 				OTHER_REZFLAGS = "";
@@ -127,7 +127,7 @@
 	<key>CFBundleExecutable</key>
 	<string>JackRouter</string>
 	<key>CFBundleGetInfoString</key>
-	<string>JackRouter 0.7.4, @2004-2005 Grame</string>
+	<string>JackRouter 0.7.6, @2004-2005 Grame</string>
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
@@ -143,7 +143,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>0.7.4</string>
+	<string>0.7.6</string>
 	<key>CFPlugInDynamicRegisterFunction</key>
 	<string></string>
 	<key>CFPlugInDynamicRegistration</key>
@@ -198,10 +198,10 @@
 		089C1676FE841209C02AAC07 = {
 			buildActionMask = 2147483647;
 			files = (
-				4BA722D004EA14C900053105,
 				B2CF851C0505FC4300B94C9A,
 				B2CF851E0505FC4300B94C9A,
 				4B61EDA505BFF2FC0093DF43,
+				4BF0CB65084DBE630017AC16,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -433,12 +433,6 @@
 			refType = 2;
 			sourceTree = SOURCE_ROOT;
 		};
-		4BA722D004EA14C900053105 = {
-			fileRef = 4BA722CF04EA14C900053105;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		4BC402DE04ED269100053105 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -564,6 +558,12 @@
 		};
 		4BC402EE04ED2C6000053105 = {
 			fileRef = 4BC402E804ED2C6000053105;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		4BF0CB65084DBE630017AC16 = {
+			fileRef = 4BA722CF04EA14C900053105;
 			isa = PBXBuildFile;
 			settings = {
 			};
