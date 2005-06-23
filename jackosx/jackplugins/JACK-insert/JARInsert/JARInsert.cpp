@@ -42,12 +42,19 @@ JARInsert::JARInsert(long host_buffer_size, int hostType)
         : c_error(kNoErr), c_client(NULL), c_isRunning(false), c_rBufOn(false), c_needsDeactivate(false), c_hBufferSize(host_buffer_size), c_hostType(hostType)
 {
     ReadPrefs();
-
+	
+	UInt32 outSize;
+    Boolean isWritable;
+	
     if (!OpenAudioClient()) {
         JARILog("Cannot find jack client.\n");
         SHOWALERT("Cannot find jack client for this application, check if Jack server is running.");
         return ;
     }
+	
+	// Deactivate Jack callback
+	//AudioDeviceGetPropertyInfo(c_jackDevID, 0, true, kAudioDevicePropertyDeactivateJack, &outSize, &isWritable);
+	//AudioDeviceSetProperty(c_jackDevID, NULL, 0, true, kAudioDevicePropertyDeactivateJack, 0, NULL);
 
     int nPorts = 2;
 	
@@ -67,16 +74,20 @@ JARInsert::JARInsert(long host_buffer_size, int hostType)
 		c_inPorts[i] = jack_port_register(c_client, name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
         JARILog("Port: %s created\n", name);
     }
-
+	
 	c_instance = JARInsert::c_instances;
 	
 	for (int i = 0; i < c_nOutPorts; i++) {
 		UInt32 portNum = c_instance + i;
         if (hostType == 'vst ') {
+			AudioDeviceGetPropertyInfo(c_jackDevID, 0, true, kAudioDevicePropertyAllocateJackPortVST, &outSize, &isWritable);
             AudioDeviceSetProperty(c_jackDevID, NULL, 0, true, kAudioDevicePropertyAllocateJackPortVST, portNum, NULL);
+			AudioDeviceGetPropertyInfo(c_jackDevID, 0, true, kAudioDevicePropertyGetJackPortVST, &outSize, &isWritable);
 			AudioDeviceGetProperty(c_jackDevID, 0, true, kAudioDevicePropertyGetJackPortVST, &portNum, &c_outPorts[i]);
 		} else {
+			AudioDeviceGetPropertyInfo(c_jackDevID, 0, true, kAudioDevicePropertyAllocateJackPortAU, &outSize, &isWritable);
 			AudioDeviceSetProperty(c_jackDevID, NULL, 0, true, kAudioDevicePropertyAllocateJackPortAU, portNum, NULL);
+			AudioDeviceGetPropertyInfo(c_jackDevID, 0, true, kAudioDevicePropertyGetJackPortAU, &outSize, &isWritable);
 			AudioDeviceGetProperty(c_jackDevID, 0, true, kAudioDevicePropertyGetJackPortAU, &portNum, &c_outPorts[i]);
 		}
  		
@@ -91,9 +102,7 @@ JARInsert::JARInsert(long host_buffer_size, int hostType)
     } else
         c_needsDeactivate = false;
 #endif
-
-    JARInsert::c_instances += 2;
-
+    
     if (c_jBufferSize > c_hBufferSize) {
         c_bsAI1 = new BSizeAlign(c_hBufferSize, c_jBufferSize);
         c_bsAI2 = new BSizeAlign(c_hBufferSize, c_jBufferSize);
@@ -108,20 +117,32 @@ JARInsert::JARInsert(long host_buffer_size, int hostType)
         }
     }
 
-    JARInsert::c_instances_count++;
+    JARInsert::c_instances += 2;
+	JARInsert::c_instances_count++;
     c_canProcess = true;
+	
+	// (Possible) reactivate Jack callback
+	//AudioDeviceGetPropertyInfo(c_jackDevID, 0, true, kAudioDevicePropertyActivateJack, &outSize, &isWritable);
+	//AudioDeviceSetProperty(c_jackDevID, NULL, 0, true, kAudioDevicePropertyActivateJack, 0, NULL);
 }
 
 JARInsert::JARInsert(int hostType)
         : c_error(kNoErr), c_client(NULL), c_isRunning(false), c_rBufOn(false), c_needsDeactivate(false), c_hBufferSize(0),  c_hostType(hostType)
 {
     ReadPrefs();
+	
+	UInt32 outSize;
+    Boolean isWritable;
 
     if (!OpenAudioClient()) {
         JARILog("Cannot find jack client.\n");
         SHOWALERT("Cannot find jack client for this application, check if Jack server is running.");
         return ;
     }
+	
+	// Deactivate Jack callback
+	//AudioDeviceGetPropertyInfo(c_jackDevID, 0, true, kAudioDevicePropertyDeactivateJack, &outSize, &isWritable);
+	//AudioDeviceSetProperty(c_jackDevID, NULL, 0, true, kAudioDevicePropertyDeactivateJack, 0, NULL);
 
     int nPorts = 2;
 
@@ -147,16 +168,19 @@ JARInsert::JARInsert(int hostType)
 	for (int i = 0; i < c_nOutPorts; i++) {
 		UInt32 portNum = c_instance + i;
         if (hostType == 'vst ') {
+			AudioDeviceGetPropertyInfo(c_jackDevID, 0, true, kAudioDevicePropertyAllocateJackPortVST, &outSize, &isWritable);
             AudioDeviceSetProperty(c_jackDevID, NULL, 0, true, kAudioDevicePropertyAllocateJackPortVST, portNum, NULL);
+			AudioDeviceGetPropertyInfo(c_jackDevID, 0, true, kAudioDevicePropertyGetJackPortVST, &outSize, &isWritable);
 			AudioDeviceGetProperty(c_jackDevID, 0, true, kAudioDevicePropertyGetJackPortVST, &portNum, &c_outPorts[i]);
 		} else {
+			AudioDeviceGetPropertyInfo(c_jackDevID, 0, true, kAudioDevicePropertyAllocateJackPortAU, &outSize, &isWritable);
 			AudioDeviceSetProperty(c_jackDevID, NULL, 0, true, kAudioDevicePropertyAllocateJackPortAU, portNum, NULL);
+			AudioDeviceGetPropertyInfo(c_jackDevID, 0, true, kAudioDevicePropertyGetJackPortAU, &outSize, &isWritable);
 			AudioDeviceGetProperty(c_jackDevID, 0, true, kAudioDevicePropertyGetJackPortAU, &portNum, &c_outPorts[i]);
 		}
  		
 		JARILog("Port: %s created\n", name);
     }
-
 
 #if 0
     if (!c_isRunning) {
@@ -170,6 +194,10 @@ JARInsert::JARInsert(int hostType)
     JARInsert::c_instances += 2;
     JARInsert::c_instances_count++;
     c_canProcess = false;
+	
+	// (Possible) reactivate Jack callback
+	//AudioDeviceGetPropertyInfo(c_jackDevID, 0, true, kAudioDevicePropertyActivateJack, &outSize, &isWritable);
+	//AudioDeviceSetProperty(c_jackDevID, NULL, 0, true, kAudioDevicePropertyActivateJack, 0, NULL);
 }
 
 JARInsert::~JARInsert()
@@ -326,7 +354,15 @@ bool JARInsert::OpenAudioClient()
 void JARInsert::Flush()
 {
     JARILog("Running flush\n");
+	UInt32 outSize;
+    Boolean isWritable;
+	
     if (c_client != NULL) {
+	
+		// Deactivate Jack callback
+		//AudioDeviceGetPropertyInfo(c_jackDevID, 0, true, kAudioDevicePropertyDeactivateJack, &outSize, &isWritable);
+		//AudioDeviceSetProperty(c_jackDevID, NULL, 0, true, kAudioDevicePropertyDeactivateJack, 0, NULL);
+	
         if (c_rBufOn) {
             delete c_bsAO1;
             delete c_bsAO2;
@@ -347,13 +383,21 @@ void JARInsert::Flush()
         free(c_inPorts);
 		for (int i = 0; i < c_nOutPorts; i++) {
 			UInt32 portNum = c_instance + i;
-			if (c_hostType == 'vst ')
+			if (c_hostType == 'vst ') {
+				AudioDeviceGetPropertyInfo(c_jackDevID, 0, true, kAudioDevicePropertyReleaseJackPortVST, &outSize, &isWritable);
 				AudioDeviceSetProperty(c_jackDevID, NULL, 0, true, kAudioDevicePropertyReleaseJackPortVST, portNum, NULL);
-			else
+			} else {
+				AudioDeviceGetPropertyInfo(c_jackDevID, 0, true, kAudioDevicePropertyReleaseJackPortAU, &outSize, &isWritable);
 				AudioDeviceSetProperty(c_jackDevID, NULL, 0, true, kAudioDevicePropertyReleaseJackPortAU, portNum, NULL);
+			}
         }
         free(c_outPorts);
         UInt32 size;
+		
+		// (Possible) reactivate Jack callback
+		//AudioDeviceGetPropertyInfo(c_jackDevID, 0, true, kAudioDevicePropertyActivateJack, &outSize, &isWritable);
+		//AudioDeviceSetProperty(c_jackDevID, NULL, 0, true, kAudioDevicePropertyActivateJack, 0, NULL);
+		AudioDeviceGetPropertyInfo(c_jackDevID, 0, true, kAudioDevicePropertyReleaseJackClient, &outSize, &isWritable);
         AudioDeviceGetProperty(c_jackDevID, 0, true, kAudioDevicePropertyReleaseJackClient, &size, &c_client);
 
         JARInsert::c_instances_count--;

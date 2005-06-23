@@ -29,7 +29,7 @@
 #define COMP_TYPE		'aufx'
 #define COMP_SUBTYPE	'JASb'
 #define COMP_MANUF		'ElCa' 	
-#define VERSION			0x010501
+#define VERSION			0x010600
 #define NAME			"jackosx.com: JACK-insert"
 #define DESCRIPTION		"ElementiCaotici JackAudioServer Insert"
 #define ENTRY_POINT		"ElCAJASEntry"
@@ -42,7 +42,7 @@
 #define COMP_TYPE		kAudioUnitCarbonViewComponentType
 #define COMP_SUBTYPE	'JASb'
 #define COMP_MANUF		'ElCa' 	
-#define VERSION			0x010501
+#define VERSION			0x010600
 #define NAME			"jackosx.com: JACK-insert"
 #define DESCRIPTION		"ElementiCaotici JackAudioServer Insert"
 #define ENTRY_POINT		"ElCAJASViewEntry"

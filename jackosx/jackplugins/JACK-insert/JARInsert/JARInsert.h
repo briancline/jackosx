@@ -39,9 +39,12 @@ enum {
 		kAudioDevicePropertyGetJackPortVST = 'jpgv',
 		kAudioDevicePropertyGetJackPortAU = 'jpga',
 		kAudioDevicePropertyReleaseJackPortVST = 'jprv',
-		kAudioDevicePropertyReleaseJackPortAU = 'jpra'
+		kAudioDevicePropertyReleaseJackPortAU = 'jpra',
+		kAudioDevicePropertyDeactivateJack = 'daja',
+		kAudioDevicePropertyActivateJack = 'aaja'
     };
-
+	
+	
 class JARInsert
 {
     public:

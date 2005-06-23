@@ -23,7 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "AUCarbonViewControl.h"
 #include "AUControlGroup.h"
 
-
 class ElCAJASView : public AUCarbonViewBase
 {
     public:
@@ -36,10 +35,8 @@ COMPONENT_ENTRY(ElCAJASView);
 
 OSStatus ElCAJASView::CreateUI(Float32 xoffset, Float32 yoffset)
 {
-
     int xoff = (int)xoffset;
     int yoff = (int)yoffset;
-
 
 #define kLabelWidth 80
 #define kLabelHeight 18
@@ -58,27 +55,21 @@ OSStatus ElCAJASView::CreateUI(Float32 xoffset, Float32 yoffset)
     labelSize.h = kMinMaxWidth;
     textSize.h = kEditTextWidth;
 
-
-
-
     {
         CAAUParameter auvp(mEditAudioUnit, 0, kAudioUnitScope_Global, 0);
-
-        r.top = 10 + yoff;
+		r.top = 10 + yoff;
         r.bottom = r.top + kLabelHeight;
         r.left = 10;
         r.right = r.left + kLabelWidth;
         verify_noerr(CreateStaticTextControl(mCarbonWindow, &r, auvp.GetName(), &fontStyle, &newControl));
-
     }
 
     {
-
-        r.top = 50 + yoff;
+       r.top = 50 + yoff;
         r.bottom = r.top + 80;
         r.left = xoff;
         r.right = r.left + 350;
-        verify_noerr(CreateStaticTextControl(mCarbonWindow, &r, CFSTR("Johnny Petrantoni JACK-insert v1.5.1, (c) 2003 - 2004.    ") , &fontStyle, &newControl));
+        verify_noerr(CreateStaticTextControl(mCarbonWindow, &r, CFSTR("Johnny Petrantoni JACK-insert v1.6, (c) 2003 - 2005.    ") , &fontStyle, &newControl));
         verify_noerr(EmbedControl(newControl));
         r.top = 75 + yoff;
         r.bottom = r.top + 80;
@@ -92,16 +83,9 @@ OSStatus ElCAJASView::CreateUI(Float32 xoffset, Float32 yoffset)
         r.right = r.left + 350;
         verify_noerr(CreateStaticTextControl(mCarbonWindow, &r, CFSTR("http://www.jackosx.com/    ") , &fontStyle, &newControl));
         verify_noerr(EmbedControl(newControl));
-
-
-    }
-
-
-
-
+	}
 
     SizeControl(mCarbonPane, mBottomRight.h + 15, mBottomRight.v - 30);
     return noErr;
-
 }
 
