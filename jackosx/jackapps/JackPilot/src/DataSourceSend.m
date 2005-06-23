@@ -380,7 +380,7 @@
     whatKind = n;
 }
 
--(id)getPortsForClient:(NSString*)nome withData:(NSMutableArray*)data2 {
+-(NSMutableArray*)getPortsForClient:(NSString*)nome withData:(NSMutableArray*)data2 {
     NSMutableArray *res = [[NSMutableArray array] retain];
     int i;
     int quantep = [data2 count];
@@ -394,7 +394,6 @@
         NSString *name = [portData getName];
         NSArray *lista = [name componentsSeparatedByString:@":"];
         if([[lista objectAtIndex:0] isEqualToString:cliente]) {
-            //if([portData getTipo]==22 || [portData getTipo]==2) { // steph 
 			if([portData getTipo] & JackPortIsOutput) {
                 portsArrData *sendData = [portsArrData alloc];
                 [sendData setNameB:name];

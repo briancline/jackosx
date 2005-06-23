@@ -15,27 +15,29 @@
 
 @interface JackMenu : NSObject
 {
-    NSTask *jackTask;
-    IBOutlet id bufferText;
-    IBOutlet id channelsTest;
+    NSTask* jackTask;
+    IBOutlet id bufferText; 
+    IBOutlet id outputChannels;  //
+	IBOutlet id inputChannels;
+	
     id jackPilWin;
     id jackdMode;
 	id verboseBox;
-    IBOutlet NSPopUpButton *driverBox;
-    IBOutlet NSPopUpButton *interfaceBox;
-    IBOutlet NSTextField *isonBut;
+    IBOutlet NSPopUpButton* driverBox;
+    IBOutlet NSPopUpButton* interfaceBox;
+    IBOutlet NSTextField* isonBut;
     IBOutlet NSProgressIndicator *cpuLoadBar;
-    IBOutlet NSTextField *loadText;
+    IBOutlet NSTextField* loadText;
     IBOutlet id samplerateText;
-    IBOutlet NSButton *startBut;
-    IBOutlet NSWindow *managerWin;
+    IBOutlet NSButton* startBut;
+    IBOutlet NSWindow* managerWin;
 	id jpWinController;
-    IBOutlet NSTextField *JALin;
-    IBOutlet NSTextField *JALout;
-    IBOutlet NSTextField *connectionsNumb;
-    IBOutlet NSButton *JALauto;
-    IBOutlet NSMenuItem *toggleDock;
-    NSTimer *update_timer;
+    IBOutlet NSTextField* JALin;
+    IBOutlet NSTextField* JALout;
+    IBOutlet NSTextField* connectionsNumb;
+    IBOutlet NSButton* JALauto;
+    IBOutlet NSMenuItem* toggleDock;
+    NSTimer* update_timer;
     int jackstat;
     int interfaccia2;
     id prefWindow;
@@ -53,24 +55,21 @@
     char  selectedDevice[256];
     char  oldSelectedDevice[256];
     AudioDeviceID selDevID;
-    BOOL jackdStartMode;
     id defInput,defOutput,sysDefOut;
 	id pluginsMenu; //NSMenu
 	id pluginSubMenu; //NSMenu
-	id inputChannels;
+	
 	NSMutableArray *plugins_ids;
 	id routingBut;
 	
 }
-- (IBAction) switchJackdMode:(id)sender;
 - (BOOL)writeDevNames;
-- (IBAction) reloadPref:(id) sender;
+- (IBAction) reloadPref:(id)sender;
 - (BOOL) writeCAPref:(id)sender;
 -(IBAction)openJackOsxNet:(id)sender;
 -(IBAction)openJohnnyMail:(id)sender;
 - (void)error:(NSString*)err;
 - (IBAction)startJack:(id)sender;
-- (IBAction)stopJack:(id)sender;
 - (IBAction)toggleJack:(id)sender;
 - (IBAction)toggle2Jack:(id)sender;
 - (IBAction)openDocsFile:(id)sender;
@@ -80,21 +79,20 @@
 -(void)warning:(id)sender;
 -(IBAction)jackALstore:(id)sender;
 - (int)writeHomePath;
-- (IBAction)startJackTask:(id)sender;
+//- (IBAction)startJackTask:(id)sender;
 - (IBAction)getJackInfo:(id)sender;
 - (IBAction)openPrefWin:(id)sender;
 - (IBAction)closePrefWin:(id)sender;
-- (IBAction) openAboutWin:(id)sender;
-- (IBAction) closeAboutWin:(id)sender;
-- (int) launchJackCarbon:(id) sender;
-- (IBAction) closeJackDeamon:(id) sender;
-- (IBAction) launchJackDeamon:(id) sender;
+- (IBAction)openAboutWin:(id)sender;
+- (IBAction)closeAboutWin:(id)sender;
+- (IBAction)closeJackDeamon:(id)sender;
+- (IBAction)launchJackDeamon:(id)sender;
 - (void)addPluginSlot;
-- (void) sendJackStatusToPlugins:(BOOL)isOn;
+- (void)sendJackStatusToPlugins:(BOOL)isOn;
 
 #ifdef PLUGIN
 - (void)testPlugin:(id)sender;
-- (void) openPlugin:(id)sender;
-- (void) closePlugin:(id)sender;
+- (void)openPlugin:(id)sender;
+- (void)closePlugin:(id)sender;
 #endif
 @end

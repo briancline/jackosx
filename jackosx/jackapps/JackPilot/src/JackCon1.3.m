@@ -64,7 +64,7 @@ int nConnections = 0;
         [tabellaPorte setDrawsGrid:NO];
         [tabellaPorte setDoubleAction:@selector(removCon:)];
         [tabellaPorte setTarget:self];
-        
+		
         if (datiTab2 != nil) [datiTab2 release];
         datiTab2 = [tableDataB alloc];
         [datiTab2 setWhatKind:1];
@@ -73,16 +73,16 @@ int nConnections = 0;
         [tabellaSend setDrawsGrid:NO];
         [tabellaSend setDoubleAction:@selector(makeCon:)];
         [tabellaSend setTarget:self];
-        
+			
         if (datiTab3 != nil) [datiTab3 release];
         datiTab3 = [tableDataC alloc];
         [datiTab3 setWhatKind:1];
         [datiTab3 writeData:sender text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected];
         [tabellaConnect setDataSource:datiTab3];
         [tabellaConnect setDrawsGrid:NO];
-        [tabellaConnect setDoubleAction:@selector(makeCon:)];
+		[tabellaConnect setDoubleAction:@selector(makeCon:)];
         [tabellaConnect setTarget:self];
-        
+		        
         needsReload = 22;
         [self reloadTimer];
         
@@ -826,10 +826,12 @@ int nConnections = 0;
                 
             } else [data setIsConn:0];
         }
+		
         [data setName:nomeBuf];
         [data setTipo:tipo];
         [data setID:i];
         [portsArr addObject:data];
+		
         //if([data IsConn])JPLog("PRE QUI OK\n");
         //[portsArrData release]; //mod 1
     }

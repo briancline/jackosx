@@ -64,8 +64,7 @@ id newplist;
     plist = [NSDictionary dictionaryWithContentsOfFile:[homeDir stringByAppendingString:@"/Library/Preferences/JackPilot.plist"]];
     newplist = [[NSMutableDictionary dictionaryWithCapacity:2] retain];
     [newplist addEntriesFromDictionary:plist];
-    if(plist) return YES;
-    return NO;
+    return (plist) ? YES: NO;
 }
 
 + (BOOL) savePref:(id) array prefType:(int) type {
