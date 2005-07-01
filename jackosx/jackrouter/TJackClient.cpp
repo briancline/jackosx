@@ -276,6 +276,10 @@ History
 06-06-05 : Version 0.76 : S Letz
 		Use the PropertyDeviceUID as the identifier for the used CoreAudio driver.
 		
+29-06-05 : Version 0.77 : S Letz
+		Correct DeviceGetProperty for kAudioDevicePropertyStreamFormatMatch.
+
+		
 TODO :
     
         - solve zombification problem of Jack (remove time-out check or use -T option)
@@ -2101,22 +2105,14 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                     JARLog("FormatFlags:        %d\n", (int)desc->mFormatFlags);
 
                     *ioPropertyDataSize = sizeof(AudioStreamBasicDescription);
-					if (desc->mSampleRate == 0)
-                        desc->mSampleRate = TJackClient::fSampleRate;
-                    if (desc->mFormatID == 0)
-                        desc->mFormatID = kIOAudioStreamSampleFormatLinearPCM;
-                    if (desc->mFormatFlags == 0)
-                        desc->mFormatFlags = kJackStreamFormat;
-                    if (desc->mBytesPerPacket == 0)
-                        desc->mBytesPerPacket = 4;
-                    if (desc->mFramesPerPacket == 0)
-                        desc->mFramesPerPacket = 1;
-                    if (desc->mBytesPerFrame == 0)
-                        desc->mBytesPerFrame = 4;
-                    if (desc->mChannelsPerFrame == 0)
-                        desc->mChannelsPerFrame = 1;
-                    if (desc->mBitsPerChannel == 0)
-                        desc->mBitsPerChannel = 32;
+					desc->mSampleRate = TJackClient::fSampleRate;
+                    desc->mFormatID = kIOAudioStreamSampleFormatLinearPCM;
+                    desc->mFormatFlags = kJackStreamFormat;
+					desc->mBytesPerPacket = 4;
+                    desc->mFramesPerPacket = 1;
+                    desc->mBytesPerFrame = 4;
+                    desc->mChannelsPerFrame = 1;
+                    desc->mBitsPerChannel = 32;
                 }
                 break;
             }
