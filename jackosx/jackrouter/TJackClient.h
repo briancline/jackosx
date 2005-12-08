@@ -77,7 +77,7 @@ extern "C"
             fStatus = false;
             fStreamUsage = false;
             for (int i = 0; i < MAX_JACK_PORTS; i++) {
-                fInput[i] = fOutput[i] = false;
+        		fInput[i] = fOutput[i] = true; // used by default
             }
         }
     };

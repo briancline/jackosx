@@ -265,7 +265,7 @@ History
 		Correct a crash with some applications (like Skype) that cause static variables (like fBlackList) not to be allocated properly : allocation with new.
  
 22-02-05 : Version 0.74 : S Letz 
-		Correct DeviceSetPorperty for kAudioDevicePropertyStreamFormat. It returns kAudioHardwareNoError if the given description is the exact format 
+		Correct DeviceSetProperty for kAudioDevicePropertyStreamFormat. It returns kAudioHardwareNoError if the given description is the exact format 
 		supported by Jack Router otherwise kAudioDeviceUnsupportedFormatError. Change error code for kAudioHardwareIllegalOperationError in DeviceSetProperty buffer size.
 		DeviceStartAtTime returns kAudioHardwareUnsupportedOperationError. Add kAudioDevicePropertyDeviceManufacturerCFString in DeviceGetPropertyInfo.
 		Add AU and VST plug-in properties in DeviceGetPropertyInfo.
@@ -279,6 +279,8 @@ History
 29-06-05 : Version 0.77 : S Letz
 		Correct DeviceGetProperty for kAudioDevicePropertyStreamFormatMatch. Fix a bug in Process (Rax using 2 IOProc with stream usage was not working anymore).
 
+08-12-05 : Version 0.78 : S Letz
+		Fixes for 10.4 compilation. Corrrect kAudioDevicePropertyPreferredChannelLayout management. Correct ProcContext intialization.
 		
 TODO :
     
@@ -288,11 +290,12 @@ TODO :
  
 */
 
-
+#include <Carbon/Carbon.h>
 #include "TJackClient.h"
 #include <notify.h>
 
 #include <CoreFoundation/CFNotificationCenter.h>
+#include <IOKit/audio/IOAudioTypes.h>
 
 #include <stdio.h>
 #include <assert.h>
@@ -1170,7 +1173,7 @@ void TJackClient::Close()
 bool TJackClient::AddIOProc(AudioDeviceIOProc proc, void* context)
 {
     if (fAudioIOProcList.find(proc) == fAudioIOProcList.end()) {
-        fAudioIOProcList.insert(make_pair(proc, TProcContext(context)));
+	    fAudioIOProcList.insert(make_pair(proc, TProcContext(context)));
         JARLog("AddIOProc fAudioIOProcList.size %ld \n", fAudioIOProcList.size());
         return true;
     } else {
@@ -1540,8 +1543,11 @@ OSStatus TJackClient::DeviceGetPropertyInfo(AudioHardwarePlugInRef inSelf,
 #ifdef kAudioHardwarePlugInInterface2ID
             // For applications that needs a output channels map, and for audio midi setup (that will not crash)
         case kAudioDevicePropertyPreferredChannelLayout:
-            if (outSize)
-                *outSize = offsetof(AudioChannelLayout, mChannelDescriptions[TJackClient::fOutputChannels]);
+     		if (outSize)
+				if (isInput)
+					*outSize = offsetof(AudioChannelLayout, mChannelDescriptions) + sizeof(AudioChannelDescription) * TJackClient::fInputChannels;
+				else
+					*outSize = offsetof(AudioChannelLayout, mChannelDescriptions) + sizeof(AudioChannelDescription) * TJackClient::fOutputChannels;
             break;
 #endif
 
@@ -1602,10 +1608,14 @@ OSStatus TJackClient::DeviceGetPropertyInfo(AudioHardwarePlugInRef inSelf,
             break;
 
         case kAudioDevicePropertyUsesVariableBufferFrameSizes:
+			if (outSize)
+                *outSize = *outSize = sizeof(UInt32);
             err = kAudioHardwareUnknownPropertyError;
             break;
 
         case kAudioDevicePropertyJackIsConnected:
+			if (outSize)
+                *outSize = *outSize = sizeof(UInt32);
             err = kAudioHardwareUnknownPropertyError;
             break;
 
@@ -1700,6 +1710,8 @@ OSStatus TJackClient::DeviceGetPropertyInfo(AudioHardwarePlugInRef inSelf,
 
         case kAudioDevicePropertyDataSource:
         case kAudioDevicePropertyDataSources:
+			if (outSize)
+                *outSize = sizeof(UInt32);
             err = kAudioHardwareUnknownPropertyError;
             break;
 
@@ -2164,11 +2176,11 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                     err = kAudioHardwareBadPropertySizeError;
                 } else {
                     // TO BE CHECKED
-                    pid_t* pid = (pid_t*) outPropertyData;
+                    pid_t* pid = (pid_t*)outPropertyData;
                     *pid = -1;
                     //*pid = getpid();
                     *ioPropertyDataSize = sizeof(pid_t);
-                }
+				}
                 break;
             }
 
@@ -2367,13 +2379,13 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                     if (isInput) {
                         outData->mNumberStreams = TJackClient::fInputChannels;
                         for (int i = 0; i < TJackClient::fInputChannels; i++) {
-                            outData->mStreamIsOn[i] = 1;
-                            JARLog("DeviceGetProperty : kAudioDevicePropertyIOProcStreamUsage input mStreamIsOn %ld \n", outData->mStreamIsOn[i]);
+							outData->mStreamIsOn[i] = (TJackClient::fJackClient->fInputPortList[i] != NULL);
+							JARLog("DeviceGetProperty : kAudioDevicePropertyIOProcStreamUsage input mStreamIsOn %ld \n", outData->mStreamIsOn[i]);
                         }
                     } else {
                         outData->mNumberStreams = TJackClient::fOutputChannels;
                         for (int i = 0; i < TJackClient::fOutputChannels; i++) {
-                            outData->mStreamIsOn[i] = 1;
+                            outData->mStreamIsOn[i] = (TJackClient::fJackClient->fOutputPortList[i] != NULL);
                             JARLog("DeviceGetProperty : kAudioDevicePropertyIOProcStreamUsage output mStreamIsOn %ld \n", outData->mStreamIsOn[i]);
                         }
                     }
@@ -2730,6 +2742,7 @@ bool TJackClient::IsUsedInput(int port)
 {
     map<AudioDeviceIOProc, TProcContext>::iterator it;
     for (it = fAudioIOProcList.begin(); it != fAudioIOProcList.end(); it++) {
+		JARLog("IsUsedInput %x %ld \n", it->first, it->second.fInput[port]);
         if (it->second.fInput[port])
             return true;
     }
@@ -2940,18 +2953,18 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
                 } else {
                     for (int i = 0; i < TJackClient::fInputChannels; i++) {
                         if (inStream == fStreamIDList[i]) {
-                            //*(UInt32*) outPropertyData = INPUT_MICROPHONE;
-                            *(UInt32*) outPropertyData = 0;
-                            JARLog("StreamGetProperty FOUND INPUT %ld\n", inStream);
+                            *(UInt32*) outPropertyData = INPUT_MICROPHONE;
+                            //*(UInt32*) outPropertyData = 0;
+							JARLog("StreamGetProperty FOUND INPUT %ld\n", inStream);
                             break;
                         }
                     }
 
                     for (int i = TJackClient::fInputChannels; i < (TJackClient::fOutputChannels + TJackClient::fInputChannels); i++) {
                         if (inStream == fStreamIDList[i]) {
-                            //*(UInt32*) outPropertyData = OUTPUT_SPEAKER;
-                            *(UInt32*) outPropertyData = 0;
-                            JARLog("StreamGetProperty FOUND OUTPUT %ld\n", inStream);
+                            *(UInt32*) outPropertyData = OUTPUT_SPEAKER;
+                            //*(UInt32*) outPropertyData = 0;
+							JARLog("StreamGetProperty FOUND OUTPUT %ld\n", inStream);
                             break;
                         }
                     }
@@ -3282,7 +3295,7 @@ bool TJackClient::ReadPref()
     if (err == noErr) {
         prefURL = CFURLCreateFromFSRef(kCFAllocatorSystemDefault, &prefFolderRef);
         if (prefURL) {
-            CFURLGetFileSystemRepresentation(prefURL, FALSE, buf, 256);
+            CFURLGetFileSystemRepresentation(prefURL, FALSE, (UInt8*)buf, 256);
             sprintf(path, "%s/JAS.jpil", buf);
             FILE *prefFile;
             if ((prefFile = fopen(path, "rt"))) {
@@ -3395,10 +3408,11 @@ bool TJackClient::CheckRunning(AudioHardwarePlugInRef inSelf)
 			CFStringRef inIUD = CFStringCreateWithCString(NULL, fCoreAudioDriverUID, CFStringGetSystemEncoding());
 			AudioValueTranslation value = { &inIUD, sizeof(CFStringRef), &fCoreAudioDriver, sizeof(AudioDeviceID) };
 			if (inIUD != NULL)  {
-				AudioHardwareGetProperty(kAudioHardwarePropertyDeviceForUID, &size, &value);
+				OSStatus err = AudioHardwareGetProperty(kAudioHardwarePropertyDeviceForUID, &size, &value);
+				JARLog("CheckRunning fCoreAudioDriverUID %s err =  %d fCoreAudioDriver = %ld\n", fCoreAudioDriverUID, err, fCoreAudioDriver);
+				printError(err);
 				CFRelease(inIUD);
 			}
-			JARLog("CheckRunning get fCoreAudioDriver %ld\n", fCoreAudioDriver);
 		}
 	    return true;
     } else {

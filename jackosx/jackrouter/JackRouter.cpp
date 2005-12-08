@@ -185,7 +185,7 @@ extern "C"
 
         // Retain and keep an open instance refcount
         // for each factory.
-        newOne->_factoryID = CFRetain( factoryID );
+        newOne->_factoryID = (CFUUIDRef)CFRetain( factoryID );
         CFPlugInAddInstanceForFactory( factoryID );
 
         // This function returns the IUnknown interface
