@@ -185,6 +185,7 @@ extern "C"
 
             static void CheckFirstRef();
             static void CheckLastRef();
+			static void CloseLastRef();
             static void IncRefInternal();
             static void DecRefInternal();
             static void IncRefExternal();

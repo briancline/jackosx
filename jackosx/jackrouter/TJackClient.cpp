@@ -280,7 +280,10 @@ History
 		Correct DeviceGetProperty for kAudioDevicePropertyStreamFormatMatch. Fix a bug in Process (Rax using 2 IOProc with stream usage was not working anymore).
 
 08-12-05 : Version 0.78 : S Letz
-		Fixes for 10.4 compilation. Corrrect kAudioDevicePropertyPreferredChannelLayout management. Correct ProcContext intialization.
+		Fixes for 10.4 compilation. Correct kAudioDevicePropertyPreferredChannelLayout management. Correct ProcContext intialization.
+
+19-12-05 : Version 0.79 : S Letz
+		Correct desactivation: ports were unregistered before deactivate.... change SaveConnections call : now done in Deactivate. Test CheckRunning result in methods.
 		
 TODO :
     
@@ -586,11 +589,17 @@ void TJackClient::CheckLastRef()
     assert(TJackClient::fJackClient);
 
     if (TJackClient::fJackClient->fExternalClientNum + TJackClient::fJackClient->fInternalClientNum == 0) {
-        JARLog("DeviceRemoveIOProc : last proc, remove client\n");
-        bool res = TJackClient::fJackClient->Desactivate();
-        if (!res)
-            JARLog("cannot desactivate client\n");
-        TJackClient::fJackClient->Close();
+		TJackClient::fJackClient->Desactivate();
+    }
+}
+
+//------------------------------------------------------------------------
+void TJackClient::CloseLastRef()
+{
+    assert(TJackClient::fJackClient);
+
+    if (TJackClient::fJackClient->fExternalClientNum + TJackClient::fJackClient->fInternalClientNum == 0) {
+ 		TJackClient::fJackClient->Close();
         delete TJackClient::fJackClient;
         TJackClient::fJackClient = NULL;
     }
@@ -604,8 +613,9 @@ void TJackClient::IncRefInternal()
     JARLog("IncRefInternal : %ld\n", TJackClient::fJackClient->fInternalClientNum);
     if (TJackClient::fJackClient->fInternalClientNum == 1) {
         TJackClient::fJackClient->AllocatePorts();
+		CheckFirstRef();   
     }
-    CheckFirstRef();
+    //CheckFirstRef();
 }
 
 //------------------------------------------------------------------------
@@ -614,9 +624,12 @@ void TJackClient::DecRefInternal()
     assert(TJackClient::fJackClient);
     TJackClient::fJackClient->fInternalClientNum--;
     JARLog("DecRefInternal : %ld\n", TJackClient::fJackClient->fInternalClientNum);
-    if (TJackClient::fJackClient->fInternalClientNum == 0)
-        TJackClient::fJackClient->DisposePorts();
-    CheckLastRef();
+    if (TJackClient::fJackClient->fInternalClientNum == 0) {
+		CheckLastRef(); 
+		TJackClient::fJackClient->DisposePorts();
+	}
+    //CheckLastRef();
+	CloseLastRef();
 }
 
 //------------------------------------------------------------------------
@@ -635,10 +648,11 @@ void TJackClient::DecRefExternal()
     TJackClient::fJackClient->fExternalClientNum--;
     JARLog("DecRefExternal : %ld\n", TJackClient::fJackClient->fExternalClientNum);
     CheckLastRef();
+	CloseLastRef();
 }
 
 //------------------------------------------------------------------------
-void TJackClient::Shutdown (void *arg)
+void TJackClient::Shutdown(void *arg)
 {
     TJackClient::fDeviceRunning = false;
     KillJackClient();
@@ -1077,7 +1091,7 @@ error:
 void TJackClient::DisposePorts()
 {
     JARLog("DisposePorts\n");
-    SaveConnections();
+    //SaveConnections();
 
     for (long i = 0; i < TJackClient::fInputChannels; i++) {
         if (fInputPortList[i]) {
@@ -1163,7 +1177,7 @@ void TJackClient::Close()
     JARLog("Close\n");
 
     if (fClient) {
-        if (jack_client_close(fClient)) {
+        if (jack_client_close(fClient) != 0) {
             JARLog("Cannot close client\n");
         }
     }
@@ -1287,6 +1301,7 @@ bool TJackClient::Activate()
 bool TJackClient::Desactivate()
 {
     JARLog("Desactivate\n");
+	SaveConnections();
 
     if (jack_deactivate(fClient)) {
         JARLog("cannot deactivate client\n");
@@ -1397,7 +1412,8 @@ OSStatus TJackClient::DeviceAddIOProc(AudioHardwarePlugInRef inSelf, AudioDevice
     JARLog("--------------------------------------------------------\n");
     JARLog("DeviceAddIOProc called inSelf, proc %ld %x \n", (long)inSelf, proc);
 
-    CheckRunning(inSelf);
+	if (!CheckRunning(inSelf))
+		return kAudioHardwareNotRunningError;
     TJackClient* client = TJackClient::GetJackClient();
 
     if (client) {
@@ -1417,8 +1433,9 @@ OSStatus TJackClient::DeviceRemoveIOProc(AudioHardwarePlugInRef inSelf, AudioDev
     JARLog("--------------------------------------------------------\n");
     JARLog("DeviceRemoveIOProc called inSelf, proc %ld %x \n", (long)inSelf, proc);
 
-    CheckRunning(inSelf);
-    TJackClient* client = TJackClient::fJackClient;
+    if (!CheckRunning(inSelf))
+		return kAudioHardwareNotRunningError;
+	TJackClient* client = TJackClient::fJackClient;
 
     JARLog("DeviceRemoveIOProc %x client\n", client);
 
@@ -1438,7 +1455,8 @@ OSStatus TJackClient::DeviceStart(AudioHardwarePlugInRef inSelf, AudioDeviceID i
     JARLog("--------------------------------------------------------\n");
     JARLog("DeviceStart called inSelf, proc %ld %x \n", (long)inSelf, proc);
 
-    CheckRunning(inSelf);
+    if (!CheckRunning(inSelf))
+		return kAudioHardwareNotRunningError;
     TJackClient* client = TJackClient::fJackClient;
 
     if (client) {
@@ -1458,8 +1476,9 @@ OSStatus TJackClient::DeviceStop(AudioHardwarePlugInRef inSelf, AudioDeviceID in
     JARLog("--------------------------------------------------------\n");
     JARLog("DeviceStop called inSelf, proc %ld %x \n", (long)inSelf, proc);
 
-    CheckRunning(inSelf);
-    TJackClient* client = TJackClient::fJackClient;
+     if (!CheckRunning(inSelf))
+		return kAudioHardwareNotRunningError;
+	TJackClient* client = TJackClient::fJackClient;
 
     if (client) {
         client->Stop(proc);
@@ -1521,7 +1540,9 @@ OSStatus TJackClient::DeviceGetPropertyInfo(AudioHardwarePlugInRef inSelf,
     JARLog("--------------------------------------------------------\n");
     JARLog("DeviceGetPropertyInfo inSelf inDevice inChannel isInput  %ld %ld %ld %ld %ld %ld \n", (long)inSelf, inDevice, inChannel, isInput, outSize, outWritable);
 
-    CheckRunning(inSelf);
+	if (!CheckRunning(inSelf))
+		return kAudioHardwareNotRunningError;
+		
     Print4CharCode("DeviceGetPropertyInfo ", inPropertyID);
 
     if (inDevice != TJackClient::fDeviceID) {
@@ -1798,7 +1819,8 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
 {
     OSStatus err = kAudioHardwareNoError;
 
-    CheckRunning(inSelf);
+	if (!CheckRunning(inSelf))
+		return kAudioHardwareNotRunningError;
 
     JARLog("--------------------------------------------------------\n");
     JARLog("DeviceGetProperty inSelf isInput inDevice %ld %ld %ld\n", (long)inSelf, isInput, inDevice);
@@ -2468,7 +2490,8 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
 {
     JARLog("--------------------------------------------------------\n");
     JARLog("DeviceSetProperty inSelf %ld\n", (long)inSelf);
-    CheckRunning(inSelf);
+    if (!CheckRunning(inSelf))
+		return kAudioHardwareNotRunningError;
 
     Print4CharCode ("DeviceSetProperty ", inPropertyID);
     OSStatus err = kAudioHardwareNoError;
@@ -2772,7 +2795,9 @@ OSStatus TJackClient::StreamGetPropertyInfo(AudioHardwarePlugInRef inSelf,
     OSStatus err = kAudioHardwareNoError;
     JARLog("--------------------------------------------------------\n");
     JARLog("StreamGetPropertyInfo inSelf inPropertyID %ld \n", (long)inSelf);
-    CheckRunning(inSelf);
+    if (!CheckRunning(inSelf))
+		return kAudioHardwareNotRunningError;
+		
     Print4CharCode("StreamGetPropertyInfo ", inPropertyID);
 
     if (outSize == NULL) {
@@ -2900,7 +2925,9 @@ OSStatus TJackClient::StreamGetProperty(AudioHardwarePlugInRef inSelf,
     OSStatus err = kAudioHardwareNoError;
     JARLog("--------------------------------------------------------\n");
     JARLog("StreamGetProperty inSelf %ld\n", (long)inSelf);
-    CheckRunning(inSelf);
+	if (!CheckRunning(inSelf))
+		return kAudioHardwareNotRunningError;
+		
     Print4CharCode("StreamGetProperty ", inPropertyID);
 
     switch (inPropertyID) {
@@ -3149,7 +3176,9 @@ OSStatus TJackClient::StreamSetProperty(AudioHardwarePlugInRef inSelf,
     OSStatus err = kAudioHardwareNoError;
     JARLog("--------------------------------------------------------\n");
     JARLog("StreamSetProperty inSelf %ld\n", (long)inSelf);
-    CheckRunning(inSelf);
+	if (!CheckRunning(inSelf))
+		return kAudioHardwareNotRunningError;
+		
     JARLog("StreamSetProperty\n");
     Print4CharCode("StreamSetProperty request:", inPropertyID);
 
@@ -3330,7 +3359,19 @@ bool TJackClient::ReadPref()
 
     char* path1 = "/Library/Audio/Plug-Ins/HAL/JackRouter.plugin/Contents/Resources/BlackList.txt";
     FILE* blackListFile;
+	
     if ((blackListFile = fopen(path1, "rt"))) {
+        char client_name[64];
+        char line[500];
+        while (fgets(line, 500, blackListFile)) {
+            sscanf(line, "%s", client_name);
+            TJackClient::fBlackList->insert(client_name);
+            JARLog("Blacklisted client %s\n", client_name);
+        }
+    }
+	
+	path1 = "/Library/Audio/Plug-Ins/HAL/JackRouterMP.plugin/Contents/Resources/BlackList.txt";
+	if ((blackListFile = fopen(path1, "rt"))) {
         char client_name[64];
         char line[500];
         while (fgets(line, 500, blackListFile)) {

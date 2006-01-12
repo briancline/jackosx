@@ -18,7 +18,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // bequite.h
 
-#include <CoreServices/CoreServices.h>
+//#include <CoreServices/CoreServices.h>
 
 #ifdef __cplusplus
 extern "C"
