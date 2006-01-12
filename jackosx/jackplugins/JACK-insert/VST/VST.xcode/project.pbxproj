@@ -702,7 +702,7 @@
 	<key>CFBundleExecutable</key>
 	<string>JACK-insert</string>
 	<key>CFBundleGetInfoString</key>
-	<string>© 2003, Johnny Petrantoni.</string>
+	<string>© 03-05, Johnny Petrantoni.</string>
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
@@ -714,11 +714,11 @@
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.5</string>
+	<string>1.6</string>
 	<key>CFBundleSignature</key>
 	<string>ElCa</string>
 	<key>CFBundleVersion</key>
-	<string>1.5</string>
+	<string>1.6</string>
 </dict>
 </plist>
 ";
