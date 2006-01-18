@@ -447,7 +447,6 @@ static void StartNotification()
         CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(),
                                         NULL, startCallback, CFSTR("com.grame.jackserver.start"),
                                         CFSTR("com.grame.jackserver"), CFNotificationSuspensionBehaviorDeliverImmediately);
-
         CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(),
                                         NULL, stopCallback, CFSTR("com.grame.jackserver.stop"),
                                         CFSTR("com.grame.jackserver"), CFNotificationSuspensionBehaviorDeliverImmediately);
@@ -461,7 +460,6 @@ static void StopNotification()
     if (TJackClient::fNotification) {
         CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(), NULL,
                                            CFSTR("com.grame.jackserver.start"), CFSTR("com.grame.jackserver"));
-
         CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(), NULL,
                                            CFSTR("com.grame.jackserver.stop"), CFSTR("com.grame.jackserver"));
         TJackClient::fNotification = false;
@@ -476,7 +474,7 @@ void TJackClient::SaveConnections()
     const char **connections;
 
     if (!fClient)
-        return ;
+        return;
 
     JARLog("--------------------------------------------------------\n");
     JARLog("SaveConnections\n");
