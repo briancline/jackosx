@@ -3355,6 +3355,7 @@ bool TJackClient::ReadPref()
                        TJackClient::fInputChannels, TJackClient::fOutputChannels, TJackClient::fAutoConnect, TJackClient::fCoreAudioDriver);
                 res = true;
             }
+			CFRelease(prefURL);
         }
     }
 
