@@ -284,6 +284,9 @@ History
 
 19-12-05 : Version 0.79 : S Letz
 		Correct desactivation: ports were unregistered before deactivate.... change SaveConnections call : now done in Deactivate. Test CheckRunning result in methods.
+
+18-01-06 : Version 0.80 : S Letz
+		Implements DeviceTranslateTime: simply copy inTime ==> outTime for now.
 		
 TODO :
     
@@ -1519,9 +1522,9 @@ OSStatus TJackClient::DeviceTranslateTime(AudioHardwarePlugInRef inSelf,
         const AudioTimeStamp* inTime,
         AudioTimeStamp* outTime)
 {
-    JARLog("--------------------------------------------------------\n");
-    JARLog("DeviceTranslateTime : not yet implemented\n");
-    return kAudioHardwareUnsupportedOperationError;
+	// Simply copy inTime ==> outTime for now
+	memcpy(outTime, inTime, sizeof(AudioTimeStamp));
+	return kAudioHardwareNoError;
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
