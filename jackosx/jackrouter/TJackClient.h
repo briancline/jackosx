@@ -1,5 +1,5 @@
 /*
-Copyright © Stefan Werner stefan@keindesign.de, Grame 2003,2004
+Copyright © Stefan Werner stefan@keindesign.de, Grame 2003-2006
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@ grame@rd.grame.fr
 #ifndef __TJackClient__
 #define __TJackClient__
 
-//#include <pthread.h>
 #include <CoreAudio/CoreAudio.h>
 #include <CoreAudio/AudioHardwarePlugin.h>
 #include <IOKit/audio/IOAudioTypes.h>
@@ -89,22 +88,22 @@ extern "C"
 
             jack_client_t* fClient;	// Jack client
 
-            jack_port_t* fInputPortList[MAX_JACK_PORTS];	// Jack input ports
-            jack_port_t* fOutputPortList[MAX_JACK_PORTS];	// Jack output ports
+            jack_port_t* fInputPortList[MAX_JACK_PORTS];			// Jack input ports
+            jack_port_t* fOutputPortList[MAX_JACK_PORTS];			// Jack output ports
             map<int, pair<float*, jack_port_t*> > fPlugInPortsVST;	// Map of temp buffers and associated Jack ports to be used by AU plug-ins
             map<int, pair<float*, jack_port_t*> > fPlugInPortsAU;	// Map of temp buffers and associated Jack ports to be used by VST plug-ins
 
             AudioBufferList* fInputList;	// CoreAudio input buffers
             AudioBufferList* fOutputList;	// CoreAudio output buffers
 
-            float** fOuputListTemp;	// Intermediate output buffers
+            float** fOuputListTemp;			// Intermediate output buffers
 
             map<AudioDeviceIOProc, TProcContext> fAudioIOProcList;   // Table of IOProc
 
-            long fProcRunning;	// Counter of running IOProc
+            long fProcRunning;			// Counter of running IOProc
             long fExternalClientNum;	// Counter of external clients (Jack plug-ins)
             long fInternalClientNum;	// Counter of internal client
-            bool fActivated;	// Jack activation state
+            bool fActivated;			// Jack activation state
 
             // Global state
             static TJackClient* fJackClient;
@@ -115,10 +114,7 @@ extern "C"
             static long fOutputChannels;
             static float fSampleRate;
             static bool fAutoConnect;
-            static bool fDefaultInput;
-            static bool fDefaultOutput;
-            static bool fDefaultSystem;
-
+    
             static string fDeviceName;
             static string fStreamName;
             static string fDeviceManufacturer;
@@ -204,7 +200,7 @@ extern "C"
             void SaveConnections();
             void RestoreConnections();
 			
-	       // HAL Plug-in API
+			// HAL Plug-in API
             static OSStatus	Initialize(AudioHardwarePlugInRef inSelf);
             static OSStatus Teardown(AudioHardwarePlugInRef inSelf);
 
@@ -285,7 +281,7 @@ extern "C"
                                               AudioDevicePropertyID inPropertyID,
                                               UInt32 inPropertyDataSize,
                                               const void* inPropertyData);
-            // Version 2 Methods QT 6.4
+			// Version 2 Methods QT 6.4
 #ifdef kAudioHardwarePlugInInterface2ID
 
             static OSStatus DeviceStartAtTime(AudioHardwarePlugInRef inSelf,

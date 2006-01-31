@@ -1,5 +1,5 @@
 /*
-Copyright © Stefan Werner stefan@keindesign.de, Grame 2003,2004
+Copyright © Stefan Werner stefan@keindesign.de, Grame 2003-2006
 
 This library is free software; you can redistribute it and modify it under
 the terms of the GNU Library General Public License as published by the
@@ -287,6 +287,9 @@ History
 
 18-01-06 : Version 0.80 : S Letz
 		Implements DeviceTranslateTime: simply copy inTime ==> outTime for now.
+
+18-01-06 : Version 0.81 : S Letz
+		Remove default input/output management. Deactivate JackRouter as DefaultSystemDevice.
 		
 TODO :
     
@@ -319,9 +322,6 @@ long TJackClient::fOutputChannels = 0;
 bool TJackClient::fAutoConnect = true;
 bool TJackClient::fDeviceRunning = false;
 bool TJackClient::fConnected2HAL = false;
-bool TJackClient::fDefaultInput = true;
-bool TJackClient::fDefaultOutput = true;
-bool TJackClient::fDefaultSystem = true;
 bool TJackClient::fDebug = false;
 list<pair<string, string> > TJackClient::fConnections;
 
@@ -2152,15 +2152,28 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                 break;
             }
 
-        case kAudioDevicePropertyDeviceCanBeDefaultSystemDevice:
-        case kAudioDevicePropertyDeviceCanBeDefaultDevice: {
+        case kAudioDevicePropertyDeviceCanBeDefaultSystemDevice: {
                 if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
                     *ioPropertyDataSize = sizeof(UInt32);
                 } else if (*ioPropertyDataSize < sizeof(UInt32)) {
                     JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n", *ioPropertyDataSize);
                     err = kAudioHardwareBadPropertySizeError;
                 } else {
-                    *(UInt32*) outPropertyData = 1;
+                    *(UInt32*) outPropertyData = 0; // no....
+                    *ioPropertyDataSize = sizeof(UInt32);
+                    JARLog("DeviceGetProperty::kAudioDevicePropertyDeviceCanBeDefaultDevice %ld\n", (long)isInput);
+                }
+                break;
+            }
+			
+		case kAudioDevicePropertyDeviceCanBeDefaultDevice: {
+                if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
+                    *ioPropertyDataSize = sizeof(UInt32);
+                } else if (*ioPropertyDataSize < sizeof(UInt32)) {
+                    JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n", *ioPropertyDataSize);
+                    err = kAudioHardwareBadPropertySizeError;
+                } else {
+                    *(UInt32*) outPropertyData = 1; // yes...
                     *ioPropertyDataSize = sizeof(UInt32);
                     JARLog("DeviceGetProperty::kAudioDevicePropertyDeviceCanBeDefaultDevice %ld\n", (long)isInput);
                 }
@@ -3338,13 +3351,13 @@ bool TJackClient::ReadPref()
                     &nullo,
                     &TJackClient::fAutoConnect,
                     &nullo,
-                    &TJackClient::fDefaultInput,
-                    &nullo,
-                    &TJackClient::fDefaultOutput,
-                    &nullo,
-                    &TJackClient::fDefaultSystem,
-                    &nullo,
-                    &TJackClient::fDebug,
+					&nullo, // do not read fDefaultInput anymore
+					&nullo,
+					&nullo, // do not read fDefaultOutput anymore
+					&nullo,
+					&nullo, // do not read fDefaultSystem anymore
+					&nullo,
+            		&TJackClient::fDebug,
                     &nullo,
  					&TJackClient::fCoreAudioDriverUID
                 );
@@ -3559,24 +3572,6 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
         if (err != kAudioHardwareNoError)
             return err;
         TJackClient::fConnected2HAL = true;
-    }
-
-    if (TJackClient::fDefaultInput) {
-        err = AudioHardwareSetProperty(kAudioHardwarePropertyDefaultInputDevice, sizeof(UInt32), &TJackClient::fDeviceID);
-        if (err != kAudioHardwareNoError)
-            return err;
-    }
-
-    if (TJackClient::fDefaultOutput) {
-        err = AudioHardwareSetProperty(kAudioHardwarePropertyDefaultOutputDevice, sizeof(UInt32), &TJackClient::fDeviceID);
-        if (err != kAudioHardwareNoError)
-            return err;
-    }
-
-    if (TJackClient::fDefaultSystem) {
-        err = AudioHardwareSetProperty(kAudioHardwarePropertyDefaultSystemOutputDevice, sizeof(UInt32), &TJackClient::fDeviceID);
-        if (err != kAudioHardwareNoError)
-            return err;
     }
 
     return err;

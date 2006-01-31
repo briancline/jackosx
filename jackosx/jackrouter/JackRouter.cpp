@@ -1,5 +1,5 @@
 /*
-Copyright © Stefan Werner stefan@keindesign.de, Grame 2003,2004
+Copyright © Stefan Werner stefan@keindesign.de, Grame 2003-2006
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
