@@ -45,9 +45,9 @@ ElCAJAS::~ElCAJAS()
     Cleanup();
 }
 
-UInt32	ElCAJAS::SupportedNumChannels (const AUChannelInfo** outInfo)
+UInt32	ElCAJAS::SupportedNumChannels(const AUChannelInfo** outInfo)
 {
-    if ( outInfo != NULL )
+    if (outInfo != NULL)
         *outInfo = &m_aobSupportedNumChannels[0];
     return kNumSupportedNumChannels;
 }
@@ -66,7 +66,7 @@ ComponentResult	ElCAJAS::GetParameterValueStrings(AudioUnitScope inScope,
     return kAudioUnitErr_InvalidProperty;
 }
 
-ComponentResult	ElCAJAS::ChangeStreamFormat(AudioUnitScope	inScope,
+ComponentResult	ElCAJAS::ChangeStreamFormat(AudioUnitScope inScope,
         AudioUnitElement inElement,
         const CAStreamBasicDescription& inPrevFormat,
         const CAStreamBasicDescription& inNewFormat)
@@ -87,7 +87,7 @@ ComponentResult	ElCAJAS::ChangeStreamFormat(AudioUnitScope	inScope,
     return kAudioUnitErr_FormatNotSupported;
 }
 
-ComponentResult	ElCAJAS::GetParameterInfo(AudioUnitScope inScope, AudioUnitParameterID	inParameterID,
+ComponentResult	ElCAJAS::GetParameterInfo(AudioUnitScope inScope, AudioUnitParameterID inParameterID,
         AudioUnitParameterInfo	&outParameterInfo)
 {
     if (inScope != kAudioUnitScope_Global)
@@ -121,9 +121,9 @@ ComponentResult	ElCAJAS::GetParameterInfo(AudioUnitScope inScope, AudioUnitParam
     return result;
 }
 
-OSStatus	ElCAJAS::ProcessBufferLists(AudioUnitRenderActionFlags&	ioActionFlags,
+OSStatus ElCAJAS::ProcessBufferLists(AudioUnitRenderActionFlags& ioActionFlags,
                                      const AudioBufferList&	inBuffer,
-                                     AudioBufferList&	outBuffer,
+                                     AudioBufferList& outBuffer,
                                      UInt32	inFramesToProcess)
 {
     int i;

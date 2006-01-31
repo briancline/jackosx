@@ -28,7 +28,7 @@ class ElCAJASView : public AUCarbonViewBase
     public:
         ElCAJASView(AudioUnitCarbonView auv) : AUCarbonViewBase(auv)
         {}
-        virtual OSStatus	CreateUI(Float32 xoffset, Float32 yoffset);
+        virtual OSStatus CreateUI(Float32 xoffset, Float32 yoffset);
 };
 
 COMPONENT_ENTRY(ElCAJASView);

@@ -28,19 +28,19 @@ class ElCAJAS : public AUEffectBase
         ElCAJAS(AudioUnit component);
         ~ElCAJAS();
 
-        virtual OSStatus	ProcessBufferLists(AudioUnitRenderActionFlags &	ioActionFlags,
-                                             const AudioBufferList &	inBuffer,
-                                             AudioBufferList &	outBuffer,
+        virtual OSStatus ProcessBufferLists(AudioUnitRenderActionFlags& ioActionFlags,
+                                             const AudioBufferList& inBuffer,
+                                             AudioBufferList& outBuffer,
                                              UInt32	inFramesToProcess);
 
-        virtual UInt32	SupportedNumChannels(const AUChannelInfo**	outInfo);
+        virtual UInt32 SupportedNumChannels(const AUChannelInfo** outInfo);
 
-        int	GetNumCustomUIComponents ()
+        int	GetNumCustomUIComponents()
         {
             return 1;
         }
 
-        void	GetUIComponentDescs(ComponentDescription* inDescArray)
+        void GetUIComponentDescs(ComponentDescription* inDescArray)
         {
             inDescArray[0].componentType = kAudioUnitCarbonViewComponentType;
             inDescArray[0].componentSubType = 'JASb';
@@ -54,29 +54,28 @@ class ElCAJAS : public AUEffectBase
         virtual void Cleanup();
 
         virtual	ComponentResult	GetParameterValueStrings(AudioUnitScope	inScope,
-                AudioUnitParameterID	inParameterID,
-                CFArrayRef *	outStrings	);
+                AudioUnitParameterID inParameterID,
+                CFArrayRef*	outStrings);
 
-        virtual ComponentResult	GetParameterInfo(AudioUnitScope	inScope, AudioUnitParameterID	inParameterID,
-                AudioUnitParameterInfo	&outParameterInfo );
+        virtual ComponentResult	GetParameterInfo(AudioUnitScope	inScope, AudioUnitParameterID inParameterID,
+                AudioUnitParameterInfo& outParameterInfo );
 
-        virtual bool	ValidFormat(AudioUnitScope	inScope,
-                                  AudioUnitElement	inElement,
-                                  const CAStreamBasicDescription & inNewFormat)
+        virtual bool ValidFormat(AudioUnitScope	inScope,
+                                  AudioUnitElement inElement,
+                                  const CAStreamBasicDescription& inNewFormat)
         {
             return true;
         }
 
-        virtual bool	StreamFormatWritable(AudioUnitScope	scope,
-                                           AudioUnitElement	element)
+        virtual bool StreamFormatWritable(AudioUnitScope scope, AudioUnitElement element)
         {
             return true;
         }
 
-        virtual	ComponentResult	ChangeStreamFormat(	AudioUnitScope	inScope,
-                AudioUnitElement	inElement,
-                const CAStreamBasicDescription & inPrevFormat,
-                const CAStreamBasicDescription & inNewFormat);
+        virtual	ComponentResult	ChangeStreamFormat(AudioUnitScope inScope,
+                AudioUnitElement inElement,
+                const CAStreamBasicDescription& inPrevFormat,
+                const CAStreamBasicDescription& inNewFormat);
 		
 	private:
         JARInsert *c_jar;
@@ -86,5 +85,5 @@ class ElCAJAS : public AUEffectBase
             kNumSupportedNumChannels = 2,
 		};
 
-        static AUChannelInfo	m_aobSupportedNumChannels[ kNumSupportedNumChannels ];
+        static AUChannelInfo m_aobSupportedNumChannels[kNumSupportedNumChannels];
 };
