@@ -290,6 +290,9 @@ History
 
 18-01-06 : Version 0.81 : S Letz
 		Remove default input/output management. Deactivate JackRouter as DefaultSystemDevice.
+
+21-03-06 : Version 0.82 : S Letz
+		Endianaess issue for Intel version. Fix fscan bug.
 		
 TODO :
     
@@ -340,9 +343,10 @@ AudioHardwarePlugInRef TJackClient::fPlugInRef = 0;
 bool TJackClient::fNotification = false;
 bool TJackClient::fFirstActivate = true;
 
-set<string>* TJackClient::fBlackList;
+set<string>* TJackClient::fBlackList = NULL;
 
-#define kJackStreamFormat kAudioFormatFlagIsPacked|kLinearPCMFormatFlagIsFloat|kAudioFormatFlagIsBigEndian
+#define kJackStreamFormat  kAudioFormatFlagsNativeFloatPacked | kLinearPCMFormatFlagIsNonInterleaved
+
 #define kAudioTimeFlags kAudioTimeStampSampleTimeValid|kAudioTimeStampHostTimeValid|kAudioTimeStampRateScalarValid
 
 struct stereoList
@@ -2160,7 +2164,7 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
                     err = kAudioHardwareBadPropertySizeError;
                 } else {
                     *(UInt32*) outPropertyData = 0; // no....
-                    *ioPropertyDataSize = sizeof(UInt32);
+					 *ioPropertyDataSize = sizeof(UInt32);
                     JARLog("DeviceGetProperty::kAudioDevicePropertyDeviceCanBeDefaultDevice %ld\n", (long)isInput);
                 }
                 break;
@@ -2665,7 +2669,7 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
                                     if (TJackClient::fJackClient) {
                                         if (TJackClient::fJackClient->fInputPortList[i] == 0) {
                                             char in_port_name [JACK_PORT_NAME_LEN];
-                                            sprintf(in_port_name, "in%ld", i + 1);
+											sprintf(in_port_name, "in%u", i + 1);
                                             TJackClient::fJackClient->fInputPortList[i] = jack_port_register(TJackClient::fJackClient->fClient, in_port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
                                             JARLog("DeviceSetProperty : input kAudioDevicePropertyIOProcStreamUsage jack_port_register %ld \n", i);
                                         }
@@ -2692,7 +2696,7 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
                                     if (TJackClient::fJackClient) {
                                         if (TJackClient::fJackClient->fOutputPortList[i] == 0) {
                                             char out_port_name [JACK_PORT_NAME_LEN];
-                                            sprintf(out_port_name, "out%ld", i + 1);
+											sprintf(out_port_name, "out%u", i + 1);
                                             TJackClient::fJackClient->fOutputPortList[i] = jack_port_register(TJackClient::fJackClient->fClient, out_port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
                                             JARLog("DeviceSetProperty : output kAudioDevicePropertyIOProcStreamUsage jack_port_register %ld \n", i);
                                         }
@@ -3343,13 +3347,14 @@ bool TJackClient::ReadPref()
             FILE *prefFile;
             if ((prefFile = fopen(path, "rt"))) {
                 int nullo;
-                fscanf(
+				int input, output, autoconnect, debug;
+				fscanf(
 					prefFile, "\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s",
-                    &TJackClient::fInputChannels,
+				    &input,
                     &nullo,
-                    &TJackClient::fOutputChannels,
+                    &output,
                     &nullo,
-                    &TJackClient::fAutoConnect,
+                    &autoconnect,
                     &nullo,
 					&nullo, // do not read fDefaultInput anymore
 					&nullo,
@@ -3357,11 +3362,16 @@ bool TJackClient::ReadPref()
 					&nullo,
 					&nullo, // do not read fDefaultSystem anymore
 					&nullo,
-            		&TJackClient::fDebug,
+            		&debug,
                     &nullo,
  					&TJackClient::fCoreAudioDriverUID
                 );
+
                 fclose(prefFile);
+				TJackClient::fInputChannels = input;
+				TJackClient::fOutputChannels = output;
+				TJackClient::fAutoConnect = autoconnect;
+				TJackClient::fDebug = debug;
                 JARLog("Reading Preferences fInputChannels: %ld fOutputChannels: %ld fAutoConnect: %ld\n",
                        TJackClient::fInputChannels, TJackClient::fOutputChannels, TJackClient::fAutoConnect);
                 JARLog("Reading Preferences fDefaultInput: %ld fDefaultOutput: %ld fDefaultSystem: %ld fDeviceID: %ld\n",
@@ -3545,7 +3555,7 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
 
         assert(TJackClient::fInputChannels < MAX_JACK_PORTS);
         assert(TJackClient::fOutputChannels < MAX_JACK_PORTS);
-
+	
         JARLog("fInputChannels %ld \n", TJackClient::fInputChannels);
         JARLog("fOutputChannels %ld \n", TJackClient::fOutputChannels);
         jack_client_close(client);
