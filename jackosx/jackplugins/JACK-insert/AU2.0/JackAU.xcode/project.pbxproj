@@ -312,9 +312,10 @@
 				B21B4A7306F0886500112E6A,
 			);
 			isa = PBXGroup;
-			path = AUPublic;
-			refType = 4;
-			sourceTree = "<group>";
+			name = AUPublic;
+			path = /Developer/Examples/CoreAudio/AudioUnits/AUPublic;
+			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		B21B4A5306F0886500112E6A = {
 			children = (
@@ -888,9 +889,10 @@
 				B21B4AAB06F088C600112E6A,
 			);
 			isa = PBXGroup;
-			path = PublicUtility;
-			refType = 4;
-			sourceTree = "<group>";
+			name = PublicUtility;
+			path = /Developer/Examples/CoreAudio/PublicUtility;
+			refType = 0;
+			sourceTree = "<absolute>";
 		};
 		B21B4AAA06F088C600112E6A = {
 			fileEncoding = 30;
