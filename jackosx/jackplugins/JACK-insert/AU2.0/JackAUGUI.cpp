@@ -69,7 +69,7 @@ OSStatus ElCAJASView::CreateUI(Float32 xoffset, Float32 yoffset)
         r.bottom = r.top + 80;
         r.left = xoff;
         r.right = r.left + 350;
-        verify_noerr(CreateStaticTextControl(mCarbonWindow, &r, CFSTR("Johnny Petrantoni JACK-insert v1.6, (c) 2003 - 2005.    ") , &fontStyle, &newControl));
+        verify_noerr(CreateStaticTextControl(mCarbonWindow, &r, CFSTR("Johnny Petrantoni JACK-insert v1.6.1, (c) 2003 - 2006.    ") , &fontStyle, &newControl));
         verify_noerr(EmbedControl(newControl));
         r.top = 75 + yoff;
         r.bottom = r.top + 80;
