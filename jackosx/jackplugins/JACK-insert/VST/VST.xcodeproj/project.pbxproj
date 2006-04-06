@@ -24,6 +24,7 @@
 		4B53CC8307C0D83B007E636C /* vstplugscarbon.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC7207C0D83B007E636C /* vstplugscarbon.h */; };
 		4B53CC8407C0D83B007E636C /* vstplugsmac.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC7307C0D83B007E636C /* vstplugsmac.h */; };
 		4B53CC8507C0D83B007E636C /* vstplugsmacho.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC7407C0D83B007E636C /* vstplugsmacho.h */; };
+		4BD637D509E53A5E0019B57C /* Info-macho.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BD637D409E53A5E0019B57C /* Info-macho.plist */; };
 		4BE2E70E09E3F40D009A4D7C /* JackVST.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B2279E6004CD772C00B1A081 /* JackVST.hpp */; };
 		4BE2E70F09E3F40D009A4D7C /* BSizeAlign.h in Headers */ = {isa = PBXBuildFile; fileRef = B2CB9AF706F46796002CF3C1 /* BSizeAlign.h */; };
 		4BE2E71009E3F40D009A4D7C /* JARInsert.h in Headers */ = {isa = PBXBuildFile; fileRef = B2CB9AF906F46796002CF3C1 /* JARInsert.h */; };
@@ -146,7 +147,7 @@
 	<key>CFBundleExecutable</key>
 	<string>JACK-insert</string>
 	<key>CFBundleGetInfoString</key>
-	<string>© 03-05, Johnny Petrantoni.</string>
+	<string>© 03-06, Johnny Petrantoni.</string>
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
@@ -158,11 +159,11 @@
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.6</string>
+	<string>1.6.1</string>
 	<key>CFBundleSignature</key>
 	<string>ElCa</string>
 	<key>CFBundleVersion</key>
-	<string>1.6</string>
+	<string>1.6.1</string>
 </dict>
 </plist>
 ";
@@ -230,7 +231,7 @@
 		4B53CC7207C0D83B007E636C /* vstplugscarbon.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = vstplugscarbon.h; sourceTree = "<group>"; };
 		4B53CC7307C0D83B007E636C /* vstplugsmac.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = vstplugsmac.h; sourceTree = "<group>"; };
 		4B53CC7407C0D83B007E636C /* vstplugsmacho.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = vstplugsmacho.h; sourceTree = "<group>"; };
-		4BE2E73A09E3F40D009A4D7C /* Info-mach_0__Upgraded_.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Info-mach_0__Upgraded_.plist"; sourceTree = "<group>"; };
+		4BD637D409E53A5E0019B57C /* Info-macho.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-macho.plist"; sourceTree = SOURCE_ROOT; };
 		4BE2E73B09E3F40D009A4D7C /* JACK-insert.vst */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "JACK-insert.vst"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2279E5F04CD772C00B1A081 /* JackVST.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = JackVST.cpp; sourceTree = "<group>"; };
 		B2279E6004CD772C00B1A081 /* JackVST.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = JackVST.hpp; sourceTree = "<group>"; };
@@ -286,7 +287,7 @@
 				08FB77AFFE84173DC02AAC07 /* src */,
 				089C1671FE841209C02AAC07 /* Frameworks and Libraries */,
 				19C28FB8FE9D52D311CA2CBB /* Products */,
-				4BE2E73A09E3F40D009A4D7C /* Info-mach_0__Upgraded_.plist */,
+				4BD637D409E53A5E0019B57C /* Info-macho.plist */,
 			);
 			name = bundle_test;
 			sourceTree = "<group>";
@@ -495,6 +496,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2FF4ECE0529FC02001F90A7 /* PkgInfo in Resources */,
+				4BD637D509E53A5E0019B57C /* Info-macho.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -639,7 +641,7 @@
 				GCC_PREFIX_HEADER = vstplugsmacho.h;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				HEADER_SEARCH_PATHS = "../VST-VST_CFM/VSTSDK";
-				INFOPLIST_FILE = "Info-mach_0__Upgraded_.plist";
+				INFOPLIST_FILE = "Info-macho.plist";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -669,7 +671,7 @@
 				GCC_PREFIX_HEADER = vstplugsmacho.h;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				HEADER_SEARCH_PATHS = "../VST-VST_CFM/VSTSDK";
-				INFOPLIST_FILE = "Info-mach_0__Upgraded_.plist";
+				INFOPLIST_FILE = "Info-macho.plist";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -697,7 +699,7 @@
 				GCC_PREFIX_HEADER = vstplugsmacho.h;
 				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				HEADER_SEARCH_PATHS = "../VST-VST_CFM/VSTSDK";
-				INFOPLIST_FILE = "Info-mach_0__Upgraded_.plist";
+				INFOPLIST_FILE = "Info-macho.plist";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
