@@ -1,0 +1,949 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXApplicationTarget section */
+		B2C017310508E0830042DB15 /* JackPilot */ = {
+			isa = PBXApplicationTarget;
+			buildConfigurationList = 4B4F3D3609E2D5E000D2EC22 /* Build configuration list for PBXApplicationTarget "JackPilot" */;
+			buildPhases = (
+				B2C0172C0508E0830042DB15 /* Headers */,
+				B2C0172D0508E0830042DB15 /* Resources */,
+				B2C0172E0508E0830042DB15 /* Sources */,
+				B2C0172F0508E0830042DB15 /* Frameworks */,
+				B2C017300508E0830042DB15 /* Rez */,
+				B2FF9D7205EFEE4A00F1AD06 /* CopyFiles */,
+				B2FF9DA305EFEFB900F1AD06 /* ShellScript */,
+				B20C52C706F496020065B021 /* ShellScript */,
+				4BA6469B072FE87800590705 /* ShellScript */,
+			);
+			buildSettings = {
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "-DPLUGIN=1";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRECOMPILE_PREFIX_HEADER = YES;
+				PREFIX_HEADER = src/JackPilot1.0_Prefix.h;
+				PRODUCT_NAME = JackPilot;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			dependencies = (
+			);
+			name = JackPilot;
+			productInstallPath = "$(USER_APPS_DIR)";
+			productName = JackPilot1.3;
+			productReference = B2C017320508E0830042DB15 /* JackPilot.app */;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>jks</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>jks.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Jack Studio Setup</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>Mac</string>
+				<string>OS</string>
+				<string>X</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleExecutable</key>
+	<string>JackPilot</string>
+	<key>CFBundleGetInfoString</key>
+	<string>JackPilot 1.5.9, @2003-2005 Johnny Petrantoni.</string>
+	<key>CFBundleIconFile</key>
+	<string>jackpilot.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>gpl.elementicaotici.JackPilot</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>JackPilot</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>JackPilot</string>
+	<key>CFBundleSignature</key>
+	<string>ElCa</string>
+	<key>CFBundleVersion</key>
+	<string>1.5.9</string>
+	<key>NSMainNibFile</key>
+	<string>MainMenu</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+</dict>
+</plist>
+";
+		};
+/* End PBXApplicationTarget section */
+
+/* Begin PBXBuildFile section */
+		4B4F3D3C09E2D5E000D2EC22 /* jackfun.h in Headers */ = {isa = PBXBuildFile; fileRef = B2B9A25D04BDC2F90031A363 /* jackfun.h */; };
+		4B4F3D3D09E2D5E000D2EC22 /* procinfo.h in Headers */ = {isa = PBXBuildFile; fileRef = B2B9A26504BDD3850031A363 /* procinfo.h */; };
+		4B4F3D3E09E2D5E000D2EC22 /* JackMenu.h in Headers */ = {isa = PBXBuildFile; fileRef = B29F407504BDEFB100D20559 /* JackMenu.h */; };
+		4B4F3D3F09E2D5E000D2EC22 /* JackPilot1.0_Prefix.h in Headers */ = {isa = PBXBuildFile; fileRef = 32CA4F630368D1EE00C91783 /* JackPilot1.0_Prefix.h */; };
+		4B4F3D4009E2D5E000D2EC22 /* DataSourceSend.h in Headers */ = {isa = PBXBuildFile; fileRef = B2C0175B0508E1BD0042DB15 /* DataSourceSend.h */; };
+		4B4F3D4109E2D5E000D2EC22 /* JackCon1.3.h in Headers */ = {isa = PBXBuildFile; fileRef = B2C0175E0508E24B0042DB15 /* JackCon1.3.h */; };
+		4B4F3D4209E2D5E000D2EC22 /* PortsData.h in Headers */ = {isa = PBXBuildFile; fileRef = B2EA0BA6050F44A200FED62D /* PortsData.h */; };
+		4B4F3D4309E2D5E000D2EC22 /* tableData.h in Headers */ = {isa = PBXBuildFile; fileRef = B2AA7CE0050F555C00FADF47 /* tableData.h */; };
+		4B4F3D4409E2D5E000D2EC22 /* bequite.h in Headers */ = {isa = PBXBuildFile; fileRef = B292F8F60510AAE700D45475 /* bequite.h */; };
+		4B4F3D4509E2D5E000D2EC22 /* DataSourceSend2.h in Headers */ = {isa = PBXBuildFile; fileRef = B292F8F80510D90700D45475 /* DataSourceSend2.h */; };
+		4B4F3D4609E2D5E000D2EC22 /* Utility.h in Headers */ = {isa = PBXBuildFile; fileRef = B2292EC10559813D004A67B1 /* Utility.h */; };
+		4B4F3D4709E2D5E000D2EC22 /* JPPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = B2EB270705C5284600724495 /* JPPlugin.h */; };
+		4B4F3D4909E2D5E000D2EC22 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		4B4F3D4A09E2D5E000D2EC22 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = B2EA0B9F050F432E00FED62D /* MainMenu.nib */; };
+		4B4F3D4B09E2D5E000D2EC22 /* jks.icns in Resources */ = {isa = PBXBuildFile; fileRef = B219AC61051E53A500730C30 /* jks.icns */; };
+		4B4F3D4C09E2D5E000D2EC22 /* jackdoc.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B2B49890051E5DAD00A80204 /* jackdoc.pdf */; };
+		4B4F3D4D09E2D5E000D2EC22 /* jackpilot.icns in Resources */ = {isa = PBXBuildFile; fileRef = B2A591F9052093FA00D722DC /* jackpilot.icns */; };
+		4B4F3D4E09E2D5E000D2EC22 /* jackdocFR.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B246B5E205287DAF00E53F5B /* jackdocFR.pdf */; };
+		4B4F3D4F09E2D5E000D2EC22 /* jackdocIT.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B246B5E305287DAF00E53F5B /* jackdocIT.pdf */; };
+		4B4F3D5009E2D5E000D2EC22 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B2FF9BAA05EFDCA700F1AD06 /* Localizable.strings */; };
+		4B4F3D5109E2D5E000D2EC22 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B2FF9BAA05EFDCA700F1AD06 /* Localizable.strings */; };
+		4B4F3D5309E2D5E000D2EC22 /* jackfun.c in Sources */ = {isa = PBXBuildFile; fileRef = B2B9A25F04BDC3000031A363 /* jackfun.c */; };
+		4B4F3D5409E2D5E000D2EC22 /* bequite.c in Sources */ = {isa = PBXBuildFile; fileRef = B2B9A26304BDD3850031A363 /* bequite.c */; };
+		4B4F3D5509E2D5E000D2EC22 /* procinfo.c in Sources */ = {isa = PBXBuildFile; fileRef = B2B9A26404BDD3850031A363 /* procinfo.c */; };
+		4B4F3D5609E2D5E000D2EC22 /* JackMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = B29F407604BDEFB100D20559 /* JackMenu.m */; };
+		4B4F3D5709E2D5E000D2EC22 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
+		4B4F3D5809E2D5E000D2EC22 /* DataSourceSend.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C0175A0508E1BD0042DB15 /* DataSourceSend.m */; };
+		4B4F3D5909E2D5E000D2EC22 /* JackCon1.3.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C017600508E2600042DB15 /* JackCon1.3.m */; };
+		4B4F3D5A09E2D5E000D2EC22 /* PortsData.m in Sources */ = {isa = PBXBuildFile; fileRef = B2EA0BA7050F44A200FED62D /* PortsData.m */; };
+		4B4F3D5B09E2D5E000D2EC22 /* tableData.m in Sources */ = {isa = PBXBuildFile; fileRef = B2AA7CE1050F555C00FADF47 /* tableData.m */; };
+		4B4F3D5C09E2D5E000D2EC22 /* DataSourceSend2.m in Sources */ = {isa = PBXBuildFile; fileRef = B292F8F90510D90700D45475 /* DataSourceSend2.m */; };
+		4B4F3D5D09E2D5E000D2EC22 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = B2292EC20559813D004A67B1 /* Utility.m */; };
+		4B4F3D5E09E2D5E000D2EC22 /* JPPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = B2EB270805C5284600724495 /* JPPlugin.m */; };
+		4B4F3D6009E2D5E000D2EC22 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		4B4F3D6109E2D5E000D2EC22 /* Jack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2BA0E1404CECD140055565C /* Jack.framework */; };
+		4B4F3D6209E2D5E000D2EC22 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B24BD00305060C0F00947A3C /* CoreAudio.framework */; };
+		4B4F3D6309E2D5E000D2EC22 /* Panda.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2EB271E05C5287400724495 /* Panda.framework */; };
+		4B4F3D6409E2D5E000D2EC22 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B24BD00705060C6C00947A3C /* AudioToolbox.framework */; };
+		4B4F3D6709E2D5E000D2EC22 /* Localizable.strings in CopyFiles */ = {isa = PBXBuildFile; fileRef = B2FF9BAA05EFDCA700F1AD06 /* Localizable.strings */; };
+		4B50039409E51A4200AD1985 /* Info-JackPilot.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B50039309E51A4200AD1985 /* Info-JackPilot.plist */; };
+		B219AC62051E53A500730C30 /* jks.icns in Resources */ = {isa = PBXBuildFile; fileRef = B219AC61051E53A500730C30 /* jks.icns */; };
+		B2292EC30559813D004A67B1 /* Utility.h in Headers */ = {isa = PBXBuildFile; fileRef = B2292EC10559813D004A67B1 /* Utility.h */; };
+		B2292EC40559813D004A67B1 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = B2292EC20559813D004A67B1 /* Utility.m */; };
+		B246B5E405287DAF00E53F5B /* jackdocFR.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B246B5E205287DAF00E53F5B /* jackdocFR.pdf */; };
+		B246B5E505287DAF00E53F5B /* jackdocIT.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B246B5E305287DAF00E53F5B /* jackdocIT.pdf */; };
+		B292F8F70510AAE700D45475 /* bequite.h in Headers */ = {isa = PBXBuildFile; fileRef = B292F8F60510AAE700D45475 /* bequite.h */; };
+		B292F8FA0510D90700D45475 /* DataSourceSend2.h in Headers */ = {isa = PBXBuildFile; fileRef = B292F8F80510D90700D45475 /* DataSourceSend2.h */; };
+		B292F8FB0510D90700D45475 /* DataSourceSend2.m in Sources */ = {isa = PBXBuildFile; fileRef = B292F8F90510D90700D45475 /* DataSourceSend2.m */; };
+		B2A591FA052093FA00D722DC /* jackpilot.icns in Resources */ = {isa = PBXBuildFile; fileRef = B2A591F9052093FA00D722DC /* jackpilot.icns */; };
+		B2AA7CE2050F555C00FADF47 /* tableData.h in Headers */ = {isa = PBXBuildFile; fileRef = B2AA7CE0050F555C00FADF47 /* tableData.h */; };
+		B2AA7CE3050F555C00FADF47 /* tableData.m in Sources */ = {isa = PBXBuildFile; fileRef = B2AA7CE1050F555C00FADF47 /* tableData.m */; };
+		B2AB50DB067F6E1900127FEB /* JPPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = B2EB270705C5284600724495 /* JPPlugin.h */; };
+		B2AB50E4067F6E3200127FEB /* JPPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = B2EB270805C5284600724495 /* JPPlugin.m */; };
+		B2AB50E6067F6E3600127FEB /* Panda.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2EB271E05C5287400724495 /* Panda.framework */; };
+		B2AB50EC067F6E4600127FEB /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B24BD00705060C6C00947A3C /* AudioToolbox.framework */; };
+		B2B49891051E5DAD00A80204 /* jackdoc.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B2B49890051E5DAD00A80204 /* jackdoc.pdf */; };
+		B2C017340508E08B0042DB15 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		B2C017380508E0960042DB15 /* jackfun.h in Headers */ = {isa = PBXBuildFile; fileRef = B2B9A25D04BDC2F90031A363 /* jackfun.h */; };
+		B2C017390508E0970042DB15 /* jackfun.c in Sources */ = {isa = PBXBuildFile; fileRef = B2B9A25F04BDC3000031A363 /* jackfun.c */; };
+		B2C0173A0508E0970042DB15 /* bequite.c in Sources */ = {isa = PBXBuildFile; fileRef = B2B9A26304BDD3850031A363 /* bequite.c */; };
+		B2C0173C0508E0980042DB15 /* procinfo.c in Sources */ = {isa = PBXBuildFile; fileRef = B2B9A26404BDD3850031A363 /* procinfo.c */; };
+		B2C0173D0508E0990042DB15 /* procinfo.h in Headers */ = {isa = PBXBuildFile; fileRef = B2B9A26504BDD3850031A363 /* procinfo.h */; };
+		B2C0174D0508E0AB0042DB15 /* JackMenu.h in Headers */ = {isa = PBXBuildFile; fileRef = B29F407504BDEFB100D20559 /* JackMenu.h */; };
+		B2C0174E0508E0AC0042DB15 /* JackMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = B29F407604BDEFB100D20559 /* JackMenu.m */; };
+		B2C017530508E0B50042DB15 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
+		B2C017550508E0C40042DB15 /* JackPilot1.0_Prefix.h in Headers */ = {isa = PBXBuildFile; fileRef = 32CA4F630368D1EE00C91783 /* JackPilot1.0_Prefix.h */; };
+		B2C0175C0508E1BD0042DB15 /* DataSourceSend.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C0175A0508E1BD0042DB15 /* DataSourceSend.m */; };
+		B2C0175D0508E1BD0042DB15 /* DataSourceSend.h in Headers */ = {isa = PBXBuildFile; fileRef = B2C0175B0508E1BD0042DB15 /* DataSourceSend.h */; };
+		B2C0175F0508E24B0042DB15 /* JackCon1.3.h in Headers */ = {isa = PBXBuildFile; fileRef = B2C0175E0508E24B0042DB15 /* JackCon1.3.h */; };
+		B2C017610508E2600042DB15 /* JackCon1.3.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C017600508E2600042DB15 /* JackCon1.3.m */; };
+		B2EA0BA1050F432E00FED62D /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = B2EA0B9F050F432E00FED62D /* MainMenu.nib */; };
+		B2EA0BA2050F446B00FED62D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		B2EA0BA3050F446C00FED62D /* Jack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2BA0E1404CECD140055565C /* Jack.framework */; };
+		B2EA0BA4050F446C00FED62D /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B24BD00305060C0F00947A3C /* CoreAudio.framework */; };
+		B2EA0BA8050F44A200FED62D /* PortsData.h in Headers */ = {isa = PBXBuildFile; fileRef = B2EA0BA6050F44A200FED62D /* PortsData.h */; };
+		B2EA0BA9050F44A200FED62D /* PortsData.m in Sources */ = {isa = PBXBuildFile; fileRef = B2EA0BA7050F44A200FED62D /* PortsData.m */; };
+		B2FF9BAB05EFDCA700F1AD06 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B2FF9BAA05EFDCA700F1AD06 /* Localizable.strings */; };
+		B2FF9D9705EFEFA300F1AD06 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B2FF9BAA05EFDCA700F1AD06 /* Localizable.strings */; };
+		B2FF9DA005EFEFB300F1AD06 /* Localizable.strings in CopyFiles */ = {isa = PBXBuildFile; fileRef = B2FF9BAA05EFDCA700F1AD06 /* Localizable.strings */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildStyle section */
+		4A9504CCFFE6A4B311CA0CBA /* Development */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OPTIMIZATION_CFLAGS = "-O0";
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4A9504CDFFE6A4B311CA0CBA /* Deployment */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				DEBUG_SYMBOLS = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				OPTIMIZATION_CFLAGS = "-O3";
+				PREBINDING = NO;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+/* End PBXBuildStyle section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4B4F3D6609E2D5E000D2EC22 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = English.lproj;
+			dstSubfolderSpec = 7;
+			files = (
+				4B4F3D6709E2D5E000D2EC22 /* Localizable.strings in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2FF9D7205EFEE4A00F1AD06 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = English.lproj;
+			dstSubfolderSpec = 7;
+			files = (
+				B2FF9DA005EFEFB300F1AD06 /* Localizable.strings in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = main.m; path = src/main.m; sourceTree = "<group>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		32CA4F630368D1EE00C91783 /* JackPilot1.0_Prefix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JackPilot1.0_Prefix.h; path = src/JackPilot1.0_Prefix.h; sourceTree = "<group>"; };
+		4B4F3D7009E2D5E000D2EC22 /* JackPilot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JackPilot.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B50039309E51A4200AD1985 /* Info-JackPilot.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-JackPilot.plist"; sourceTree = SOURCE_ROOT; };
+		B219AC61051E53A500730C30 /* jks.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = jks.icns; path = resources/jks.icns; sourceTree = "<group>"; };
+		B2292EC10559813D004A67B1 /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Utility.h; path = src/Utility.h; sourceTree = "<group>"; };
+		B2292EC20559813D004A67B1 /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = Utility.m; path = src/Utility.m; sourceTree = "<group>"; };
+		B246B5E205287DAF00E53F5B /* jackdocFR.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = jackdocFR.pdf; path = resources/jackdocFR.pdf; sourceTree = "<group>"; };
+		B246B5E305287DAF00E53F5B /* jackdocIT.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = jackdocIT.pdf; path = resources/jackdocIT.pdf; sourceTree = "<group>"; };
+		B24BD00305060C0F00947A3C /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
+		B24BD00705060C6C00947A3C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
+		B292F8F60510AAE700D45475 /* bequite.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = bequite.h; path = src/bequite.h; sourceTree = "<group>"; };
+		B292F8F80510D90700D45475 /* DataSourceSend2.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = DataSourceSend2.h; path = src/DataSourceSend2.h; sourceTree = "<group>"; };
+		B292F8F90510D90700D45475 /* DataSourceSend2.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = DataSourceSend2.m; path = src/DataSourceSend2.m; sourceTree = "<group>"; };
+		B29D062205C941DF0013F7E1 /* todo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = todo.txt; sourceTree = "<group>"; };
+		B29F407504BDEFB100D20559 /* JackMenu.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = JackMenu.h; path = src/JackMenu.h; sourceTree = "<group>"; };
+		B29F407604BDEFB100D20559 /* JackMenu.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = JackMenu.m; path = src/JackMenu.m; sourceTree = "<group>"; };
+		B2A591F9052093FA00D722DC /* jackpilot.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = jackpilot.icns; path = resources/jackpilot.icns; sourceTree = "<group>"; };
+		B2AA7CE0050F555C00FADF47 /* tableData.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = tableData.h; path = src/tableData.h; sourceTree = "<group>"; };
+		B2AA7CE1050F555C00FADF47 /* tableData.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = tableData.m; path = src/tableData.m; sourceTree = "<group>"; };
+		B2B49890051E5DAD00A80204 /* jackdoc.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = jackdoc.pdf; path = resources/jackdoc.pdf; sourceTree = "<group>"; };
+		B2B9A25D04BDC2F90031A363 /* jackfun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jackfun.h; path = src/jackfun.h; sourceTree = "<group>"; };
+		B2B9A25F04BDC3000031A363 /* jackfun.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = jackfun.c; path = src/jackfun.c; sourceTree = "<group>"; };
+		B2B9A26304BDD3850031A363 /* bequite.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bequite.c; path = src/bequite.c; sourceTree = "<group>"; };
+		B2B9A26404BDD3850031A363 /* procinfo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = procinfo.c; path = src/procinfo.c; sourceTree = "<group>"; };
+		B2B9A26504BDD3850031A363 /* procinfo.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = procinfo.h; path = src/procinfo.h; sourceTree = "<group>"; };
+		B2BA0E1404CECD140055565C /* Jack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Jack.framework; path = /Library/Frameworks/Jack.framework; sourceTree = "<absolute>"; };
+		B2C017320508E0830042DB15 /* JackPilot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = JackPilot.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2C0175A0508E1BD0042DB15 /* DataSourceSend.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = DataSourceSend.m; path = src/DataSourceSend.m; sourceTree = "<group>"; };
+		B2C0175B0508E1BD0042DB15 /* DataSourceSend.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = DataSourceSend.h; path = src/DataSourceSend.h; sourceTree = "<group>"; };
+		B2C0175E0508E24B0042DB15 /* JackCon1.3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JackCon1.3.h; path = src/JackCon1.3.h; sourceTree = "<group>"; };
+		B2C017600508E2600042DB15 /* JackCon1.3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JackCon1.3.m; path = src/JackCon1.3.m; sourceTree = "<group>"; };
+		B2EA0BA0050F432E00FED62D /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		B2EA0BA6050F44A200FED62D /* PortsData.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = PortsData.h; path = src/PortsData.h; sourceTree = "<group>"; };
+		B2EA0BA7050F44A200FED62D /* PortsData.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = PortsData.m; path = src/PortsData.m; sourceTree = "<group>"; };
+		B2EB270705C5284600724495 /* JPPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JPPlugin.h; path = src/JPPlugin.h; sourceTree = "<group>"; };
+		B2EB270805C5284600724495 /* JPPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JPPlugin.m; path = src/JPPlugin.m; sourceTree = "<group>"; };
+		B2EB271E05C5287400724495 /* Panda.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Panda.framework; path = /Library/Frameworks/Panda.framework; sourceTree = "<absolute>"; };
+		B2FF9BAA05EFDCA700F1AD06 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4B4F3D5F09E2D5E000D2EC22 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B4F3D6009E2D5E000D2EC22 /* Cocoa.framework in Frameworks */,
+				4B4F3D6109E2D5E000D2EC22 /* Jack.framework in Frameworks */,
+				4B4F3D6209E2D5E000D2EC22 /* CoreAudio.framework in Frameworks */,
+				4B4F3D6309E2D5E000D2EC22 /* Panda.framework in Frameworks */,
+				4B4F3D6409E2D5E000D2EC22 /* AudioToolbox.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2C0172F0508E0830042DB15 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B2EA0BA2050F446B00FED62D /* Cocoa.framework in Frameworks */,
+				B2EA0BA3050F446C00FED62D /* Jack.framework in Frameworks */,
+				B2EA0BA4050F446C00FED62D /* CoreAudio.framework in Frameworks */,
+				B2AB50E6067F6E3600127FEB /* Panda.framework in Frameworks */,
+				B2AB50EC067F6E4600127FEB /* AudioToolbox.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				B2C0175E0508E24B0042DB15 /* JackCon1.3.h */,
+				B2C017600508E2600042DB15 /* JackCon1.3.m */,
+				B29F407504BDEFB100D20559 /* JackMenu.h */,
+				B29F407604BDEFB100D20559 /* JackMenu.m */,
+				B2C0175B0508E1BD0042DB15 /* DataSourceSend.h */,
+				B2C0175A0508E1BD0042DB15 /* DataSourceSend.m */,
+				B2EA0BA6050F44A200FED62D /* PortsData.h */,
+				B292F8F80510D90700D45475 /* DataSourceSend2.h */,
+				B292F8F90510D90700D45475 /* DataSourceSend2.m */,
+				B2EA0BA7050F44A200FED62D /* PortsData.m */,
+				B2AA7CE0050F555C00FADF47 /* tableData.h */,
+				B2AA7CE1050F555C00FADF47 /* tableData.m */,
+				B2292EC10559813D004A67B1 /* Utility.h */,
+				B2292EC20559813D004A67B1 /* Utility.m */,
+				B2EB270705C5284600724495 /* JPPlugin.h */,
+				B2EB270805C5284600724495 /* JPPlugin.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B2EB271E05C5287400724495 /* Panda.framework */,
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+				B2BA0E1404CECD140055565C /* Jack.framework */,
+				B24BD00305060C0F00947A3C /* CoreAudio.framework */,
+				B24BD00705060C6C00947A3C /* AudioToolbox.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4B50039309E51A4200AD1985 /* Info-JackPilot.plist */,
+				B2C017320508E0830042DB15 /* JackPilot.app */,
+				4B4F3D7009E2D5E000D2EC22 /* JackPilot.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* JackPilot1.0 */ = {
+			isa = PBXGroup;
+			children = (
+				B29D062205C941DF0013F7E1 /* todo.txt */,
+				B2FF9BAA05EFDCA700F1AD06 /* Localizable.strings */,
+				B29FBC2804BDBDF900834C8B /* C functs */,
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = JackPilot1.0;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				32CA4F630368D1EE00C91783 /* JackPilot1.0_Prefix.h */,
+				29B97316FDCFA39411CA2CEA /* main.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				B2B49890051E5DAD00A80204 /* jackdoc.pdf */,
+				B219AC61051E53A500730C30 /* jks.icns */,
+				B2EA0B9F050F432E00FED62D /* MainMenu.nib */,
+				B2A591F9052093FA00D722DC /* jackpilot.icns */,
+				B246B5E205287DAF00E53F5B /* jackdocFR.pdf */,
+				B246B5E305287DAF00E53F5B /* jackdocIT.pdf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B29FBC2804BDBDF900834C8B /* C functs */ = {
+			isa = PBXGroup;
+			children = (
+				B2B9A25D04BDC2F90031A363 /* jackfun.h */,
+				B2B9A25F04BDC3000031A363 /* jackfun.c */,
+				B2B9A26304BDD3850031A363 /* bequite.c */,
+				B292F8F60510AAE700D45475 /* bequite.h */,
+				B2B9A26404BDD3850031A363 /* procinfo.c */,
+				B2B9A26504BDD3850031A363 /* procinfo.h */,
+			);
+			name = "C functs";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		4B4F3D3B09E2D5E000D2EC22 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B4F3D3C09E2D5E000D2EC22 /* jackfun.h in Headers */,
+				4B4F3D3D09E2D5E000D2EC22 /* procinfo.h in Headers */,
+				4B4F3D3E09E2D5E000D2EC22 /* JackMenu.h in Headers */,
+				4B4F3D3F09E2D5E000D2EC22 /* JackPilot1.0_Prefix.h in Headers */,
+				4B4F3D4009E2D5E000D2EC22 /* DataSourceSend.h in Headers */,
+				4B4F3D4109E2D5E000D2EC22 /* JackCon1.3.h in Headers */,
+				4B4F3D4209E2D5E000D2EC22 /* PortsData.h in Headers */,
+				4B4F3D4309E2D5E000D2EC22 /* tableData.h in Headers */,
+				4B4F3D4409E2D5E000D2EC22 /* bequite.h in Headers */,
+				4B4F3D4509E2D5E000D2EC22 /* DataSourceSend2.h in Headers */,
+				4B4F3D4609E2D5E000D2EC22 /* Utility.h in Headers */,
+				4B4F3D4709E2D5E000D2EC22 /* JPPlugin.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2C0172C0508E0830042DB15 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B2C017380508E0960042DB15 /* jackfun.h in Headers */,
+				B2C0173D0508E0990042DB15 /* procinfo.h in Headers */,
+				B2C0174D0508E0AB0042DB15 /* JackMenu.h in Headers */,
+				B2C017550508E0C40042DB15 /* JackPilot1.0_Prefix.h in Headers */,
+				B2C0175D0508E1BD0042DB15 /* DataSourceSend.h in Headers */,
+				B2C0175F0508E24B0042DB15 /* JackCon1.3.h in Headers */,
+				B2EA0BA8050F44A200FED62D /* PortsData.h in Headers */,
+				B2AA7CE2050F555C00FADF47 /* tableData.h in Headers */,
+				B292F8F70510AAE700D45475 /* bequite.h in Headers */,
+				B292F8FA0510D90700D45475 /* DataSourceSend2.h in Headers */,
+				B2292EC30559813D004A67B1 /* Utility.h in Headers */,
+				B2AB50DB067F6E1900127FEB /* JPPlugin.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		4B4F3D3A09E2D5E000D2EC22 /* JackPilot Universal */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4B4F3D6B09E2D5E000D2EC22 /* Build configuration list for PBXNativeTarget "JackPilot Universal" */;
+			buildPhases = (
+				4B4F3D3B09E2D5E000D2EC22 /* Headers */,
+				4B4F3D4809E2D5E000D2EC22 /* Resources */,
+				4B4F3D5209E2D5E000D2EC22 /* Sources */,
+				4B4F3D5F09E2D5E000D2EC22 /* Frameworks */,
+				4B4F3D6509E2D5E000D2EC22 /* Rez */,
+				4B4F3D6609E2D5E000D2EC22 /* CopyFiles */,
+				4B4F3D6809E2D5E000D2EC22 /* ShellScript */,
+				4B4F3D6909E2D5E000D2EC22 /* ShellScript */,
+				4B4F3D6A09E2D5E000D2EC22 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "-DPLUGIN=1";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRECOMPILE_PREFIX_HEADER = YES;
+				PREFIX_HEADER = src/JackPilot1.0_Prefix.h;
+				PRODUCT_NAME = JackPilot;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			dependencies = (
+			);
+			name = "JackPilot Universal";
+			productInstallPath = "$(USER_APPS_DIR)";
+			productName = JackPilot1.3;
+			productReference = 4B4F3D7009E2D5E000D2EC22 /* JackPilot.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 4B4F3D7309E2D5E100D2EC22 /* Build configuration list for PBXProject "JackPilot" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				4A9504CCFFE6A4B311CA0CBA /* Development */,
+				4A9504CDFFE6A4B311CA0CBA /* Deployment */,
+			);
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+				Italian,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* JackPilot1.0 */;
+			projectDirPath = "";
+			targets = (
+				B2C017310508E0830042DB15 /* JackPilot */,
+				4B4F3D3A09E2D5E000D2EC22 /* JackPilot Universal */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4B4F3D4809E2D5E000D2EC22 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B4F3D4909E2D5E000D2EC22 /* InfoPlist.strings in Resources */,
+				4B4F3D4A09E2D5E000D2EC22 /* MainMenu.nib in Resources */,
+				4B4F3D4B09E2D5E000D2EC22 /* jks.icns in Resources */,
+				4B4F3D4C09E2D5E000D2EC22 /* jackdoc.pdf in Resources */,
+				4B4F3D4D09E2D5E000D2EC22 /* jackpilot.icns in Resources */,
+				4B4F3D4E09E2D5E000D2EC22 /* jackdocFR.pdf in Resources */,
+				4B4F3D4F09E2D5E000D2EC22 /* jackdocIT.pdf in Resources */,
+				4B4F3D5009E2D5E000D2EC22 /* Localizable.strings in Resources */,
+				4B4F3D5109E2D5E000D2EC22 /* Localizable.strings in Resources */,
+				4B50039409E51A4200AD1985 /* Info-JackPilot.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2C0172D0508E0830042DB15 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B2C017340508E08B0042DB15 /* InfoPlist.strings in Resources */,
+				B2EA0BA1050F432E00FED62D /* MainMenu.nib in Resources */,
+				B219AC62051E53A500730C30 /* jks.icns in Resources */,
+				B2B49891051E5DAD00A80204 /* jackdoc.pdf in Resources */,
+				B2A591FA052093FA00D722DC /* jackpilot.icns in Resources */,
+				B246B5E405287DAF00E53F5B /* jackdocFR.pdf in Resources */,
+				B246B5E505287DAF00E53F5B /* jackdocIT.pdf in Resources */,
+				B2FF9BAB05EFDCA700F1AD06 /* Localizable.strings in Resources */,
+				B2FF9D9705EFEFA300F1AD06 /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXRezBuildPhase section */
+		4B4F3D6509E2D5E000D2EC22 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2C017300508E0830042DB15 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4B4F3D6809E2D5E000D2EC22 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rm build/Deployment/JackPilot.app/Contents/Resources/Localizable.strings";
+		};
+		4B4F3D6909E2D5E000D2EC22 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp -R Localization/Italian.lproj build/Deployment/JackPilot.app/Contents/Resources/";
+		};
+		4B4F3D6A09E2D5E000D2EC22 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp -R Localization/French.lproj build/Deployment/JackPilot.app/Contents/Resources/";
+		};
+		4BA6469B072FE87800590705 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp -R Localization/French.lproj build/JackPilot.app/Contents/Resources/";
+		};
+		B20C52C706F496020065B021 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp -R Localization/Italian.lproj build/JackPilot.app/Contents/Resources/";
+		};
+		B2FF9DA305EFEFB900F1AD06 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rm build/JackPilot.app/Contents/Resources/Localizable.strings";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4B4F3D5209E2D5E000D2EC22 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B4F3D5309E2D5E000D2EC22 /* jackfun.c in Sources */,
+				4B4F3D5409E2D5E000D2EC22 /* bequite.c in Sources */,
+				4B4F3D5509E2D5E000D2EC22 /* procinfo.c in Sources */,
+				4B4F3D5609E2D5E000D2EC22 /* JackMenu.m in Sources */,
+				4B4F3D5709E2D5E000D2EC22 /* main.m in Sources */,
+				4B4F3D5809E2D5E000D2EC22 /* DataSourceSend.m in Sources */,
+				4B4F3D5909E2D5E000D2EC22 /* JackCon1.3.m in Sources */,
+				4B4F3D5A09E2D5E000D2EC22 /* PortsData.m in Sources */,
+				4B4F3D5B09E2D5E000D2EC22 /* tableData.m in Sources */,
+				4B4F3D5C09E2D5E000D2EC22 /* DataSourceSend2.m in Sources */,
+				4B4F3D5D09E2D5E000D2EC22 /* Utility.m in Sources */,
+				4B4F3D5E09E2D5E000D2EC22 /* JPPlugin.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2C0172E0508E0830042DB15 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B2C017390508E0970042DB15 /* jackfun.c in Sources */,
+				B2C0173A0508E0970042DB15 /* bequite.c in Sources */,
+				B2C0173C0508E0980042DB15 /* procinfo.c in Sources */,
+				B2C0174E0508E0AC0042DB15 /* JackMenu.m in Sources */,
+				B2C017530508E0B50042DB15 /* main.m in Sources */,
+				B2C0175C0508E1BD0042DB15 /* DataSourceSend.m in Sources */,
+				B2C017610508E2600042DB15 /* JackCon1.3.m in Sources */,
+				B2EA0BA9050F44A200FED62D /* PortsData.m in Sources */,
+				B2AA7CE3050F555C00FADF47 /* tableData.m in Sources */,
+				B292F8FB0510D90700D45475 /* DataSourceSend2.m in Sources */,
+				B2292EC40559813D004A67B1 /* Utility.m in Sources */,
+				B2AB50E4067F6E3200127FEB /* JPPlugin.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C165DFE840E0CC02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		B2EA0B9F050F432E00FED62D /* MainMenu.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B2EA0BA0050F432E00FED62D /* English */,
+			);
+			name = MainMenu.nib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4B4F3D3709E2D5E000D2EC22 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OPTIMIZATION_CFLAGS = "-O0";
+				OTHER_CFLAGS = "-DPLUGIN=1";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRECOMPILE_PREFIX_HEADER = YES;
+				PREFIX_HEADER = src/JackPilot1.0_Prefix.h;
+				PRODUCT_NAME = JackPilot;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4B4F3D3809E2D5E000D2EC22 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_SYMBOLS = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "-DPLUGIN=1";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRECOMPILE_PREFIX_HEADER = YES;
+				PREFIX_HEADER = src/JackPilot1.0_Prefix.h;
+				PRODUCT_NAME = JackPilot;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4B4F3D3909E2D5E000D2EC22 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OPTIMIZATION_CFLAGS = "-O3";
+				OTHER_CFLAGS = "-DPLUGIN=1";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRECOMPILE_PREFIX_HEADER = YES;
+				PREFIX_HEADER = src/JackPilot1.0_Prefix.h;
+				PRODUCT_NAME = JackPilot;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			name = Default;
+		};
+		4B4F3D6C09E2D5E000D2EC22 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = src/JackPilot1.0_Prefix.h;
+				GCC_PREPROCESSOR_DEFINITIONS = "PLUGIN=1";
+				INFOPLIST_FILE = "Info-JackPilot.plist";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = JackPilot;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4B4F3D6D09E2D5E000D2EC22 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				DEBUG_SYMBOLS = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = src/JackPilot1.0_Prefix.h;
+				GCC_PREPROCESSOR_DEFINITIONS = "PLUGIN=1";
+				INFOPLIST_FILE = "Info-JackPilot.plist";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = JackPilot;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		4B4F3D6E09E2D5E000D2EC22 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = src/JackPilot1.0_Prefix.h;
+				GCC_PREPROCESSOR_DEFINITIONS = "PLUGIN=1";
+				INFOPLIST_FILE = "Info-JackPilot.plist";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = JackPilot;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			name = Default;
+		};
+		4B4F3D7409E2D5E100D2EC22 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Development;
+		};
+		4B4F3D7509E2D5E100D2EC22 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Deployment;
+		};
+		4B4F3D7609E2D5E100D2EC22 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4B4F3D3609E2D5E000D2EC22 /* Build configuration list for PBXApplicationTarget "JackPilot" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B4F3D3709E2D5E000D2EC22 /* Development */,
+				4B4F3D3809E2D5E000D2EC22 /* Deployment */,
+				4B4F3D3909E2D5E000D2EC22 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4B4F3D6B09E2D5E000D2EC22 /* Build configuration list for PBXNativeTarget "JackPilot Universal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B4F3D6C09E2D5E000D2EC22 /* Development */,
+				4B4F3D6D09E2D5E000D2EC22 /* Deployment */,
+				4B4F3D6E09E2D5E000D2EC22 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4B4F3D7309E2D5E100D2EC22 /* Build configuration list for PBXProject "JackPilot" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B4F3D7409E2D5E100D2EC22 /* Development */,
+				4B4F3D7509E2D5E100D2EC22 /* Deployment */,
+				4B4F3D7609E2D5E100D2EC22 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}
