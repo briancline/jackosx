@@ -475,7 +475,7 @@ static void StopNotification()
 //------------------------------------------------------------------------
 void TJackClient::SaveConnections()
 {
-    const char **connections;
+    const char** connections;
 
     if (!fClient)
         return;
@@ -657,7 +657,7 @@ void TJackClient::DecRefExternal()
 }
 
 //------------------------------------------------------------------------
-void TJackClient::Shutdown(void *arg)
+void TJackClient::Shutdown(void* arg)
 {
     TJackClient::fDeviceRunning = false;
     KillJackClient();
@@ -680,7 +680,7 @@ void TJackClient::SetTime(AudioTimeStamp* timeVal, long curTime, UInt64 time)
 }
 
 //------------------------------------------------------------------------
-int TJackClient::XRun(void *arg)
+int TJackClient::XRun(void* arg)
 {
     JARLog("XRun\n");
     AudioHardwareDevicePropertyChanged(TJackClient::fPlugInRef,
@@ -692,7 +692,7 @@ int TJackClient::XRun(void *arg)
 }
 
 //------------------------------------------------------------------------
-int TJackClient::BufferSize(jack_nframes_t nframes, void *arg)
+int TJackClient::BufferSize(jack_nframes_t nframes, void* arg)
 {
     TJackClient* client = (TJackClient*)arg;
     JARLog("New BufferSize %ld\n", nframes);
@@ -3530,13 +3530,13 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
     JARLog("kAudioHardwarePropertyProcessIsMaster err outData %ld %ld\n", err, outData);
 #endif
 
-    jack_client_t * client;
+    jack_client_t* client;
 
     if (client = TJackClient::CheckServer(inSelf)) {
 
-        const char **ports;
+		const char** ports;
 		
-       if (!prefOK) {
+		if (!prefOK) {
 
             int i = 0;
             if ((ports = jack_get_ports(client, NULL, NULL, JackPortIsPhysical | JackPortIsOutput)) != NULL) {
