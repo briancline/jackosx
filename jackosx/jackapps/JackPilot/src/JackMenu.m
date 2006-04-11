@@ -495,21 +495,21 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 	char drivername[128];
 	getDeviceUIDFromID(selDevID,drivername);
     
-    if ([JALauto state]==NSOnState) {
+    if ([JALauto state] == NSOnState) {
         jackALStore([JALin intValue],[JALout intValue],1,
-					[defInput state]==NSOnState ? TRUE : FALSE,
-					[defOutput state]==NSOnState ? TRUE : FALSE,
-					[sysDefOut state]==NSOnState ? TRUE : FALSE,
-					[verboseBox state]==NSOnState ? 1 : 0,
+					[defInput state] == NSOnState ? TRUE : FALSE,
+					[defOutput state] == NSOnState ? TRUE : FALSE,
+					[sysDefOut state] == NSOnState ? TRUE : FALSE,
+					[verboseBox state] == NSOnState ? 1 : 0,
 					drivername);
     }
 	
-    if ([JALauto state]==NSOffState) {
+    if ([JALauto state] == NSOffState) {
 		jackALStore([JALin intValue],[JALout intValue],0,
-					[defInput state]==NSOnState ? TRUE : FALSE,
-					[defOutput state]==NSOnState ? TRUE : FALSE,
-					[sysDefOut state]==NSOnState ? TRUE : FALSE,
-					[verboseBox state]==NSOnState ? 1 : 0,
+					[defInput state] == NSOnState ? TRUE : FALSE,
+					[defOutput state] == NSOnState ? TRUE : FALSE,
+					[sysDefOut state] == NSOnState ? TRUE : FALSE,
+					[verboseBox state] == NSOnState ? 1 : 0,
 					drivername);
     }
 	
@@ -670,19 +670,19 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 	
     if ([JALauto state] == NSOnState) {
         if(jackALStore([JALin intValue],[JALout intValue],1,
-						[defInput state]==NSOnState ? TRUE : FALSE,
-						[defOutput state]==NSOnState ? TRUE : FALSE,
-						[sysDefOut state]==NSOnState ? TRUE : FALSE,
-						[verboseBox state]==NSOnState ? 1 : 0,
+						[defInput state] == NSOnState ? TRUE : FALSE,
+						[defOutput state] == NSOnState ? TRUE : FALSE,
+						[sysDefOut state] == NSOnState ? TRUE : FALSE,
+						[verboseBox state] == NSOnState ? 1 : 0,
 						drivername) == 0) [self error:@"Cannot save JAS preferences."];
     }
 	
     if ([JALauto state] == NSOffState) {
         if(jackALStore([JALin intValue],[JALout intValue],0,
-						[defInput state]==NSOnState ? TRUE : FALSE,
-						[defOutput state]==NSOnState ? TRUE : FALSE,
-						[sysDefOut state]==NSOnState ? TRUE : FALSE,
-						[verboseBox state]==NSOnState ? 1 : 0,
+						[defInput state] == NSOnState ? TRUE : FALSE,
+						[defOutput state] == NSOnState ? TRUE : FALSE,
+						[sysDefOut state] == NSOnState ? TRUE : FALSE,
+						[verboseBox state] == NSOnState ? 1 : 0,
 						drivername) == 0) [self error:@"Cannot save JAS preferences."];
     }
 	
@@ -915,7 +915,7 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 	for (i = 0; i < manyDevices; i++) {
 		size = sizeof(char)*256;
 		char name[256];
-		err = AudioDeviceGetProperty(devices[i],0,false,kAudioDevicePropertyDeviceName,&size,&name);
+		err = AudioDeviceGetProperty(devices[i], 0, false, kAudioDevicePropertyDeviceName, &size, &name);
 		if (err != noErr) 
 			return;
 		/*
@@ -1103,7 +1103,7 @@ Scan current audio device properties : in/out channels, sampling rate, buffer si
     }
 	
 	// Sampling rate
-	err = AudioDeviceGetPropertyInfo(selDevID,0,false,kAudioDevicePropertyAvailableNominalSampleRates,&size,&isWritable);
+	err = AudioDeviceGetPropertyInfo(selDevID, 0, false, kAudioDevicePropertyAvailableNominalSampleRates, &size, &isWritable);
     if (err != noErr) {
 		NSLog(@"err in (info) kAudioDevicePropertyAvailableNominalSampleRates");
 	}
@@ -1112,7 +1112,7 @@ Scan current audio device properties : in/out channels, sampling rate, buffer si
 	JPLog("Sample rate different values: %ld\n",count);
 	
 	AudioValueRange valueTable[count];
-	err = AudioDeviceGetProperty(selDevID,0,false,kAudioDevicePropertyAvailableNominalSampleRates,&size,valueTable);
+	err = AudioDeviceGetProperty(selDevID, 0, false, kAudioDevicePropertyAvailableNominalSampleRates, &size, valueTable);
     if (err != noErr) {
 		NSLog(@"err in (info) kAudioDevicePropertyAvailableNominalSampleRates");
 	}
@@ -1124,7 +1124,7 @@ Scan current audio device properties : in/out channels, sampling rate, buffer si
 	
 	Float64 actualSr;
     size = sizeof(Float64);
-    err = AudioDeviceGetProperty(selDevID,0,false,kAudioDevicePropertyNominalSampleRate,&size,&actualSr);
+    err = AudioDeviceGetProperty(selDevID, 0, false, kAudioDevicePropertyNominalSampleRate, &size, &actualSr);
     if (err != noErr) { 
 		NSLog(@"err in kAudioDevicePropertyNominalSampleRate"); 
 		[samplerateText selectItemWithTitle:[[NSNumber numberWithLong:(long)actualSr] stringValue]]; 
@@ -1133,7 +1133,7 @@ Scan current audio device properties : in/out channels, sampling rate, buffer si
 	// Buffer size
     UInt32 newBufFrame;
     size = sizeof(UInt32);
-    err = AudioDeviceGetProperty(selDevID,0,false,kAudioDevicePropertyBufferFrameSize,&size,&newBufFrame);
+    err = AudioDeviceGetProperty(selDevID, 0, false, kAudioDevicePropertyBufferFrameSize, &size, &newBufFrame);
     if (err != noErr) return NO;
     
 	[bufferText selectItemWithTitle:@"512"]; // forcing to a lower value...
@@ -1141,35 +1141,35 @@ Scan current audio device properties : in/out channels, sampling rate, buffer si
     
     UInt32 theSize = sizeof(UInt32);
 	UInt32 newBufSize = 32;
-    err = AudioDeviceSetProperty(selDevID,NULL,0,false,kAudioDevicePropertyBufferFrameSize,theSize,&newBufSize);
+    err = AudioDeviceSetProperty(selDevID, NULL, 0, false, kAudioDevicePropertyBufferFrameSize, theSize, &newBufSize);
     if (err != noErr) 
 		[bufferText removeItemWithTitle:@"32"]; 
     newBufSize = 64;
-    err = AudioDeviceSetProperty(selDevID,NULL,0,false,kAudioDevicePropertyBufferFrameSize,theSize,&newBufSize);
+    err = AudioDeviceSetProperty(selDevID, NULL, 0, false, kAudioDevicePropertyBufferFrameSize, theSize, &newBufSize);
     if (err != noErr) 
 		[bufferText removeItemWithTitle:@"64"]; 
     newBufSize = 128;
-    err = AudioDeviceSetProperty(selDevID,NULL,0,false,kAudioDevicePropertyBufferFrameSize,theSize,&newBufSize);
+    err = AudioDeviceSetProperty(selDevID, NULL, 0, false, kAudioDevicePropertyBufferFrameSize, theSize, &newBufSize);
     if (err != noErr) 
 		[bufferText removeItemWithTitle:@"128"]; 
     newBufSize = 256;
-    err = AudioDeviceSetProperty(selDevID,NULL,0,false,kAudioDevicePropertyBufferFrameSize,theSize,&newBufSize);
+    err = AudioDeviceSetProperty(selDevID, NULL, 0, false, kAudioDevicePropertyBufferFrameSize, theSize, &newBufSize);
     if (err != noErr) 
 		[bufferText removeItemWithTitle:@"256"]; 
     newBufSize = 512;
-    err = AudioDeviceSetProperty(selDevID,NULL,0,false,kAudioDevicePropertyBufferFrameSize,theSize,&newBufSize);
+    err = AudioDeviceSetProperty(selDevID, NULL, 0, false, kAudioDevicePropertyBufferFrameSize, theSize, &newBufSize);
     if (err != noErr) 
 		[bufferText removeItemWithTitle:@"512"]; 
     newBufSize = 1024;
-    err = AudioDeviceSetProperty(selDevID,NULL,0,false,kAudioDevicePropertyBufferFrameSize,theSize,&newBufSize);
+    err = AudioDeviceSetProperty(selDevID, NULL, 0, false, kAudioDevicePropertyBufferFrameSize, theSize, &newBufSize);
     if (err != noErr) 
 		[bufferText removeItemWithTitle:@"1024"];
     newBufSize = 2048;
-    err = AudioDeviceSetProperty(selDevID,NULL,0,false,kAudioDevicePropertyBufferFrameSize,theSize,&newBufSize);
+    err = AudioDeviceSetProperty(selDevID, NULL, 0, false, kAudioDevicePropertyBufferFrameSize, theSize, &newBufSize);
     if (err != noErr) 
 		[bufferText removeItemWithTitle:@"2048"];
     newBufSize = 4096;
-    err = AudioDeviceSetProperty(selDevID,NULL,0,false,kAudioDevicePropertyBufferFrameSize,theSize,&newBufSize);
+    err = AudioDeviceSetProperty(selDevID, NULL, 0, false, kAudioDevicePropertyBufferFrameSize, theSize, &newBufSize);
     if (err != noErr) 
 		[bufferText removeItemWithTitle:@"4096"];
 
@@ -1177,15 +1177,17 @@ Scan current audio device properties : in/out channels, sampling rate, buffer si
 	
 	UInt32 oldSize = newBufFrame;
 	size = sizeof(UInt32);
-    err = AudioDeviceGetProperty(selDevID,0,false,kAudioDevicePropertyBufferFrameSize,&size,&newBufFrame);
+    err = AudioDeviceGetProperty(selDevID, 0, false, kAudioDevicePropertyBufferFrameSize, &size, &newBufFrame);
     if (err != noErr) return NO;
 	
 	JPLog("got actual buffersize ok %ld\n",newBufFrame);
     
-	if(oldSize!=newBufFrame) {
+	if (oldSize != newBufFrame) {
 		JPLog("AudioDeviceSetProperty kAudioDevicePropertyBufferFrameSize %ld\n",oldSize);
-		err = AudioDeviceSetProperty(selDevID,NULL,0,false,kAudioDevicePropertyBufferFrameSize,theSize,&oldSize);
-		if(err) { NSLog(@"err in kAudioDevicePropertyBufferFrameSize"); return NO; }
+		err = AudioDeviceSetProperty(selDevID, NULL, 0, false, kAudioDevicePropertyBufferFrameSize, theSize, &oldSize);
+		if(err) { 
+			NSLog(@"err in kAudioDevicePropertyBufferFrameSize"); return NO; 
+		}
 	}
     
     JPLog("set old buffersize ok\n");
@@ -1204,7 +1206,7 @@ Set the selDevID variable to the currently selected device of the system defaukt
     AudioDeviceID defaultDev;
     int i;
     
-    err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices,&size,&isWritable);
+    err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices, &size, &isWritable);
     if (err != noErr) 
 		return NO;
     
@@ -1212,22 +1214,22 @@ Set the selDevID variable to the currently selected device of the system defaukt
 	JPLog("number of audio devices: %ld\n",manyDevices);
     
     AudioDeviceID devices[manyDevices];
-    err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices,&size,&devices[0]);
+    err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices, &size, &devices[0]);
     if (err != noErr) 
 		return NO;
         
     size = sizeof(AudioDeviceID);
-    err = AudioHardwareGetProperty(kAudioHardwarePropertyDefaultOutputDevice,&size,&defaultDev);
+    err = AudioHardwareGetProperty(kAudioHardwarePropertyDefaultOutputDevice, &size, &defaultDev);
     if (err != noErr) 
 		return NO;
         
     BOOL selected = NO;
-	JPLog("First selected device: %s.\n",selectedDevice);
+	JPLog("First selected device: %s.\n", selectedDevice);
     
     for (i = 0; i < manyDevices; i++) {
         size = 256;
         char name[256];
-		err = AudioDeviceGetProperty(devices[i],0,false,kAudioDevicePropertyDeviceName,&size,&name[0]);
+		err = AudioDeviceGetProperty(devices[i], 0, false, kAudioDevicePropertyDeviceName, &size, &name[0]);
         if (err != noErr) 
 			return NO;        
 		JPLog("Checking device: %s.\n",name);
