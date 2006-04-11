@@ -1,0 +1,45 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {
+                clientAddInputMultiport = id; 
+                clientAddOutputMultiport = id; 
+                clientRemoveInputMultiport = id; 
+                clientRemoveOutputMultiport = id; 
+                closeClientEditor = id; 
+                closeSaveSetupPanel = id; 
+                editSetups = id; 
+                loadSetup = id; 
+                openAudioMIDISetup = id; 
+                openJackControl = id; 
+                saveSetup = id; 
+            }; 
+            CLASS = JPJack; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                clientAddInputMultiportButton = NSButton; 
+                clientAddOutputMultiportButton = NSButton; 
+                clientDescriptionText = NSTextField; 
+                clientEditorPanel = NSPanel; 
+                clientIconImage = NSImageView; 
+                clientInputMultiportTable = NSTableView; 
+                clientInputPortTable = NSTableView; 
+                clientNameText = NSTextField; 
+                clientOutputMultiportTable = NSTableView; 
+                clientOutputPortTable = NSTableView; 
+                clientRemoveInputMultiportButton = NSButton; 
+                clientRemoveOutputMultiportButton = NSButton; 
+                saveSetupNameText = NSTextField; 
+                saveSetupPanel = NSPanel; 
+                tipView = JPTipView; 
+                view = NSView; 
+                window = NSWindow; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = JPTipView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {CLASS = JPView; LANGUAGE = ObjC; SUPERCLASS = NSView; }
+    ); 
+    IBVersion = 1; 
+}

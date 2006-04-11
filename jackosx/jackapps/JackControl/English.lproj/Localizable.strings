@@ -1,0 +1,27 @@
+"Stopped Title" = "Jack is not running.";
+"Stopped Description" = "Click Start to allow applications to share audio connections.";
+"Stopped Button" = "Start";
+
+"Running Title" = "Jack is running.";
+"Running Description" = "Click Stop to prevent applications from sharing audio connections.";
+"Running Button" = "Stop";
+
+"Starting Title" = "Jack is starting up...";
+"Stopping Title" = "Jack is stopping...";
+"General Description" = "Jack allows applications to share audio connections.";
+
+"Stop Error Title" = "Jack cannot stop";
+"Stop Error Description" = "Jack currently has connections in use. You can either quit the applications using Jack or use JackPanel to remove the connections.";
+
+"Start Error Title" = "Jack could not be started";
+"Start Error Description" = "There was an error starting Jack.";
+
+"Uninstall Title" = "Uninstall Jack";
+"Uninstall Message" = "Are you sure you want to uninstall Jack? You will no longer be able to share audio connections between applications.";
+
+"Version Not Installed" = "<not installed>";
+"Info Not Installed" = "This software needs to be installed.";
+
+"OK" = "OK";
+"Yes" = "Yes";
+"No" = "No";

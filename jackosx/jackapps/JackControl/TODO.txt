@@ -1,0 +1,6 @@
+==== Jack.prefPane ====
+
+- fixed a potential crash getting the number of connections
+
+updated uninstall.command
+install device listeners - so hardware popups can change if hardware connected/disconnected

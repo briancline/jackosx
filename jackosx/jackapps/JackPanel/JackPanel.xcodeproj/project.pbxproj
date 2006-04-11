@@ -1,0 +1,482 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
+		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		EA20045C0991C3CC00C628EB /* minus.tiff in Resources */ = {isa = PBXBuildFile; fileRef = EA20045A0991C3CC00C628EB /* minus.tiff */; };
+		EA20045D0991C3CC00C628EB /* plus.tiff in Resources */ = {isa = PBXBuildFile; fileRef = EA20045B0991C3CC00C628EB /* plus.tiff */; };
+		EA200AFB0992625200C628EB /* JPJack_ClientEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = EA200AFA0992625200C628EB /* JPJack_ClientEditor.m */; };
+		EA2B050D098E7C3F000064DA /* overlay.tiff in Resources */ = {isa = PBXBuildFile; fileRef = EA2B050B098E7C3F000064DA /* overlay.tiff */; };
+		EA2B050E098E7C3F000064DA /* underlay.tiff in Resources */ = {isa = PBXBuildFile; fileRef = EA2B050C098E7C3F000064DA /* underlay.tiff */; };
+		EA2B056B098E92B1000064DA /* gradient.tiff in Resources */ = {isa = PBXBuildFile; fileRef = EA2B056A098E92B1000064DA /* gradient.tiff */; };
+		EA2B067C098E9BE3000064DA /* icon_driver_input.tiff in Resources */ = {isa = PBXBuildFile; fileRef = EA2B067A098E9BE3000064DA /* icon_driver_input.tiff */; };
+		EA2B067D098E9BE3000064DA /* icon_driver_output.tiff in Resources */ = {isa = PBXBuildFile; fileRef = EA2B067B098E9BE3000064DA /* icon_driver_output.tiff */; };
+		EA2B0691098EA006000064DA /* resize.png in Resources */ = {isa = PBXBuildFile; fileRef = EA2B0690098EA006000064DA /* resize.png */; };
+		EA81280E09951E8E001324C3 /* port_multiple.tiff in Resources */ = {isa = PBXBuildFile; fileRef = EA81280C09951E8E001324C3 /* port_multiple.tiff */; };
+		EA81280F09951E8E001324C3 /* port_single.tiff in Resources */ = {isa = PBXBuildFile; fileRef = EA81280D09951E8E001324C3 /* port_single.tiff */; };
+		EA81307F09956ED3001324C3 /* JPTipView.m in Sources */ = {isa = PBXBuildFile; fileRef = EA81307D09956ED2001324C3 /* JPTipView.m */; };
+		EAA5AD69098D4C990036633E /* JPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA5AD68098D4C990036633E /* JPClient.m */; };
+		EAA5AD6E098D4CA60036633E /* JPMultiport.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA5AD6D098D4CA60036633E /* JPMultiport.m */; };
+		EAA916C0098F9FE500742365 /* JPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA916BF098F9FE500742365 /* JPConnection.m */; };
+		EACD3268099C2BC70020E255 /* Jack.icns in Resources */ = {isa = PBXBuildFile; fileRef = EACD3267099C2BC70020E255 /* Jack.icns */; };
+		EAF55CF6098C4FBC0086AE6F /* JPJack.m in Sources */ = {isa = PBXBuildFile; fileRef = EAF55CF5098C4FBC0086AE6F /* JPJack.m */; };
+		EAF55D07098C51A90086AE6F /* JPView.m in Sources */ = {isa = PBXBuildFile; fileRef = EAF55D06098C51A90086AE6F /* JPView.m */; };
+		EAF55E43098C6A6F0086AE6F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = EAF55E42098C6A6F0086AE6F /* Localizable.strings */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildStyle section */
+		4A9504CCFFE6A4B311CA0CBA /* Debug */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		4A9504CDFFE6A4B311CA0CBA /* Release */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End PBXBuildStyle section */
+
+/* Begin PBXContainerItemProxy section */
+		4B92955109EBF26400269A47 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4B92954A09EBF26400269A47 /* AFExtensions.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DC2EF5B0486A6940098B216 /* AFExtensions.framework */;
+			remoteInfo = AFExtensions;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		EA85B4560992C01A00CA19A5 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		32CA4F630368D1EE00C91783 /* JackPanel_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JackPanel_Prefix.pch; sourceTree = "<group>"; };
+		4B92954A09EBF26400269A47 /* AFExtensions.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AFExtensions.xcodeproj; path = AFExtensions/AFExtensions.xcodeproj; sourceTree = SOURCE_ROOT; };
+		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* JackPanel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JackPanel.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA20045A0991C3CC00C628EB /* minus.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = minus.tiff; sourceTree = "<group>"; };
+		EA20045B0991C3CC00C628EB /* plus.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = plus.tiff; sourceTree = "<group>"; };
+		EA200533099254E100C628EB /* Jack.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Jack.h; sourceTree = "<group>"; };
+		EA200AF90992625200C628EB /* JPJack_ClientEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPJack_ClientEditor.h; sourceTree = "<group>"; };
+		EA200AFA0992625200C628EB /* JPJack_ClientEditor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPJack_ClientEditor.m; sourceTree = "<group>"; };
+		EA2B050B098E7C3F000064DA /* overlay.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = overlay.tiff; sourceTree = "<group>"; };
+		EA2B050C098E7C3F000064DA /* underlay.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = underlay.tiff; sourceTree = "<group>"; };
+		EA2B056A098E92B1000064DA /* gradient.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = gradient.tiff; sourceTree = "<group>"; };
+		EA2B067A098E9BE3000064DA /* icon_driver_input.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = icon_driver_input.tiff; sourceTree = "<group>"; };
+		EA2B067B098E9BE3000064DA /* icon_driver_output.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = icon_driver_output.tiff; sourceTree = "<group>"; };
+		EA2B0690098EA006000064DA /* resize.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = resize.png; sourceTree = "<group>"; };
+		EA81280C09951E8E001324C3 /* port_multiple.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = port_multiple.tiff; sourceTree = "<group>"; };
+		EA81280D09951E8E001324C3 /* port_single.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = port_single.tiff; sourceTree = "<group>"; };
+		EA81307D09956ED2001324C3 /* JPTipView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = JPTipView.m; sourceTree = "<group>"; };
+		EA81307E09956ED2001324C3 /* JPTipView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = JPTipView.h; sourceTree = "<group>"; };
+		EAA5AD67098D4C990036633E /* JPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPClient.h; sourceTree = "<group>"; };
+		EAA5AD68098D4C990036633E /* JPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPClient.m; sourceTree = "<group>"; };
+		EAA5AD6C098D4CA60036633E /* JPMultiport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPMultiport.h; sourceTree = "<group>"; };
+		EAA5AD6D098D4CA60036633E /* JPMultiport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPMultiport.m; sourceTree = "<group>"; };
+		EAA916BE098F9FE500742365 /* JPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPConnection.h; sourceTree = "<group>"; };
+		EAA916BF098F9FE500742365 /* JPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPConnection.m; sourceTree = "<group>"; };
+		EACD3267099C2BC70020E255 /* Jack.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Jack.icns; sourceTree = "<group>"; };
+		EAF55CDA098C483F0086AE6F /* Jack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Jack.framework; path = /Library/Frameworks/Jack.framework; sourceTree = "<absolute>"; };
+		EAF55CF4098C4FBC0086AE6F /* JPJack.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = JPJack.h; sourceTree = "<group>"; };
+		EAF55CF5098C4FBC0086AE6F /* JPJack.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = JPJack.m; sourceTree = "<group>"; };
+		EAF55D05098C51A90086AE6F /* JPView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = JPView.h; sourceTree = "<group>"; };
+		EAF55D06098C51A90086AE6F /* JPView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = JPView.m; sourceTree = "<group>"; };
+		EAF55E40098C6A6B0086AE6F /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
+		EAF55E99098C71EE0086AE6F /* TODO.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D11072E0486CEB800E47090 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				EA200533099254E100C628EB /* Jack.h */,
+				EAF55CF4098C4FBC0086AE6F /* JPJack.h */,
+				EAF55CF5098C4FBC0086AE6F /* JPJack.m */,
+				EA200AF90992625200C628EB /* JPJack_ClientEditor.h */,
+				EA200AFA0992625200C628EB /* JPJack_ClientEditor.m */,
+				EAA5AD67098D4C990036633E /* JPClient.h */,
+				EAA5AD68098D4C990036633E /* JPClient.m */,
+				EAA5AD6C098D4CA60036633E /* JPMultiport.h */,
+				EAA5AD6D098D4CA60036633E /* JPMultiport.m */,
+				EAA916BE098F9FE500742365 /* JPConnection.h */,
+				EAA916BF098F9FE500742365 /* JPConnection.m */,
+				EAF55D05098C51A90086AE6F /* JPView.h */,
+				EAF55D06098C51A90086AE6F /* JPView.m */,
+				EA81307E09956ED2001324C3 /* JPTipView.h */,
+				EA81307D09956ED2001324C3 /* JPTipView.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+				EAF55CDA098C483F0086AE6F /* Jack.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107320486CEB800E47090 /* JackPanel.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* JackPanel */ = {
+			isa = PBXGroup;
+			children = (
+				EAF55E99098C71EE0086AE6F /* TODO.txt */,
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = JackPanel;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				32CA4F630368D1EE00C91783 /* JackPanel_Prefix.pch */,
+				29B97316FDCFA39411CA2CEA /* main.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				EA2B050A098E7C3F000064DA /* Graphics */,
+				8D1107310486CEB800E47090 /* Info.plist */,
+				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
+				EAF55E42098C6A6F0086AE6F /* Localizable.strings */,
+				EACD3267099C2BC70020E255 /* Jack.icns */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4B92954A09EBF26400269A47 /* AFExtensions.xcodeproj */,
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4B92954E09EBF26400269A47 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4B92955209EBF26400269A47 /* AFExtensions.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EA2B050A098E7C3F000064DA /* Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				EA20045A0991C3CC00C628EB /* minus.tiff */,
+				EA20045B0991C3CC00C628EB /* plus.tiff */,
+				EA2B050B098E7C3F000064DA /* overlay.tiff */,
+				EA2B050C098E7C3F000064DA /* underlay.tiff */,
+				EA2B056A098E92B1000064DA /* gradient.tiff */,
+				EA2B067A098E9BE3000064DA /* icon_driver_input.tiff */,
+				EA2B067B098E9BE3000064DA /* icon_driver_output.tiff */,
+				EA81280C09951E8E001324C3 /* port_multiple.tiff */,
+				EA81280D09951E8E001324C3 /* port_single.tiff */,
+				EA2B0690098EA006000064DA /* resize.png */,
+			);
+			path = Graphics;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8D1107260486CEB800E47090 /* JackPanel */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "JackPanel" */;
+			buildPhases = (
+				8D1107290486CEB800E47090 /* Resources */,
+				8D11072C0486CEB800E47090 /* Sources */,
+				8D11072E0486CEB800E47090 /* Frameworks */,
+				EA85B4560992C01A00CA19A5 /* CopyFiles */,
+				EAA8860A099A6CC200F4831B /* ShellScript */,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+			};
+			dependencies = (
+			);
+			name = JackPanel;
+			productInstallPath = "$(HOME)/Applications";
+			productName = JackPanel;
+			productReference = 8D1107320486CEB800E47090 /* JackPanel.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "JackPanel" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				4A9504CCFFE6A4B311CA0CBA /* Debug */,
+				4A9504CDFFE6A4B311CA0CBA /* Release */,
+			);
+			hasScannedForEncodings = 1;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* JackPanel */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 4B92954E09EBF26400269A47 /* Products */;
+					ProjectRef = 4B92954A09EBF26400269A47 /* AFExtensions.xcodeproj */;
+				},
+			);
+			targets = (
+				8D1107260486CEB800E47090 /* JackPanel */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		4B92955209EBF26400269A47 /* AFExtensions.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = AFExtensions.framework;
+			remoteRef = 4B92955109EBF26400269A47 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D1107290486CEB800E47090 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
+				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				EAF55E43098C6A6F0086AE6F /* Localizable.strings in Resources */,
+				EA2B050D098E7C3F000064DA /* overlay.tiff in Resources */,
+				EA2B050E098E7C3F000064DA /* underlay.tiff in Resources */,
+				EA2B056B098E92B1000064DA /* gradient.tiff in Resources */,
+				EA2B067C098E9BE3000064DA /* icon_driver_input.tiff in Resources */,
+				EA2B067D098E9BE3000064DA /* icon_driver_output.tiff in Resources */,
+				EA2B0691098EA006000064DA /* resize.png in Resources */,
+				EA20045C0991C3CC00C628EB /* minus.tiff in Resources */,
+				EA20045D0991C3CC00C628EB /* plus.tiff in Resources */,
+				EA81280E09951E8E001324C3 /* port_multiple.tiff in Resources */,
+				EA81280F09951E8E001324C3 /* port_single.tiff in Resources */,
+				EACD3268099C2BC70020E255 /* Jack.icns in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		EAA8860A099A6CC200F4831B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "find \"$BUILD_DIR/$CONFIGURATION/$PRODUCT_NAME.app/Contents/Frameworks/\" -name Headers -prune -exec rm -r \"{}\" ';'";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D11072C0486CEB800E47090 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072D0486CEB800E47090 /* main.m in Sources */,
+				EAF55CF6098C4FBC0086AE6F /* JPJack.m in Sources */,
+				EAF55D07098C51A90086AE6F /* JPView.m in Sources */,
+				EAA5AD69098D4C990036633E /* JPClient.m in Sources */,
+				EAA5AD6E098D4CA60036633E /* JPMultiport.m in Sources */,
+				EAA916C0098F9FE500742365 /* JPConnection.m in Sources */,
+				EA200AFB0992625200C628EB /* JPJack_ClientEditor.m in Sources */,
+				EA81307F09956ED3001324C3 /* JPTipView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C165DFE840E0CC02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		29B97318FDCFA39411CA2CEA /* MainMenu.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				29B97319FDCFA39411CA2CEA /* English */,
+			);
+			name = MainMenu.nib;
+			sourceTree = "<group>";
+		};
+		EAF55E42098C6A6F0086AE6F /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EAF55E40098C6A6B0086AE6F /* English */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C01FCF4B08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(FRAMEWORK_SEARCH_PATHS)";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = .;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					Jack,
+				);
+				PRODUCT_NAME = JackPanel;
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Debug;
+		};
+		C01FCF4C08A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = ppc;
+				FRAMEWORK_SEARCH_PATHS = "$(FRAMEWORK_SEARCH_PATHS)";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = .;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					Jack,
+				);
+				PRODUCT_NAME = JackPanel;
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = /Library/Frameworks/;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.2;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = /Library/Frameworks/;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.2;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "JackPanel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4B08A954540054247B /* Debug */,
+				C01FCF4C08A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "JackPanel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

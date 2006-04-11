@@ -1,0 +1,33 @@
+==== JackPanel ====
+
+- fixed a possible crash trying to get an icon from a carbon app
+- fixed a crash trying to get an icon of an app who's name wasn't complete (from Jack)
+
+¥ port tips show *which* ports are being referenced
+¥ option : don't allow ports to be used by more than one multiport (exclusive)
+¥ button to create "one multiport per port"
+
+¥ option : automatically remove inactive applications?
+
+¥ multiports show up on Live/GarageBand without any real ports to connect to
+	- changed outputs on the fly (deregistered ports?)
+¥ VSTi host always showing up?
+¥ RealPlayer shows up, but no ports?
+
+editing setups?
+startup: more error checking?
+
+== before final release ==
+built-in icons in client editor list need shadow? inversion?
+startup:
+	more errors to check for?
+	if Jack not launched, launch from the alert (convenience?)
+icon
+
+== future versions ==
+JackPanel recorder client(s)
+	- has tiny transport, some options (audio path & format to write to / record/stop button)
+	- has multiport, etc, can connect to anything *via Jack*
+	- writing/converting based on AudioFile API
+Network-based clients
+accept drivers adding/removing ports? (ex: network-based drivers)

@@ -1,0 +1,15 @@
+"Jack Not Found Alert" = "Jack Framework not installed";
+"Jack Not Found Message" = "JackPanel needs the Jack.framework installed in order to be used. Please re-install the Jack package.";
+"Quit" = "Quit";
+
+"Jack Not Running Alert" = "Jack is not running";
+"Jack Not Running Message" = "JackPanel needs Jack to be running in order to be used.";
+
+"Setup Exists Title" = "\"%@\" already exists. Do you want to replace it?";
+"Setup Exists Message" = "A setup with the same name already exists. Replacing it will overwrite its current contents.";
+"Replace" = "Replace";
+"Cancel" = "Cancel";
+
+"Setup" = "Setup";
+"Load Setup" = "Load Setup";
+"<none>" = "<none>";

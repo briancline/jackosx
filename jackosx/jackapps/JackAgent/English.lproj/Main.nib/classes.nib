@@ -1,0 +1,20 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {
+                connections = id; 
+                cpuLoad = id; 
+                jackState = id; 
+                openJackPanel = id; 
+                openJackPreferences = id; 
+                toggleJack = id; 
+            }; 
+            CLASS = JAAgent; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {menu = NSMenu; }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

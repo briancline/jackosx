@@ -1,0 +1,10 @@
+"Jack On" = "Jack OS X: On";
+"Jack Off" = "Jack OS X: Off";
+
+"Enable" = "Turn Jack OS X On";
+"Disable" = "Turn Jack OS X Off";
+
+"Connections" = "Connections: %d";
+"No connections" = "Connections: --";
+"CPU Load" = "CPU Load: %@";
+"No load" = "CPU Load: --";

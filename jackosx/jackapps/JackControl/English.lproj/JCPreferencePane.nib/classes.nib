@@ -1,0 +1,62 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {
+                homePage = id; 
+                interfaceChanged = id; 
+                launchAudioMIDISetup = id; 
+                launchJackPanel = id; 
+                menuStatusChanged = id; 
+                serverSettingChanged = id; 
+                startStop = id; 
+                uninstall = id; 
+            }; 
+            CLASS = JPPreferencePane; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                applicationInputChannelsStepper = NSStepper; 
+                applicationInputChannelsText = NSTextField; 
+                applicationOutputChannelsStepper = NSStepper; 
+                applicationOutputChannelsText = NSTextField; 
+                automaticallyConnectButton = NSButton; 
+                bufferSizePopup = NSPopUpButton; 
+                connectionsText = NSTextField; 
+                cpuUsageText = NSTextField; 
+                driverPopup = NSPopUpButton; 
+                interfaceInputChannelsStepper = NSStepper; 
+                interfaceInputChannelsText = NSTextField; 
+                interfaceOutputChannelsStepper = NSStepper; 
+                interfaceOutputChannelsText = NSTextField; 
+                interfacePopup = NSPopUpButton; 
+                jackControlInfoText = NSTextField; 
+                jackControlVersionText = NSTextField; 
+                jackInfoText = NSTextField; 
+                jackRouterInfoText = NSTextField; 
+                jackRouterVersionText = NSTextField; 
+                jackVersionText = NSTextField; 
+                menuStatusButton = NSButton; 
+                runningDescriptionText = NSTextField; 
+                runningTitleText = NSTextField; 
+                sampleRatePopup = NSPopUpButton; 
+                showStatusButton = NSButton; 
+                startAtLoginButton = NSButton; 
+                startButton = NSButton; 
+                uninstallButton = NSButton; 
+            }; 
+            SUPERCLASS = NSPreferencePane; 
+        }, 
+        {
+            CLASS = NSPreferencePane; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                "_firstKeyView" = id; 
+                "_initialKeyView" = id; 
+                "_lastKeyView" = id; 
+                "_window" = id; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}
