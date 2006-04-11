@@ -49,7 +49,7 @@ int closeJack(void)
 	
 #if 1
     int pid = checkJack();
-	if (pid!=0) { 
+	if (pid != 0) { 
 		kill(pid,SIGQUIT); //SIGUSR2 is the one that should work (look at jackd.c or engine.c) but doesn't work...
 	} 
 #else
@@ -106,9 +106,8 @@ int checkJack(void)
     quanti = quantiProc();
     int i;
     for (i = 0; i < quanti; i++) {
-		
         int test;
-        test = strcmp("jackd",ottieniNome(i));
+        test = strcmp("jackd", ottieniNome(i));
 		if (test == 0) { 
 			flag = ottieniFlag(i); 
 			return ottieniPid(i); 
@@ -141,9 +140,9 @@ int ottieniPorte(void)  //why not void instead of int return!!??
 int portaPerNumero(int n, char *nomeOut, unsigned long *tipo) 
 {
     ottieniPorte();
-	if(!jplist) return 0;
+	if (!jplist) return 0;
     if (jplist[n] != NULL) {
-        strcpy(nomeOut,jplist[n]);
+        strcpy(nomeOut, jplist[n]);
         *tipo = getTipoByName(jplist[n]);        
         return 1;
     }
@@ -154,12 +153,12 @@ int numeroPorte(void)
 {
     if (jplist != NULL) { 
         int i = 0;
-        while(*jplist != NULL) {
+        while (*jplist != NULL) {
             *jplist++;
             i++;
         }
         int a;
-        for(a = 0; a < i; a++) {
+        for (a = 0; a < i; a++) {
             *jplist--;
         }
         return i;
@@ -173,14 +172,14 @@ int getConnections(void)
     ottieniPorte();
     int a = numeroPorte();
     int i;
-    for (i = 0; i < a ;i++) {
+    for (i = 0; i < a; i++) {
         const char** aa;
         jack_port_t* jp;
-        jp = jack_port_by_name(client,jplist[i]);
+        jp = jack_port_by_name(client, jplist[i]);
         if (jp != NULL) 
 			if ((aa = jack_port_get_all_connections(client,jp)) != NULL) {
             int g = 0;
-            while(aa[g] != NULL) {
+            while (aa[g] != NULL) {
                 g++;
             }
             nConnect += g;
@@ -192,12 +191,12 @@ int getConnections(void)
 int numeroConn(void) 
 {
     int i = 0;
-    while(*connec!=NULL) {
+    while (*connec != NULL) {
         *connec++;
         i++;
     }
     int a;
-    for(a=0; a<i ;a++) {
+    for (a = 0; a < i; a++) {
         *connec--;
     }
     return i;
@@ -215,7 +214,7 @@ int getStatus(void)
 
 int connectPorts(char* da, char* a) 
 {
-    return jack_connect(client,da,a);
+    return jack_connect(client, da, a);
 }
 
 int disconnectPorts(char* da, char* a) 
@@ -231,12 +230,13 @@ int connessionePerNumero(int n, char* nomeOut)
     unsigned long tipo;
     portaPerNumero(n,&porta[0],&tipo);
     jp = jack_port_by_name(client,&porta[0]);
-    if (jp==NULL) return 0;
+    if (jp == NULL) 
+		return 0;
     connec = jack_port_get_all_connections(client,jp);
-    if (connec!=NULL) {
+    if (connec != NULL) {
         int nu = numeroConn();
         int i;
-        for (i=0; i<nu ;i++){
+        for (i = 0; i < nu; i++) {
             if (connec[i] && nomeOut) strcat(nomeOut,connec[i]);
             return 1;
         }
@@ -250,16 +250,17 @@ int connessionePerNumero2(int n, char** nomeOut)
     char porta[256];
     jack_port_t* jp;
     unsigned long tipo;
-    portaPerNumero(n,&porta[0],&tipo);
-    jp = jack_port_by_name(client,&porta[0]);
+    portaPerNumero(n, &porta[0], &tipo);
+    jp = jack_port_by_name(client, &porta[0]);
     if (jp == NULL) return 0;
-    connec = jack_port_get_all_connections(client,jp);
-	if (connec!=NULL) {
+    connec = jack_port_get_all_connections(client, jp);
+	if (connec != NULL) {
 		int nu = numeroConn();
 		int i;
-		if (nomeOut!=NULL) {
-			for (i=0; i<nu; i++){
-				if (connec[i]!=NULL && nomeOut[i]!=NULL) strcpy(nomeOut[i],connec[i]);
+		if (nomeOut != NULL) {
+			for (i = 0; i < nu; i++){
+				if (connec[i] != NULL && nomeOut[i] != NULL) 
+					strcpy(nomeOut[i],connec[i]);
 			}
 		}
 		many = nu;
@@ -279,8 +280,9 @@ float cpuLoad(void)
 unsigned long getTipoByName(const char* name)
 {
     jack_port_t* jp;
-    jp = jack_port_by_name(client,name);
-    if (jp!=NULL) return jack_port_flags(jp);
+    jp = jack_port_by_name(client, name);
+    if (jp != NULL) 
+		return jack_port_flags(jp);
     return 0;
 }
 
@@ -355,7 +357,7 @@ int jackALStore(int inCH,int outCH,int AUTOC,int DEFinput,int DEFoutput,int DEFs
     } else {	
 		verboseLevel = LOGSLevel;
 		fprintf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s"
-				,inCH, -1, outCH,-1,AUTOC,-1,DEFinput,-1,DEFoutput,-1,DEFsystem,-1,verboseLevel,-1,UI
+				,inCH, -1, outCH, -1, AUTOC, -1, DEFinput, -1, DEFoutput, -1, DEFsystem, -1, verboseLevel, -1, UI
 				); 
 		fclose(prefFile);
     }
@@ -427,12 +429,12 @@ int nomeCliente(int n, char* nome)
     int nporte = numeroPorte();
     array = (char**)malloc(nporte*sizeof(char*));
     int i;
-    for(i = 0 ;i < nporte; i++) {
+    for (i = 0; i < nporte; i++) {
         array[i] = (char*)malloc(256*sizeof(char));
-		memset(array[i],0x0,sizeof(char)*256);
+		memset(array[i], 0x0, sizeof(char)*256);
     }
     int quanti;
-    ottieniNomeClienti(array,&quanti);
+    ottieniNomeClienti(array, &quanti);
     strcpy(nome,array[n]);
     for (i = 0; i < nporte; i++) {
         free(array[i]);
@@ -453,24 +455,25 @@ int ottieniNomeClienti(char** nome, int* quanti)
     ottieniPorte();
     int nPorts = numeroPorte();
     int i;
-    char idport[256],oldIdport[256];
+    char idport[256], oldIdport[256];
     int progr = 0;
     for (i = 0; i < nPorts; i++) {
         int a;
         for (a = 0; a < strlen(jplist[i]); a++) { 
             idport[a] = jplist[i][a];
-            if (jplist[i][a] == ':') break;
+            if (jplist[i][a] == ':') 
+				break;
         }
-        if (strcmp(&idport[0],&oldIdport[0])==0) { 
+        if (strcmp(&idport[0],&oldIdport[0]) == 0) { 
 			goto end; 
-		 }
+		}
         if (nome) {
 			if (nome[progr]) 
 				strcpy(nome[progr],jplist[i]);
 		}
         progr++;
     end:
-        strcpy(&oldIdport[0],&idport[0]);
+        strcpy(&oldIdport[0], &idport[0]);
     }
     *quanti = progr;
     return 0;
@@ -481,7 +484,7 @@ void writeHomePath(char *path)
     if (homePath != NULL) 
 		free(homePath);
     homePath = (char*)malloc(sizeof(char)*strlen(path)+1);
-	memset(homePath,0x0,sizeof(char)*strlen(path)+1);
+	memset(homePath, 0x0, sizeof(char)*strlen(path)+1);
     strcpy(homePath,path);
 }
 
