@@ -15,7 +15,7 @@
     int i,b,n,many;
     n = *quanteSel;
     many = 0;
-    for(i=0;i<n;i++) {
+    for (i = 0; i < n; i++) {
         int nn = connessionePerNumero2(porteSelected[i],NULL);
         char **porta;
         porta = (char**)alloca(nn*sizeof(char*));
@@ -23,7 +23,7 @@
             porta[b] = (char*)alloca(256*sizeof(char));
         }
         connessionePerNumero2(porteSelected[i],porta);
-        for(b=0;b<nn;b++) {
+        for (b = 0; b < nn; b++) {
             NSString *nome = [NSString init];
             nome = [NSString stringWithCString:porta[b]];
             [porte addObject:nome];
@@ -39,10 +39,11 @@
     objectValueForTableColumn:(NSTableColumn *)aTableColumn
     row:(int)rowIndex
 {
-	if(arrayOk==nil || [arrayOk count]==0) return nil;
+	if (arrayOk == nil || [arrayOk count] == 0) 
+		return nil;
     NSString *res = [arrayOk objectAtIndex:rowIndex];
     NSArray *list = [res componentsSeparatedByString:@":"];
-    if([list count]==3) {
+    if ([list count] == 3) {
         NSString *primaParte = [[list objectAtIndex:1] stringByAppendingString:@":"];
         NSString *res2 = [primaParte stringByAppendingString:[list objectAtIndex:2]];
         return res2;
@@ -58,8 +59,7 @@
 }
 
 -(void)flush: (id)sender
-{
-}
+{}
 
 -(id)getCHisono: (int)numero
 {
@@ -72,24 +72,25 @@
 }
 
 -(void)reorderTheArray {
-    if(arrayOk!=nil) [arrayOk release];
+    if (arrayOk != nil) 
+		[arrayOk release];
     arrayOk = [[NSMutableArray array] retain];
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:[porte count]];
     int i;
     NSMutableArray *keys = [NSMutableArray array];
-    for(i=0;i<[porte count];i++) {
+    for (i = 0; i < [porte count]; i++) {
         id str = [porte objectAtIndex:i];
         NSArray *listaStr = [str componentsSeparatedByString:@":"];
         id obj = [listaStr objectAtIndex:0];
         id check = [dict objectForKey:obj];
-        if(check==nil) { [keys addObject:obj]; [dict setObject:str forKey:obj]; }
-        if(check!=nil) { 
+        if (check == nil) { [keys addObject:obj]; [dict setObject:str forKey:obj]; }
+        if (check != nil) { 
             NSMutableArray *array = [NSMutableArray array];
-            if([check isKindOfClass:[NSString class]]) {
+            if ([check isKindOfClass:[NSString class]]) {
                 [array addObject:check];
                 [array addObject:str];
             }
-            if([check isKindOfClass:[NSMutableArray class]]) {
+            if ([check isKindOfClass:[NSMutableArray class]]) {
                 int a;
                 for(a=0;a<[check count];a++) {
                     [array addObject:[check objectAtIndex:a]];
@@ -100,17 +101,18 @@
         }
     }
     
-    for(i=0;i<[keys count];i++) {
+    for(i = 0;i < [keys count]; i++) {
         id ports = [dict objectForKey:[keys objectAtIndex:i]]; 
         int a;
-        if([ports isKindOfClass:[NSMutableArray class]]) {
-            for(a=0;a<[ports count];a++) {
+        if ([ports isKindOfClass:[NSMutableArray class]]) {
+            for (a = 0; a < [ports count]; a++) {
                 id objecto = [ports objectAtIndex:a];
-                if([objecto isKindOfClass:[NSString class]]) [arrayOk addObject:[ports objectAtIndex:a]];
-                if([objecto isKindOfClass:[NSMutableArray class]]) [arrayOk addObjectsFromArray:objecto];
+                if ([objecto isKindOfClass:[NSString class]]) [arrayOk addObject:[ports objectAtIndex:a]];
+                if ([objecto isKindOfClass:[NSMutableArray class]]) [arrayOk addObjectsFromArray:objecto];
             }
         }
-        if([ports isKindOfClass:[NSString class]]) [arrayOk addObject:ports];
+        if ([ports isKindOfClass:[NSString class]]) 
+			[arrayOk addObject:ports];
     }
 }
 

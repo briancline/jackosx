@@ -5,6 +5,8 @@
 #import "JackCon1.3.h"
 #include "jackfun.h"
 
+JackConnections* static_conn;
+
 static void JackPortRegistration(jack_port_id_t port, int a, void *arg) {
 	JPLog("JackPortRegistration.\n");
 	JackConnections *c = (JackConnections*)arg;
@@ -21,8 +23,6 @@ static int JackGraphOrder(void *arg) {
 static int JackProcess(jack_nframes_t frames, void *arg) {
 	return 0;
 }
-
-JackConnections *static_conn;
 
 @implementation JackConnections
 
@@ -118,6 +118,7 @@ int nConnections = 0;
     if (kind1 == 1 && kind2 == 0) {
 		int n,i;
 		n = [lista1 count];
+		
 		for(i = 0; i < n; i++) {
 			[[lista1 objectAtIndex:i] getCString:daCh];
 			[[aText stringValue] getCString:aCh];
@@ -126,54 +127,31 @@ int nConnections = 0;
 			if (test != 0) test = connectPorts(&aCh[0],&daCh[0]);
 			if (test != 0) test = disconnectPorts(&daCh[0],&aCh[0]);
 			if (test != 0) test = disconnectPorts(&aCh[0],&daCh[0]);
-			
-			/*if(tipoStringa1==666) disconnectPorts(&daCh,&aCh);
-			if(tipoStringa1==333) {
-				int test = connectPorts(&daCh,&aCh);
-				if(test!=0) test = connectPorts(&aCh,&daCh);
-			}*/
 		}
     }
     
     if (kind1 == 0 && kind2 == 0) {
         [[daText stringValue] getCString:daCh];
         [[aText stringValue] getCString:aCh];
-        //JPLog("CHI: %d , tipo1: %d , tipo2: %d\n",chiSelected,tipoStringa1,tipoStringa2);
-        //JPLog("DA: %s A: %s\n",daCh,aCh);
-        
+		       
         int test = connectPorts(&daCh[0],&aCh[0]);
-        if(test!=0) test = connectPorts(&aCh[0],&daCh[0]);
-        if(test!=0) test = disconnectPorts(&daCh[0],&aCh[0]);
-        if(test!=0) test = disconnectPorts(&aCh[0],&daCh[0]);
-        
-        /*if(chiSelected==22 && tipoStringa1==666) disconnectPorts(&daCh,&aCh); // 1 - 2 oltre che 21 e 22
-        if(chiSelected==21 && tipoStringa2==666) disconnectPorts(&daCh,&aCh);
-        if(tipoStringa1==333 && tipoStringa2==333) {
-            int test = connectPorts(&daCh,&aCh);
-            if(test!=0) test = connectPorts(&aCh,&daCh); 
-        }*/
+        if (test != 0) test = connectPorts(&aCh[0],&daCh[0]);
+        if (test != 0) test = disconnectPorts(&daCh[0],&aCh[0]);
+        if (test != 0) test = disconnectPorts(&aCh[0],&daCh[0]);
     }
     
     if (kind1 == 1 && kind2 == 1) {
         int n,i;
         n = [lista1 count];
-        for(i=0;i<n;i++) {
+		
+        for(i = 0; i < n; i++) {
             [[lista1 objectAtIndex:i] getCString:daCh];
             [[lista2 objectAtIndex:i] getCString:aCh];
             int test = connectPorts(&daCh[0],&aCh[0]);
-            if(test!=0) test = connectPorts(&aCh[0],&daCh[0]);
-            if(test!=0) test = disconnectPorts(&daCh[0],&aCh[0]);
-            if(test!=0) test = disconnectPorts(&aCh[0],&daCh[0]);
-            
-            //JPLog("tipo STRINGA: %d and %d\n",tipoStringa1,tipoStringa2);
-            
-            /*if(tipoStringa1 == 333 && tipoStringa2 == 666) disconnectPorts(&daCh,&aCh);
-            if(tipoStringa1== 666 && tipoStringa2 == 333) disconnectPorts(&daCh,&aCh);
-            if(tipoStringa1==333 && tipoStringa2==333) {
-                int test = connectPorts(&daCh,&aCh);
-                if(test!=0) test = connectPorts(&aCh,&daCh);
-            }*/
-        }
+            if (test != 0) test = connectPorts(&aCh[0],&daCh[0]);
+            if (test != 0) test = disconnectPorts(&daCh[0],&aCh[0]);
+            if (test != 0) test = disconnectPorts(&aCh[0],&daCh[0]);
+		}
     }
     
     if (kind1 == 0 && kind2 == 1) {
@@ -182,18 +160,11 @@ int nConnections = 0;
         for(i=0;i<n;i++) {
             [[lista2 objectAtIndex:i] getCString:aCh];
             [[daText stringValue] getCString:daCh];
-            //JPLog("TIPO: %d\n",tipoStringa2);
             int test = connectPorts(&daCh[0],&aCh[0]);
-            if(test!=0) test = connectPorts(&aCh[0],&daCh[0]);
-            if(test!=0) test = disconnectPorts(&daCh[0],&aCh[0]);
-            if(test!=0) test = disconnectPorts(&aCh[0],&daCh[0]);
-            /*if(tipoStringa2==666) disconnectPorts(&daCh,&aCh);
-            if(tipoStringa2==333) {
-                int test = connectPorts(&daCh,&aCh);
-                if(test!=0) test = connectPorts(&aCh,&daCh);
-            }*/
-    }
-
+            if (test != 0) test = connectPorts(&aCh[0],&daCh[0]);
+            if (test != 0) test = disconnectPorts(&daCh[0],&aCh[0]);
+            if (test != 0) test = disconnectPorts(&aCh[0],&daCh[0]);
+		}
     }
     needsReloadColor = 44;
 }
@@ -274,7 +245,7 @@ int nConnections = 0;
                     
                     int test;
                     test = disconnectPorts(buf,daCh);
-                    if(test!=0) test = disconnectPorts(daCh,buf);
+                    if (test != 0) test = disconnectPorts(daCh,buf);
                 }
             }
         }
@@ -288,7 +259,7 @@ int nConnections = 0;
                 [chi getCString:daCh];
                 int test;
                 test = disconnectPorts(buf,daCh);
-                if(test!=0) test = disconnectPorts(daCh,buf);
+                if (test != 0) test = disconnectPorts(daCh,buf);
             } 
         }
     }
@@ -316,7 +287,7 @@ int nConnections = 0;
                     
                     int test;
                     test = disconnectPorts(buf,daCh);
-                    if(test!=0) test = disconnectPorts(daCh,buf);
+                    if (test != 0) test = disconnectPorts(daCh,buf);
                 }
             }
         }
@@ -330,7 +301,7 @@ int nConnections = 0;
                 [chi getCString:daCh];
                 int test;
                 test = disconnectPorts(buf,daCh);
-                if(test!=0) test = disconnectPorts(daCh,buf);
+                if (test != 0) test = disconnectPorts(daCh,buf);
             } 
         }
     }
@@ -558,7 +529,7 @@ int nConnections = 0;
 				
 				for(aa=0;aa<quanteCc;aa++) {
 					int test = disconnectPorts(aCh,thebuf[aa]);
-					if(test!=0) test = disconnectPorts(thebuf[aa],aCh);
+					if (test != 0) test = disconnectPorts(thebuf[aa],aCh);
 				}
 			}
 		}
@@ -645,7 +616,7 @@ int nConnections = 0;
 			for (aa = 0; aa < strlen(strA); aa++) { 
 				checkAudio[aa] = strA[aa];
 				if (strA[aa] == ':') {
-					if(strcmp(checkAudio,"portaudio:")==0 || strcmp(checkAudio,"coreaudio:")==0) {
+					if(strcmp(checkAudio,"portaudio:") == 0 || strcmp(checkAudio,"coreaudio:") == 0) {
 						char audioDevice[256];
 						getCurrentAudioDevice(&audioDevice[0]);
 						strcat(&checkAudio[0],audioDevice);
@@ -701,7 +672,7 @@ int nConnections = 0;
 			for (aa = 0; aa < strlen(strDA); aa++) { 
 				checkAudio[aa] = strDA[aa];
 				if (strDA[aa] == ':') {
-					if(strcmp(checkAudio,"portaudio:")==0 || strcmp(checkAudio,"coreaudio:")==0) {
+					if(strcmp(checkAudio,"portaudio:") == 0 || strcmp(checkAudio,"coreaudio:") == 0) {
 						char audioDevice[256];
 						getCurrentAudioDevice(&audioDevice[0]);
 						strcat(&checkAudio[0],&audioDevice[0]);
@@ -755,7 +726,7 @@ int nConnections = 0;
 			int test;
 			
 			test = connectPorts(strDA,strA);
-			if(test!=0) test = connectPorts(strA,strDA);
+			if (test != 0) test = connectPorts(strA,strDA);
 			
 			while(test!=0) {
 				int a;
@@ -794,33 +765,34 @@ int nConnections = 0;
     nports = numeroPorte();
     JPLog("Number of ports: %d\n",nports);
     int i;
-    char *nomeBuf;
+    char* nomeBuf;
     nomeBuf = (char*)alloca(256*sizeof(char));
-    for(i=0;i<nports;i++) {
+    for(i = 0; i < nports; i++) {
         unsigned long tipo;
-        portsArrData *data = [[portsArrData alloc] retain];
-        portaPerNumero(i,nomeBuf,&tipo);
-        JPLog("Port %d : %s of kind: %d\n",i,nomeBuf,tipo);
+        portsArrData* data = [[portsArrData alloc] retain];
+        portaPerNumero(i, nomeBuf, &tipo);
+        JPLog("Port %d : %s of kind: %d\n", i, nomeBuf, tipo);
         int coci;
-        for(coci=0;coci<quantePConnCli;coci++) {
+        for (coci = 0; coci < quantePConnCli; coci++) {
             //JPLog("YES\n");
             int connec;
             connec = connessionePerNumero2(i,NULL);
-            if(connec!=0) { 
+            if (connec != 0) { 
                 //JPLog("IS Connected: %d\n", connec);
                 char **name;
                 name = (char**)alloca(connec*sizeof(char*));
                 char *bufferT;
                 bufferT = (char*)alloca(256*sizeof(char));
                 unsigned long tipo2;
-                portaPerNumero(portSelected[coci],bufferT,&tipo2);
+                portaPerNumero(portSelected[coci], bufferT, &tipo2);
                 int ii;
-                for (ii=0;ii<connec;ii++) {
+                for (ii = 0; ii < connec; ii++) {
                     name[ii] = (char*)alloca(256*sizeof(char));
                 }
                 connessionePerNumero2(i,name);
-                for(ii=0;ii<connec;ii++) {
-                    if(strcmp(bufferT,name[ii])==0) [data setIsConn:1];
+                for(ii = 0; ii < connec; ii++) {
+                    if (strcmp(bufferT,name[ii]) == 0) 
+						[data setIsConn:1];
                     //JPLog("COMPARO : %s and %s\n",bufferT,name[ii]);
                 }
                 
@@ -831,9 +803,6 @@ int nConnections = 0;
         [data setTipo:tipo];
         [data setID:i];
         [portsArr addObject:data];
-		
-        //if([data IsConn])JPLog("PRE QUI OK\n");
-        //[portsArrData release]; //mod 1
     }
 }
 
@@ -863,19 +832,19 @@ int nConnections = 0;
         int nrows2 = [tabellaConnect numberOfRows];
         NSMutableArray *lista1 = [NSMutableArray array];
         NSMutableArray *lista2 = [NSMutableArray array];
-        for(i=0;i<nrows1;i++) {
+        for(i = 0; i < nrows1; i++) {
             id item = [tabellaSend itemAtRow:i];
             if([tabellaSend isItemExpanded:item]) [lista1 addObject:[NSNumber numberWithInt:i]];
         }
-        for(i=0;i<nrows2;i++) {
+        for(i = 0; i < nrows2; i++) {
             id item = [tabellaConnect itemAtRow:i];
             if([tabellaConnect isItemExpanded:item]) [lista2 addObject:[NSNumber numberWithInt:i]];
         }
         [self reload:self];
-        for(i=0;i<[lista1 count];i++) {
+        for (i = 0; i < [lista1 count]; i++) {
             [tabellaSend expandItem:[tabellaSend itemAtRow:[[lista1 objectAtIndex:i] intValue]] expandChildren:YES];
         }
-        for(i=0;i<[lista2 count];i++) {
+        for ( i = 0; i < [lista2 count]; i++) {
             [tabellaConnect expandItem:[tabellaConnect itemAtRow:[[lista2 objectAtIndex:i] intValue]] expandChildren:YES];
         }
         [tabellaSend selectRow:rigo1 byExtendingSelection:NO];
@@ -883,7 +852,7 @@ int nConnections = 0;
         return;
     }
     
-    if(needsReloadColor == 44) {
+    if (needsReloadColor == 44) {
         [self reload2];
         
         int rigo1 = [tabellaSend selectedRow];
@@ -895,26 +864,26 @@ int nConnections = 0;
         NSMutableArray *lista1 = [NSMutableArray array];
         NSMutableArray *lista2 = [NSMutableArray array];
         
-        for(i=0;i<nrows1;i++) {
+        for(i = 0; i < nrows1; i++) {
             id item = [tabellaSend itemAtRow:i];
             if([tabellaSend isItemExpanded:item]) [lista1 addObject:[NSNumber numberWithInt:i]];
         }
         
-        for(i=0;i<nrows2;i++) {
+        for(i = 0; i < nrows2; i++) {
             id item = [tabellaConnect itemAtRow:i];
             if([tabellaConnect isItemExpanded:item]) [lista2 addObject:[NSNumber numberWithInt:i]];
         }
-        if(chiSelected==22 && !doubleClick) [theWindow makeFirstResponder:tabellaSend];
-        if(chiSelected==21 && !doubleClick) [theWindow makeFirstResponder:tabellaConnect];
-        if(chiSelected==21 && doubleClick) { [theWindow makeFirstResponder:tabellaSend]; [datiTab2 selezionaPorte]; }    
-        if(chiSelected==22 && doubleClick) { [theWindow makeFirstResponder:tabellaConnect]; [datiTab3 selezionaPorte]; }
+        if (chiSelected == 22 && !doubleClick) [theWindow makeFirstResponder:tabellaSend];
+        if (chiSelected == 21 && !doubleClick) [theWindow makeFirstResponder:tabellaConnect];
+        if (chiSelected == 21 && doubleClick) { [theWindow makeFirstResponder:tabellaSend]; [datiTab2 selezionaPorte]; }    
+        if (chiSelected == 22 && doubleClick) { [theWindow makeFirstResponder:tabellaConnect]; [datiTab3 selezionaPorte]; }
         
         [self reload3:50];
         
-        for(i=0;i<[lista1 count];i++) {
+        for(i = 0;i < [lista1 count]; i++) {
             [tabellaSend expandItem:[tabellaSend itemAtRow:[[lista1 objectAtIndex:i] intValue]] expandChildren:YES];
         }
-        for(i=0;i<[lista2 count];i++) {
+        for(i = 0; i < [lista2 count]; i++) {
             [tabellaConnect expandItem:[tabellaConnect itemAtRow:[[lista2 objectAtIndex:i] intValue]] expandChildren:YES];
         }
         
