@@ -62,7 +62,6 @@
                 JALout = NSTextField; 
                 aboutWin = id; 
                 bufferText = id; 
-                channelsTest = id; 
                 connectionsNumb = NSTextField; 
                 cpuLoadBar = NSProgressIndicator; 
                 defInput = id; 
@@ -82,6 +81,7 @@
                 jpWinController = id; 
                 loadText = NSTextField; 
                 managerWin = NSWindow; 
+                outputChannels = id; 
                 pluginSubMenu = id; 
                 pluginsMenu = id; 
                 prefWindow = id; 
