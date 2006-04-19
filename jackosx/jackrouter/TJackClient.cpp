@@ -293,6 +293,9 @@ History
 
 21-03-06 : Version 0.82 : S Letz
 		Endianaess issue for Intel version. Fix fscan bug.
+
+11-04-06 : Version 0.83 : S Letz
+		JackRouter as default input/output "again"...
 		
 TODO :
     
@@ -325,6 +328,9 @@ long TJackClient::fOutputChannels = 0;
 bool TJackClient::fAutoConnect = true;
 bool TJackClient::fDeviceRunning = false;
 bool TJackClient::fConnected2HAL = false;
+bool TJackClient::fDefaultInput = true;	 
+bool TJackClient::fDefaultOutput = true;	 
+bool TJackClient::fDefaultSystem = true;
 bool TJackClient::fDebug = false;
 list<pair<string, string> > TJackClient::fConnections;
 
@@ -3347,7 +3353,7 @@ bool TJackClient::ReadPref()
             FILE *prefFile;
             if ((prefFile = fopen(path, "rt"))) {
                 int nullo;
-				int input, output, autoconnect, debug;
+				int input, output, autoconnect, debug, default_input, default_output, default_system;
 				fscanf(
 					prefFile, "\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s",
 				    &input,
@@ -3356,11 +3362,11 @@ bool TJackClient::ReadPref()
                     &nullo,
                     &autoconnect,
                     &nullo,
-					&nullo, // do not read fDefaultInput anymore
+					&default_input, 
 					&nullo,
-					&nullo, // do not read fDefaultOutput anymore
+					&default_output, 
 					&nullo,
-					&nullo, // do not read fDefaultSystem anymore
+					&default_system,
 					&nullo,
             		&debug,
                     &nullo,
@@ -3371,6 +3377,9 @@ bool TJackClient::ReadPref()
 				TJackClient::fInputChannels = input;
 				TJackClient::fOutputChannels = output;
 				TJackClient::fAutoConnect = autoconnect;
+				TJackClient::fDefaultInput = default_input;
+				TJackClient::fDefaultOutput = default_output;
+				TJackClient::fDefaultSystem = default_system;
 				TJackClient::fDebug = debug;
                 JARLog("Reading Preferences fInputChannels: %ld fOutputChannels: %ld fAutoConnect: %ld\n",
                        TJackClient::fInputChannels, TJackClient::fOutputChannels, TJackClient::fAutoConnect);
@@ -3583,6 +3592,24 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
             return err;
         TJackClient::fConnected2HAL = true;
     }
+	
+	if (TJackClient::fDefaultInput) {	 
+		err = AudioHardwareSetProperty(kAudioHardwarePropertyDefaultInputDevice, sizeof(UInt32), &TJackClient::fDeviceID);	 
+		if (err != kAudioHardwareNoError)	 
+			return err;	 
+	}	 
+ 	 
+	if (TJackClient::fDefaultOutput) {	 
+		err = AudioHardwareSetProperty(kAudioHardwarePropertyDefaultOutputDevice, sizeof(UInt32), &TJackClient::fDeviceID);	 
+		if (err != kAudioHardwareNoError)	 
+			return err;	 
+	}	 
+ 	 
+	if (TJackClient::fDefaultSystem) {	 
+		err = AudioHardwareSetProperty(kAudioHardwarePropertyDefaultSystemOutputDevice, sizeof(UInt32), &TJackClient::fDeviceID);	 
+		if (err != kAudioHardwareNoError)	 
+			return err;	 
+	}	 
 
     return err;
 }

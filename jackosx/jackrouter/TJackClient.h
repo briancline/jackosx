@@ -114,6 +114,9 @@ extern "C"
             static long fOutputChannels;
             static float fSampleRate;
             static bool fAutoConnect;
+			static bool fDefaultInput;	 
+			static bool fDefaultOutput;	 
+			static bool fDefaultSystem;
     
             static string fDeviceName;
             static string fStreamName;
