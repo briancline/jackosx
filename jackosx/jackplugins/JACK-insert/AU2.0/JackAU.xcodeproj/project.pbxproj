@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4BD14F2709FCC17300D721BB /* Info-jack.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BD14F2609FCC17300D721BB /* Info-jack.plist */; };
 		4BE2E68D09E3F2F7009A4D7C /* PkgInfo in CopyFiles */ = {isa = PBXBuildFile; fileRef = F5F49F150377B9B101000103 /* PkgInfo */; };
 		4BE2E68F09E3F2F7009A4D7C /* JackAU.h in Headers */ = {isa = PBXBuildFile; fileRef = F500946803772D2101000103 /* JackAU.h */; };
 		4BE2E69009E3F2F7009A4D7C /* AUBase.h in Headers */ = {isa = PBXBuildFile; fileRef = B21B4A5506F0886500112E6A /* AUBase.h */; };
@@ -256,8 +257,7 @@
 
 /* Begin PBXFileReference section */
 		014CEA3E0018CDD111CA2923 /* JACK-insert.component */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = "JACK-insert.component"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4BD1B90709E502BA002A7804 /* Info-jack__Upgraded_ copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Info-jack__Upgraded_ copy.plist"; sourceTree = "<group>"; };
-		4BE2E6D609E3F2F7009A4D7C /* Info-jack__Upgraded_.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Info-jack__Upgraded_.plist"; sourceTree = "<group>"; };
+		4BD14F2609FCC17300D721BB /* Info-jack.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-jack.plist"; sourceTree = SOURCE_ROOT; };
 		4BE2E6D709E3F2F7009A4D7C /* JACK-insert.component */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "JACK-insert.component"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BE2E6FA09E3F395009A4D7C /* CAVectorUnit.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CAVectorUnit.cpp; path = /Developer/Examples/CoreAudio/PublicUtility/CAVectorUnit.cpp; sourceTree = "<absolute>"; };
 		4BE2E6FB09E3F395009A4D7C /* CAVectorUnit.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CAVectorUnit.h; path = /Developer/Examples/CoreAudio/PublicUtility/CAVectorUnit.h; sourceTree = "<absolute>"; };
@@ -367,8 +367,7 @@
 				089C167CFE841241C02AAC07 /* Resources */,
 				089C1671FE841209C02AAC07 /* External Frameworks and Libraries */,
 				19C28FB6FE9D52B211CA2CBB /* Products */,
-				4BE2E6D609E3F2F7009A4D7C /* Info-jack__Upgraded_.plist */,
-				4BD1B90709E502BA002A7804 /* Info-jack__Upgraded_ copy.plist */,
+				4BD14F2609FCC17300D721BB /* Info-jack.plist */,
 			);
 			name = pingpong;
 			sourceTree = "<group>";
@@ -685,6 +684,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BD14F2709FCC17300D721BB /* Info-jack.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -906,14 +906,14 @@
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_USE_GCC3_PFE_SUPPORT = YES;
 				HEADER_SEARCH_PATHS = "";
-				INFOPLIST_FILE = "Info-jack__Upgraded_.plist";
+				INFOPLIST_FILE = "Info-jack.plist";
 				INSTALL_PATH = "~/Library/Audio/Plug-Ins/Components";
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-bundle";
 				OTHER_REZFLAGS = "-d ppc_$ppc -d i386_$i386 -I /Developer/Examples/CoreAudio/AudioUnits/AUPublic/AUBase/ -I /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/Headers";
 				PRODUCT_NAME = "JACK-insert";
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = "";
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
