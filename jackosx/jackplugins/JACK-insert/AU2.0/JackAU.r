@@ -20,6 +20,8 @@
 
 #include <AudioUnit/AudioUnit.r>
 
+#include "JackUnitVersion.h"
+
 // Note that resource IDs must be spaced 2 apart for the 'STR ' name and description
 #define kAudioUnitResID_ElCAJAS			1000
 #define kAudioUnitResID_ElCAJASGUI		2000
@@ -29,7 +31,7 @@
 #define COMP_TYPE		'aufx'
 #define COMP_SUBTYPE	'JASb'
 #define COMP_MANUF		'ElCa' 	
-#define VERSION			0x010600
+#define VERSION			kJackUnitVersion
 #define NAME			"jackosx.com: JACK-insert"
 #define DESCRIPTION		"ElementiCaotici JackAudioServer Insert"
 #define ENTRY_POINT		"ElCAJASEntry"
@@ -42,9 +44,11 @@
 #define COMP_TYPE		kAudioUnitCarbonViewComponentType
 #define COMP_SUBTYPE	'JASb'
 #define COMP_MANUF		'ElCa' 	
-#define VERSION			0x010600
+#define VERSION			kJackUnitVersion
 #define NAME			"jackosx.com: JACK-insert"
 #define DESCRIPTION		"ElementiCaotici JackAudioServer Insert"
 #define ENTRY_POINT		"ElCAJASViewEntry"
 
 #include "AUResources.r"
+
+

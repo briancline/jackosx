@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <AUEffectBase.h>
 #include "../JARInsert/JARInsert.h"
+#include "JackUnitVersion.h"
 
 class ElCAJAS : public AUEffectBase
 {
@@ -76,6 +77,8 @@ class ElCAJAS : public AUEffectBase
                 AudioUnitElement inElement,
                 const CAStreamBasicDescription& inPrevFormat,
                 const CAStreamBasicDescription& inNewFormat);
+				
+		virtual ComponentResult	Version() { return kJackUnitVersion; }
 		
 	private:
         JARInsert *c_jar;
