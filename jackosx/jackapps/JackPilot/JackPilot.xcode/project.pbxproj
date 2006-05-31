@@ -59,9 +59,9 @@
 //104
 		1058C7A0FEA54F0111CA2CBB = {
 			children = (
+				4B6683EE0A2D8C4C00E8ADF8,
 				B2EB271E05C5287400724495,
 				1058C7A1FEA54F0111CA2CBB,
-				B2BA0E1404CECD140055565C,
 				B24BD00305060C0F00947A3C,
 				B24BD00705060C6C00947A3C,
 			);
@@ -282,6 +282,20 @@
 //4B2
 //4B3
 //4B4
+		4B6683EE0A2D8C4C00E8ADF8 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = Jack.framework;
+			path = /Library/Frameworks/Jack.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		4B6683EF0A2D8C4C00E8ADF8 = {
+			fileRef = 4B6683EE0A2D8C4C00E8ADF8;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		4BA6469B072FE87800590705 = {
 			buildActionMask = 2147483647;
 			files = (
@@ -619,14 +633,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		B2BA0E1404CECD140055565C = {
-			isa = PBXFileReference;
-			lastKnownFileType = wrapper.framework;
-			name = Jack.framework;
-			path = /Library/Frameworks/Jack.framework;
-			refType = 0;
-			sourceTree = "<absolute>";
-		};
 		B2C0172C0508E0830042DB15 = {
 			buildActionMask = 2147483647;
 			files = (
@@ -685,10 +691,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2EA0BA2050F446B00FED62D,
-				B2EA0BA3050F446C00FED62D,
 				B2EA0BA4050F446C00FED62D,
 				B2AB50E6067F6E3600127FEB,
 				B2AB50EC067F6E4600127FEB,
+				4B6683EF0A2D8C4C00E8ADF8,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -760,7 +766,7 @@
 	<key>CFBundleExecutable</key>
 	<string>JackPilot</string>
 	<key>CFBundleGetInfoString</key>
-	<string>JackPilot 1.5.9, @2003-2005 Johnny Petrantoni.</string>
+	<string>JackPilot 1.6.1, @2003-2006 Johnny Petrantoni.</string>
 	<key>CFBundleIconFile</key>
 	<string>jackpilot.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -776,7 +782,7 @@
 	<key>CFBundleSignature</key>
 	<string>ElCa</string>
 	<key>CFBundleVersion</key>
-	<string>1.5.9</string>
+	<string>1.6.1</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
@@ -938,12 +944,6 @@
 		};
 		B2EA0BA2050F446B00FED62D = {
 			fileRef = 1058C7A1FEA54F0111CA2CBB;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		B2EA0BA3050F446C00FED62D = {
-			fileRef = B2BA0E1404CECD140055565C;
 			isa = PBXBuildFile;
 			settings = {
 			};

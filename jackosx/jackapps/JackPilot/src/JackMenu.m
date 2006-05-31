@@ -548,7 +548,7 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 		strcat(stringa,buffersize);
 		strcat(stringa," -c ");
 		strcat(stringa,channels);
-		strcat(stringa," -n ");
+		strcat(stringa," -d ");
 		strcat(stringa,"\"");
 		strcat(stringa,interface);
 		strcat(stringa,"\"");
@@ -698,7 +698,7 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 		fprintf(file, "-r %s \n",[[samplerateText titleOfSelectedItem]cString]);
 		fprintf(file, "-i %s \n",[[inputChannels titleOfSelectedItem]cString]);
 		fprintf(file, "-o %s \n",[[outputChannels titleOfSelectedItem]cString]);
-		fprintf(file, "-n %s \n",drivername); 
+		fprintf(file, "-d %s \n",drivername); 
 		fclose(file);
 	}
    
@@ -957,7 +957,7 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
     strcat(stringa,out_channels);
 	strcat(stringa," -i ");
     strcat(stringa,in_channels);
-	strcat(stringa," -n ");
+	strcat(stringa," -d ");
 	strcat(stringa,"\"");
 	strcat(stringa,drivername);
 	strcat(stringa,"\"");
