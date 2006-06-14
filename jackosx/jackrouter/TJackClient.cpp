@@ -297,6 +297,10 @@ History
 11-04-06 : Version 0.83 : S Letz
 		JackRouter as default input/output "again"...
 		
+11-04-06 : Version 0.84 : S Letz
+		Fix an Autoconnect/Restore connection issue found with AudioFinder (in kAudioDevicePropertyIOProcStreamUsage)
+
+		
 TODO :
     
         - solve zombification problem of Jack (remove time-out check or use -T option)
@@ -338,7 +342,7 @@ string TJackClient::fDeviceName = "Jack Router";
 string TJackClient::fStreamName = "Float32";
 string TJackClient::fDeviceManufacturer = "Grame";
 
-AudioDeviceID TJackClient::fDeviceID;
+AudioDeviceID TJackClient::fDeviceID = 0;
 TJackClient* TJackClient::fJackClient = NULL;
 
 AudioStreamID TJackClient::fStreamIDList[MAX_JACK_PORTS];
@@ -446,7 +450,7 @@ static void stopCallback(CFNotificationCenterRef center,
                          const void* object,
                          CFDictionaryRef userInfo)
 {
-    OSStatus err = TJackClient::Teardown1(TJackClient::fPlugInRef);
+    OSStatus err = TJackClient::Teardown(TJackClient::fPlugInRef);
     JARLog("com.grame.jackserver.stop notification %ld\n", err);
 }
 
@@ -580,7 +584,20 @@ void TJackClient::KillJackClient()
         TJackClient::fJackClient->Desactivate();
         TJackClient::fJackClient->Close();
         delete TJackClient::fJackClient;
-        TJackClient::fJackClient = NULL;
+		
+        TJackClient::fInputChannels = 0;
+		TJackClient::fOutputChannels = 0;
+
+		TJackClient::fAutoConnect = true;
+		TJackClient::fDeviceRunning = false;
+		TJackClient::fConnected2HAL = false;
+		TJackClient::fDebug = false;
+		TJackClient::fDeviceID = 0;
+		TJackClient::fJackClient = NULL;
+		TJackClient::fCoreAudioDriver = 0;
+		TJackClient::fPlugInRef = 0;
+		TJackClient::fNotification = false;
+		TJackClient::fFirstActivate = true;
     }
 }
 
@@ -2720,7 +2737,13 @@ OSStatus TJackClient::DeviceSetProperty(AudioHardwarePlugInRef inSelf,
                                 JARLog("DeviceSetProperty : output kAudioDevicePropertyIOProcStreamUsage output inData->mStreamIsOn %ld \n", inData->mStreamIsOn[i]);
                             }
                         }
-						TJackClient::fJackClient->AutoConnect();
+						// Autoconnect is only done for the first activation
+						if (TJackClient::fFirstActivate) {
+							TJackClient::fJackClient->AutoConnect();
+							TJackClient::fFirstActivate = false;
+						} else {
+							TJackClient::fJackClient->RestoreConnections();
+						}
                         err = kAudioHardwareNoError;
                     }
                 }
@@ -3639,6 +3662,7 @@ OSStatus TJackClient::Teardown(AudioHardwarePlugInRef inSelf)
     }
 
     delete fBlackList;
+	fBlackList = NULL;
     return kAudioHardwareNoError;
 }
 

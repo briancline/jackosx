@@ -132,9 +132,7 @@ extern "C"
             static AudioDeviceID fCoreAudioDriver;		// The CoreAudio driver currently loaded by Jack
 			static char fCoreAudioDriverUID[128];		// The CoreAudio driver currently loaded by Jack
             static bool fFirstActivate;
-            static AudioHardwarePlugInRef fPlugInRef;
-            static bool fNotification;
-
+     
             static void SetTime(AudioTimeStamp* timeVal, long curTime, UInt64 time);
 
             // Plug-in management
@@ -154,6 +152,9 @@ extern "C"
             virtual ~TJackClient();
 
             static bool fDebug;
+			static AudioHardwarePlugInRef fPlugInRef;
+            static bool fNotification;
+			
             static int Process(jack_nframes_t nframes, void* arg);
             static int BufferSize(jack_nframes_t nframes, void* arg);
             static int XRun(void* arg);
