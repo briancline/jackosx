@@ -514,7 +514,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -r build/JackRouter.plugin /Library/Audio/Plug-Ins/HAL/  ";
+			shellScript = "cp -r build/Deployment/JackRouter.plugin /Library/Audio/Plug-Ins/HAL/  ";
 		};
 /* End PBXShellScriptBuildPhase section */
 
