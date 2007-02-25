@@ -329,11 +329,9 @@ bool TJackSynchro::Open()
         printf("Can not open create source \n");
         goto error;
     }
-
     return true;
 
 error:
-
     Close();
     return false;
 }
