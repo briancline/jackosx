@@ -21,23 +21,6 @@
 				B20C52C706F496020065B021 /* ShellScript */,
 				4BA6469B072FE87800590705 /* ShellScript */,
 			);
-			buildSettings = {
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "-DPLUGIN=1";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRECOMPILE_PREFIX_HEADER = YES;
-				PREFIX_HEADER = src/JackPilot1.0_Prefix.h;
-				PRODUCT_NAME = JackPilot;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-			};
 			dependencies = (
 			);
 			name = JackPilot;
@@ -100,6 +83,7 @@
 /* End PBXApplicationTarget section */
 
 /* Begin PBXBuildFile section */
+		4B4F1BA60C5616A50096B3EE /* Info-JackPilot.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B4F1BA50C5616A50096B3EE /* Info-JackPilot.plist */; };
 		4B4F3D3C09E2D5E000D2EC22 /* jackfun.h in Headers */ = {isa = PBXBuildFile; fileRef = B2B9A25D04BDC2F90031A363 /* jackfun.h */; };
 		4B4F3D3D09E2D5E000D2EC22 /* procinfo.h in Headers */ = {isa = PBXBuildFile; fileRef = B2B9A26504BDD3850031A363 /* procinfo.h */; };
 		4B4F3D3E09E2D5E000D2EC22 /* JackMenu.h in Headers */ = {isa = PBXBuildFile; fileRef = B29F407504BDEFB100D20559 /* JackMenu.h */; };
@@ -139,7 +123,6 @@
 		4B4F3D6309E2D5E000D2EC22 /* Panda.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2EB271E05C5287400724495 /* Panda.framework */; };
 		4B4F3D6409E2D5E000D2EC22 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B24BD00705060C6C00947A3C /* AudioToolbox.framework */; };
 		4B4F3D6709E2D5E000D2EC22 /* Localizable.strings in CopyFiles */ = {isa = PBXBuildFile; fileRef = B2FF9BAA05EFDCA700F1AD06 /* Localizable.strings */; };
-		4B50039409E51A4200AD1985 /* Info-JackPilot.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B50039309E51A4200AD1985 /* Info-JackPilot.plist */; };
 		B219AC62051E53A500730C30 /* jks.icns in Resources */ = {isa = PBXBuildFile; fileRef = B219AC61051E53A500730C30 /* jks.icns */; };
 		B2292EC30559813D004A67B1 /* Utility.h in Headers */ = {isa = PBXBuildFile; fileRef = B2292EC10559813D004A67B1 /* Utility.h */; };
 		B2292EC40559813D004A67B1 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = B2292EC20559813D004A67B1 /* Utility.m */; };
@@ -181,33 +164,6 @@
 		B2FF9DA005EFEFB300F1AD06 /* Localizable.strings in CopyFiles */ = {isa = PBXBuildFile; fileRef = B2FF9BAA05EFDCA700F1AD06 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXBuildStyle section */
-		4A9504CCFFE6A4B311CA0CBA /* Development */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				OPTIMIZATION_CFLAGS = "-O0";
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		4A9504CDFFE6A4B311CA0CBA /* Deployment */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				DEBUG_SYMBOLS = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				OPTIMIZATION_CFLAGS = "-O3";
-				PREBINDING = NO;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-/* End PBXBuildStyle section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		4B4F3D6609E2D5E000D2EC22 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -238,8 +194,8 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* JackPilot1.0_Prefix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JackPilot1.0_Prefix.h; path = src/JackPilot1.0_Prefix.h; sourceTree = "<group>"; };
+		4B4F1BA50C5616A50096B3EE /* Info-JackPilot.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-JackPilot.plist"; sourceTree = SOURCE_ROOT; };
 		4B4F3D7009E2D5E000D2EC22 /* JackPilot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JackPilot.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		4B50039309E51A4200AD1985 /* Info-JackPilot.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-JackPilot.plist"; sourceTree = SOURCE_ROOT; };
 		B219AC61051E53A500730C30 /* jks.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = jks.icns; path = resources/jks.icns; sourceTree = "<group>"; };
 		B2292EC10559813D004A67B1 /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Utility.h; path = src/Utility.h; sourceTree = "<group>"; };
 		B2292EC20559813D004A67B1 /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = Utility.m; path = src/Utility.m; sourceTree = "<group>"; };
@@ -352,7 +308,6 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4B50039309E51A4200AD1985 /* Info-JackPilot.plist */,
 				B2C017320508E0830042DB15 /* JackPilot.app */,
 				4B4F3D7009E2D5E000D2EC22 /* JackPilot.app */,
 			);
@@ -386,6 +341,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4B4F1BA50C5616A50096B3EE /* Info-JackPilot.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				B2B49890051E5DAD00A80204 /* jackdoc.pdf */,
 				B219AC61051E53A500730C30 /* jks.icns */,
@@ -479,23 +435,6 @@
 			);
 			buildRules = (
 			);
-			buildSettings = {
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "-DPLUGIN=1";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRECOMPILE_PREFIX_HEADER = YES;
-				PREFIX_HEADER = src/JackPilot1.0_Prefix.h;
-				PRODUCT_NAME = JackPilot;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-			};
 			dependencies = (
 			);
 			name = "JackPilot Universal";
@@ -510,12 +449,6 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 4B4F3D7309E2D5E100D2EC22 /* Build configuration list for PBXProject "JackPilot" */;
-			buildSettings = {
-			};
-			buildStyles = (
-				4A9504CCFFE6A4B311CA0CBA /* Development */,
-				4A9504CDFFE6A4B311CA0CBA /* Deployment */,
-			);
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -547,7 +480,7 @@
 				4B4F3D4F09E2D5E000D2EC22 /* jackdocIT.pdf in Resources */,
 				4B4F3D5009E2D5E000D2EC22 /* Localizable.strings in Resources */,
 				4B4F3D5109E2D5E000D2EC22 /* Localizable.strings in Resources */,
-				4B50039409E51A4200AD1985 /* Info-JackPilot.plist in Resources */,
+				4B4F1BA60C5616A50096B3EE /* Info-JackPilot.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
