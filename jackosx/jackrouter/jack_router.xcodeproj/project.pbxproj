@@ -56,32 +56,6 @@
 		B2CF85210505FCF600B94C9A /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2CF85200505FCF600B94C9A /* Carbon.framework */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXBuildStyle section */
-		014CEA3F0018CDD111CA2923 /* Development */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				OPTIMIZATION_CFLAGS = "-O0";
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		014CEA400018CDD111CA2923 /* Deployment */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				OPTIMIZATION_CFLAGS = "-03";
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-/* End PBXBuildStyle section */
-
 /* Begin PBXBundleTarget section */
 		089C1673FE841209C02AAC07 /* JackRouter */ = {
 			isa = PBXBundleTarget;
@@ -95,29 +69,6 @@
 				4B9C283507C38E70001C7A1E /* CopyFiles */,
 				4B61EE0F05C019930093DF43 /* ShellScript */,
 			);
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "";
-				INSTALL_PATH = "/Library/Audio/Plug-Ins/HAL";
-				LIBRARY_SEARCH_PATHS = "";
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Jack,
-					"-framework",
-					CoreFoundation,
-				);
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = JackRouter;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = plugin;
-			};
 			dependencies = (
 			);
 			name = JackRouter;
@@ -399,29 +350,6 @@
 			);
 			buildRules = (
 			);
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "";
-				INSTALL_PATH = "/Library/Audio/Plug-Ins/HAL";
-				LIBRARY_SEARCH_PATHS = "";
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Jack,
-					"-framework",
-					CoreFoundation,
-				);
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = JackRouter;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = plugin;
-			};
 			dependencies = (
 			);
 			name = "JackRouter Universal";
@@ -436,12 +364,6 @@
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 4B01251B09D2DED5004604C4 /* Build configuration list for PBXProject "jack_router" */;
-			buildSettings = {
-			};
-			buildStyles = (
-				014CEA3F0018CDD111CA2923 /* Development */,
-				014CEA400018CDD111CA2923 /* Deployment */,
-			);
 			hasScannedForEncodings = 1;
 			mainGroup = 089C166AFE841209C02AAC07 /* dummyaudioplug */;
 			projectDirPath = "";
