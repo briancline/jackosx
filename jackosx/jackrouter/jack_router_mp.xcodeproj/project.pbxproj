@@ -289,8 +289,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
-					i386,
 					ppc,
+					i386,
 				);
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
@@ -310,6 +310,7 @@
 				);
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = JackRouterMP;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk/;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -343,6 +344,7 @@
 				);
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = JackRouterMP;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk/;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -357,6 +359,10 @@
 		4B8CA67E0B862AB500043AC8 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
@@ -371,6 +377,7 @@
 				);
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = JackRouterMP;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk/;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
