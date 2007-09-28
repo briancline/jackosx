@@ -25,6 +25,7 @@ Changes Log:
 28-9-2007: Johnny Petrantoni - First Import.
 28-9-2007: Johnny Petrantoni - Added Stephane GetEXEName() and code cleanup.
 28-9-2007: Johnny Petrantoni - Minor fixes, added TODO and this changes log.
+28-9-2007: Johnny Petrantoni - Added pThreadUtilities.h code... but the cracks are still there..
 
 TODO:
 1) We should really free(x) memory of asio buffers.
@@ -59,6 +60,8 @@ TODO:
 
 #define IEEE754_64FLOAT 1
 #include "asio.h"
+
+#include "pThreadUtilities.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(asio);
 
@@ -885,6 +888,8 @@ static DWORD CALLBACK win32_callback(LPVOID arg) {
     attr.sched_priority = 62;
     pthread_setschedparam(pthread_self(),SCHED_RR,&attr);
 	*/
+	
+	setThreadToPriority(pthread_self(),96,TRUE,10000000);
 
     /* let IWineASIO_Init know we are alive */
     SetEvent(This.start_event);

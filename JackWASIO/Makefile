@@ -29,7 +29,8 @@ wineasio_dll_CXX_SRCS =
 wineasio_dll_RC_SRCS  =
 wineasio_dll_LDFLAGS  = -shared \
 			$(wineasio_dll_MODULE:%=%.spec) \
-			-mnocygwin
+			-mnocygwin \
+			 -framework CoreAudio
 wineasio_dll_DLL_PATH =
 wineasio_dll_DLLS     = odbc32 \
 			ole32 \
