@@ -20,6 +20,18 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
+/*
+Changes Log:
+28-9-2007: Johnny Petrantoni - First Import.
+28-9-2007: Johnny Petrantoni - Added Stephane GetEXEName() and code cleanup.
+28-9-2007: Johnny Petrantoni - Minor fixes, added TODO and this changes log.
+
+TODO:
+1) We should really free(x) memory of asio buffers.
+2) Figure why cracks with buffersizes less than 1024. (suspect the milliseconds or thread priority)
+3) Preference file.. not sure which approach to use tho, and add a way to specify where the libjack is, instead of static path.
+*/
+
 #include "config.h"
 #include "port.h"
 
@@ -38,7 +50,6 @@
 
 #include <sched.h>
 #include <pthread.h>
-#include <semaphore.h>
 
 #include "wine/library.h"
 #include "wine/debug.h"
@@ -307,8 +318,6 @@ WRAP_THISCALL( ASIOBool __stdcall, IWineASIOImpl_init, (LPWINEASIO iface, void *
     int i,j;
     char *envi;
     char name[32];
-    char *usercfg = NULL;
-    FILE *cfg;
 
     This.sample_rate = 48000.0;
     This.block_frames = 1024;
@@ -326,7 +335,7 @@ WRAP_THISCALL( ASIOBool __stdcall, IWineASIOImpl_init, (LPWINEASIO iface, void *
     This.state = Init;
 	
 	char proc_name[256];
-	memset(proc_name,0x0,sizeof(char)*256); //size of char is redundant.. but dunno i like to write it:)
+	memset(&proc_name[0],0x0,sizeof(char)*256); //size of char is redundant.. but dunno i like to write it:)
 	
 	if(!GetEXEName(GetCurrentProcessId(),&proc_name[0])) {
 		strcpy(&proc_name[0],"Wine_ASIO");
@@ -427,11 +436,13 @@ WRAP_THISCALL( void __stdcall, IWineASIOImpl_getErrorMessage, (LPWINEASIO iface,
 }
 
 WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_start, (LPWINEASIO iface)) {
+	/*
     char *var_port = NULL;
     char *val_port = NULL;
     const char ** ports;
     int numports;
     int i;
+	*/
 
     if (This.callbacks) {
         This.sample_position = 0;
