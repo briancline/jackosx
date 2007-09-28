@@ -36,6 +36,7 @@ wineasio_dll_DLLS     = odbc32 \
 			oleaut32 \
 			winspool \
 			winmm \
+			psapi \
 			pthread
 wineasio_dll_LIBRARY_PATH=
 wineasio_dll_LIBRARIES= uuid

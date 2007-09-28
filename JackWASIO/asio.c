@@ -25,7 +25,6 @@
 
 #include "settings.h"
 
-//#include <stdarg.h>
 #include <stdio.h>
 #include <dlfcn.h>
 #include <sys/time.h>
@@ -35,6 +34,7 @@
 #include <wine/windows/winbase.h>
 #include <wine/windows/objbase.h>
 #include <wine/windows/mmsystem.h>
+#include <wine/windows/psapi.h>
 
 #include <sched.h>
 #include <pthread.h>
@@ -130,8 +130,7 @@ unsigned int MAX_OUTPUTS = 2;
  * IWineAsio interface
  */
 #define INTERFACE IWineASIO
-DECLARE_INTERFACE_(IWineASIO,IUnknown)
-{
+DECLARE_INTERFACE_(IWineASIO,IUnknown) {
     STDMETHOD_(HRESULT,QueryInterface)(THIS_ REFIID riid, void** ppvObject) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
@@ -161,8 +160,7 @@ DECLARE_INTERFACE_(IWineASIO,IUnknown)
 
 typedef struct IWineASIO *LPWINEASIO, **LPLPWINEASIO;
 
-enum
-{
+enum {
     Init,
     Run,
     Exit
@@ -175,8 +173,7 @@ typedef struct _Channel {
    jack_port_t *port;
 } Channel;
 
-struct IWineASIOImpl
-{
+struct IWineASIOImpl {
     /* COM stuff */
     const IWineASIOVtbl *lpVtbl;
     LONG                ref;
@@ -216,15 +213,53 @@ struct IWineASIOImpl
 
 typedef struct IWineASIOImpl              IWineASIOImpl;
 
-static ULONG WINAPI IWineASIOImpl_AddRef(LPWINEASIO iface)
-{
+static int GetEXEName(DWORD dwProcessID, char* name) {
+    DWORD aProcesses [1024], cbNeeded, cProcesses;
+    unsigned int i;
+        
+    //Enumerate all processes
+    if(!EnumProcesses(aProcesses, sizeof(aProcesses), &cbNeeded)) return FALSE;
+
+    // Calculate how many process identifiers were returned.
+    cProcesses = cbNeeded / sizeof(DWORD);
+
+    char szEXEName[MAX_PATH];
+    //Loop through all process to find the one that matches
+    //the one we are looking for
+
+    for (i = 0; i < cProcesses; i++) {
+        if (aProcesses [i] == dwProcessID) {
+            // Get a handle to the process
+            HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION |
+                              PROCESS_VM_READ, FALSE, dwProcessID);
+        
+            // Get the process name
+            if (NULL != hProcess) {
+                HMODULE hMod;
+                DWORD cbNeeded;
+            
+                if(EnumProcessModules(hProcess, &hMod,sizeof(hMod), &cbNeeded)) {
+                    //Get the name of the exe file
+                    GetModuleBaseNameA(hProcess,hMod,szEXEName,sizeof(szEXEName)/sizeof(char));
+					int len = strlen((char*)szEXEName) - 3; // remove ".exe"
+					lstrcpynA(name,(char*)szEXEName,len); 
+					name[len] = '\0';
+					return TRUE;
+                 }
+            }
+        }    
+    }
+
+    return FALSE;
+}
+
+static ULONG WINAPI IWineASIOImpl_AddRef(LPWINEASIO iface) {
     ULONG ref = InterlockedIncrement(&(This.ref));
     TRACE("(%p) ref was %x\n", &This, ref - 1);
     return ref;
 }
 
-static ULONG WINAPI IWineASIOImpl_Release(LPWINEASIO iface)
-{
+static ULONG WINAPI IWineASIOImpl_Release(LPWINEASIO iface) {
     ULONG ref = InterlockedDecrement(&(This.ref));
     TRACE("(%p) ref was %x\n", &This, ref + 1);
 
@@ -253,14 +288,11 @@ static ULONG WINAPI IWineASIOImpl_Release(LPWINEASIO iface)
     return ref;
 }
 
-static HRESULT WINAPI IWineASIOImpl_QueryInterface(LPWINEASIO iface, REFIID riid, void** ppvObject)
-{
+static HRESULT WINAPI IWineASIOImpl_QueryInterface(LPWINEASIO iface, REFIID riid, void** ppvObject) {
     if (ppvObject == NULL)
         return E_INVALIDARG;
 
-    if (IsEqualIID(&CLSID_WineASIO, riid))
-    {
-
+    if (IsEqualIID(&CLSID_WineASIO, riid)) {
         This.ref++;
         *ppvObject = &This;
 
@@ -270,8 +302,7 @@ static HRESULT WINAPI IWineASIOImpl_QueryInterface(LPWINEASIO iface, REFIID riid
     return E_NOINTERFACE;
 }
 
-WRAP_THISCALL( ASIOBool __stdcall, IWineASIOImpl_init, (LPWINEASIO iface, void *sysHandle))
-{
+WRAP_THISCALL( ASIOBool __stdcall, IWineASIOImpl_init, (LPWINEASIO iface, void *sysHandle)) {
     jack_status_t status;
     int i,j;
     char *envi;
@@ -293,10 +324,16 @@ WRAP_THISCALL( ASIOBool __stdcall, IWineASIOImpl_init, (LPWINEASIO iface, void *
     This.tc_read = FALSE;
     This.terminate = FALSE;
     This.state = Init;
-
-    This.client = fp_jack_client_open("Wine_ASIO", JackNullOption, &status, NULL);
-    if (This.client == NULL)
-    {
+	
+	char proc_name[256];
+	memset(proc_name,0x0,sizeof(char)*256); //size of char is redundant.. but dunno i like to write it:)
+	
+	if(!GetEXEName(GetCurrentProcessId(),&proc_name[0])) {
+		strcpy(&proc_name[0],"Wine_ASIO");
+	}
+	
+    This.client = fp_jack_client_open(&proc_name[0],JackNullOption, &status, NULL);
+    if (This.client == NULL) {
         WARN("failed to open jack server\n");
         return ASIOFalse;
     }
@@ -349,14 +386,12 @@ WRAP_THISCALL( ASIOBool __stdcall, IWineASIOImpl_init, (LPWINEASIO iface, void *
     This.start_event = CreateEventW(NULL, FALSE, FALSE, NULL);
     This.stop_event = CreateEventW(NULL, FALSE, FALSE, NULL);
     This.thread = CreateThread(NULL, 0, win32_callback, &This, 0, &This.thread_id);
-    if (This.thread)
-    {
+    if (This.thread) {
         WaitForSingleObject(This.start_event, INFINITE);
         CloseHandle(This.start_event);
         This.start_event = INVALID_HANDLE_VALUE;
     }
-    else
-    {
+    else {
         WARN("Couldn't create thread\n");
         return ASIOFalse;
     }
@@ -366,14 +401,12 @@ WRAP_THISCALL( ASIOBool __stdcall, IWineASIOImpl_init, (LPWINEASIO iface, void *
 
     fp_jack_set_process_callback(This.client, jack_process, &This);
 
-    for (i = 0; i < MAX_INPUTS; i++)
-    {
+    for (i = 0; i < MAX_INPUTS; i++) {
         sprintf(name, "Input%d", i);
         This.input[i].port = fp_jack_port_register(This.client, name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput,0);
     }
 
-    for (i = 0; i < MAX_OUTPUTS; i++)
-    {
+    for (i = 0; i < MAX_OUTPUTS; i++) {
         sprintf(name, "Output%d", i);
         This.output[i].port = fp_jack_port_register(This.client, name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput,0);
     }
@@ -381,37 +414,31 @@ WRAP_THISCALL( ASIOBool __stdcall, IWineASIOImpl_init, (LPWINEASIO iface, void *
     return ASIOTrue;
 }
 
-WRAP_THISCALL( void __stdcall, IWineASIOImpl_getDriverName, (LPWINEASIO iface, char *name))
-{
+WRAP_THISCALL( void __stdcall, IWineASIOImpl_getDriverName, (LPWINEASIO iface, char *name)) {
     strcpy(name, "Wine ASIO");
 }
 
-WRAP_THISCALL( long __stdcall, IWineASIOImpl_getDriverVersion, (LPWINEASIO iface))
-{
+WRAP_THISCALL( long __stdcall, IWineASIOImpl_getDriverVersion, (LPWINEASIO iface)) {
     return 2;
 }
 
-WRAP_THISCALL( void __stdcall, IWineASIOImpl_getErrorMessage, (LPWINEASIO iface, char *string))
-{
+WRAP_THISCALL( void __stdcall, IWineASIOImpl_getErrorMessage, (LPWINEASIO iface, char *string)) {
     strcpy(string, This.error_message);
 }
 
-WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_start, (LPWINEASIO iface))
-{
+WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_start, (LPWINEASIO iface)) {
     char *var_port = NULL;
     char *val_port = NULL;
     const char ** ports;
     int numports;
     int i;
 
-    if (This.callbacks)
-    {
+    if (This.callbacks) {
         This.sample_position = 0;
         This.system_time.lo = 0;
         This.system_time.hi = 0;
 
-        if (fp_jack_activate(This.client))
-        {
+        if (fp_jack_activate(This.client)) {
             WARN("couldn't activate client\n");
             return ASE_NotPresent;
         }
@@ -471,13 +498,10 @@ WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_start, (LPWINEASIO iface))
     return ASE_NotPresent;
 }
 
-WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_stop, (LPWINEASIO iface))
-{
-
+WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_stop, (LPWINEASIO iface)) {
     This.state = Exit;
 
-    if (fp_jack_deactivate(This.client))
-    {
+    if (fp_jack_deactivate(This.client)) {
         WARN("couldn't deactivate client\n");
         return ASE_NotPresent;
     }
@@ -485,9 +509,7 @@ WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_stop, (LPWINEASIO iface))
     return ASE_OK;
 }
 
-WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_getChannels, (LPWINEASIO iface, long *numInputChannels, long *numOutputChannels))
-{
-
+WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_getChannels, (LPWINEASIO iface, long *numInputChannels, long *numOutputChannels)) {
     if (numInputChannels)
         *numInputChannels = MAX_INPUTS;
 
@@ -497,9 +519,7 @@ WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_getChannels, (LPWINEASIO iface
     return ASE_OK;
 }
 
-WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_getLatencies, (LPWINEASIO iface, long *inputLatency, long *outputLatency))
-{
-
+WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_getLatencies, (LPWINEASIO iface, long *inputLatency, long *outputLatency)) {
     if (inputLatency)
         *inputLatency = This.input_latency;
 
@@ -509,9 +529,7 @@ WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_getLatencies, (LPWINEASIO ifac
     return ASE_OK;
 }
 
-WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_getBufferSize, (LPWINEASIO iface, long *minSize, long *maxSize, long *preferredSize, long *granularity))
-{
-
+WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_getBufferSize, (LPWINEASIO iface, long *minSize, long *maxSize, long *preferredSize, long *granularity)) {
     if (minSize)
         *minSize = This.block_frames;
 
@@ -527,38 +545,29 @@ WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_getBufferSize, (LPWINEASIO ifa
     return ASE_OK;
 }
 
-WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_canSampleRate, (LPWINEASIO iface, ASIOSampleRate sampleRate))
-{
-
+WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_canSampleRate, (LPWINEASIO iface, ASIOSampleRate sampleRate)) {
     if (sampleRate == This.sample_rate)
         return ASE_OK;
 
     return ASE_NoClock;
 }
 
-WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_getSampleRate, (LPWINEASIO iface, ASIOSampleRate *sampleRate))
-{
-
+WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_getSampleRate, (LPWINEASIO iface, ASIOSampleRate *sampleRate)) {
     if (sampleRate)
         *sampleRate = This.sample_rate;
 
     return ASE_OK;
 }
 
-WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_setSampleRate, (LPWINEASIO iface, ASIOSampleRate sampleRate))
-{
-
+WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_setSampleRate, (LPWINEASIO iface, ASIOSampleRate sampleRate)) {
     if (sampleRate != This.sample_rate)
         return ASE_NoClock;
 
     return ASE_OK;
 }
 
-WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_getClockSources, (LPWINEASIO iface, ASIOClockSource *clocks, long *numSources))
-{
-
-    if (clocks && numSources)
-    {
+WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_getClockSources, (LPWINEASIO iface, ASIOClockSource *clocks, long *numSources)) {
+    if (clocks && numSources) {
         clocks->index = 0;
         clocks->associatedChannel = -1;
         clocks->associatedGroup = -1;
@@ -572,11 +581,8 @@ WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_getClockSources, (LPWINEASIO i
     return ASE_InvalidParameter;
 }
 
-WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_setClockSource, (LPWINEASIO iface, long reference))
-{
-
-    if (reference == 0)
-    {
+WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_setClockSource, (LPWINEASIO iface, long reference)) {
+    if (reference == 0) {
         This.asio_time.timeInfo.flags |= kClockSourceChanged;
 
         return ASE_OK;
@@ -585,19 +591,15 @@ WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_setClockSource, (LPWINEASIO if
     return ASE_NotPresent;
 }
 
-WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_getSamplePosition, (LPWINEASIO iface, ASIOSamples *sPos, ASIOTimeStamp *tStamp))
-{
-
+WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_getSamplePosition, (LPWINEASIO iface, ASIOSamples *sPos, ASIOTimeStamp *tStamp)) {
     tStamp->lo = This.system_time.lo;
     tStamp->hi = This.system_time.hi;
 
-    if (This.sample_position >= twoRaisedTo32)
-    {
+    if (This.sample_position >= twoRaisedTo32) {
         sPos->hi = (unsigned long)(This.sample_position * twoRaisedTo32Reciprocal);
         sPos->lo = (unsigned long)(This.sample_position - (sPos->hi * twoRaisedTo32));
     }
-    else
-    {
+    else {
         sPos->hi = 0;
         sPos->lo = (unsigned long)This.sample_position;
     }
@@ -605,8 +607,7 @@ WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_getSamplePosition, (LPWINEASIO
     return ASE_OK;
 }
 
-WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_getChannelInfo, (LPWINEASIO iface, ASIOChannelInfo *info))
-{
+WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_getChannelInfo, (LPWINEASIO iface, ASIOChannelInfo *info)) {
     char name[32];
 
     if (info->channel < 0 || (info->isInput ? info->channel >= MAX_INPUTS : info->channel >= MAX_OUTPUTS))
@@ -616,13 +617,11 @@ WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_getChannelInfo, (LPWINEASIO if
     info->type = ASIOSTInt32LSB;
     info->channelGroup = 0;
 
-    if (info->isInput)
-    {
+    if (info->isInput) {
         info->isActive = This.input[info->channel].active;
         sprintf(name, "Input %ld", info->channel);
     }
-    else
-    {
+    else {
         info->isActive = This.output[info->channel].active;
         sprintf(name, "Output %ld", info->channel);
     }
@@ -632,40 +631,33 @@ WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_getChannelInfo, (LPWINEASIO if
     return ASE_OK;
 }
 
-WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_disposeBuffers, (LPWINEASIO iface))
-{
+WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_disposeBuffers, (LPWINEASIO iface)) {
     int i;
 
     This.callbacks = NULL;
     __wrapped_IWineASIOImpl_stop(iface);
 
-    for (i = 0; i < MAX_INPUTS; i++)
-    {
+    for (i = 0; i < MAX_INPUTS; i++) {
         This.input[i].active = ASIOFalse;
     }
 
-    for (i = 0; i < MAX_OUTPUTS; i++)
-    {
+    for (i = 0; i < MAX_OUTPUTS; i++) {
         This.output[i].active = ASIOFalse;
     }
 
     return ASE_OK;
 }
 
-WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_createBuffers, (LPWINEASIO iface, ASIOBufferInfo *bufferInfos, long numChannels, long bufferSize, ASIOCallbacks *callbacks))
-{
+WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_createBuffers, (LPWINEASIO iface, ASIOBufferInfo *bufferInfos, long numChannels, long bufferSize, ASIOCallbacks *callbacks)) {
     ASIOBufferInfo * info = bufferInfos;
     int i;
 
     This.block_frames = bufferSize;
     This.miliseconds = (long)((double)(This.block_frames * 1000) / This.sample_rate);
 
-    for (i = 0; i < numChannels; i++, info++)
-    {
-        if (info->isInput)
-        {
-            if (info->channelNum < 0 || info->channelNum >= MAX_INPUTS)
-            {
+    for (i = 0; i < numChannels; i++, info++) {
+        if (info->isInput) {
+            if (info->channelNum < 0 || info->channelNum >= MAX_INPUTS) {
                 WARN("invalid input channel: %ld\n", info->channelNum);
                 goto ERROR_PARAM;
             }
@@ -673,12 +665,9 @@ WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_createBuffers, (LPWINEASIO ifa
             This.input[info->channelNum].active = ASIOTrue;
             info->buffers[0] = &This.input[info->channelNum].buffer[0];
             info->buffers[1] = &This.input[info->channelNum].buffer[This.block_frames];
-
         }
-        else
-        {
-            if (info->channelNum < 0 || info->channelNum >= MAX_OUTPUTS)
-            {
+        else {
+            if (info->channelNum < 0 || info->channelNum >= MAX_OUTPUTS) {
                 WARN("invalid output channel: %ld\n", info->channelNum);
                 goto ERROR_PARAM;
             }
@@ -686,16 +675,13 @@ WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_createBuffers, (LPWINEASIO ifa
             This.output[info->channelNum].active = ASIOTrue;
             info->buffers[0] = &This.output[info->channelNum].buffer[0];
             info->buffers[1] = &This.output[info->channelNum].buffer[This.block_frames];
-
         }
     }
 
     This.callbacks = callbacks;
 
-    if (This.callbacks->asioMessage)
-    {
-        if (This.callbacks->asioMessage(kAsioSupportsTimeInfo, 0, 0, 0))
-        {
+    if (This.callbacks->asioMessage) {
+        if (This.callbacks->asioMessage(kAsioSupportsTimeInfo, 0, 0, 0)) {
             This.time_info_mode = TRUE;
             This.asio_time.timeInfo.speed = 1;
             This.asio_time.timeInfo.systemTime.hi = 0;
@@ -713,8 +699,7 @@ WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_createBuffers, (LPWINEASIO ifa
         else
             This.time_info_mode = FALSE;
     }
-    else
-    {
+    else {
         This.time_info_mode = FALSE;
         WARN("asioMessage callback not supplied\n");
         goto ERROR_PARAM;
