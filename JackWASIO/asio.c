@@ -26,10 +26,10 @@ Changes Log:
 28-9-2007: Johnny Petrantoni - Added Stephane GetEXEName() and code cleanup.
 28-9-2007: Johnny Petrantoni - Minor fixes, added TODO and this changes log.
 28-9-2007: Johnny Petrantoni - Added pThreadUtilities.h code... but the cracks are still there..
+29-9-2007: Johnny Petrantoni - added mutex and condition code to synch IT IS WORKING NOW!!! tested down to 256 buffersize using reaper.
 
 TODO:
 1) We should really free(x) memory of asio buffers.
-2) Figure why cracks with buffersizes less than 1024. (suspect the milliseconds or thread priority)
 3) Preference file.. not sure which approach to use tho, and add a way to specify where the libjack is, instead of static path.
 */
 
@@ -223,6 +223,8 @@ struct IWineASIOImpl {
     Channel             *input;
     Channel             *output;
 	float				*tempbuf;
+	pthread_cond_t		cond;
+	pthread_mutex_t		mutex;
 } This;
 
 typedef struct IWineASIOImpl              IWineASIOImpl;
@@ -279,6 +281,10 @@ static ULONG WINAPI IWineASIOImpl_Release(LPWINEASIO iface) {
 
     if (!ref) {
 		This.terminate = TRUE;
+		
+		pthread_mutex_lock(&This.mutex);
+		pthread_cond_signal(&This.cond);
+		pthread_mutex_unlock(&This.mutex);
 
         WaitForSingleObject(This.stop_event, INFINITE);
 	
@@ -297,6 +303,9 @@ static ULONG WINAPI IWineASIOImpl_Release(LPWINEASIO iface) {
 		for (i=0; i<MAX_OUTPUTS; i++) {
 			fp_jack_ringbuffer_free(This.output[i].ring);
 		}
+		
+		pthread_mutex_destroy(&This.mutex);
+		pthread_cond_destroy(&This.cond);
     }
 
     return ref;
@@ -351,6 +360,9 @@ WRAP_THISCALL( ASIOBool __stdcall, IWineASIOImpl_init, (LPWINEASIO iface, void *
     }
 
     TRACE("JACK client opened\n");
+	
+	pthread_mutex_init(&This.mutex,NULL);
+	pthread_cond_init(&This.cond,NULL);
 
     This.sample_rate = fp_jack_get_sample_rate(This.client);
     This.block_frames = fp_jack_get_buffer_size(This.client);
@@ -862,6 +874,10 @@ static int jack_process(jack_nframes_t nframes, void * arg) {
 			fp_jack_ringbuffer_write(This.input[i].ring,in,nframes * sizeof(float));
 		}
 	}
+	
+	pthread_mutex_lock(&This.mutex);
+	pthread_cond_signal(&This.cond);
+	pthread_mutex_unlock(&This.mutex);
 
 	// copy the ASIO data to JACK
 	for (i = 0; i < MAX_OUTPUTS; i++) {
@@ -896,8 +912,12 @@ static DWORD CALLBACK win32_callback(LPVOID arg) {
 	
 	int *buffer;
 	int i,j;
+	
+	pthread_mutex_lock(&This.mutex);
 
     while (1) {
+		pthread_cond_wait(&This.cond,&This.mutex); //this should (mutex) unlock while waiting and lock automatically when signaled...
+	
         /* check for termination */
         if (This.terminate) {
             SetEvent(This.stop_event);
@@ -948,8 +968,10 @@ static DWORD CALLBACK win32_callback(LPVOID arg) {
 			This.toggle = This.toggle ? 0 : 1;
         }
 		
-		Sleep(This.miliseconds);
+		//Sleep(This.miliseconds);
     }
+	
+	pthread_mutex_unlock(&This.mutex);
     
     return 0;
 }
