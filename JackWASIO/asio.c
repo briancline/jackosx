@@ -22,15 +22,16 @@
 
 /*
 Changes Log:
-28-9-2007: Johnny Petrantoni - First Import.
-28-9-2007: Johnny Petrantoni - Added Stephane GetEXEName() and code cleanup.
-28-9-2007: Johnny Petrantoni - Minor fixes, added TODO and this changes log.
-28-9-2007: Johnny Petrantoni - Added pThreadUtilities.h code... but the cracks are still there..
-29-9-2007: Johnny Petrantoni - added mutex and condition code to synch IT IS WORKING NOW!!! tested down to 256 buffersize using reaper.
+28-9-2007: Johnny Petrantoni -	First Import.
+28-9-2007: Johnny Petrantoni -	Added Stephane GetEXEName() and code cleanup.
+28-9-2007: Johnny Petrantoni -	Minor fixes, added TODO and this changes log.
+28-9-2007: Johnny Petrantoni -	Added pThreadUtilities.h code... but the cracks are still there..
+29-9-2007: Johnny Petrantoni -	added mutex and condition code to synch IT IS WORKING NOW!!! tested down to 256 buffersize using reaper.
+30-9-2007: Johnny Petrantoni -	added JackPilot preferences for virtual-ports and auto connect, added some macros for linux compilation, 
+								removed prepath from libjack.
 
 TODO:
 1) We should really free(x) memory of asio buffers.
-3) Preference file.. not sure which approach to use tho, and add a way to specify where the libjack is, instead of static path.
 */
 
 #include "config.h"
@@ -61,12 +62,18 @@ TODO:
 #define IEEE754_64FLOAT 1
 #include "asio.h"
 
+#ifndef _LINUX_
 #include "pThreadUtilities.h"
+#endif
 
 WINE_DEFAULT_DEBUG_CHANNEL(asio);
 
 #ifndef SONAME_LIBJACK
-#define SONAME_LIBJACK "/usr/local/lib/libjack.dylib"
+	#ifndef _LINUX_
+		#define SONAME_LIBJACK "libjack.dylib"
+	#else 
+		#define SONAME_LIBJACK "libjack.so"
+	#endif
 #endif
 
 #define MAKE_FUNCPTR(f) static typeof(f) * fp_##f = NULL;
@@ -110,6 +117,7 @@ static GUID const CLSID_WineASIO = {
 
 unsigned int MAX_INPUTS = 2;
 unsigned int MAX_OUTPUTS = 2;
+int gAUTO_CONNECT = FALSE;
 
 /* ASIO drivers use the thiscall calling convention which only Microsoft compilers
  * produce.  These macros add an extra layer to fixup the registers properly for
@@ -228,6 +236,44 @@ struct IWineASIOImpl {
 } This;
 
 typedef struct IWineASIOImpl              IWineASIOImpl;
+
+static void ReadJPPrefs() {
+	char *envar;
+    char path[256];
+	
+	envar = getenv("HOME");
+
+	sprintf(path, "%s/Library/Preferences/JAS.jpil", envar);
+	FILE *prefFile;
+	if ((prefFile = fopen(path, "rt"))) {
+		int nullo;
+		int input, output, autoconnect, debug, default_input, default_output, default_system;
+		fscanf(
+				prefFile, "\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",
+				&input,
+				&nullo,
+				&output,
+				&nullo,
+				&autoconnect,
+				&nullo,
+				&default_input, 
+				&nullo,
+				&default_output, 
+				&nullo,
+				&default_system,
+				&nullo,
+				&debug,
+				&nullo,
+				&nullo
+			);
+
+		fclose(prefFile);
+				
+		MAX_INPUTS = input;
+		MAX_OUTPUTS = output;
+		gAUTO_CONNECT = autoconnect;
+	}
+}
 
 static int GetEXEName(DWORD dwProcessID, char* name) {
     DWORD aProcesses [1024], cbNeeded, cProcesses;
@@ -372,11 +418,18 @@ WRAP_THISCALL( ASIOBool __stdcall, IWineASIOImpl_init, (LPWINEASIO iface, void *
 
     TRACE("sample rate: %f\n", This.sample_rate);
 	
+#ifndef _LINUX_
+	ReadJPPrefs();
+#else
     envi = getenv(ENV_INPUTS);
-    if (envi != NULL) MAX_INPUTS = atoi(envi);
+	if (envi != NULL) MAX_INPUTS = atoi(envi);
+#endif
+    
 
+#ifdef _LINUX_
     envi = getenv(ENV_OUTPUTS);
-    if (envi != NULL) MAX_OUTPUTS = atoi(envi); 
+	if (envi != NULL) MAX_OUTPUTS = atoi(envi);
+#endif
 
     // initialize input buffers
 
@@ -451,13 +504,11 @@ WRAP_THISCALL( void __stdcall, IWineASIOImpl_getErrorMessage, (LPWINEASIO iface,
 }
 
 WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_start, (LPWINEASIO iface)) {
-	/*
     char *var_port = NULL;
     char *val_port = NULL;
     const char ** ports;
     int numports;
     int i;
-	*/
 
     if (This.callbacks) {
         This.sample_position = 0;
@@ -469,51 +520,44 @@ WRAP_THISCALL( ASIOError __stdcall, IWineASIOImpl_start, (LPWINEASIO iface)) {
             return ASE_NotPresent;
         }
 		
-		/*
-        ports = fp_jack_get_ports(This.client, NULL, NULL, JackPortIsPhysical | JackPortIsOutput);
-        for(numports = 0; ports && ports[numports]; numports++);
-        for (i = 0; i < MAX_INPUTS; i++)
-        {
-            asprintf(&var_port, "%s%d", MAP_INPORT, i);
-            val_port = getenv(var_port);
-            TRACE("%d: %s %s\n", i, var_port, val_port);
-            free(var_port);
-            var_port = NULL;
+		if(gAUTO_CONNECT) {
+			ports = fp_jack_get_ports(This.client, NULL, NULL, JackPortIsPhysical | JackPortIsOutput);
+			for(numports = 0; ports && ports[numports]; numports++);
+			
+			for (i = 0; i < MAX_INPUTS; i++) {
+				asprintf(&var_port, "%s%d", MAP_INPORT, i);
+				val_port = getenv(var_port);
+				TRACE("%d: %s %s\n", i, var_port, val_port);
+				free(var_port);
+				var_port = NULL;
 
-            if (This.input[i].active == ASIOTrue && (val_port || i < numports))
-                if (fp_jack_connect(This.client,
-                    val_port ? val_port : ports[i],
-                    fp_jack_port_name(This.input[i].port)))
-                {
-                    WARN("input %d connect failed\n", i);
-                }
-        }
-        if (ports)
-           free(ports);
+				if (This.input[i].active == ASIOTrue && (val_port || i < numports)) {
+					if (fp_jack_connect(This.client,val_port ? val_port : ports[i],fp_jack_port_name(This.input[i].port))) {
+						WARN("input %d connect failed\n", i);
+					}
+				}
+			}
+			if (ports) free(ports);
 
-        ports = fp_jack_get_ports(This.client, NULL, NULL, JackPortIsPhysical | JackPortIsInput);
-        for(numports = 0; ports && ports[numports]; numports++);
+			ports = fp_jack_get_ports(This.client, NULL, NULL, JackPortIsPhysical | JackPortIsInput);
+			for(numports = 0; ports && ports[numports]; numports++);
 
-        for (i = 0; (i < MAX_OUTPUTS); i++)
-        {
-            asprintf(&var_port, "%s%d", MAP_OUTPORT, i);
-	    val_port = getenv(var_port);
-            TRACE("%d: %s %s\n", i, var_port, val_port);
-            free(var_port);
-            var_port = NULL;
+			for (i = 0; (i < MAX_OUTPUTS); i++) {
+				asprintf(&var_port, "%s%d", MAP_OUTPORT, i);
+				val_port = getenv(var_port);
+				TRACE("%d: %s %s\n", i, var_port, val_port);
+				free(var_port);
+				var_port = NULL;
                
-            if (This.output[i].active == ASIOTrue && (val_port || i < numports))
-                if (fp_jack_connect(This.client,
-                    fp_jack_port_name(This.output[i].port),
-                    val_port ? val_port : ports[i]))
-                {
-                       WARN("output %d connect failed\n", i);
-                }
-        }
+				if (This.output[i].active == ASIOTrue && (val_port || i < numports)) {
+					if (fp_jack_connect(This.client,fp_jack_port_name(This.output[i].port),val_port ? val_port : ports[i])) {
+						WARN("output %d connect failed\n", i);
+					}
+				}
+			}
         
-        if (ports)
-           free(ports);
-		*/
+			if (ports) free(ports);
+		}
 
         This.state = Run;
         TRACE("started\n");
@@ -896,16 +940,9 @@ static int jack_process(jack_nframes_t nframes, void * arg) {
  * Do the callback in this thread and then switch back to the Jack callback thread.
  */
 static DWORD CALLBACK win32_callback(LPVOID arg) {
-	/*
-	struct sched_param attr;
-	
-	memset(&attr, 0, sizeof(attr));
-
-    attr.sched_priority = 62;
-    pthread_setschedparam(pthread_self(),SCHED_RR,&attr);
-	*/
-	
+#ifndef _LINUX_
 	setThreadToPriority(pthread_self(),96,TRUE,10000000);
+#endif
 
     /* let IWineASIO_Init know we are alive */
     SetEvent(This.start_event);
