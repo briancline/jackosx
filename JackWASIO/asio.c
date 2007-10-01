@@ -29,6 +29,7 @@ Changes Log:
 29-9-2007: Johnny Petrantoni -	added mutex and condition code to synch IT IS WORKING NOW!!! tested down to 256 buffersize using reaper.
 30-9-2007: Johnny Petrantoni -	added JackPilot preferences for virtual-ports and auto connect, added some macros for linux compilation, 
 								removed prepath from libjack.
+2-10-2007: Johnny Petrantoni - added more Linux compatibility code, it should compile now on a linux box (still need edit makefile)
 
 TODO:
 1) We should really free(x) memory of asio buffers.
@@ -56,20 +57,20 @@ TODO:
 #include "wine/library.h"
 #include "wine/debug.h"
 
-#include <Jackmp/jack.h>
-#include <Jackmp/ringbuffer.h>
+#include <Jack/jack.h>
+#include <Jack/ringbuffer.h>
 
 #define IEEE754_64FLOAT 1
 #include "asio.h"
 
-#ifndef _LINUX_
+#ifndef __LINUX__
 #include "pThreadUtilities.h"
 #endif
 
 WINE_DEFAULT_DEBUG_CHANNEL(asio);
 
 #ifndef SONAME_LIBJACK
-	#ifndef _LINUX_
+	#ifndef __LINUX__
 		#define SONAME_LIBJACK "libjack.dylib"
 	#else 
 		#define SONAME_LIBJACK "libjack.so"
@@ -418,15 +419,11 @@ WRAP_THISCALL( ASIOBool __stdcall, IWineASIOImpl_init, (LPWINEASIO iface, void *
 
     TRACE("sample rate: %f\n", This.sample_rate);
 	
-#ifndef _LINUX_
+#ifndef __LINUX__
 	ReadJPPrefs();
 #else
     envi = getenv(ENV_INPUTS);
 	if (envi != NULL) MAX_INPUTS = atoi(envi);
-#endif
-    
-
-#ifdef _LINUX_
     envi = getenv(ENV_OUTPUTS);
 	if (envi != NULL) MAX_OUTPUTS = atoi(envi);
 #endif
@@ -940,8 +937,16 @@ static int jack_process(jack_nframes_t nframes, void * arg) {
  * Do the callback in this thread and then switch back to the Jack callback thread.
  */
 static DWORD CALLBACK win32_callback(LPVOID arg) {
-#ifndef _LINUX_
+#ifndef __LINUX__
 	setThreadToPriority(pthread_self(),96,TRUE,10000000);
+#else 
+	struct sched_param rtparam;
+	
+	memset (&rtparam, 0, sizeof (rtparam));
+	
+	rtparam.sched_priority = 98; // I'm not 100% sure on this...
+	
+	pthread_setschedparam(pthread_self(),SCHED_FIFO,&rtparam);
 #endif
 
     /* let IWineASIO_Init know we are alive */
@@ -1004,8 +1009,6 @@ static DWORD CALLBACK win32_callback(LPVOID arg) {
 			
 			This.toggle = This.toggle ? 0 : 1;
         }
-		
-		//Sleep(This.miliseconds);
     }
 	
 	pthread_mutex_unlock(&This.mutex);
