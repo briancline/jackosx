@@ -3,7 +3,7 @@
  * Copyright (C) 2007 Peter L Jones
  * 
  * Copyright (C) 2007 Johnny Petrantoni
- * Copyright (C) 2007 Stéphane Letz
+ * Copyright (C) 2007 Stephane Letz
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -57,8 +57,13 @@ TODO:
 #include "wine/library.h"
 #include "wine/debug.h"
 
+#ifdef __LINUX__
+#include <jack/jack.h>
+#include <jack/ringbuffer.h>
+#else
 #include <Jack/jack.h>
 #include <Jack/ringbuffer.h>
+#endif
 
 #define IEEE754_64FLOAT 1
 #include "asio.h"
