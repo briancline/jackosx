@@ -76,7 +76,7 @@
 			productName = dummyaudioplug;
 			productReference = 014CEA3E0018CDD111CA2923 /* JackRouter.plugin */;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
 <plist version=\"1.0\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
@@ -364,9 +364,11 @@
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 4B01251B09D2DED5004604C4 /* Build configuration list for PBXProject "jack_router" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 089C166AFE841209C02AAC07 /* dummyaudioplug */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				089C1673FE841209C02AAC07 /* JackRouter */,
 				4B0124F509D2DED3004604C4 /* JackRouter Universal */,
@@ -623,14 +625,13 @@
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
-					"-framework",
-					Jack,
+					"-ljack",
 					"-framework",
 					CoreFoundation,
 				);
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = JackRouter;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = "";
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",

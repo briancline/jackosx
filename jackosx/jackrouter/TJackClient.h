@@ -23,7 +23,7 @@ grame@rd.grame.fr
 #define __TJackClient__
 
 #include <CoreAudio/CoreAudio.h>
-#include <CoreAudio/AudioHardwarePlugin.h>
+#include <CoreAudio/AudioHardwarePlugIn.h>
 #include <IOKit/audio/IOAudioTypes.h>
 #include <string.h>
 #include <jack/jack.h>
@@ -121,6 +121,8 @@ extern "C"
             static string fDeviceName;
             static string fStreamName;
             static string fDeviceManufacturer;
+			static string fInputDataSource;
+			static string fOutputDataSource;
 
             static bool fDeviceRunning;
             static bool fConnected2HAL;

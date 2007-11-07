@@ -20,7 +20,7 @@ grame@rd.grame.fr
 */
 
 #include <CoreFoundation/CoreFoundation.h>
-#include <CoreAudio/AudioHardwarePlugin.h>
+#include <CoreAudio/AudioHardwarePlugIn.h>
 #include <IOKit/audio/IOAudioTypes.h>
 #include <pthread.h>
 

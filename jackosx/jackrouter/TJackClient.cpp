@@ -298,9 +298,11 @@ History
 		JackRouter as default input/output "again"...
 		
 11-04-06 : Version 0.84 : S Letz
-		Fix an Autoconnect/Restore connection issue found with AudioFinder (in kAudioDevicePropertyIOProcStreamUsage)
+		Fix an Autoconnect/Restore connection issue found with AudioFinder (in kAudioDevicePropertyIOProcStreamUsage).
 
-		
+07-11-07 : Version 0.85 : S Letz
+		Implement kAudioDevicePropertyDataSource and kAudioDevicePropertyDataSources.
+
 TODO :
     
         - solve zombification problem of Jack (remove time-out check or use -T option)
@@ -338,9 +340,12 @@ bool TJackClient::fDefaultSystem = true;
 bool TJackClient::fDebug = false;
 list<pair<string, string> > TJackClient::fConnections;
 
-string TJackClient::fDeviceName = "Jack Router";
+string TJackClient::fDeviceName = "JackRouter";
 string TJackClient::fStreamName = "Float32";
 string TJackClient::fDeviceManufacturer = "Grame";
+
+string TJackClient::fInputDataSource = "JackRouter Input";
+string TJackClient::fOutputDataSource = "JackRouter Output";
 
 AudioDeviceID TJackClient::fDeviceID = 0;
 TJackClient* TJackClient::fJackClient = NULL;
@@ -358,6 +363,9 @@ set<string>* TJackClient::fBlackList = NULL;
 #define kJackStreamFormat  kAudioFormatFlagsNativeFloatPacked | kLinearPCMFormatFlagIsNonInterleaved
 
 #define kAudioTimeFlags kAudioTimeStampSampleTimeValid|kAudioTimeStampHostTimeValid|kAudioTimeStampRateScalarValid
+
+#define JackInputDataSource 0
+#define JackOutputDataSource 1
 
 struct stereoList
 {
@@ -383,7 +391,7 @@ static void Print4CharCode(char* msg, long c)
     if (TJackClient::fDebug) {
         UInt32 __4CC_number = (c);
         char __4CC_string[5];
-        memcpy(__4CC_string, &__4CC_number, 4);
+     	*((SInt32*)__4CC_string) = EndianU32_NtoB(__4CC_number);		
         __4CC_string[4] = 0;
         JARLog("%s'%s'\n", (msg), __4CC_string);
     }
@@ -1761,13 +1769,13 @@ OSStatus TJackClient::DeviceGetPropertyInfo(AudioHardwarePlugInRef inSelf,
         case kAudioDevicePropertyDataSources:
 			if (outSize)
                 *outSize = sizeof(UInt32);
-            err = kAudioHardwareUnknownPropertyError;
             break;
 
         case kAudioDevicePropertyDataSourceNameForID:
         case kAudioDevicePropertyDataSourceNameForIDCFString:
-            err = kAudioHardwareUnknownPropertyError;
-            break;
+			if (outSize)
+                *outSize = sizeof(AudioValueTranslation);
+			break;
 
         case kAudioDevicePropertyConfigurationApplication:
             if (outSize)
@@ -2335,9 +2343,19 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
             }
 
         case kAudioDevicePropertyDataSource:
-        case kAudioDevicePropertyDataSources:
-            err = kAudioHardwareUnknownPropertyError;
-            break;
+        case kAudioDevicePropertyDataSources: {
+				if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
+					*ioPropertyDataSize = sizeof(UInt32);
+				} else if (*ioPropertyDataSize < sizeof(UInt32)) {
+					JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n", *ioPropertyDataSize);
+					err = kAudioHardwareBadPropertySizeError;
+				} else {
+					*(UInt32*) outPropertyData = (isInput) ? JackInputDataSource : JackOutputDataSource; 
+					*ioPropertyDataSize = sizeof(UInt32);
+				}
+				JARLog("DeviceGetProperty : kAudioDevicePropertyDataSource ok %ld\n");
+				break;
+		}
 
         case kAudioDevicePropertyPlugIn: {
                 if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
@@ -2413,12 +2431,49 @@ OSStatus TJackClient::DeviceGetProperty(AudioHardwarePlugInRef inSelf,
             break;
 
         case kAudioDevicePropertyDataSourceNameForID: {
-                err = kAudioHardwareUnknownPropertyError;
-                break;
+				if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
+                    *ioPropertyDataSize = (isInput) ? TJackClient::fInputDataSource.size() + 1 : TJackClient::fOutputDataSource.size() + 1;
+                } else if (isInput && *ioPropertyDataSize < sizeof(TJackClient::fInputDataSource.size() + 1)) {
+                    JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n", *ioPropertyDataSize);
+                    err = kAudioHardwareBadPropertySizeError;
+				} else if (!isInput && *ioPropertyDataSize < sizeof(fOutputDataSource)) {
+                    JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n", *ioPropertyDataSize);
+                    err = kAudioHardwareBadPropertySizeError;
+                } else if (outPropertyData) {
+					AudioValueTranslation* data = (AudioValueTranslation*)outPropertyData;
+					if (isInput && (*(UInt32*)data->mInputData) == JackInputDataSource) {
+						data->mOutputDataSize = TJackClient::fInputDataSource.size() + 1; 
+						strcpy((char*)data->mOutputData, TJackClient::fInputDataSource.c_str());
+					} else if (!isInput && (*(UInt32*)data->mInputData) == JackOutputDataSource) {
+						data->mOutputDataSize = TJackClient::fOutputDataSource.size() + 1; 
+						strcpy((char*)data->mOutputData, TJackClient::fOutputDataSource.c_str());
+					}
+				} else {
+					err = kAudioHardwareBadPropertySizeError;
+				}
+				break;
             }
 
         case kAudioDevicePropertyDataSourceNameForIDCFString: {
-                err = kAudioHardwareUnknownPropertyError;
+				if ((outPropertyData == NULL) && (ioPropertyDataSize != NULL)) {
+                    *ioPropertyDataSize = sizeof(CFStringRef);
+                } else if (*ioPropertyDataSize < sizeof (CFStringRef)) {
+                    err = kAudioHardwareBadPropertySizeError;
+                    JARLog("DeviceGetProperty : kAudioHardwareBadPropertySizeError %ld\n", *ioPropertyDataSize);
+				} else if (outPropertyData) {
+					AudioValueTranslation* data = (AudioValueTranslation*)outPropertyData;
+					if (isInput && (*(UInt32*)data->mInputData) == JackInputDataSource) {
+						data->mOutputDataSize = TJackClient::fInputDataSource.size() + 1; 
+						CFStringRef* outString = (CFStringRef*)data->mOutputData;
+						*outString = CFStringCreateWithCString(NULL, TJackClient::fInputDataSource.c_str(), CFStringGetSystemEncoding());
+					} else if (!isInput && (*(UInt32*)data->mInputData) == JackOutputDataSource) {
+						data->mOutputDataSize = TJackClient::fOutputDataSource.size() + 1; 
+						CFStringRef* outString = (CFStringRef*)data->mOutputData;
+						*outString = CFStringCreateWithCString(NULL, TJackClient::fOutputDataSource.c_str(), CFStringGetSystemEncoding());
+					}
+				} else {
+					err = kAudioHardwareBadPropertySizeError;
+				}
                 break;
             }
 
