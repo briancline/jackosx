@@ -7,232 +7,107 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4B53CC7507C0D83B007E636C /* AEffect.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC6407C0D83B007E636C /* AEffect.h */; };
-		4B53CC7607C0D83B007E636C /* aeffectx.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC6507C0D83B007E636C /* aeffectx.h */; };
-		4B53CC7707C0D83B007E636C /* AEffEditor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC6607C0D83B007E636C /* AEffEditor.hpp */; };
-		4B53CC7807C0D83B007E636C /* aeffguieditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B53CC6707C0D83B007E636C /* aeffguieditor.cpp */; };
-		4B53CC7907C0D83B007E636C /* aeffguieditor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC6807C0D83B007E636C /* aeffguieditor.h */; };
-		4B53CC7A07C0D83B007E636C /* AudioEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B53CC6907C0D83B007E636C /* AudioEffect.cpp */; };
-		4B53CC7B07C0D83B007E636C /* AudioEffect.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC6A07C0D83B007E636C /* AudioEffect.hpp */; };
-		4B53CC7C07C0D83B007E636C /* audioeffectx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B53CC6B07C0D83B007E636C /* audioeffectx.cpp */; };
-		4B53CC7D07C0D83B007E636C /* audioeffectx.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC6C07C0D83B007E636C /* audioeffectx.h */; };
-		4B53CC7E07C0D83B007E636C /* vstcontrols.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B53CC6D07C0D83B007E636C /* vstcontrols.cpp */; };
-		4B53CC7F07C0D83B007E636C /* vstcontrols.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC6E07C0D83B007E636C /* vstcontrols.h */; };
-		4B53CC8007C0D83B007E636C /* vstfxstore.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC6F07C0D83B007E636C /* vstfxstore.h */; };
-		4B53CC8107C0D83B007E636C /* vstgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B53CC7007C0D83B007E636C /* vstgui.cpp */; };
-		4B53CC8207C0D83B007E636C /* vstgui.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC7107C0D83B007E636C /* vstgui.h */; };
-		4B53CC8307C0D83B007E636C /* vstplugscarbon.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC7207C0D83B007E636C /* vstplugscarbon.h */; };
-		4B53CC8407C0D83B007E636C /* vstplugsmac.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC7307C0D83B007E636C /* vstplugsmac.h */; };
-		4B53CC8507C0D83B007E636C /* vstplugsmacho.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC7407C0D83B007E636C /* vstplugsmacho.h */; };
-		4BD637D509E53A5E0019B57C /* Info-macho.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4BD637D409E53A5E0019B57C /* Info-macho.plist */; };
-		4BE2E70E09E3F40D009A4D7C /* JackVST.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B2279E6004CD772C00B1A081 /* JackVST.hpp */; };
-		4BE2E70F09E3F40D009A4D7C /* BSizeAlign.h in Headers */ = {isa = PBXBuildFile; fileRef = B2CB9AF706F46796002CF3C1 /* BSizeAlign.h */; };
-		4BE2E71009E3F40D009A4D7C /* JARInsert.h in Headers */ = {isa = PBXBuildFile; fileRef = B2CB9AF906F46796002CF3C1 /* JARInsert.h */; };
-		4BE2E71109E3F40D009A4D7C /* ringbuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = B2CB9AFB06F46796002CF3C1 /* ringbuffer.h */; };
-		4BE2E71209E3F40D009A4D7C /* AEffect.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC6407C0D83B007E636C /* AEffect.h */; };
-		4BE2E71309E3F40D009A4D7C /* aeffectx.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC6507C0D83B007E636C /* aeffectx.h */; };
-		4BE2E71409E3F40D009A4D7C /* AEffEditor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC6607C0D83B007E636C /* AEffEditor.hpp */; };
-		4BE2E71509E3F40D009A4D7C /* aeffguieditor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC6807C0D83B007E636C /* aeffguieditor.h */; };
-		4BE2E71609E3F40D009A4D7C /* AudioEffect.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC6A07C0D83B007E636C /* AudioEffect.hpp */; };
-		4BE2E71709E3F40D009A4D7C /* audioeffectx.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC6C07C0D83B007E636C /* audioeffectx.h */; };
-		4BE2E71809E3F40D009A4D7C /* vstcontrols.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC6E07C0D83B007E636C /* vstcontrols.h */; };
-		4BE2E71909E3F40D009A4D7C /* vstfxstore.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC6F07C0D83B007E636C /* vstfxstore.h */; };
-		4BE2E71A09E3F40D009A4D7C /* vstgui.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC7107C0D83B007E636C /* vstgui.h */; };
-		4BE2E71B09E3F40D009A4D7C /* vstplugscarbon.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC7207C0D83B007E636C /* vstplugscarbon.h */; };
-		4BE2E71C09E3F40D009A4D7C /* vstplugsmac.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC7307C0D83B007E636C /* vstplugsmac.h */; };
-		4BE2E71D09E3F40D009A4D7C /* vstplugsmacho.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B53CC7407C0D83B007E636C /* vstplugsmacho.h */; };
-		4BE2E71F09E3F40D009A4D7C /* PkgInfo in Resources */ = {isa = PBXBuildFile; fileRef = B2FF4ECD0529FC02001F90A7 /* PkgInfo */; };
-		4BE2E72109E3F40D009A4D7C /* JackVST.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2279E5F04CD772C00B1A081 /* JackVST.cpp */; };
-		4BE2E72209E3F40D009A4D7C /* JackVSTMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2FF4ED20529FE06001F90A7 /* JackVSTMain.cpp */; };
-		4BE2E72309E3F40D009A4D7C /* BSizeAlign.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2CB9AF606F46796002CF3C1 /* BSizeAlign.cpp */; };
-		4BE2E72409E3F40D009A4D7C /* JARInsert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2CB9AF806F46796002CF3C1 /* JARInsert.cpp */; };
-		4BE2E72509E3F40D009A4D7C /* ringbuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = B2CB9AFA06F46796002CF3C1 /* ringbuffer.c */; };
-		4BE2E72609E3F40D009A4D7C /* aeffguieditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B53CC6707C0D83B007E636C /* aeffguieditor.cpp */; };
-		4BE2E72709E3F40D009A4D7C /* AudioEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B53CC6907C0D83B007E636C /* AudioEffect.cpp */; };
-		4BE2E72809E3F40D009A4D7C /* audioeffectx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B53CC6B07C0D83B007E636C /* audioeffectx.cpp */; };
-		4BE2E72909E3F40D009A4D7C /* vstcontrols.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B53CC6D07C0D83B007E636C /* vstcontrols.cpp */; };
-		4BE2E72A09E3F40D009A4D7C /* vstgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B53CC7007C0D83B007E636C /* vstgui.cpp */; };
-		4BE2E72C09E3F40D009A4D7C /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B22EE371052900E3008EDF11 /* CoreAudio.framework */; };
-		4BE2E72D09E3F40D009A4D7C /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B282F7CF04CB1F3900ECBF7F /* Carbon.framework */; };
-		4BE2E72E09E3F40D009A4D7C /* Jack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B23C897004CB1A7E00F1E491 /* Jack.framework */; };
-		4BE2E72F09E3F40D009A4D7C /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2CE54B805CA517B00667293 /* QuickTime.framework */; };
-		4BE2E73009E3F40D009A4D7C /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2F0252306F4C83200E9C25F /* CoreFoundation.framework */; };
-		4BE2E73309E3F40D009A4D7C /* PkgInfo in CopyFiles */ = {isa = PBXBuildFile; fileRef = B2FF4ECD0529FC02001F90A7 /* PkgInfo */; };
-		4BE2E73509E3F40D009A4D7C /* PkgInfo in CopyFiles */ = {isa = PBXBuildFile; fileRef = B2FF4ECD0529FC02001F90A7 /* PkgInfo */; };
-		B2CB9AFC06F46796002CF3C1 /* BSizeAlign.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2CB9AF606F46796002CF3C1 /* BSizeAlign.cpp */; };
-		B2CB9AFD06F46796002CF3C1 /* BSizeAlign.h in Headers */ = {isa = PBXBuildFile; fileRef = B2CB9AF706F46796002CF3C1 /* BSizeAlign.h */; };
-		B2CB9AFE06F46796002CF3C1 /* JARInsert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2CB9AF806F46796002CF3C1 /* JARInsert.cpp */; };
-		B2CB9AFF06F46796002CF3C1 /* JARInsert.h in Headers */ = {isa = PBXBuildFile; fileRef = B2CB9AF906F46796002CF3C1 /* JARInsert.h */; };
-		B2CB9B0006F46796002CF3C1 /* ringbuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = B2CB9AFA06F46796002CF3C1 /* ringbuffer.c */; };
-		B2CB9B0106F46796002CF3C1 /* ringbuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = B2CB9AFB06F46796002CF3C1 /* ringbuffer.h */; };
-		B2CE543605CA4EE400667293 /* PkgInfo in CopyFiles */ = {isa = PBXBuildFile; fileRef = B2FF4ECD0529FC02001F90A7 /* PkgInfo */; };
-		B2CE543C05CA4EF600667293 /* PkgInfo in CopyFiles */ = {isa = PBXBuildFile; fileRef = B2FF4ECD0529FC02001F90A7 /* PkgInfo */; };
-		B2CE54B905CA517B00667293 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2CE54B805CA517B00667293 /* QuickTime.framework */; };
-		B2F0252406F4C83200E9C25F /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2F0252306F4C83200E9C25F /* CoreFoundation.framework */; };
-		B2FF4EC20529FBB0001F90A7 /* JackVST.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2279E5F04CD772C00B1A081 /* JackVST.cpp */; };
-		B2FF4EC30529FBB0001F90A7 /* JackVST.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B2279E6004CD772C00B1A081 /* JackVST.hpp */; };
-		B2FF4ECE0529FC02001F90A7 /* PkgInfo in Resources */ = {isa = PBXBuildFile; fileRef = B2FF4ECD0529FC02001F90A7 /* PkgInfo */; };
-		B2FF4ECF0529FCE3001F90A7 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B22EE371052900E3008EDF11 /* CoreAudio.framework */; };
-		B2FF4ED00529FCE3001F90A7 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B282F7CF04CB1F3900ECBF7F /* Carbon.framework */; };
-		B2FF4ED10529FCE4001F90A7 /* Jack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B23C897004CB1A7E00F1E491 /* Jack.framework */; };
-		B2FF4ED30529FE06001F90A7 /* JackVSTMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2FF4ED20529FE06001F90A7 /* JackVSTMain.cpp */; };
+		4BBCE6F90C68A68100E1DF19 /* aeffect.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BBCE6DA0C68A68100E1DF19 /* aeffect.h */; };
+		4BBCE6FA0C68A68100E1DF19 /* aeffectx.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BBCE6DB0C68A68100E1DF19 /* aeffectx.h */; };
+		4BBCE6FB0C68A68100E1DF19 /* aeffeditor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BBCE6DC0C68A68100E1DF19 /* aeffeditor.h */; };
+		4BBCE6FC0C68A68100E1DF19 /* AEffEditor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4BBCE6DD0C68A68100E1DF19 /* AEffEditor.hpp */; };
+		4BBCE6FD0C68A68100E1DF19 /* aeffguieditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BBCE6DE0C68A68100E1DF19 /* aeffguieditor.cpp */; };
+		4BBCE6FE0C68A68100E1DF19 /* aeffguieditor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BBCE6DF0C68A68100E1DF19 /* aeffguieditor.h */; };
+		4BBCE6FF0C68A68100E1DF19 /* audioeffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BBCE6E00C68A68100E1DF19 /* audioeffect.cpp */; };
+		4BBCE7000C68A68100E1DF19 /* audioeffect.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BBCE6E10C68A68100E1DF19 /* audioeffect.h */; };
+		4BBCE7010C68A68100E1DF19 /* AudioEffect.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4BBCE6E20C68A68100E1DF19 /* AudioEffect.hpp */; };
+		4BBCE7020C68A68100E1DF19 /* audioeffectx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BBCE6E30C68A68100E1DF19 /* audioeffectx.cpp */; };
+		4BBCE7030C68A68100E1DF19 /* audioeffectx.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BBCE6E40C68A68100E1DF19 /* audioeffectx.h */; };
+		4BBCE7040C68A68100E1DF19 /* cfileselector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BBCE6E50C68A68100E1DF19 /* cfileselector.cpp */; };
+		4BBCE7050C68A68100E1DF19 /* cfileselector.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BBCE6E60C68A68100E1DF19 /* cfileselector.h */; };
+		4BBCE7060C68A68100E1DF19 /* Changelog in Resources */ = {isa = PBXBuildFile; fileRef = 4BBCE6E70C68A68100E1DF19 /* Changelog */; };
+		4BBCE7070C68A68100E1DF19 /* cscrollview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BBCE6E80C68A68100E1DF19 /* cscrollview.cpp */; };
+		4BBCE7080C68A68100E1DF19 /* cscrollview.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BBCE6E90C68A68100E1DF19 /* cscrollview.h */; };
+		4BBCE7090C68A68100E1DF19 /* ctabview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BBCE6EA0C68A68100E1DF19 /* ctabview.cpp */; };
+		4BBCE70A0C68A68100E1DF19 /* ctabview.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BBCE6EB0C68A68100E1DF19 /* ctabview.h */; };
+		4BBCE70D0C68A68100E1DF19 /* vstcontrols.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BBCE6EE0C68A68100E1DF19 /* vstcontrols.cpp */; };
+		4BBCE70E0C68A68100E1DF19 /* vstcontrols.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BBCE6EF0C68A68100E1DF19 /* vstcontrols.h */; };
+		4BBCE70F0C68A68100E1DF19 /* vstfxstore.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BBCE6F00C68A68100E1DF19 /* vstfxstore.h */; };
+		4BBCE7100C68A68100E1DF19 /* vstgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BBCE6F10C68A68100E1DF19 /* vstgui.cpp */; };
+		4BBCE7110C68A68100E1DF19 /* vstgui.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BBCE6F20C68A68100E1DF19 /* vstgui.h */; };
+		4BBCE7120C68A68100E1DF19 /* vstkeycode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BBCE6F30C68A68100E1DF19 /* vstkeycode.h */; };
+		4BBCE7140C68A68100E1DF19 /* vstplugscarbon.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BBCE6F50C68A68100E1DF19 /* vstplugscarbon.h */; };
+		4BBCE7150C68A68100E1DF19 /* vstplugsmac.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BBCE6F60C68A68100E1DF19 /* vstplugsmac.h */; };
+		4BBCE7160C68A68100E1DF19 /* vstplugsmacho.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BBCE6F70C68A68100E1DF19 /* vstplugsmacho.h */; };
+		4BBCE7170C68A68100E1DF19 /* vstplugsquartz.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BBCE6F80C68A68100E1DF19 /* vstplugsquartz.h */; };
+		4BE88DE10C68A21F0095546B /* JackVST.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B2279E6004CD772C00B1A081 /* JackVST.hpp */; };
+		4BE88DE20C68A21F0095546B /* BSizeAlign.h in Headers */ = {isa = PBXBuildFile; fileRef = B2CB9AF706F46796002CF3C1 /* BSizeAlign.h */; };
+		4BE88DE30C68A21F0095546B /* JARInsert.h in Headers */ = {isa = PBXBuildFile; fileRef = B2CB9AF906F46796002CF3C1 /* JARInsert.h */; };
+		4BE88DE40C68A21F0095546B /* ringbuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = B2CB9AFB06F46796002CF3C1 /* ringbuffer.h */; };
+		4BE88DF20C68A21F0095546B /* PkgInfo in Resources */ = {isa = PBXBuildFile; fileRef = B2FF4ECD0529FC02001F90A7 /* PkgInfo */; };
+		4BE88DF40C68A21F0095546B /* JackVST.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2279E5F04CD772C00B1A081 /* JackVST.cpp */; };
+		4BE88DF50C68A21F0095546B /* JackVSTMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2FF4ED20529FE06001F90A7 /* JackVSTMain.cpp */; };
+		4BE88DF60C68A21F0095546B /* BSizeAlign.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2CB9AF606F46796002CF3C1 /* BSizeAlign.cpp */; };
+		4BE88DF70C68A21F0095546B /* JARInsert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2CB9AF806F46796002CF3C1 /* JARInsert.cpp */; };
+		4BE88DF80C68A21F0095546B /* ringbuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = B2CB9AFA06F46796002CF3C1 /* ringbuffer.c */; };
+		4BE88DFF0C68A21F0095546B /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B22EE371052900E3008EDF11 /* CoreAudio.framework */; };
+		4BE88E000C68A21F0095546B /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B282F7CF04CB1F3900ECBF7F /* Carbon.framework */; };
+		4BE88E010C68A21F0095546B /* Jack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B23C897004CB1A7E00F1E491 /* Jack.framework */; };
+		4BE88E020C68A21F0095546B /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2CE54B805CA517B00667293 /* QuickTime.framework */; };
+		4BE88E030C68A21F0095546B /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2F0252306F4C83200E9C25F /* CoreFoundation.framework */; };
+		4BE88E060C68A21F0095546B /* PkgInfo in CopyFiles */ = {isa = PBXBuildFile; fileRef = B2FF4ECD0529FC02001F90A7 /* PkgInfo */; };
+		4BE88E080C68A21F0095546B /* PkgInfo in CopyFiles */ = {isa = PBXBuildFile; fileRef = B2FF4ECD0529FC02001F90A7 /* PkgInfo */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXBuildStyle section */
-		014CEA420018CDE011CA2923 /* Development */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				OPTIMIZATION_CFLAGS = "-O0";
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		014CEA430018CDE011CA2923 /* Deployment */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-/* End PBXBuildStyle section */
-
-/* Begin PBXBundleTarget section */
-		B2FF4EC00529FBA9001F90A7 /* mach-0 */ = {
-			isa = PBXBundleTarget;
-			buildConfigurationList = 4BE2E70809E3F40D009A4D7C /* Build configuration list for PBXBundleTarget "mach-0" */;
-			buildPhases = (
-				B2FF4EBB0529FBA9001F90A7 /* Headers */,
-				B2FF4EBC0529FBA9001F90A7 /* Resources */,
-				B2FF4EBD0529FBA9001F90A7 /* Sources */,
-				B2FF4EBE0529FBA9001F90A7 /* Frameworks */,
-				B2FF4EBF0529FBA9001F90A7 /* Rez */,
-				B2CE543105CA4ECD00667293 /* CopyFiles */,
-				B2CE543905CA4EEB00667293 /* CopyFiles */,
-			);
-			buildSettings = {
-				HEADER_SEARCH_PATHS = "../VST-VST_CFM/VSTSDK";
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "-DDEBUG=1";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREFIX_HEADER = vstplugsmacho.h;
-				PRODUCT_NAME = "JACK-insert";
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = vst;
-			};
-			dependencies = (
-			);
-			name = "mach-0";
-			productInstallPath = "$(USER_LIBRARY_DIR)/Bundles";
-			productName = "mach-0";
-			productReference = B2FF4EC10529FBA9001F90A7 /* JACK-insert.vst */;
-			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
-<plist version=\"1.0\">
-<dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
-	<key>CFBundleExecutable</key>
-	<string>JACK-insert</string>
-	<key>CFBundleGetInfoString</key>
-	<string>© 03-06, Johnny Petrantoni.</string>
-	<key>CFBundleIconFile</key>
-	<string></string>
-	<key>CFBundleIdentifier</key>
-	<string>gpl.jackosx.com.JACK-insert.vst</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>JACK-insert</string>
-	<key>CFBundlePackageType</key>
-	<string>BNDL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>1.6.1</string>
-	<key>CFBundleSignature</key>
-	<string>ElCa</string>
-	<key>CFBundleVersion</key>
-	<string>1.6.1</string>
-</dict>
-</plist>
-";
-		};
-/* End PBXBundleTarget section */
-
 /* Begin PBXCopyFilesBuildPhase section */
-		4BE2E73209E3F40D009A4D7C /* CopyFiles */ = {
+		4BE88E050C68A21F0095546B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
-				4BE2E73309E3F40D009A4D7C /* PkgInfo in CopyFiles */,
+				4BE88E060C68A21F0095546B /* PkgInfo in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4BE2E73409E3F40D009A4D7C /* CopyFiles */ = {
+		4BE88E070C68A21F0095546B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = ..;
 			dstSubfolderSpec = 7;
 			files = (
-				4BE2E73509E3F40D009A4D7C /* PkgInfo in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B2CE543105CA4ECD00667293 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 7;
-			files = (
-				B2CE543605CA4EE400667293 /* PkgInfo in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B2CE543905CA4EEB00667293 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = ..;
-			dstSubfolderSpec = 7;
-			files = (
-				B2CE543C05CA4EF600667293 /* PkgInfo in CopyFiles */,
+				4BE88E080C68A21F0095546B /* PkgInfo in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4B53CC6407C0D83B007E636C /* AEffect.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AEffect.h; sourceTree = "<group>"; };
-		4B53CC6507C0D83B007E636C /* aeffectx.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = aeffectx.h; sourceTree = "<group>"; };
-		4B53CC6607C0D83B007E636C /* AEffEditor.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = AEffEditor.hpp; sourceTree = "<group>"; };
-		4B53CC6707C0D83B007E636C /* aeffguieditor.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = aeffguieditor.cpp; sourceTree = "<group>"; };
-		4B53CC6807C0D83B007E636C /* aeffguieditor.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = aeffguieditor.h; sourceTree = "<group>"; };
-		4B53CC6907C0D83B007E636C /* AudioEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = AudioEffect.cpp; sourceTree = "<group>"; };
-		4B53CC6A07C0D83B007E636C /* AudioEffect.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = AudioEffect.hpp; sourceTree = "<group>"; };
-		4B53CC6B07C0D83B007E636C /* audioeffectx.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = audioeffectx.cpp; sourceTree = "<group>"; };
-		4B53CC6C07C0D83B007E636C /* audioeffectx.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = audioeffectx.h; sourceTree = "<group>"; };
-		4B53CC6D07C0D83B007E636C /* vstcontrols.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = vstcontrols.cpp; sourceTree = "<group>"; };
-		4B53CC6E07C0D83B007E636C /* vstcontrols.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = vstcontrols.h; sourceTree = "<group>"; };
-		4B53CC6F07C0D83B007E636C /* vstfxstore.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = vstfxstore.h; sourceTree = "<group>"; };
-		4B53CC7007C0D83B007E636C /* vstgui.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = vstgui.cpp; sourceTree = "<group>"; };
-		4B53CC7107C0D83B007E636C /* vstgui.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = vstgui.h; sourceTree = "<group>"; };
-		4B53CC7207C0D83B007E636C /* vstplugscarbon.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = vstplugscarbon.h; sourceTree = "<group>"; };
-		4B53CC7307C0D83B007E636C /* vstplugsmac.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = vstplugsmac.h; sourceTree = "<group>"; };
-		4B53CC7407C0D83B007E636C /* vstplugsmacho.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = vstplugsmacho.h; sourceTree = "<group>"; };
-		4BD637D409E53A5E0019B57C /* Info-macho.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-macho.plist"; sourceTree = SOURCE_ROOT; };
-		4BE2E73B09E3F40D009A4D7C /* JACK-insert.vst */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "JACK-insert.vst"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BBCE6DA0C68A68100E1DF19 /* aeffect.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = aeffect.h; path = "../VST-VST_CFM/VSTSDK24/aeffect.h"; sourceTree = SOURCE_ROOT; };
+		4BBCE6DB0C68A68100E1DF19 /* aeffectx.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = aeffectx.h; path = "../VST-VST_CFM/VSTSDK24/aeffectx.h"; sourceTree = SOURCE_ROOT; };
+		4BBCE6DC0C68A68100E1DF19 /* aeffeditor.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = aeffeditor.h; path = "../VST-VST_CFM/VSTSDK24/aeffeditor.h"; sourceTree = SOURCE_ROOT; };
+		4BBCE6DD0C68A68100E1DF19 /* AEffEditor.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = AEffEditor.hpp; path = "../VST-VST_CFM/VSTSDK24/AEffEditor.hpp"; sourceTree = SOURCE_ROOT; };
+		4BBCE6DE0C68A68100E1DF19 /* aeffguieditor.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = aeffguieditor.cpp; path = "../VST-VST_CFM/VSTSDK24/aeffguieditor.cpp"; sourceTree = SOURCE_ROOT; };
+		4BBCE6DF0C68A68100E1DF19 /* aeffguieditor.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = aeffguieditor.h; path = "../VST-VST_CFM/VSTSDK24/aeffguieditor.h"; sourceTree = SOURCE_ROOT; };
+		4BBCE6E00C68A68100E1DF19 /* audioeffect.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = audioeffect.cpp; path = "../VST-VST_CFM/VSTSDK24/audioeffect.cpp"; sourceTree = SOURCE_ROOT; };
+		4BBCE6E10C68A68100E1DF19 /* audioeffect.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = audioeffect.h; path = "../VST-VST_CFM/VSTSDK24/audioeffect.h"; sourceTree = SOURCE_ROOT; };
+		4BBCE6E20C68A68100E1DF19 /* AudioEffect.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; name = AudioEffect.hpp; path = "../VST-VST_CFM/VSTSDK24/AudioEffect.hpp"; sourceTree = SOURCE_ROOT; };
+		4BBCE6E30C68A68100E1DF19 /* audioeffectx.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = audioeffectx.cpp; path = "../VST-VST_CFM/VSTSDK24/audioeffectx.cpp"; sourceTree = SOURCE_ROOT; };
+		4BBCE6E40C68A68100E1DF19 /* audioeffectx.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = audioeffectx.h; path = "../VST-VST_CFM/VSTSDK24/audioeffectx.h"; sourceTree = SOURCE_ROOT; };
+		4BBCE6E50C68A68100E1DF19 /* cfileselector.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = cfileselector.cpp; path = "../VST-VST_CFM/VSTSDK24/cfileselector.cpp"; sourceTree = SOURCE_ROOT; };
+		4BBCE6E60C68A68100E1DF19 /* cfileselector.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = cfileselector.h; path = "../VST-VST_CFM/VSTSDK24/cfileselector.h"; sourceTree = SOURCE_ROOT; };
+		4BBCE6E70C68A68100E1DF19 /* Changelog */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = Changelog; path = "../VST-VST_CFM/VSTSDK24/Changelog"; sourceTree = SOURCE_ROOT; };
+		4BBCE6E80C68A68100E1DF19 /* cscrollview.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = cscrollview.cpp; path = "../VST-VST_CFM/VSTSDK24/cscrollview.cpp"; sourceTree = SOURCE_ROOT; };
+		4BBCE6E90C68A68100E1DF19 /* cscrollview.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = cscrollview.h; path = "../VST-VST_CFM/VSTSDK24/cscrollview.h"; sourceTree = SOURCE_ROOT; };
+		4BBCE6EA0C68A68100E1DF19 /* ctabview.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = ctabview.cpp; path = "../VST-VST_CFM/VSTSDK24/ctabview.cpp"; sourceTree = SOURCE_ROOT; };
+		4BBCE6EB0C68A68100E1DF19 /* ctabview.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ctabview.h; path = "../VST-VST_CFM/VSTSDK24/ctabview.h"; sourceTree = SOURCE_ROOT; };
+		4BBCE6EE0C68A68100E1DF19 /* vstcontrols.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = vstcontrols.cpp; path = "../VST-VST_CFM/VSTSDK24/vstcontrols.cpp"; sourceTree = SOURCE_ROOT; };
+		4BBCE6EF0C68A68100E1DF19 /* vstcontrols.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = vstcontrols.h; path = "../VST-VST_CFM/VSTSDK24/vstcontrols.h"; sourceTree = SOURCE_ROOT; };
+		4BBCE6F00C68A68100E1DF19 /* vstfxstore.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = vstfxstore.h; path = "../VST-VST_CFM/VSTSDK24/vstfxstore.h"; sourceTree = SOURCE_ROOT; };
+		4BBCE6F10C68A68100E1DF19 /* vstgui.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = vstgui.cpp; path = "../VST-VST_CFM/VSTSDK24/vstgui.cpp"; sourceTree = SOURCE_ROOT; };
+		4BBCE6F20C68A68100E1DF19 /* vstgui.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = vstgui.h; path = "../VST-VST_CFM/VSTSDK24/vstgui.h"; sourceTree = SOURCE_ROOT; };
+		4BBCE6F30C68A68100E1DF19 /* vstkeycode.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = vstkeycode.h; path = "../VST-VST_CFM/VSTSDK24/vstkeycode.h"; sourceTree = SOURCE_ROOT; };
+		4BBCE6F50C68A68100E1DF19 /* vstplugscarbon.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = vstplugscarbon.h; path = "../VST-VST_CFM/VSTSDK24/vstplugscarbon.h"; sourceTree = SOURCE_ROOT; };
+		4BBCE6F60C68A68100E1DF19 /* vstplugsmac.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = vstplugsmac.h; path = "../VST-VST_CFM/VSTSDK24/vstplugsmac.h"; sourceTree = SOURCE_ROOT; };
+		4BBCE6F70C68A68100E1DF19 /* vstplugsmacho.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = vstplugsmacho.h; path = "../VST-VST_CFM/VSTSDK24/vstplugsmacho.h"; sourceTree = SOURCE_ROOT; };
+		4BBCE6F80C68A68100E1DF19 /* vstplugsquartz.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = vstplugsquartz.h; path = "../VST-VST_CFM/VSTSDK24/vstplugsquartz.h"; sourceTree = SOURCE_ROOT; };
+		4BE88E0E0C68A21F0095546B /* JACK-insert.vst */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "JACK-insert.vst"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BE88E1D0C68A27B0095546B /* Info-mach_0.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-mach_0.plist"; sourceTree = "<group>"; };
 		B2279E5F04CD772C00B1A081 /* JackVST.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = JackVST.cpp; sourceTree = "<group>"; };
 		B2279E6004CD772C00B1A081 /* JackVST.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = JackVST.hpp; sourceTree = "<group>"; };
 		B22EE371052900E3008EDF11 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
@@ -246,33 +121,20 @@
 		B2CB9AFB06F46796002CF3C1 /* ringbuffer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ringbuffer.h; path = ../JARInsert/ringbuffer.h; sourceTree = SOURCE_ROOT; };
 		B2CE54B805CA517B00667293 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		B2F0252306F4C83200E9C25F /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
-		B2FF4EC10529FBA9001F90A7 /* JACK-insert.vst */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = "JACK-insert.vst"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2FF4ECD0529FC02001F90A7 /* PkgInfo */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = PkgInfo; sourceTree = "<group>"; };
 		B2FF4ED20529FE06001F90A7 /* JackVSTMain.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = JackVSTMain.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		4BE2E72B09E3F40D009A4D7C /* Frameworks */ = {
+		4BE88DFE0C68A21F0095546B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4BE2E72C09E3F40D009A4D7C /* CoreAudio.framework in Frameworks */,
-				4BE2E72D09E3F40D009A4D7C /* Carbon.framework in Frameworks */,
-				4BE2E72E09E3F40D009A4D7C /* Jack.framework in Frameworks */,
-				4BE2E72F09E3F40D009A4D7C /* QuickTime.framework in Frameworks */,
-				4BE2E73009E3F40D009A4D7C /* CoreFoundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B2FF4EBE0529FBA9001F90A7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B2FF4ECF0529FCE3001F90A7 /* CoreAudio.framework in Frameworks */,
-				B2FF4ED00529FCE3001F90A7 /* Carbon.framework in Frameworks */,
-				B2FF4ED10529FCE4001F90A7 /* Jack.framework in Frameworks */,
-				B2CE54B905CA517B00667293 /* QuickTime.framework in Frameworks */,
-				B2F0252406F4C83200E9C25F /* CoreFoundation.framework in Frameworks */,
+				4BE88DFF0C68A21F0095546B /* CoreAudio.framework in Frameworks */,
+				4BE88E000C68A21F0095546B /* Carbon.framework in Frameworks */,
+				4BE88E010C68A21F0095546B /* Jack.framework in Frameworks */,
+				4BE88E020C68A21F0095546B /* QuickTime.framework in Frameworks */,
+				4BE88E030C68A21F0095546B /* CoreFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,12 +144,12 @@
 		089C166AFE841209C02AAC07 /* bundle_test */ = {
 			isa = PBXGroup;
 			children = (
-				4B53CC6307C0D83B007E636C /* VSTSDK */,
+				4BBCE6D90C68A68100E1DF19 /* VSTSDK24 */,
 				B2FF4ECC0529FBBF001F90A7 /* Resources */,
 				08FB77AFFE84173DC02AAC07 /* src */,
 				089C1671FE841209C02AAC07 /* Frameworks and Libraries */,
 				19C28FB8FE9D52D311CA2CBB /* Products */,
-				4BD637D409E53A5E0019B57C /* Info-macho.plist */,
+				4BE88E1D0C68A27B0095546B /* Info-mach_0.plist */,
 			);
 			name = bundle_test;
 			sourceTree = "<group>";
@@ -318,35 +180,45 @@
 		19C28FB8FE9D52D311CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B2FF4EC10529FBA9001F90A7 /* JACK-insert.vst */,
-				4BE2E73B09E3F40D009A4D7C /* JACK-insert.vst */,
+				4BE88E0E0C68A21F0095546B /* JACK-insert.vst */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		4B53CC6307C0D83B007E636C /* VSTSDK */ = {
+		4BBCE6D90C68A68100E1DF19 /* VSTSDK24 */ = {
 			isa = PBXGroup;
 			children = (
-				4B53CC6407C0D83B007E636C /* AEffect.h */,
-				4B53CC6507C0D83B007E636C /* aeffectx.h */,
-				4B53CC6607C0D83B007E636C /* AEffEditor.hpp */,
-				4B53CC6707C0D83B007E636C /* aeffguieditor.cpp */,
-				4B53CC6807C0D83B007E636C /* aeffguieditor.h */,
-				4B53CC6907C0D83B007E636C /* AudioEffect.cpp */,
-				4B53CC6A07C0D83B007E636C /* AudioEffect.hpp */,
-				4B53CC6B07C0D83B007E636C /* audioeffectx.cpp */,
-				4B53CC6C07C0D83B007E636C /* audioeffectx.h */,
-				4B53CC6D07C0D83B007E636C /* vstcontrols.cpp */,
-				4B53CC6E07C0D83B007E636C /* vstcontrols.h */,
-				4B53CC6F07C0D83B007E636C /* vstfxstore.h */,
-				4B53CC7007C0D83B007E636C /* vstgui.cpp */,
-				4B53CC7107C0D83B007E636C /* vstgui.h */,
-				4B53CC7207C0D83B007E636C /* vstplugscarbon.h */,
-				4B53CC7307C0D83B007E636C /* vstplugsmac.h */,
-				4B53CC7407C0D83B007E636C /* vstplugsmacho.h */,
+				4BBCE6DA0C68A68100E1DF19 /* aeffect.h */,
+				4BBCE6DB0C68A68100E1DF19 /* aeffectx.h */,
+				4BBCE6DC0C68A68100E1DF19 /* aeffeditor.h */,
+				4BBCE6DD0C68A68100E1DF19 /* AEffEditor.hpp */,
+				4BBCE6DE0C68A68100E1DF19 /* aeffguieditor.cpp */,
+				4BBCE6DF0C68A68100E1DF19 /* aeffguieditor.h */,
+				4BBCE6E00C68A68100E1DF19 /* audioeffect.cpp */,
+				4BBCE6E10C68A68100E1DF19 /* audioeffect.h */,
+				4BBCE6E20C68A68100E1DF19 /* AudioEffect.hpp */,
+				4BBCE6E30C68A68100E1DF19 /* audioeffectx.cpp */,
+				4BBCE6E40C68A68100E1DF19 /* audioeffectx.h */,
+				4BBCE6E50C68A68100E1DF19 /* cfileselector.cpp */,
+				4BBCE6E60C68A68100E1DF19 /* cfileselector.h */,
+				4BBCE6E70C68A68100E1DF19 /* Changelog */,
+				4BBCE6E80C68A68100E1DF19 /* cscrollview.cpp */,
+				4BBCE6E90C68A68100E1DF19 /* cscrollview.h */,
+				4BBCE6EA0C68A68100E1DF19 /* ctabview.cpp */,
+				4BBCE6EB0C68A68100E1DF19 /* ctabview.h */,
+				4BBCE6EE0C68A68100E1DF19 /* vstcontrols.cpp */,
+				4BBCE6EF0C68A68100E1DF19 /* vstcontrols.h */,
+				4BBCE6F00C68A68100E1DF19 /* vstfxstore.h */,
+				4BBCE6F10C68A68100E1DF19 /* vstgui.cpp */,
+				4BBCE6F20C68A68100E1DF19 /* vstgui.h */,
+				4BBCE6F30C68A68100E1DF19 /* vstkeycode.h */,
+				4BBCE6F50C68A68100E1DF19 /* vstplugscarbon.h */,
+				4BBCE6F60C68A68100E1DF19 /* vstplugsmac.h */,
+				4BBCE6F70C68A68100E1DF19 /* vstplugsmacho.h */,
+				4BBCE6F80C68A68100E1DF19 /* vstplugsquartz.h */,
 			);
-			name = VSTSDK;
-			path = "../VST-VST_CFM/VSTSDK";
+			name = VSTSDK24;
+			path = "../VST-VST_CFM/VSTSDK24";
 			sourceTree = SOURCE_ROOT;
 		};
 		B2CB9AF006F46782002CF3C1 /* JARInsertLIB */ = {
@@ -373,91 +245,59 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		4BE2E70D09E3F40D009A4D7C /* Headers */ = {
+		4BE88DE00C68A21F0095546B /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4BE2E70E09E3F40D009A4D7C /* JackVST.hpp in Headers */,
-				4BE2E70F09E3F40D009A4D7C /* BSizeAlign.h in Headers */,
-				4BE2E71009E3F40D009A4D7C /* JARInsert.h in Headers */,
-				4BE2E71109E3F40D009A4D7C /* ringbuffer.h in Headers */,
-				4BE2E71209E3F40D009A4D7C /* AEffect.h in Headers */,
-				4BE2E71309E3F40D009A4D7C /* aeffectx.h in Headers */,
-				4BE2E71409E3F40D009A4D7C /* AEffEditor.hpp in Headers */,
-				4BE2E71509E3F40D009A4D7C /* aeffguieditor.h in Headers */,
-				4BE2E71609E3F40D009A4D7C /* AudioEffect.hpp in Headers */,
-				4BE2E71709E3F40D009A4D7C /* audioeffectx.h in Headers */,
-				4BE2E71809E3F40D009A4D7C /* vstcontrols.h in Headers */,
-				4BE2E71909E3F40D009A4D7C /* vstfxstore.h in Headers */,
-				4BE2E71A09E3F40D009A4D7C /* vstgui.h in Headers */,
-				4BE2E71B09E3F40D009A4D7C /* vstplugscarbon.h in Headers */,
-				4BE2E71C09E3F40D009A4D7C /* vstplugsmac.h in Headers */,
-				4BE2E71D09E3F40D009A4D7C /* vstplugsmacho.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B2FF4EBB0529FBA9001F90A7 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B2FF4EC30529FBB0001F90A7 /* JackVST.hpp in Headers */,
-				B2CB9AFD06F46796002CF3C1 /* BSizeAlign.h in Headers */,
-				B2CB9AFF06F46796002CF3C1 /* JARInsert.h in Headers */,
-				B2CB9B0106F46796002CF3C1 /* ringbuffer.h in Headers */,
-				4B53CC7507C0D83B007E636C /* AEffect.h in Headers */,
-				4B53CC7607C0D83B007E636C /* aeffectx.h in Headers */,
-				4B53CC7707C0D83B007E636C /* AEffEditor.hpp in Headers */,
-				4B53CC7907C0D83B007E636C /* aeffguieditor.h in Headers */,
-				4B53CC7B07C0D83B007E636C /* AudioEffect.hpp in Headers */,
-				4B53CC7D07C0D83B007E636C /* audioeffectx.h in Headers */,
-				4B53CC7F07C0D83B007E636C /* vstcontrols.h in Headers */,
-				4B53CC8007C0D83B007E636C /* vstfxstore.h in Headers */,
-				4B53CC8207C0D83B007E636C /* vstgui.h in Headers */,
-				4B53CC8307C0D83B007E636C /* vstplugscarbon.h in Headers */,
-				4B53CC8407C0D83B007E636C /* vstplugsmac.h in Headers */,
-				4B53CC8507C0D83B007E636C /* vstplugsmacho.h in Headers */,
+				4BE88DE10C68A21F0095546B /* JackVST.hpp in Headers */,
+				4BE88DE20C68A21F0095546B /* BSizeAlign.h in Headers */,
+				4BE88DE30C68A21F0095546B /* JARInsert.h in Headers */,
+				4BE88DE40C68A21F0095546B /* ringbuffer.h in Headers */,
+				4BBCE6F90C68A68100E1DF19 /* aeffect.h in Headers */,
+				4BBCE6FA0C68A68100E1DF19 /* aeffectx.h in Headers */,
+				4BBCE6FB0C68A68100E1DF19 /* aeffeditor.h in Headers */,
+				4BBCE6FC0C68A68100E1DF19 /* AEffEditor.hpp in Headers */,
+				4BBCE6FE0C68A68100E1DF19 /* aeffguieditor.h in Headers */,
+				4BBCE7000C68A68100E1DF19 /* audioeffect.h in Headers */,
+				4BBCE7010C68A68100E1DF19 /* AudioEffect.hpp in Headers */,
+				4BBCE7030C68A68100E1DF19 /* audioeffectx.h in Headers */,
+				4BBCE7050C68A68100E1DF19 /* cfileselector.h in Headers */,
+				4BBCE7080C68A68100E1DF19 /* cscrollview.h in Headers */,
+				4BBCE70A0C68A68100E1DF19 /* ctabview.h in Headers */,
+				4BBCE70E0C68A68100E1DF19 /* vstcontrols.h in Headers */,
+				4BBCE70F0C68A68100E1DF19 /* vstfxstore.h in Headers */,
+				4BBCE7110C68A68100E1DF19 /* vstgui.h in Headers */,
+				4BBCE7120C68A68100E1DF19 /* vstkeycode.h in Headers */,
+				4BBCE7140C68A68100E1DF19 /* vstplugscarbon.h in Headers */,
+				4BBCE7150C68A68100E1DF19 /* vstplugsmac.h in Headers */,
+				4BBCE7160C68A68100E1DF19 /* vstplugsmacho.h in Headers */,
+				4BBCE7170C68A68100E1DF19 /* vstplugsquartz.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		4BE2E70C09E3F40D009A4D7C /* mach-0 Universal */ = {
+		4BE88DDF0C68A21F0095546B /* mach-0 Universal */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4BE2E73609E3F40D009A4D7C /* Build configuration list for PBXNativeTarget "mach-0 Universal" */;
+			buildConfigurationList = 4BE88E090C68A21F0095546B /* Build configuration list for PBXNativeTarget "mach-0 Universal" */;
 			buildPhases = (
-				4BE2E70D09E3F40D009A4D7C /* Headers */,
-				4BE2E71E09E3F40D009A4D7C /* Resources */,
-				4BE2E72009E3F40D009A4D7C /* Sources */,
-				4BE2E72B09E3F40D009A4D7C /* Frameworks */,
-				4BE2E73109E3F40D009A4D7C /* Rez */,
-				4BE2E73209E3F40D009A4D7C /* CopyFiles */,
-				4BE2E73409E3F40D009A4D7C /* CopyFiles */,
+				4BE88DE00C68A21F0095546B /* Headers */,
+				4BE88DF10C68A21F0095546B /* Resources */,
+				4BE88DF30C68A21F0095546B /* Sources */,
+				4BE88DFE0C68A21F0095546B /* Frameworks */,
+				4BE88E040C68A21F0095546B /* Rez */,
+				4BE88E050C68A21F0095546B /* CopyFiles */,
+				4BE88E070C68A21F0095546B /* CopyFiles */,
 			);
 			buildRules = (
 			);
-			buildSettings = {
-				HEADER_SEARCH_PATHS = "../VST-VST_CFM/VSTSDK";
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "-DDEBUG=1";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PREFIX_HEADER = vstplugsmacho.h;
-				PRODUCT_NAME = "JACK-insert";
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = vst;
-			};
 			dependencies = (
 			);
 			name = "mach-0 Universal";
 			productInstallPath = "$(USER_LIBRARY_DIR)/Bundles";
 			productName = "mach-0";
-			productReference = 4BE2E73B09E3F40D009A4D7C /* JACK-insert.vst */;
+			productReference = 4BE88E0E0C68A21F0095546B /* JACK-insert.vst */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -465,52 +305,32 @@
 /* Begin PBXProject section */
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = 4BE2E73C09E3F40D009A4D7C /* Build configuration list for PBXProject "VST" */;
-			buildSettings = {
-			};
-			buildStyles = (
-				014CEA420018CDE011CA2923 /* Development */,
-				014CEA430018CDE011CA2923 /* Deployment */,
-			);
+			buildConfigurationList = 4BE88E100C68A2200095546B /* Build configuration list for PBXProject "VST" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 089C166AFE841209C02AAC07 /* bundle_test */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
-				B2FF4EC00529FBA9001F90A7 /* mach-0 */,
-				4BE2E70C09E3F40D009A4D7C /* mach-0 Universal */,
+				4BE88DDF0C68A21F0095546B /* mach-0 Universal */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		4BE2E71E09E3F40D009A4D7C /* Resources */ = {
+		4BE88DF10C68A21F0095546B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4BE2E71F09E3F40D009A4D7C /* PkgInfo in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B2FF4EBC0529FBA9001F90A7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B2FF4ECE0529FC02001F90A7 /* PkgInfo in Resources */,
-				4BD637D509E53A5E0019B57C /* Info-macho.plist in Resources */,
+				4BE88DF20C68A21F0095546B /* PkgInfo in Resources */,
+				4BBCE7060C68A68100E1DF19 /* Changelog in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXRezBuildPhase section */
-		4BE2E73109E3F40D009A4D7C /* Rez */ = {
-			isa = PBXRezBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B2FF4EBF0529FBA9001F90A7 /* Rez */ = {
+		4BE88E040C68A21F0095546B /* Rez */ = {
 			isa = PBXRezBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -520,57 +340,48 @@
 /* End PBXRezBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		4BE2E72009E3F40D009A4D7C /* Sources */ = {
+		4BE88DF30C68A21F0095546B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4BE2E72109E3F40D009A4D7C /* JackVST.cpp in Sources */,
-				4BE2E72209E3F40D009A4D7C /* JackVSTMain.cpp in Sources */,
-				4BE2E72309E3F40D009A4D7C /* BSizeAlign.cpp in Sources */,
-				4BE2E72409E3F40D009A4D7C /* JARInsert.cpp in Sources */,
-				4BE2E72509E3F40D009A4D7C /* ringbuffer.c in Sources */,
-				4BE2E72609E3F40D009A4D7C /* aeffguieditor.cpp in Sources */,
-				4BE2E72709E3F40D009A4D7C /* AudioEffect.cpp in Sources */,
-				4BE2E72809E3F40D009A4D7C /* audioeffectx.cpp in Sources */,
-				4BE2E72909E3F40D009A4D7C /* vstcontrols.cpp in Sources */,
-				4BE2E72A09E3F40D009A4D7C /* vstgui.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		B2FF4EBD0529FBA9001F90A7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B2FF4EC20529FBB0001F90A7 /* JackVST.cpp in Sources */,
-				B2FF4ED30529FE06001F90A7 /* JackVSTMain.cpp in Sources */,
-				B2CB9AFC06F46796002CF3C1 /* BSizeAlign.cpp in Sources */,
-				B2CB9AFE06F46796002CF3C1 /* JARInsert.cpp in Sources */,
-				B2CB9B0006F46796002CF3C1 /* ringbuffer.c in Sources */,
-				4B53CC7807C0D83B007E636C /* aeffguieditor.cpp in Sources */,
-				4B53CC7A07C0D83B007E636C /* AudioEffect.cpp in Sources */,
-				4B53CC7C07C0D83B007E636C /* audioeffectx.cpp in Sources */,
-				4B53CC7E07C0D83B007E636C /* vstcontrols.cpp in Sources */,
-				4B53CC8107C0D83B007E636C /* vstgui.cpp in Sources */,
+				4BE88DF40C68A21F0095546B /* JackVST.cpp in Sources */,
+				4BE88DF50C68A21F0095546B /* JackVSTMain.cpp in Sources */,
+				4BE88DF60C68A21F0095546B /* BSizeAlign.cpp in Sources */,
+				4BE88DF70C68A21F0095546B /* JARInsert.cpp in Sources */,
+				4BE88DF80C68A21F0095546B /* ringbuffer.c in Sources */,
+				4BBCE6FD0C68A68100E1DF19 /* aeffguieditor.cpp in Sources */,
+				4BBCE6FF0C68A68100E1DF19 /* audioeffect.cpp in Sources */,
+				4BBCE7020C68A68100E1DF19 /* audioeffectx.cpp in Sources */,
+				4BBCE7040C68A68100E1DF19 /* cfileselector.cpp in Sources */,
+				4BBCE7070C68A68100E1DF19 /* cscrollview.cpp in Sources */,
+				4BBCE7090C68A68100E1DF19 /* ctabview.cpp in Sources */,
+				4BBCE70D0C68A68100E1DF19 /* vstcontrols.cpp in Sources */,
+				4BBCE7100C68A68100E1DF19 /* vstgui.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		4BE2E70909E3F40D009A4D7C /* Development */ = {
+		4BE88E0A0C68A21F0095546B /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					i386,
+					ppc,
+				);
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = "../VST-VST_CFM/VSTSDK";
-				OPTIMIZATION_CFLAGS = "-O0";
-				OTHER_CFLAGS = "-DDEBUG=1";
+				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = "../VST-VST_CFM/VSTSDK24";
+				INFOPLIST_FILE = "Info-mach_0.plist";
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
-				PREFIX_HEADER = vstplugsmacho.h;
 				PRODUCT_NAME = "JACK-insert";
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
@@ -583,17 +394,23 @@
 			};
 			name = Development;
 		};
-		4BE2E70A09E3F40D009A4D7C /* Deployment */ = {
+		4BE88E0B0C68A21F0095546B /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					i386,
+					ppc,
+				);
 				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				HEADER_SEARCH_PATHS = "../VST-VST_CFM/VSTSDK";
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "-DDEBUG=1";
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = "../VST-VST_CFM/VSTSDK24";
+				INFOPLIST_FILE = "Info-mach_0.plist";
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
-				PREFIX_HEADER = vstplugsmacho.h;
 				PRODUCT_NAME = "JACK-insert";
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
@@ -606,15 +423,21 @@
 			};
 			name = Deployment;
 		};
-		4BE2E70B09E3F40D009A4D7C /* Default */ = {
+		4BE88E0C0C68A21F0095546B /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				HEADER_SEARCH_PATHS = "../VST-VST_CFM/VSTSDK";
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "-DDEBUG=1";
+				ARCHS = (
+					i386,
+					ppc,
+				);
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = "../VST-VST_CFM/VSTSDK24";
+				INFOPLIST_FILE = "Info-mach_0.plist";
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
-				PREFIX_HEADER = vstplugsmacho.h;
 				PRODUCT_NAME = "JACK-insert";
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
@@ -626,142 +449,55 @@
 			};
 			name = Default;
 		};
-		4BE2E73709E3F40D009A4D7C /* Development */ = {
+		4BE88E110C68A2200095546B /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
 					ppc,
 					i386,
 				);
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREFIX_HEADER = vstplugsmacho.h;
-				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
-				HEADER_SEARCH_PATHS = "../VST-VST_CFM/VSTSDK";
-				INFOPLIST_FILE = "Info-macho.plist";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = "JACK-insert";
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = vst;
-				ZERO_LINK = YES;
 			};
 			name = Development;
 		};
-		4BE2E73809E3F40D009A4D7C /* Deployment */ = {
+		4BE88E120C68A2200095546B /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
 					ppc,
 					i386,
 				);
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PREFIX_HEADER = vstplugsmacho.h;
-				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
-				HEADER_SEARCH_PATHS = "../VST-VST_CFM/VSTSDK";
-				INFOPLIST_FILE = "Info-macho.plist";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = "JACK-insert";
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = vst;
-				ZERO_LINK = NO;
 			};
 			name = Deployment;
 		};
-		4BE2E73909E3F40D009A4D7C /* Default */ = {
+		4BE88E130C68A2200095546B /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
 					ppc,
 					i386,
 				);
-				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PREFIX_HEADER = vstplugsmacho.h;
-				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
-				HEADER_SEARCH_PATHS = "../VST-VST_CFM/VSTSDK";
-				INFOPLIST_FILE = "Info-macho.plist";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = "JACK-insert";
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = vst;
-			};
-			name = Default;
-		};
-		4BE2E73D09E3F40D009A4D7C /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-			};
-			name = Development;
-		};
-		4BE2E73E09E3F40D009A4D7C /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-			};
-			name = Deployment;
-		};
-		4BE2E73F09E3F40D009A4D7C /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
 			};
 			name = Default;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4BE2E70809E3F40D009A4D7C /* Build configuration list for PBXBundleTarget "mach-0" */ = {
+		4BE88E090C68A21F0095546B /* Build configuration list for PBXNativeTarget "mach-0 Universal" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4BE2E70909E3F40D009A4D7C /* Development */,
-				4BE2E70A09E3F40D009A4D7C /* Deployment */,
-				4BE2E70B09E3F40D009A4D7C /* Default */,
+				4BE88E0A0C68A21F0095546B /* Development */,
+				4BE88E0B0C68A21F0095546B /* Deployment */,
+				4BE88E0C0C68A21F0095546B /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
 		};
-		4BE2E73609E3F40D009A4D7C /* Build configuration list for PBXNativeTarget "mach-0 Universal" */ = {
+		4BE88E100C68A2200095546B /* Build configuration list for PBXProject "VST" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4BE2E73709E3F40D009A4D7C /* Development */,
-				4BE2E73809E3F40D009A4D7C /* Deployment */,
-				4BE2E73909E3F40D009A4D7C /* Default */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
-		};
-		4BE2E73C09E3F40D009A4D7C /* Build configuration list for PBXProject "VST" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4BE2E73D09E3F40D009A4D7C /* Development */,
-				4BE2E73E09E3F40D009A4D7C /* Deployment */,
-				4BE2E73F09E3F40D009A4D7C /* Default */,
+				4BE88E110C68A2200095546B /* Development */,
+				4BE88E120C68A2200095546B /* Deployment */,
+				4BE88E130C68A2200095546B /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;

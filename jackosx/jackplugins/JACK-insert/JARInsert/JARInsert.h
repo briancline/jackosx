@@ -23,7 +23,7 @@ e-mail: johnny@meskalina.it web: http://www.meskalina.it
 
 #define DEBUG 1
 
-#include <Jack/Jack.h>
+#include <jack/jack.h>
 #include <Carbon/Carbon.h>
 #include <CoreAudio/CoreAudio.h>
 #include "BSizeAlign.h"

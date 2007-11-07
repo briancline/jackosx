@@ -1,5 +1,5 @@
 /*
-  Copyright ©  Johnny Petrantoni 2003
+  Copyright ï¿½  Johnny Petrantoni 2003
  
   This library is free software; you can redistribute it and modify it under
   the terms of the GNU Library General Public License as published by the
@@ -27,8 +27,7 @@ JackVST::JackVST (audioMasterCallback audioMaster)
 	fGain = 1.;				// default to 0 dB
 	setNumInputs (2);		// stereo in
 	setNumOutputs (2);		// stereo out
-	setUniqueID ('JACK-insert');	// identify
-	canMono ();				// makes sense to feed both inputs with the same signal
+	setUniqueID ('JACK');	// identify
 	canProcessReplacing ();	// supports both accumulating and replacing output
 	strcpy (programName, "Default");	// default program name
 	
@@ -55,32 +54,32 @@ void JackVST::getProgramName (char *name)
 }
 
 //-----------------------------------------------------------------------------------------
-void JackVST::setParameter (long index, float value)
+void JackVST::setParameter (VstInt32 index, float value)
 {
 	fGain = value;
 }
 
 //-----------------------------------------------------------------------------------------
-float JackVST::getParameter (long index)
+float JackVST::getParameter (VstInt32 index)
 {
 	return fGain;
 }
 
 //-----------------------------------------------------------------------------------------
-void JackVST::getParameterName (long index, char *label)
+void JackVST::getParameterName (VstInt32 index, char *label)
 {
     if(c_error == JARInsert::kNoErr) strcpy (label, "ONLINE");
     else strcpy (label, "OFFLINE");
 }
 
 //-----------------------------------------------------------------------------------------
-void JackVST::getParameterDisplay (long index, char *text)
+void JackVST::getParameterDisplay (VstInt32 index, char *text)
 {
-	dB2string (fGain, text);
+	dB2string (fGain, text, strlen(text));
 }
 
 //-----------------------------------------------------------------------------------------
-void JackVST::getParameterLabel(long index, char *label)
+void JackVST::getParameterLabel(VstInt32 index, char *label)
 {
 	strcpy (label, "");
 }
@@ -102,18 +101,18 @@ bool JackVST::getProductString (char* text)
 //------------------------------------------------------------------------
 bool JackVST::getVendorString (char* text)
 {
-	strcpy(text, "(c) 2003-2006, Johnny Petrantoni.");
+	strcpy(text, "(c) 2003-2007, Johnny Petrantoni.");
 	return true;
 }
 
 //-----------------------------------------------------------------------------------------
-void JackVST::process (float **inputs, float **outputs, long sampleFrames)
+void JackVST::process (float **inputs, float **outputs, VstInt32 sampleFrames)
 {
     processReplacing(inputs,outputs,sampleFrames);
 }
 
 //-----------------------------------------------------------------------------------------
-void JackVST::processReplacing (float **inputs, float **outputs, long sampleFrames)
+void JackVST::processReplacing (float **inputs, float **outputs, VstInt32 sampleFrames)
 {
 	if((c_jar->GetError() == JARInsert::kNoErr) && c_jar) {
 		if(!c_jar->CanProcess()) c_jar->AllocBSizeAlign(sampleFrames);
