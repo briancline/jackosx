@@ -301,7 +301,8 @@ History
 		Fix an Autoconnect/Restore connection issue found with AudioFinder (in kAudioDevicePropertyIOProcStreamUsage).
 
 07-11-07 : Version 0.85 : S Letz
-		Implement kAudioDevicePropertyDataSource and kAudioDevicePropertyDataSources.
+		Implement kAudioDevicePropertyDataSource and kAudioDevicePropertyDataSources. Use of "jack_client_open" instead of "jack_client_new".
+		Do not check jack server when loaded in "coreaudiod" process.
 
 TODO :
     
@@ -1188,23 +1189,22 @@ void TJackClient::StopRunning()
 bool TJackClient::Open()
 {
     pid_t pid = getpid();
+	jack_options_t options = JackNullOption;
+	jack_status_t status;
     char* id_name = bequite_getNameFromPid(pid);
     JARLog("JackClient::Open id %ld name %s\n", pid, id_name);
     assert(id_name != NULL);
 
-    if ((fClient = jack_client_new(id_name)) == NULL) {
+    if ((fClient = jack_client_open(id_name, options, &status)) == NULL) {
         JARLog("TJackClient::Open jack server not running?\n");
-        goto error;
-    }
-
-    jack_set_process_callback(fClient, Process, this);
-    jack_on_shutdown(fClient, Shutdown, NULL);
-    jack_set_buffer_size_callback(fClient, BufferSize, this);
-    jack_set_xrun_callback(fClient, XRun, this);
-    return true;
-
-error:
-    return false;
+        return false;
+    } else {
+		jack_set_process_callback(fClient, Process, this);
+		jack_on_shutdown(fClient, Shutdown, NULL);
+		jack_set_buffer_size_callback(fClient, BufferSize, this);
+		jack_set_xrun_callback(fClient, XRun, this);
+		return true;
+	}
 }
 
 //------------------------------------------------------------------------
@@ -3619,38 +3619,41 @@ OSStatus TJackClient::Initialize(AudioHardwarePlugInRef inSelf)
 
     jack_client_t* client;
 
-    if (client = TJackClient::CheckServer(inSelf)) {
-
-		const char** ports;
-		
-		if (!prefOK) {
-
-            int i = 0;
-            if ((ports = jack_get_ports(client, NULL, NULL, JackPortIsPhysical | JackPortIsOutput)) != NULL) {
-                while (ports[i])
-                    i++;
-            }
-            TJackClient::fInputChannels = max(2, i); // At least 2 channels
-
-            i = 0;
-            if ((ports = jack_get_ports(client, NULL, NULL, JackPortIsPhysical | JackPortIsInput)) != NULL) {
-                while (ports[i])
-                    i++;
-            }
-            TJackClient::fOutputChannels = max(2, i); // At least 2 channels
-        }
-
-        assert(TJackClient::fInputChannels < MAX_JACK_PORTS);
-        assert(TJackClient::fOutputChannels < MAX_JACK_PORTS);
+	if (strcmp("coreaudiod", id_name) != 0) {
 	
-        JARLog("fInputChannels %ld \n", TJackClient::fInputChannels);
-        JARLog("fOutputChannels %ld \n", TJackClient::fOutputChannels);
-        jack_client_close(client);
+		if (client = TJackClient::CheckServer(inSelf)) {
 
-    } else {
-        JARLog("jack server not running?\n");
-        return kAudioHardwareNotRunningError;
-    }
+			const char** ports;
+			
+			if (!prefOK) {
+
+				int i = 0;
+				if ((ports = jack_get_ports(client, NULL, NULL, JackPortIsPhysical | JackPortIsOutput)) != NULL) {
+					while (ports[i])
+						i++;
+				}
+				TJackClient::fInputChannels = max(2, i); // At least 2 channels
+
+				i = 0;
+				if ((ports = jack_get_ports(client, NULL, NULL, JackPortIsPhysical | JackPortIsInput)) != NULL) {
+					while (ports[i])
+						i++;
+				}
+				TJackClient::fOutputChannels = max(2, i); // At least 2 channels
+			}
+
+			assert(TJackClient::fInputChannels < MAX_JACK_PORTS);
+			assert(TJackClient::fOutputChannels < MAX_JACK_PORTS);
+		
+			JARLog("fInputChannels %ld \n", TJackClient::fInputChannels);
+			JARLog("fOutputChannels %ld \n", TJackClient::fOutputChannels);
+			jack_client_close(client);
+
+		} else {
+			JARLog("jack server not running?\n");
+			return kAudioHardwareNotRunningError;
+		}
+	}
 
     err = AudioHardwareClaimAudioDeviceID(inSelf, &TJackClient::fDeviceID);
     if (err == kAudioHardwareNoError) {
