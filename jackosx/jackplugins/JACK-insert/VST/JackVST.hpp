@@ -20,7 +20,7 @@
 
 #include "audioeffectx.h"
 #include <CoreAudio/CoreAudio.h>
-#include <Jack/jack.h>
+#include <jack/jack.h>
 #include <stdio.h>
 #include <memory.h>
 #include <JARInsert.h>

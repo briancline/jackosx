@@ -108,15 +108,18 @@ bool JackVST::getVendorString (char* text)
 //-----------------------------------------------------------------------------------------
 void JackVST::process (float **inputs, float **outputs, VstInt32 sampleFrames)
 {
-    processReplacing(inputs,outputs,sampleFrames);
+    processReplacing(inputs, outputs, sampleFrames);
 }
 
 //-----------------------------------------------------------------------------------------
 void JackVST::processReplacing (float **inputs, float **outputs, VstInt32 sampleFrames)
 {
-	if((c_jar->GetError() == JARInsert::kNoErr) && c_jar) {
-		if(!c_jar->CanProcess()) c_jar->AllocBSizeAlign(sampleFrames);
-		c_jar->Process(inputs,outputs,sampleFrames);
-	} else for(int i=0;i<2;i++) memset(outputs[i],0x0,sizeof(float)*sampleFrames);
+	if ((c_jar->GetError() == JARInsert::kNoErr) && c_jar) {
+		if (!c_jar->CanProcess()) 
+			c_jar->AllocBSizeAlign(sampleFrames);
+		c_jar->Process(inputs, outputs, sampleFrames);
+	} else {
+		for(int i = 0; i < 2; i++) memset(outputs[i], 0x0, sizeof(float) * sampleFrames);
+	}
 }
 

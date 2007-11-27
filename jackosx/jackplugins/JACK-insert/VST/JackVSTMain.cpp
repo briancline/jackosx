@@ -33,35 +33,34 @@ bool oome = false;
 //------------------------------------------------------------------------
 #if BEOS
 #define main main_plugin
-extern "C" __declspec(dllexport) AEffect *main_plugin (audioMasterCallback audioMaster);
+extern "C" __declspec(dllexport) AEffect *main_plugin(audioMasterCallback audioMaster);
 
 #elif MACX
 #define main main_macho
-extern "C" AEffect *main_macho (audioMasterCallback audioMaster);
+extern "C" AEffect *main_macho(audioMasterCallback audioMaster);
 
 #else
-AEffect *main (audioMasterCallback audioMaster);
+AEffect *main(audioMasterCallback audioMaster);
 #endif
 
 //------------------------------------------------------------------------
-AEffect *main (audioMasterCallback audioMaster)
+AEffect *main(audioMasterCallback audioMaster)
 {
 	// Get VST Version
-	if (!audioMaster (0, audioMasterVersion, 0, 0, 0, 0))
+	if (!audioMaster(0, audioMasterVersion, 0, 0, 0, 0))
 		return 0;  // old version
 
 	// Create the AudioEffect
-	JackVST* effect = new JackVST (audioMaster);
+	JackVST* effect = new JackVST(audioMaster);
 	if (!effect)
 		return 0;
 
 	// Check if no problem in constructor of JackVST
-	if (oome)
-	{
+	if (oome) {
 		delete effect;
 		return 0;
 	}
-	return effect->getAeffect ();
+	return effect->getAeffect();
 }
 
 #if MAC
@@ -72,7 +71,7 @@ AEffect *main (audioMasterCallback audioMaster)
 #if WIN32
 #include <windows.h>
 void* hInstance;
-BOOL WINAPI DllMain (HINSTANCE hInst, DWORD dwReason, LPVOID lpvReserved)
+BOOL WINAPI DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpvReserved)
 {
 	hInstance = hInst;
 	return 1;

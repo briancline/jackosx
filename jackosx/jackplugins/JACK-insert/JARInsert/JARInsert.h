@@ -48,6 +48,7 @@ enum {
 class JARInsert
 {
     public:
+	
         enum {
             kNoErr, kErrNoClient, kErrCoreAudio, kErrInvalidBSize
 		};
@@ -68,7 +69,9 @@ class JARInsert
         }
 
         static bool c_printDebug;
+		
     private:
+	
         bool ReadPrefs();
 
         bool c_canProcess;

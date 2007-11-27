@@ -39,7 +39,13 @@ extern "C" void JARILog(char *fmt, ...)
 }
 
 JARInsert::JARInsert(long host_buffer_size, int hostType)
-        : c_error(kNoErr), c_client(NULL), c_isRunning(false), c_rBufOn(false), c_needsDeactivate(false), c_hBufferSize(host_buffer_size), c_hostType(hostType)
+        : c_error(kNoErr), 
+		c_client(NULL), 
+		c_isRunning(false), 
+		c_rBufOn(false), 
+		c_needsDeactivate(false), 
+		c_hBufferSize(host_buffer_size), 
+		c_hostType(hostType)
 {
     ReadPrefs();
 	
@@ -49,7 +55,7 @@ JARInsert::JARInsert(long host_buffer_size, int hostType)
     if (!OpenAudioClient()) {
         JARILog("Cannot find jack client.\n");
         SHOWALERT("Cannot find jack client for this application, check if Jack server is running.");
-        return ;
+        return;
     }
 	
 	// Deactivate Jack callback
@@ -108,9 +114,9 @@ JARInsert::JARInsert(long host_buffer_size, int hostType)
         c_bsAI2 = new BSizeAlign(c_hBufferSize, c_jBufferSize);
         c_bsAO1 = new BSizeAlign(c_jBufferSize, c_hBufferSize);
         c_bsAO2 = new BSizeAlign(c_jBufferSize, c_hBufferSize);
-        if (c_bsAI1->Ready() && c_bsAI2->Ready() && c_bsAO1->Ready() && c_bsAO2->Ready())
+        if (c_bsAI1->Ready() && c_bsAI2->Ready() && c_bsAO1->Ready() && c_bsAO2->Ready()) {
             c_rBufOn = true;
-        else {
+        } else {
             c_error = kErrInvalidBSize;
             Flush();
             return ;
@@ -127,7 +133,13 @@ JARInsert::JARInsert(long host_buffer_size, int hostType)
 }
 
 JARInsert::JARInsert(int hostType)
-        : c_error(kNoErr), c_client(NULL), c_isRunning(false), c_rBufOn(false), c_needsDeactivate(false), c_hBufferSize(0),  c_hostType(hostType)
+        : c_error(kNoErr), 
+		c_client(NULL), 
+		c_isRunning(false), 
+		c_rBufOn(false), 
+		c_needsDeactivate(false), 
+		c_hBufferSize(0),  
+		c_hostType(hostType)
 {
     ReadPrefs();
 	
@@ -208,23 +220,27 @@ JARInsert::~JARInsert()
 
 bool JARInsert::AllocBSizeAlign(long host_buffer_size)
 {
+	JARILog("AllocBSizeAlign host_buffer_size = %ld \n", host_buffer_size);
+	
     c_hBufferSize = host_buffer_size;
     if (c_jBufferSize > c_hBufferSize) {  
 		
         if (((host_buffer_size - 1) & host_buffer_size) != 0) {
-			JARILog("Bad buffer size for BSizeAlign host_buffer_size %ld \n",host_buffer_size);
+			JARILog("Bad buffer size for BSizeAlign host_buffer_size %ld \n", host_buffer_size);
             c_error = kErrInvalidBSize;
             Flush();
             return false;
         }
 		
+		JARILog("AllocBSizeAlign c_jBufferSize = %ld c_hBufferSize = %ld\n", c_jBufferSize, c_hBufferSize);
+		
         c_bsAI1 = new BSizeAlign(c_hBufferSize, c_jBufferSize);
         c_bsAI2 = new BSizeAlign(c_hBufferSize, c_jBufferSize);
         c_bsAO1 = new BSizeAlign(c_jBufferSize, c_hBufferSize);
         c_bsAO2 = new BSizeAlign(c_jBufferSize, c_hBufferSize);
-        if (c_bsAI1->Ready() && c_bsAI2->Ready() && c_bsAO1->Ready() && c_bsAO2->Ready())
+        if (c_bsAI1->Ready() && c_bsAI2->Ready() && c_bsAO1->Ready() && c_bsAO2->Ready()) {
             c_rBufOn = true;
-        else {
+        } else {
             JARILog("Bad buffer size for BSizeAlign c_hBufferSize %ld c_jBufferSize %ld \n",c_hBufferSize, c_jBufferSize);
             c_error = kErrInvalidBSize;
             Flush();
@@ -246,10 +262,11 @@ bool JARInsert::AllocBSizeAlign(long host_buffer_size)
 
 int JARInsert::Process(float** in_buffer, float** out_buffer, long host_nframes)
 {
-    if (c_hBufferSize != host_nframes) {
+	if (c_hBufferSize != host_nframes) {
         JARILog("CRITICAL ERROR: Host Buffer Size mismatch, NOT PROCESSING!! %ld c_hBufferSize  %ld host_nframes \n", c_hBufferSize, host_nframes);
         return 1;
     }
+	
     if (c_rBufOn) {
 		float* out1 = c_outPorts[0];
         float* out2 = c_outPorts[1];
@@ -283,10 +300,10 @@ int JARInsert::Process(float** in_buffer, float** out_buffer, long host_nframes)
         float* in1 = (float*) jack_port_get_buffer(c_inPorts[0], (jack_nframes_t)c_jBufferSize);
         float* in2 = (float*) jack_port_get_buffer(c_inPorts[1], (jack_nframes_t)c_jBufferSize);
 		
-		memcpy(out1, in_buffer[0], sizeof(float)*c_jBufferSize);
-        memcpy(out2, in_buffer[1], sizeof(float)*c_jBufferSize);
-        memcpy(out_buffer[0], in1, sizeof(float)*c_jBufferSize);
-        memcpy(out_buffer[1], in2, sizeof(float)*c_jBufferSize);
+		memcpy(out1, in_buffer[0], sizeof(float) * c_jBufferSize);
+        memcpy(out2, in_buffer[1], sizeof(float) * c_jBufferSize);
+        memcpy(out_buffer[0], in1, sizeof(float) * c_jBufferSize);
+        memcpy(out_buffer[1], in2, sizeof(float) * c_jBufferSize);
     }
     return 0;
 }
@@ -313,26 +330,33 @@ bool JARInsert::OpenAudioClient()
         return false;
     }
 
-    for (int i = 0;i < nDevices;i++) {
+    for (int i = 0; i < nDevices; i++) {
 
         JARILog("ID: %ld\n", device[i]);
 
         char name[256];
-        size = sizeof(char) * 256;
+        size = 256;
         err = AudioDeviceGetProperty(device[i], 0, true, kAudioDevicePropertyDeviceName, &size, &name);
         if (err == noErr) {
             JARILog("Name: %s\n", name);
 
-            if (strcmp(&name[0], "Jack Audio Server") == 0 || strcmp(&name[0], "Jack Router") == 0) {
+            if (strcmp(&name[0], "Jack Audio Server") == 0 || strcmp(&name[0], "JackRouter") == 0) {
                 c_jackDevID = device[i];
                 if (device != NULL)
                     free(device);
+					
+				JARILog("Get Jack client\n");
+				size = sizeof(UInt32); 
                 err = AudioDeviceGetProperty(c_jackDevID, 0, true, kAudioDevicePropertyGetJackClient, &size, &c_client);
                 if (err != noErr) {
+					JARILog("Get Jack client error = %d\n", err);
                     c_error = kErrNoClient;
                     return false;
                 }
+				
+				JARILog("Get Jack client OK\n");
 #if 0
+				size = sizeof(UInt32);
                 err = AudioDeviceGetProperty(c_jackDevID, 0, true, kAudioDevicePropertyDeviceIsRunning, &size, &c_isRunning);
                 if (err != noErr) {
                     c_error = kErrNoClient;
@@ -392,13 +416,12 @@ void JARInsert::Flush()
 			}
         }
         free(c_outPorts);
-        UInt32 size;
-		
+      
 		// (Possible) reactivate Jack callback
 		//AudioDeviceGetPropertyInfo(c_jackDevID, 0, true, kAudioDevicePropertyActivateJack, &outSize, &isWritable);
 		//AudioDeviceSetProperty(c_jackDevID, NULL, 0, true, kAudioDevicePropertyActivateJack, 0, NULL);
 		AudioDeviceGetPropertyInfo(c_jackDevID, 0, true, kAudioDevicePropertyReleaseJackClient, &outSize, &isWritable);
-        AudioDeviceGetProperty(c_jackDevID, 0, true, kAudioDevicePropertyReleaseJackClient, &size, &c_client);
+        AudioDeviceGetProperty(c_jackDevID, 0, true, kAudioDevicePropertyReleaseJackClient, &outSize, &c_client);
 
         JARInsert::c_instances_count--;
         if (JARInsert::c_instances_count == 0)

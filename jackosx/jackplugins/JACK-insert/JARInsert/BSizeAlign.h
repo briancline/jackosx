@@ -33,8 +33,8 @@ class BSizeAlign
         {
             return c_ready;
         }
-        bool AddBuffer(float *buffer);
-        bool GetBuffer(float *buffer);
+        bool AddBuffer(float* buffer);
+        bool GetBuffer(float* buffer);
         bool CanGet()
         {
             return c_can_get;
@@ -44,7 +44,7 @@ class BSizeAlign
             typeINbig, typeOUTbig
 		};
         RingBuffer c_rb;
-        float *c_rb_data;
+        float* c_rb_data;
         long c_in_frames;
         long c_out_frames;
         bool c_ready;

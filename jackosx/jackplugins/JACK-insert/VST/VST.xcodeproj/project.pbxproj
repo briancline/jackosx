@@ -47,7 +47,6 @@
 		4BE88DF80C68A21F0095546B /* ringbuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = B2CB9AFA06F46796002CF3C1 /* ringbuffer.c */; };
 		4BE88DFF0C68A21F0095546B /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B22EE371052900E3008EDF11 /* CoreAudio.framework */; };
 		4BE88E000C68A21F0095546B /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B282F7CF04CB1F3900ECBF7F /* Carbon.framework */; };
-		4BE88E010C68A21F0095546B /* Jack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B23C897004CB1A7E00F1E491 /* Jack.framework */; };
 		4BE88E020C68A21F0095546B /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2CE54B805CA517B00667293 /* QuickTime.framework */; };
 		4BE88E030C68A21F0095546B /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2F0252306F4C83200E9C25F /* CoreFoundation.framework */; };
 		4BE88E060C68A21F0095546B /* PkgInfo in CopyFiles */ = {isa = PBXBuildFile; fileRef = B2FF4ECD0529FC02001F90A7 /* PkgInfo */; };
@@ -111,7 +110,6 @@
 		B2279E5F04CD772C00B1A081 /* JackVST.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = JackVST.cpp; sourceTree = "<group>"; };
 		B2279E6004CD772C00B1A081 /* JackVST.hpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.h; path = JackVST.hpp; sourceTree = "<group>"; };
 		B22EE371052900E3008EDF11 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
-		B23C897004CB1A7E00F1E491 /* Jack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Jack.framework; path = /Library/Frameworks/Jack.framework; sourceTree = "<absolute>"; };
 		B282F7CF04CB1F3900ECBF7F /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		B2CB9AF606F46796002CF3C1 /* BSizeAlign.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = BSizeAlign.cpp; path = ../JARInsert/BSizeAlign.cpp; sourceTree = SOURCE_ROOT; };
 		B2CB9AF706F46796002CF3C1 /* BSizeAlign.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = BSizeAlign.h; path = ../JARInsert/BSizeAlign.h; sourceTree = SOURCE_ROOT; };
@@ -132,7 +130,6 @@
 			files = (
 				4BE88DFF0C68A21F0095546B /* CoreAudio.framework in Frameworks */,
 				4BE88E000C68A21F0095546B /* Carbon.framework in Frameworks */,
-				4BE88E010C68A21F0095546B /* Jack.framework in Frameworks */,
 				4BE88E020C68A21F0095546B /* QuickTime.framework in Frameworks */,
 				4BE88E030C68A21F0095546B /* CoreFoundation.framework in Frameworks */,
 			);
@@ -161,7 +158,6 @@
 				B2CE54B805CA517B00667293 /* QuickTime.framework */,
 				B22EE371052900E3008EDF11 /* CoreAudio.framework */,
 				B282F7CF04CB1F3900ECBF7F /* Carbon.framework */,
-				B23C897004CB1A7E00F1E491 /* Jack.framework */,
 			);
 			name = "Frameworks and Libraries";
 			sourceTree = "<group>";
@@ -379,8 +375,9 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = "../VST-VST_CFM/VSTSDK24";
 				INFOPLIST_FILE = "Info-mach_0.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "-ljack";
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = "JACK-insert";
 				SECTORDER_FLAGS = "";
@@ -408,8 +405,9 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = "../VST-VST_CFM/VSTSDK24";
 				INFOPLIST_FILE = "Info-mach_0.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "-ljack";
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = "JACK-insert";
 				SECTORDER_FLAGS = "";
@@ -435,6 +433,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = "../VST-VST_CFM/VSTSDK24";
 				INFOPLIST_FILE = "Info-mach_0.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
