@@ -28,7 +28,7 @@
 			productName = JackPilot1.3;
 			productReference = B2C017320508E0830042DB15 /* JackPilot.app */;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
 <plist version=\"1.0\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
@@ -118,7 +118,6 @@
 		4B4F3D5D09E2D5E000D2EC22 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = B2292EC20559813D004A67B1 /* Utility.m */; };
 		4B4F3D5E09E2D5E000D2EC22 /* JPPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = B2EB270805C5284600724495 /* JPPlugin.m */; };
 		4B4F3D6009E2D5E000D2EC22 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		4B4F3D6109E2D5E000D2EC22 /* Jack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2BA0E1404CECD140055565C /* Jack.framework */; };
 		4B4F3D6209E2D5E000D2EC22 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B24BD00305060C0F00947A3C /* CoreAudio.framework */; };
 		4B4F3D6309E2D5E000D2EC22 /* Panda.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2EB271E05C5287400724495 /* Panda.framework */; };
 		4B4F3D6409E2D5E000D2EC22 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B24BD00705060C6C00947A3C /* AudioToolbox.framework */; };
@@ -155,7 +154,6 @@
 		B2C017610508E2600042DB15 /* JackCon1.3.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C017600508E2600042DB15 /* JackCon1.3.m */; };
 		B2EA0BA1050F432E00FED62D /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = B2EA0B9F050F432E00FED62D /* MainMenu.nib */; };
 		B2EA0BA2050F446B00FED62D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		B2EA0BA3050F446C00FED62D /* Jack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2BA0E1404CECD140055565C /* Jack.framework */; };
 		B2EA0BA4050F446C00FED62D /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B24BD00305060C0F00947A3C /* CoreAudio.framework */; };
 		B2EA0BA8050F44A200FED62D /* PortsData.h in Headers */ = {isa = PBXBuildFile; fileRef = B2EA0BA6050F44A200FED62D /* PortsData.h */; };
 		B2EA0BA9050F44A200FED62D /* PortsData.m in Sources */ = {isa = PBXBuildFile; fileRef = B2EA0BA7050F44A200FED62D /* PortsData.m */; };
@@ -218,7 +216,6 @@
 		B2B9A26304BDD3850031A363 /* bequite.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bequite.c; path = src/bequite.c; sourceTree = "<group>"; };
 		B2B9A26404BDD3850031A363 /* procinfo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = procinfo.c; path = src/procinfo.c; sourceTree = "<group>"; };
 		B2B9A26504BDD3850031A363 /* procinfo.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = procinfo.h; path = src/procinfo.h; sourceTree = "<group>"; };
-		B2BA0E1404CECD140055565C /* Jack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Jack.framework; path = /Library/Frameworks/Jack.framework; sourceTree = "<absolute>"; };
 		B2C017320508E0830042DB15 /* JackPilot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = JackPilot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2C0175A0508E1BD0042DB15 /* DataSourceSend.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = DataSourceSend.m; path = src/DataSourceSend.m; sourceTree = "<group>"; };
 		B2C0175B0508E1BD0042DB15 /* DataSourceSend.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = DataSourceSend.h; path = src/DataSourceSend.h; sourceTree = "<group>"; };
@@ -239,7 +236,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B4F3D6009E2D5E000D2EC22 /* Cocoa.framework in Frameworks */,
-				4B4F3D6109E2D5E000D2EC22 /* Jack.framework in Frameworks */,
 				4B4F3D6209E2D5E000D2EC22 /* CoreAudio.framework in Frameworks */,
 				4B4F3D6309E2D5E000D2EC22 /* Panda.framework in Frameworks */,
 				4B4F3D6409E2D5E000D2EC22 /* AudioToolbox.framework in Frameworks */,
@@ -251,7 +247,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2EA0BA2050F446B00FED62D /* Cocoa.framework in Frameworks */,
-				B2EA0BA3050F446C00FED62D /* Jack.framework in Frameworks */,
 				B2EA0BA4050F446C00FED62D /* CoreAudio.framework in Frameworks */,
 				B2AB50E6067F6E3600127FEB /* Panda.framework in Frameworks */,
 				B2AB50EC067F6E4600127FEB /* AudioToolbox.framework in Frameworks */,
@@ -289,7 +284,6 @@
 			children = (
 				B2EB271E05C5287400724495 /* Panda.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
-				B2BA0E1404CECD140055565C /* Jack.framework */,
 				B24BD00305060C0F00947A3C /* CoreAudio.framework */,
 				B24BD00705060C6C00947A3C /* AudioToolbox.framework */,
 			);
@@ -449,6 +443,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 4B4F3D7309E2D5E100D2EC22 /* Build configuration list for PBXProject "JackPilot" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -459,6 +454,7 @@
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* JackPilot1.0 */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				B2C017310508E0830042DB15 /* JackPilot */,
 				4B4F3D3A09E2D5E000D2EC22 /* JackPilot Universal */,
@@ -531,7 +527,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "rm build/Deployment/JackPilot.app/Contents/Resources/Localizable.strings";
+			shellScript = "rm build/Development/JackPilot.app/Contents/Resources/Localizable.strings";
 		};
 		4B4F3D6909E2D5E000D2EC22 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -544,7 +540,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -R Localization/Italian.lproj build/Deployment/JackPilot.app/Contents/Resources/";
+			shellScript = "cp -R Localization/Italian.lproj build/Development/JackPilot.app/Contents/Resources/";
 		};
 		4B4F3D6A09E2D5E000D2EC22 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -557,7 +553,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -R Localization/French.lproj build/Deployment/JackPilot.app/Contents/Resources/";
+			shellScript = "cp -R Localization/French.lproj build/Development/JackPilot.app/Contents/Resources/";
 		};
 		4BA6469B072FE87800590705 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -737,8 +733,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
-					ppc,
 					i386,
+					ppc,
 				);
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -748,9 +744,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = src/JackPilot1.0_Prefix.h;
 				GCC_PREPROCESSOR_DEFINITIONS = "PLUGIN=1";
+				HEADER_SEARCH_PATHS = /usr/local/include;
 				INFOPLIST_FILE = "Info-JackPilot.plist";
 				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "-ljack";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = JackPilot;
@@ -779,9 +776,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = src/JackPilot1.0_Prefix.h;
 				GCC_PREPROCESSOR_DEFINITIONS = "PLUGIN=1";
+				HEADER_SEARCH_PATHS = /usr/local/include;
 				INFOPLIST_FILE = "Info-JackPilot.plist";
 				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "-ljack";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = JackPilot;

@@ -44,30 +44,36 @@ static BOOL checkDeviceName(char* deviceName)
     AudioDeviceID defaultDev;
     int i;
     
-    err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices,&size,&isWritable);
+    err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices, &size, &isWritable);
     if (err != noErr) 
 		return NO;
     
     int manyDevices = size/sizeof(AudioDeviceID);
-	JPLog("number of audio devices: %ld\n",manyDevices);
+	JPLog("number of audio devices: %ld\n", manyDevices);
     
     AudioDeviceID devices[manyDevices];
-    err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices,&size,&devices[0]);
+    err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices, &size, &devices[0]);
     if (err != noErr) 
 		return NO;
         
     size = sizeof(AudioDeviceID);
-    err = AudioHardwareGetProperty(kAudioHardwarePropertyDefaultOutputDevice,&size,&defaultDev);
+    err = AudioHardwareGetProperty(kAudioHardwarePropertyDefaultOutputDevice, &size, &defaultDev);
     if (err != noErr) 
 		return NO;
 		 
     for (i = 0; i < manyDevices; i++) {
-		size = 256;
 		char name[256];
-		err = AudioDeviceGetProperty(devices[i],0,false,kAudioDevicePropertyDeviceName,&size,name);
+		CFStringRef nameRef;
+		size = sizeof(CFStringRef);
+		err = AudioDeviceGetProperty(devices[i], 0, false, kAudioDevicePropertyDeviceNameCFString, &size, &nameRef);
+		//err = AudioDeviceGetProperty(devices[i], 0, false, kAudioDevicePropertyDeviceName, &size, name);
         if (err != noErr) 
-			return NO;        
-        if (strcmp(&name[0],deviceName) == 0)
+			return NO;     
+			
+		CFStringGetCString(nameRef, name, 256, kCFStringEncodingMacRoman);
+		CFRelease(nameRef);
+		
+        if (strcmp(&name[0], deviceName) == 0)
 			return checkDevice(devices[i]);
 	}
         
@@ -82,10 +88,13 @@ static OSStatus getDeviceUIDFromID(AudioDeviceID id, char name[128])
 					   kAudioDevicePropertyDeviceUID,
 					   &size,
 					   &UI);
-	if (res == noErr) 
-		CFStringGetCString(UI,name,128,CFStringGetSystemEncoding());
-	
-	CFRelease(UI);
+	if (res == noErr) {
+		CFStringGetCString(UI, name, 128, CFStringGetSystemEncoding());
+		JPLog("getDeviceUIDFromID: name = %s\n", name);
+		CFRelease(UI);
+	} else {	
+		JPLog("getDeviceUIDFromID: FAIL name = %s\n", name);
+	}
     return res;
 }
 
@@ -206,7 +215,8 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 	NSString *file;
 	NSString *stringa = [NSString init];
 	[driverBox removeAllItems];
-	NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtPath:@"/usr/local/lib/jack/"];
+	//NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtPath:@"/usr/local/lib/jack/"];
+	NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtPath:@"/usr/local/lib/jackmp/"];
 	while (file = [enumerator nextObject]) {
 		if ([file hasPrefix:@"jack_"]) {
 				stringa = (NSString*)[file substringFromIndex:5];
@@ -224,8 +234,10 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 		[self reloadPref:nil];
 		NSArray *prefs = [Utility getPref:'audi'];
 		if (prefs) {
+			JPLog("Reading preferences ref file OK\n");
 			char deviceName[256];
 			[[prefs objectAtIndex:1] getCString:deviceName];
+			JPLog("Reading preferences ref file deviceName = %s\n", deviceName);
 			if (checkDeviceName(deviceName)) { // Check is device kept in preference is available
 				[driverBox selectItemWithTitle:[prefs objectAtIndex:0]];
 				[interfaceBox selectItemWithTitle:[prefs objectAtIndex:1]];
@@ -777,7 +789,8 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
         [jasCopyRText setStringValue:jasCopyR];
     }
     
-    bundle = [NSBundle bundleWithIdentifier:@"com.grame.Jack"];
+    //bundle = [NSBundle bundleWithIdentifier:@"com.grame.Jack"];
+	bundle = [NSBundle bundleWithIdentifier:@"com.grame.Jackmp"];
     if (!bundle) {
         NSLog(@"JackFramework not found");
         [jackVerText setStringValue:LOCSTR(@"Maybe too old.")];
@@ -898,7 +911,7 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 	AudioDeviceID vDevice = 0;
 	Boolean isWritable;
 
-	err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices,&size,&isWritable);
+	err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices, &size, &isWritable);
 	if (err != noErr) 
 		return;
 
@@ -906,23 +919,28 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 	JPLog("number of audio devices: %ld\n",manyDevices);
 
 	AudioDeviceID devices[manyDevices];
-	err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices,&size,&devices);
+	err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices, &size ,&devices);
 	if (err != noErr) 
 		return;
 
 	int i;
 
 	for (i = 0; i < manyDevices; i++) {
-		size = sizeof(char)*256;
 		char name[256];
-		err = AudioDeviceGetProperty(devices[i], 0, false, kAudioDevicePropertyDeviceName, &size, &name);
+		CFStringRef nameRef;
+		size = sizeof(CFStringRef);
+		err = AudioDeviceGetProperty(devices[i], 0, false, kAudioDevicePropertyDeviceNameCFString, &size, &nameRef);
+		//err = AudioDeviceGetProperty(devices[i], 0, false, kAudioDevicePropertyDeviceName, &size, &name);
 		if (err != noErr) 
 			return;
 		/*
 		if (strncmp(interface,name,strlen(interface)) == 0)   
 			vDevice = devices[i];
 		*/
-		if (strcmp(interface,name) == 0)   
+		CFStringGetCString(nameRef, name, 256, kCFStringEncodingMacRoman);
+		CFRelease(nameRef);
+		
+		if (strcmp(interface, name) == 0)   
 			vDevice = devices[i];
 	}	
 
@@ -947,7 +965,8 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 	char drivername[128];
 	getDeviceUIDFromID(vDevice,drivername);
     
-    strcpy(stringa,"/usr/local/bin/./jackd -R -d ");
+    //strcpy(stringa,"/usr/local/bin/./jackd -R -d ");
+	strcpy(stringa,"/usr/local/bin/./jackdmp -R -d ");
     strcat(stringa,driver);
 	strcat(stringa," -r ");
     strcat(stringa,samplerate);
@@ -1056,7 +1075,6 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
         [NSApp terminate:nil];
     }
 }
-
 
 /*
 Scan current audio device properties : in/out channels, sampling rate, buffer size
@@ -1227,23 +1245,28 @@ Set the selDevID variable to the currently selected device of the system defaukt
 	JPLog("First selected device: %s.\n", selectedDevice);
     
     for (i = 0; i < manyDevices; i++) {
-        size = 256;
-        char name[256];
-		err = AudioDeviceGetProperty(devices[i], 0, false, kAudioDevicePropertyDeviceName, &size, &name[0]);
+		char name[256];
+		CFStringRef nameRef;
+		size = sizeof(CFStringRef);
+		err = AudioDeviceGetProperty(devices[i], 0, false, kAudioDevicePropertyDeviceNameCFString, &size, &nameRef);
         if (err != noErr) 
-			return NO;        
+			return NO;
+		CFStringGetCString(nameRef, name, 256, kCFStringEncodingMacRoman);
 		JPLog("Checking device: %s.\n",name);
-        if (strcmp(&name[0],"Jack Router") != 0 && strcmp(&name[0],"iSight") != 0 && checkDevice(devices[i])) {
-			JPLog("Adding device: %s.\n",name);
-            NSString *s_name = [NSString stringWithCString:&name[0]];
+		
+     	if (strcmp(&name[0],"JackRouter") != 0 && strcmp(&name[0],"iSight") != 0 && checkDevice(devices[i])) {
+			JPLog("Adding device: %s.\n", name);
+            NSString *s_name = [NSString stringWithCString:&name[0] encoding:NSMacOSRomanStringEncoding];
 			[interfaceBox addItemWithTitle:s_name];
-            if (strcmp(&selectedDevice[0], &name[0])==0) { 
+            if (strcmp(&selectedDevice[0], &name[0]) == 0) { 
 				selected = YES; 
 				[interfaceBox selectItemWithTitle:s_name]; 
 				selDevID = devices[i]; 
 				JPLog("Selected device:: %s.\n",name);
 			}
         }
+		
+		CFRelease(nameRef);
     }
         
     if (!selected) 

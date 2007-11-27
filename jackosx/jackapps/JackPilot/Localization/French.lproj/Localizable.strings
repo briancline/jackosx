@@ -6,9 +6,9 @@
 /* ALERTS */
 "Please Wait..." = "Attendez...";
 "Jack server is starting..." = "Le serveur Jack demarre...";
-"Jack server is closing..." = "Le serveur jack s'arrete...";
+"Jack server is closing..." = "Le serveur Jack s'arrete...";
 "Cannot start Jack server,\nPlease check the console or retry after a system reboot." = "Le serveur Jack ne demarre pas,\nVerifiez les preferences ou essayez de nouveau apres redemarrage.";
-"Jack server error, try manually (from Dock menu) to close jackd.." = "Erreur du serveur Jack, try manually (from Dock menu) to close jackd..";
+"Jack server error, try manually (from Dock menu) to close jackd.." = "Erreur du serveur Jack, essayez manuellement (depuis le menu Dock) de fermer jackd..";
 "Are you sure?" = "Etes vous sur?";
 "No" = "Non";
 "Yes" = "Oui";
@@ -16,11 +16,11 @@
 "Error:" = "Erreur:";
 "Fatal error:" = "Erreur fatale:";
 "Warning:" = "Attention:";
-"Cannot initialize CoreAudio services, check JackPilot preferences or quit. " = "Les services CoreAudio ne peuvent pas etres initialises, Verifiez les preferences de JackPilot ou quittez. ";
+"Cannot initialize CoreAudio services, check JackPilot preferences or quit. " = "Les services CoreAudio ne peuvent pas etre initialises, Verifiez les preferences de JackPilot ou quittez. ";
 "Preferences" = "Preferences";
 "Quit" = "Quitter";
-"Cannot initialize CoreAudio services, JackPilot will quit. " = "Les services CoreAudio ne peuvent pas etres initialises, JackPilot va quitter. ";
-"Cannot initialize CoreAudio services, check preferences. " = "Les services CoreAudio ne peuvent pas etres initialises, verifiez les preferences. ";
+"Cannot initialize CoreAudio services, JackPilot will quit. " = "Les services CoreAudio ne peuvent pas etre initialises, JackPilot va quitter. ";
+"Cannot initialize CoreAudio services, check preferences. " = "Les services CoreAudio ne peuvent pas etre initialises, verifiez les preferences. ";
 "Cannot find last audio device, please check preferences. " = "Le dernier peripherique utilise est introuvable, verifiez les preferences. ";
 "Use default" = "Utiliez le peripherique pas defaut";
 "Jack Audio Server CoreAudio driver is not installed or is corrupted. " = "Le driver Jack Router CoreAudio n'est pas installe ou est endommage. ";

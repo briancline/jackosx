@@ -107,7 +107,8 @@ int checkJack(void)
     int i;
     for (i = 0; i < quanti; i++) {
         int test;
-        test = strcmp("jackd", ottieniNome(i));
+        //test = strcmp("jackd", ottieniNome(i));
+		test = strcmp("jackdmp", ottieniNome(i));
 		if (test == 0) { 
 			flag = ottieniFlag(i); 
 			return ottieniPid(i); 

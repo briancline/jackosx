@@ -10,7 +10,7 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <Jack/jack.h>
+#include <jack/jack.h>
 #include <Carbon/Carbon.h>
 
 int getDefInput(void);

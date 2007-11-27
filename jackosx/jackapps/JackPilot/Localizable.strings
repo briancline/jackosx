@@ -23,7 +23,7 @@
 "Cannot initialize CoreAudio services, check preferences. " = "Cannot initialize CoreAudio services, check preferences. ";
 "Cannot find last audio device, please check preferences. " = "Cannot find last audio device, please check preferences. ";
 "Use default" = "Use default";
-"Jack Audio Server CoreAudio driver is not installed or is corrupted. " = "Jack Router CoreAudio driver is not installed or is corrupted. ";
+"Jack Audio Server CoreAudio driver is not installed or is corrupted. " = "JackRouter CoreAudio driver is not installed or is corrupted. ";
 "Ok" = "Ok";
 "Sorry..." = "Sorry...";
 "You must have \"Connections Manager\" window opened, and JACK must be ON." = "You must have \"Connections Manager\" window opened, and JACK must be ON.";
