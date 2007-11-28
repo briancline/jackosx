@@ -89,6 +89,14 @@ JackRouterPlugIn*   JackRouterPlugIn::fIntance = NULL;
 //	JackRouterPlugIn
 //=============================================================================
 
+static char* DefaultServerName()
+{
+    char* server_name;
+    if ((server_name = getenv("JACK_DEFAULT_SERVER")) == NULL)
+        server_name = "default";
+    return server_name;
+}
+
 static void startCallback(CFNotificationCenterRef /*center*/,
                           void*	/*observer*/,
                           CFStringRef /*name*/,
@@ -97,7 +105,6 @@ static void startCallback(CFNotificationCenterRef /*center*/,
 {
 	printf("com.grame.jackserver.start notification\n");
 	JackRouterPlugIn::fIntance->AddForHAL();
-	//JackRouterPlugIn::fIntance->InitializeWithObjectID(JackRouterPlugIn::fPlugInRef);
 }
 
 static void stopCallback(CFNotificationCenterRef /*center*/,
@@ -108,9 +115,9 @@ static void stopCallback(CFNotificationCenterRef /*center*/,
 {
 	printf("com.grame.jackserver.stop notification\n");
  	JackRouterPlugIn::fIntance->RemoveFromHAL();
-	//JackRouterPlugIn::fIntance->Teardown();
 }
 
+/*
 static void StartNotification()
 {
 	printf("StartNotification \n");
@@ -129,6 +136,31 @@ static void StopNotification()
 										CFSTR("com.grame.jackserver.start"), CFSTR("com.grame.jackserver"));
 	CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(), NULL,
 										CFSTR("com.grame.jackserver.stop"), CFSTR("com.grame.jackserver"));
+}
+*/
+
+static void StartNotification()
+{
+	printf("StartNotification \n");
+	CFStringRef ref = CFStringCreateWithCString(NULL, DefaultServerName(), kCFStringEncodingMacRoman);
+	CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(),
+									NULL, startCallback, CFSTR("com.grame.jackserver.start"),
+									ref, CFNotificationSuspensionBehaviorDeliverImmediately);
+	CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(),
+									NULL, stopCallback, CFSTR("com.grame.jackserver.stop"),
+									ref, CFNotificationSuspensionBehaviorDeliverImmediately);
+	CFRelease(ref);
+ }
+
+static void StopNotification()
+{
+	printf("StopNotification \n");
+	CFStringRef ref = CFStringCreateWithCString(NULL, DefaultServerName(), kCFStringEncodingMacRoman);
+	CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(), NULL,
+										CFSTR("com.grame.jackserver.start"), ref);
+	CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(), NULL,
+										CFSTR("com.grame.jackserver.stop"), ref);
+	CFRelease(ref);
 }
 
 JackRouterPlugIn::JackRouterPlugIn(CFUUIDRef inFactoryUUID)
