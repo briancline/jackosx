@@ -1400,8 +1400,9 @@ int JackRouterDevice::BufferSize(jack_nframes_t nframes, void* arg)
 {
     JackRouterDevice* client = (JackRouterDevice*)arg;
     JARLog("New BufferSize %ld\n", nframes);
-
-    JackRouterDevice::fBufferSize = nframes;
+	
+	JackRouterDevice::fBufferSize = nframes;
+	mIOBufferFrameSize = nframes;
 
     for (long i = 0; i < JackRouterDevice::fInputChannels; i++) {
         client->fInputList->mBuffers[i].mNumberChannels = 1;
