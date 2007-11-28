@@ -22,6 +22,7 @@ grame@rd.grame.fr
 #include "JARLog.h"
 #include <stdarg.h>
 #include <stdio.h>
+#include <string.h>
 
 int JAR_fDebug = 0;
 
@@ -50,3 +51,16 @@ void JARLog(char *fmt, ...)
         va_end(ap);
     }
 }
+
+/*
+void Print4CharCode(char* msg, long c)
+{
+    if (JAR_fDebug) {
+        unsigned int  __4CC_number = (c);
+        char __4CC_string[5];
+        memcpy(__4CC_string, &__4CC_number, 4);
+        __4CC_string[4] = 0;
+        JARLog("%s'%s'\n", (msg), __4CC_string);
+    }
+}
+*/

@@ -272,7 +272,8 @@ bool	JackRouterDevice::HasProperty(const AudioObjectPropertyAddress& inAddress) 
 {
 	bool theAnswer = false;
 	
-	JARLog("JackRouterDevice::HasProperty \n");
+	JARLog("JackRouterDevice::HasProperty\n");
+	Print4CharCode("JackRouterDevice::HasProperty ", inAddress.mSelector);
 	
 	//	take and hold the state mutex
 	CAMutex::Locker theStateMutex(const_cast<JackRouterDevice*>(this)->GetStateMutex());
@@ -305,14 +306,18 @@ bool	JackRouterDevice::IsPropertySettable(const AudioObjectPropertyAddress& inAd
 {
 	bool theAnswer = false;
 	
+	JARLog("JackRouterDevice::IsPropertySettable\n");
+	Print4CharCode("JackRouterDevice::IsPropertySettable ", inAddress.mSelector);
+	
 	//	take and hold the state mutex
 	CAMutex::Locker theStateMutex(const_cast<JackRouterDevice*>(this)->GetStateMutex());
 	
 	switch(inAddress.mSelector)
 	{
+
 		case kAudioDevicePropertyBufferFrameSize:
 		case kAudioDevicePropertyBufferSize:
-			theAnswer = false;
+			theAnswer = true;
 			break;
 			
 		case kAudioDevicePropertyIOProcStreamUsage:
@@ -355,6 +360,7 @@ UInt32	JackRouterDevice::GetPropertyDataSize(const AudioObjectPropertyAddress& i
 	UInt32	theAnswer = 0;
 	
 	JARLog("JackRouterDevice::GetPropertyDataSize\n");
+	Print4CharCode("JackRouterDevice::GetPropertyDataSize ", inAddress.mSelector);
 	
 	//	take and hold the state mutex
 	CAMutex::Locker theStateMutex(const_cast<JackRouterDevice*>(this)->GetStateMutex());
@@ -395,7 +401,8 @@ void	JackRouterDevice::GetPropertyData(const AudioObjectPropertyAddress& inAddre
 	//	take and hold the state mutex
 	CAMutex::Locker theStateMutex(const_cast<JackRouterDevice*>(this)->GetStateMutex());
 	
-	JARLog("JackRouterDevice::GetPropertyData\n");
+	JARLog("JackRouterDevice::GetPropertyData %ld\n", inAddress.mSelector);
+	Print4CharCode("JackRouterDevice::GetPropertyData ", inAddress.mSelector);
 	
 	switch(inAddress.mSelector)
 	{
@@ -433,6 +440,7 @@ void	JackRouterDevice::GetPropertyData(const AudioObjectPropertyAddress& inAddre
 void	JackRouterDevice::SetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void* inQualifierData, UInt32 inDataSize, const void* inData, const AudioTimeStamp* inWhen)
 {
 	JARLog("JackRouterDevice::SetPropertyData\n");
+	Print4CharCode("JackRouterDevice::SetPropertyData ", inAddress.mSelector);
 	
 	//	take and hold the state mutex
 	CAMutex::Locker theStateMutex(GetStateMutex());

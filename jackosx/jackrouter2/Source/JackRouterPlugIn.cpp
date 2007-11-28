@@ -50,6 +50,7 @@ History
 	       Use a unique UUID for JackRouter. Throw an exception for JackAU or JackVST access is plugin not running.
 26-11-07 : Fix a bug in JackRouterDevice::Process. Use blacklist also in JackRouterPlugIn::AddForHAL. Lock taken in CommandThread::WorkLoop() only if commands are waiting.
 27-11-07 : Fix a buffer size initialisation bug in JackRouterDevice::Initialize(). Use AutoConnect/RestoreConnections also in kAudioDevicePropertyIOProcStreamUsage handling.
+28-11-07 : Fix DVD-Player issue: it works only at 1024 frames. kAudioDevicePropertyBufferFrameSize and kAudioDevicePropertyBufferSize properties are now Settable.
 
 */
 

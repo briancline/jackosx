@@ -30,6 +30,7 @@ extern "C"
 extern int JAR_fDebug;
 
 void JARLog(char *fmt, ...);
+//void Print4CharCode(char* msg, long c);
 
 #ifdef __cplusplus
 }
