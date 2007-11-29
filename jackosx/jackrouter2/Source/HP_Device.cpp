@@ -335,7 +335,7 @@ void	HP_Device::Show() const
 
 bool	HP_Device::HasProperty(const AudioObjectPropertyAddress& inAddress) const
 {
-	Print4CharCode("HP_Device::HasProperty ", inAddress.mSelector);
+	JARPrint4CharCode("HP_Device::HasProperty ", inAddress.mSelector);
 	
 	//	initialize the return value
 	bool theAnswer = false;
@@ -929,7 +929,7 @@ void	HP_Device::GetPropertyData(const AudioObjectPropertyAddress& inAddress, UIn
 	UInt32 theIndex = 0;
 	
 	JARLog("HP_Device::GetPropertyData %ld\n", inAddress.mSelector);
-	Print4CharCode("HP_Device::GetPropertyData ", inAddress.mSelector);
+	JARPrint4CharCode("HP_Device::GetPropertyData ", inAddress.mSelector);
 	
 	//	Figure out what section is involved. Note that the HAL's API calls HasProperty before calling
 	//	GetPropertyData. This means that it can be assumed that inAddress is valid for the property involved.

@@ -52,6 +52,7 @@ History
 27-11-07 : Fix a buffer size initialisation bug in JackRouterDevice::Initialize(). Use AutoConnect/RestoreConnections also in kAudioDevicePropertyIOProcStreamUsage handling.
 28-11-07 : Fix DVD-Player issue: it works only at 1024 frames. kAudioDevicePropertyBufferFrameSize and kAudioDevicePropertyBufferSize properties are now Settable. 
 		   Correct JackRouterDevice::BufferSize.
+29-11-07 : New JackRouterDevice::GetBufferSize method for dynamic buffer size changes. Optimization in Process.
 
 */
 
@@ -118,31 +119,9 @@ static void stopCallback(CFNotificationCenterRef /*center*/,
  	JackRouterPlugIn::fIntance->RemoveFromHAL();
 }
 
-/*
 static void StartNotification()
 {
-	printf("StartNotification \n");
-	CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(),
-									NULL, startCallback, CFSTR("com.grame.jackserver.start"),
-									CFSTR("com.grame.jackserver"), CFNotificationSuspensionBehaviorDeliverImmediately);
-	CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(),
-									NULL, stopCallback, CFSTR("com.grame.jackserver.stop"),
-									CFSTR("com.grame.jackserver"), CFNotificationSuspensionBehaviorDeliverImmediately);
- }
-
-static void StopNotification()
-{
-	printf("StopNotification \n");
-	CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(), NULL,
-										CFSTR("com.grame.jackserver.start"), CFSTR("com.grame.jackserver"));
-	CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(), NULL,
-										CFSTR("com.grame.jackserver.stop"), CFSTR("com.grame.jackserver"));
-}
-*/
-
-static void StartNotification()
-{
-	printf("StartNotification \n");
+	printf("StartNotification name = %s \n", DefaultServerName());
 	CFStringRef ref = CFStringCreateWithCString(NULL, DefaultServerName(), kCFStringEncodingMacRoman);
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(),
 									NULL, startCallback, CFSTR("com.grame.jackserver.start"),
@@ -155,7 +134,7 @@ static void StartNotification()
 
 static void StopNotification()
 {
-	printf("StopNotification \n");
+	printf("StopNotification name = %s \n", DefaultServerName());
 	CFStringRef ref = CFStringCreateWithCString(NULL, DefaultServerName(), kCFStringEncodingMacRoman);
 	CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(), NULL,
 										CFSTR("com.grame.jackserver.start"), ref);
@@ -225,10 +204,10 @@ void	JackRouterPlugIn::InitializeWithObjectID(AudioObjectID inObjectID)
 			}
 			JackRouterDevice::fOutputChannels = max(2, i); // At least 2 channels
 		}
+		
+		if (JackRouterDevice::fInputChannels >= MAX_JACK_PORTS || JackRouterDevice::fOutputChannels >= MAX_JACK_PORTS)
+			throw CAException(kAudioHardwareIllegalOperationError);
 
-		assert(JackRouterDevice::fInputChannels < MAX_JACK_PORTS);
-		assert(JackRouterDevice::fOutputChannels < MAX_JACK_PORTS);
-	
 		JARLog("fInputChannels = %ld \n", JackRouterDevice::fInputChannels);
 		JARLog("fOutputChannels = %ld \n", JackRouterDevice::fOutputChannels);
 		jack_client_close(client);
@@ -247,7 +226,7 @@ void	JackRouterPlugIn::InitializeWithObjectID(AudioObjectID inObjectID)
 #endif
 
 	if (theError != 0)
-		printf("JackRouterPlugIn::InitializeWithObjectID: couldn't instantiate the AudioDevice object theError = %ld\n", theError);
+		JARLog("JackRouterPlugIn::InitializeWithObjectID: couldn't instantiate the AudioDevice object theError = %ld\n", theError);
 	
 	ThrowIfError(theError, CAException(theError), "JackRouterPlugIn::InitializeWithObjectID: couldn't instantiate the AudioDevice object");
 	
@@ -324,7 +303,7 @@ void	JackRouterPlugIn::Teardown()
 
 		//	teardown the super class
 		HP_HardwarePlugIn::Teardown();
-		printf("JackRouterPlugIn::Teardown 0\n");
+		JARLog("JackRouterPlugIn::Teardown 0\n");
 	} else {
 		//  otherwise, only stop the IOProcs
 		mDevice->Do_StopAllIOProcs();
@@ -333,14 +312,14 @@ void	JackRouterPlugIn::Teardown()
 		mDevice->Finalize();
 		
 		//	and leave the rest to die with the process
-		printf("JackRouterPlugIn::Teardown 1\n");
+		JARLog("JackRouterPlugIn::Teardown 1\n");
 	}
 }
 
 void	JackRouterPlugIn::AddForHAL()
 {
 	char* id_name = bequite_getNameFromPid((int)getpid());
-  	printf("AddForHAL name = %s\n", id_name);
+  	JARLog("AddForHAL name = %s\n", id_name);
    
 	// Reject "blacklisted" clients
     if (fBlackList->find(id_name) != fBlackList->end()) {

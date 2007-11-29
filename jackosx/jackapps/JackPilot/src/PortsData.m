@@ -13,13 +13,15 @@
 }
 
 -(void)setNameCh:(NSString*)nome {
-    if(nomeP!=NULL) free(nomeP);
-    nomeP = (char*)malloc(sizeof(char)*256);
+    if (nomeP != NULL) 
+		free(nomeP);
+    nomeP = (char*)malloc(sizeof(char) * 256);
     [nome getCString:nomeP];
 }
 
 -(const char *)getCPort {
-    if(nomeP!=NULL) return nomeP;
+    if (nomeP != NULL) 
+		return nomeP;
     return NULL;
 }
 
@@ -33,7 +35,7 @@
 
 -(void)getChars:(char*)IN {
     char *buf;
-    buf = (char*)alloca(256*sizeof(char));
+    buf = (char*)alloca(256 * sizeof(char));
     [nomePorta getCString:buf];
     strcpy(IN,buf);
 }

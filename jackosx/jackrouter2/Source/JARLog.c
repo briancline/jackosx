@@ -23,6 +23,7 @@ grame@rd.grame.fr
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+#include "CADebugMacros.h"
 
 int JAR_fDebug = 0;
 
@@ -52,15 +53,11 @@ void JARLog(char *fmt, ...)
     }
 }
 
-/*
-void Print4CharCode(char* msg, long c)
+void JARPrint4CharCode(char* msg, long c)
 {
     if (JAR_fDebug) {
         unsigned int  __4CC_number = (c);
-        char __4CC_string[5];
-        memcpy(__4CC_string, &__4CC_number, 4);
-        __4CC_string[4] = 0;
+        char __4CC_string[5] = CA4CCToCString(__4CC_number);
         JARLog("%s'%s'\n", (msg), __4CC_string);
     }
 }
-*/

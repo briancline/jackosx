@@ -271,6 +271,8 @@ private:
 	void						ReleasePlugInPortVST(int num);
 	void						ReleasePlugInPortAU(int num);
 	
+	int							GetBufferSize();
+	
 	// JACK callbacks
 	static int					Process(jack_nframes_t nframes, void* arg);
 	static int					BufferSize(jack_nframes_t nframes, void* arg);

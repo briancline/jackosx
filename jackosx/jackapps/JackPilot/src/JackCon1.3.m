@@ -7,20 +7,23 @@
 
 JackConnections* static_conn;
 
-static void JackPortRegistration(jack_port_id_t port, int a, void *arg) {
+static void JackPortRegistration(jack_port_id_t port, int a, void *arg) 
+{
 	JPLog("JackPortRegistration.\n");
 	JackConnections *c = (JackConnections*)arg;
 	[c reload:nil];
 }
 
-static int JackGraphOrder(void *arg) {
+static int JackGraphOrder(void *arg) 
+{
 	JPLog("JackGraphOrder.\n");
 	JackConnections *c = (JackConnections*)arg;
 	[c reload:nil];
 	return 0;
 }
 
-static int JackProcess(jack_nframes_t frames, void *arg) {
+static int JackProcess(jack_nframes_t frames, void *arg) 
+{
 	return 0;
 }
 
@@ -32,14 +35,15 @@ int nConnections = 0;
 	return static_conn;
 }
 
-- (void)JackCallBacks {
+- (void)JackCallBacks 
+{
 	JPLog("Setting Jack Graph CallBacks.\n");
 	int res = 0;
-	res = jack_set_port_registration_callback(getClient(),JackPortRegistration,self);
+	res = jack_set_port_registration_callback(getClient(), JackPortRegistration, self);
 	if (res != 0) JPLog("Cannot: jack_set_port_registration_callback.\n");
-	jack_set_graph_order_callback(getClient(),JackGraphOrder,self);
+	jack_set_graph_order_callback(getClient(), JackGraphOrder, self);
 	if (res != 0) JPLog("Cannot: jack_set_graph_order_callback.\n");
-	res = jack_set_process_callback(getClient(),JackProcess,NULL);
+	res = jack_set_process_callback(getClient(), JackProcess, NULL);
 	if (res != 0) JPLog("Cannot: jack_set_process_callback.\n");
 }
 
@@ -395,11 +399,11 @@ int nConnections = 0;
 						NSString *aStr = [NSString stringWithCString:str[a]];
 						NSArray *lista1 = [daStr componentsSeparatedByString:@" "];
 						NSArray *lista2 = [aStr componentsSeparatedByString:@" "];
-						if([lista1 count]==1 && [lista2 count]==1) {
+						if ([lista1 count]==1 && [lista2 count]==1) {
 							JPLog("JackPilot is saving: %s -> %s\n",strA,str[a]);
 							fprintf(schemeFile,"\t%s\t%d\t%s\t%d",strA, -1,str[a],-1);
 						} 
-						if([lista1 count]!=1 && [lista2 count]==1) {
+						if ([lista1 count]!=1 && [lista2 count]==1) {
 							int cici;
 							char *buf1,*buf2;
 							buf1 = (char*)calloc(256,sizeof(char));
@@ -616,7 +620,7 @@ int nConnections = 0;
 			for (aa = 0; aa < strlen(strA); aa++) { 
 				checkAudio[aa] = strA[aa];
 				if (strA[aa] == ':') {
-					if(strcmp(checkAudio,"portaudio:") == 0 || strcmp(checkAudio,"coreaudio:") == 0) {
+					if (strcmp(checkAudio,"portaudio:") == 0 || strcmp(checkAudio,"coreaudio:") == 0) {
 						char audioDevice[256];
 						getCurrentAudioDevice(&audioDevice[0]);
 						strcat(&checkAudio[0],audioDevice);

@@ -178,7 +178,7 @@ int getConnections(void)
         jack_port_t* jp;
         jp = jack_port_by_name(client, jplist[i]);
         if (jp != NULL) 
-			if ((aa = jack_port_get_all_connections(client,jp)) != NULL) {
+			if ((aa = jack_port_get_all_connections(client, jp)) != NULL) {
             int g = 0;
             while (aa[g] != NULL) {
                 g++;
@@ -428,11 +428,11 @@ int nomeCliente(int n, char* nome)
 	//!!Fix me, why lots of malloc for only one name!!
     char** array;
     int nporte = numeroPorte();
-    array = (char**)malloc(nporte*sizeof(char*));
+    array = (char**)malloc(nporte * sizeof(char*));
     int i;
     for (i = 0; i < nporte; i++) {
-        array[i] = (char*)malloc(256*sizeof(char));
-		memset(array[i], 0x0, sizeof(char)*256);
+        array[i] = (char*)malloc(256 * sizeof(char));
+		memset(array[i], 0x0, sizeof(char) * 256);
     }
     int quanti;
     ottieniNomeClienti(array, &quanti);

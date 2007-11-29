@@ -84,10 +84,7 @@ static OSStatus getDeviceUIDFromID(AudioDeviceID id, char name[128])
 {
     UInt32 size = sizeof(CFStringRef);
 	CFStringRef UI;
-    OSStatus res = AudioDeviceGetProperty(id, 0, false,
-					   kAudioDevicePropertyDeviceUID,
-					   &size,
-					   &UI);
+    OSStatus res = AudioDeviceGetProperty(id, 0, false, kAudioDevicePropertyDeviceUID, &size, &UI);
 	if (res == noErr) {
 		CFStringGetCString(UI, name, 128, CFStringGetSystemEncoding());
 		JPLog("getDeviceUIDFromID: name = %s\n", name);
@@ -529,7 +526,6 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 		goto end;
 		
 		// steph
-		
 		NSString *str;
 		str = [NSString stringWithCString:"/./CarbonJackd -R -d "];
 		
