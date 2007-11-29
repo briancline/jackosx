@@ -9,14 +9,14 @@ JackConnections* static_conn;
 
 static void JackPortRegistration(jack_port_id_t port, int a, void *arg) 
 {
-	JPLog("JackPortRegistration.\n");
+	JPLog("JackPortRegistration\n");
 	JackConnections *c = (JackConnections*)arg;
 	[c reload:nil];
 }
 
 static int JackGraphOrder(void *arg) 
 {
-	JPLog("JackGraphOrder.\n");
+	JPLog("JackGraphOrder\n");
 	JackConnections *c = (JackConnections*)arg;
 	[c reload:nil];
 	return 0;
@@ -40,11 +40,14 @@ int nConnections = 0;
 	JPLog("Setting Jack Graph CallBacks.\n");
 	int res = 0;
 	res = jack_set_port_registration_callback(getClient(), JackPortRegistration, self);
-	if (res != 0) JPLog("Cannot: jack_set_port_registration_callback.\n");
+	if (res != 0) 
+		JPLog("Cannot: jack_set_port_registration_callback.\n");
 	jack_set_graph_order_callback(getClient(), JackGraphOrder, self);
-	if (res != 0) JPLog("Cannot: jack_set_graph_order_callback.\n");
+	if (res != 0) 
+		JPLog("Cannot: jack_set_graph_order_callback.\n");
 	res = jack_set_process_callback(getClient(), JackProcess, NULL);
-	if (res != 0) JPLog("Cannot: jack_set_process_callback.\n");
+	if (res != 0) 
+		JPLog("Cannot: jack_set_process_callback.\n");
 }
 
 -(void)awakeFromNib {
@@ -60,7 +63,8 @@ int nConnections = 0;
         
         [self fillPortsArray];
         
-        if (datiTab != nil) [datiTab release];
+        if (datiTab != nil) 
+			[datiTab release];
         datiTab = [tableData alloc];
         [datiTab setWhatKind:0];
         [datiTab writeData:sender text:&quantePConnCli text2:&portSelected[0] text3:&needsReload];
@@ -69,7 +73,8 @@ int nConnections = 0;
         [tabellaPorte setDoubleAction:@selector(removCon:)];
         [tabellaPorte setTarget:self];
 		
-        if (datiTab2 != nil) [datiTab2 release];
+        if (datiTab2 != nil) 
+			[datiTab2 release];
         datiTab2 = [tableDataB alloc];
         [datiTab2 setWhatKind:1];
         [datiTab2 writeData:sender text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected];
@@ -78,7 +83,8 @@ int nConnections = 0;
         [tabellaSend setDoubleAction:@selector(makeCon:)];
         [tabellaSend setTarget:self];
 			
-        if (datiTab3 != nil) [datiTab3 release];
+        if (datiTab3 != nil) 
+			[datiTab3 release];
         datiTab3 = [tableDataC alloc];
         [datiTab3 setWhatKind:1];
         [datiTab3 writeData:sender text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected];
@@ -100,7 +106,6 @@ int nConnections = 0;
 
 - (IBAction)makeCon:(id)sender
 {
-    //JPLog("Double Click\n");
     doubleClick = YES;
     NSMutableArray *lista1 = nil;
 	NSMutableArray *lista2 = nil;
@@ -108,11 +113,13 @@ int nConnections = 0;
     oldSel2 = [tabellaConnect selectedRow];
     [self selectFrom:sender];
     [self selectTo:sender];
+	
     if (kind1 != 1) 
 		[[daText stringValue] getCString:daCh];
     else {
         lista1 = [datiTab2 getPorteSelected];
     }
+	
     if (kind2 != 1) 
 		[[aText stringValue] getCString:aCh];
     else {
@@ -170,6 +177,7 @@ int nConnections = 0;
             if (test != 0) test = disconnectPorts(&aCh[0],&daCh[0]);
 		}
     }
+	
     needsReloadColor = 44;
 }
 
@@ -187,9 +195,7 @@ int nConnections = 0;
 }
 
 -(void)removeACon:(id)sender 
-{
-    //JPLog("DOUBLE CLICK\n");
-}
+{}
 
 -(IBAction) reload3:(int)sender {
     [self fillPortsArray];
@@ -244,7 +250,7 @@ int nConnections = 0;
                     chi2 = [lista1 objectAtIndex:i];
                     
                     char *buf;
-                    buf = (char*)alloca(256*sizeof(char));
+                    buf = (char*)alloca(256 * sizeof(char));
                     [chi2 getCString:buf];
                     
                     int test;
@@ -255,7 +261,7 @@ int nConnections = 0;
         }
         if (kind2 == 0) {
             char *buf;
-            buf = (char*)alloca(256*sizeof(char));
+            buf = (char*)alloca(256 * sizeof(char));
             [[aText stringValue] getCString:buf];
             while (object = [rows nextObject]) {
                 NSString *chi;
@@ -286,7 +292,7 @@ int nConnections = 0;
                     chi2 = [lista1 objectAtIndex:i];
                     
                     char *buf;
-                    buf = (char*)alloca(256*sizeof(char));
+                    buf = (char*)alloca(256 * sizeof(char));
                     [chi2 getCString:buf];
                     
                     int test;
@@ -297,7 +303,7 @@ int nConnections = 0;
         }
         if (kind1 == 0) {
             char *buf;
-            buf = (char*)alloca(256*sizeof(char));
+            buf = (char*)alloca(256 * sizeof(char));
             [[daText stringValue] getCString:buf];
             while (object = [rows nextObject]) {
                 NSString *chi;
@@ -337,150 +343,154 @@ int nConnections = 0;
 
 - (IBAction)saveScheme: (id)sender
 {
-    if([theWindow isVisible]) {
+	if ([theWindow isVisible]) {
 
-    NSSavePanel *sp;
-    int runResult;
-    NSString *filename;
-    sp = [NSSavePanel savePanel];
+		NSSavePanel *sp;
+		int runResult;
+		NSString *filename;
+		sp = [NSSavePanel savePanel];
 
-    [sp setRequiredFileType:@"jks"];
+		[sp setRequiredFileType:@"jks"];
+		runResult = [sp runModalForDirectory:NSHomeDirectory() file:@""];
 
-    runResult = [sp runModalForDirectory:NSHomeDirectory() file:@""];
-
-    if (runResult == NSOKButton) {
-        if(!(filename = [sp filename])) {
-            NSBeep();
-        }
-    }else 
-		return;
-    
-    char namefile[256];
-    [filename getCString:namefile];
-    
-    FILE *schemeFile;
-    if ((schemeFile = fopen(&namefile[0], "wt")) == NULL) {
-        return;
-	} else {
+		if (runResult == NSOKButton) {
+			if(!(filename = [sp filename])) {
+				NSBeep();
+			}
+		}else 
+			return;
 		
-		ottieniPorte();
+		char namefile[256];
+		[filename getCString:namefile];
 		
-		int chisono = numeroPorte();
-		int chisono2 = getConnections();
-		int i;
-		
-		char **str;
-		str = (char**)calloc(128,sizeof(char*));
-		int rip;
-		for(rip = 0; rip < 128; rip++) {
-			str[rip] = (char*)calloc(256,sizeof(char));
-		}
-	   
-		fprintf(schemeFile,"\t%d",(chisono2/2)); 
-	   
-		for(i = 0; i < chisono; i++) {
-			char strDA[256],strA[256];
+		FILE *schemeFile;
+		if ((schemeFile = fopen(&namefile[0], "wt")) == NULL) {
+			return;
+		} else {
 			
-			NSString *chi;
-			chi = [datiTab2 getCHisono2:i];
-			NSString *chi2;
-			chi2 = [datiTab3 getCHisono2:i];
-			[chi getCString:strDA];
-			[chi2 getCString:strA];
-			int test;
-			test = getTipoByName(&strDA[0]);
-			if(test == 22 || test == 2) {
-			int res;
-			res = connessionePerNumero2(i,str);
-				if(res != 0) {
-					int a;
-					for(a = 0; a < res; a++) {
-						NSString *daStr = [NSString stringWithCString:strA];
-						NSString *aStr = [NSString stringWithCString:str[a]];
-						NSArray *lista1 = [daStr componentsSeparatedByString:@" "];
-						NSArray *lista2 = [aStr componentsSeparatedByString:@" "];
-						if ([lista1 count]==1 && [lista2 count]==1) {
-							JPLog("JackPilot is saving: %s -> %s\n",strA,str[a]);
-							fprintf(schemeFile,"\t%s\t%d\t%s\t%d",strA, -1,str[a],-1);
-						} 
-						if ([lista1 count]!=1 && [lista2 count]==1) {
-							int cici;
-							char *buf1,*buf2;
-							buf1 = (char*)calloc(256,sizeof(char));
-							buf2 = (char*)calloc(256,sizeof(char));
-							
-							for(cici=0;cici<[lista1 count];cici++) {
-								NSString *pre = [lista1 objectAtIndex:cici];
-								[pre getCString:buf1];
-								strcat(buf2,buf1);
-								if(cici+1!=[lista1 count])strcat(buf2,"%%%");
+			ottieniPorte();
+			
+			int chisono = numeroPorte();
+			int chisono2 = getConnections();
+			int i;
+			
+			char **str;
+			str = (char**)calloc(128, sizeof(char*));
+			int rip;
+			for (rip = 0; rip < 128; rip++) {
+				str[rip] = (char*)calloc(256, sizeof(char));
+			}
+		   
+			fprintf(schemeFile,"\t%d",(chisono2/2)); 
+		   
+			for(i = 0; i < chisono; i++) {
+				char strDA[256],strA[256];
+				
+				NSString *chi;
+				chi = [datiTab2 getCHisono2:i];
+				NSString *chi2;
+				chi2 = [datiTab3 getCHisono2:i];
+				[chi getCString:strDA];
+				[chi2 getCString:strA];
+				int test;
+				test = getTipoByName(&strDA[0]);
+				if (test == 22 || test == 2) {
+					int res;
+					res = connessionePerNumero2(i, str, 128);
+					if (res != 0) {
+						int a;
+						for (a = 0; a < res; a++) {
+							NSString *daStr = [NSString stringWithCString:strA];
+							NSString *aStr = [NSString stringWithCString:str[a]];
+							NSArray *lista1 = [daStr componentsSeparatedByString:@" "];
+							NSArray *lista2 = [aStr componentsSeparatedByString:@" "];
+							if ([lista1 count] == 1 && [lista2 count] == 1) {
+								JPLog("JackPilot is saving: %s -> %s\n",strA,str[a]);
+								fprintf(schemeFile,"\t%s\t%d\t%s\t%d",strA, -1,str[a],-1);
+							} 
+							if ([lista1 count] != 1 && [lista2 count] == 1) {
+								int cici;
+								char *buf1, *buf2;
+								buf1 = (char*)calloc(256, sizeof(char));
+								buf2 = (char*)calloc(256, sizeof(char));
+								
+								for(cici=0;cici<[lista1 count];cici++) {
+									NSString *pre = [lista1 objectAtIndex:cici];
+									[pre getCString:buf1];
+									strcat(buf2,buf1);
+									if(cici+1!=[lista1 count])strcat(buf2,"%%%");
+								}
+								strcpy(strA,buf2);
+								free(buf1); free(buf2);
+								JPLog("JackPilot is saving: %s -> %s\n",strA,str[a]);
+								fprintf(schemeFile,"\t%s\t%d\t%s\t%d",strA, -1,str[a],-1);
 							}
-							strcpy(strA,buf2);
-							free(buf1); free(buf2);
-							JPLog("JackPilot is saving: %s -> %s\n",strA,str[a]);
-							fprintf(schemeFile,"\t%s\t%d\t%s\t%d",strA, -1,str[a],-1);
-						}
-						if ([lista1 count] != 1 && [lista2 count] != 1) {
-							int cici;
-							char *buf1,*buf2;
-							buf1 = (char*)calloc(256,sizeof(char));
-							buf2 = (char*)calloc(256,sizeof(char));
-							
-							for(cici = 0; cici < [lista1 count]; cici++) {
-								NSString *pre = [lista1 objectAtIndex:cici];
-								[pre getCString:buf1];
-								strcat(buf2,buf1);
-								if(cici+1!=[lista1 count])strcat(buf2,"%%%");
+							if ([lista1 count] != 1 && [lista2 count] != 1) {
+								int cici;
+								char *buf1, *buf2;
+								buf1 = (char*)calloc(256,sizeof(char));
+								buf2 = (char*)calloc(256,sizeof(char));
+								
+								for(cici = 0; cici < [lista1 count]; cici++) {
+									NSString *pre = [lista1 objectAtIndex:cici];
+									[pre getCString:buf1];
+									strcat(buf2,buf1);
+									if(cici+1!=[lista1 count])strcat(buf2,"%%%");
+								}
+								strcpy(strA,buf2);
+								free(buf1); free(buf2);
+								
+								char *buf3,*buf4;
+								buf3 = (char*)calloc(256, sizeof(char));
+								buf4 = (char*)calloc(256, sizeof(char));
+								
+								for(cici = 0; cici <[lista2 count]; cici++) {
+									NSString *pre = [lista2 objectAtIndex:cici];
+									[pre getCString:buf3];
+									strcat(buf4, buf3);
+									if (cici + 1 != [lista2 count])
+										strcat(buf4,"%%%");
+								}
+								strcpy(str[a],buf4);
+								free(buf3); 
+								free(buf4);
+								JPLog("JackPilot is saving: %s -> %s\n", strA, str[a]);
+								fprintf(schemeFile,"\t%s\t%d\t%s\t%d",strA, -1, str[a], -1);
 							}
-							strcpy(strA,buf2);
-							free(buf1); free(buf2);
 							
-							char *buf3,*buf4;
-							buf3 = (char*)calloc(256,sizeof(char));
-							buf4 = (char*)calloc(256,sizeof(char));
-							
-							for(cici = 0; cici <[lista2 count]; cici++) {
-								NSString *pre = [lista2 objectAtIndex:cici];
-								[pre getCString:buf3];
-								strcat(buf4,buf3);
-								if(cici+1!=[lista2 count])strcat(buf4,"%%%");
+							if ([lista1 count] == 1 && [lista2 count] != 1) {
+								int cici;
+								char *buf1,*buf2;
+								buf1 = (char*)calloc(256, sizeof(char));
+								buf2 = (char*)calloc(256, sizeof(char));
+								
+								for (cici = 0; cici < [lista2 count]; cici++) {
+									NSString *pre = [lista2 objectAtIndex:cici];
+									[pre getCString:buf1];
+									strcat(buf2, buf1);
+									if (cici + 1 != [lista2 count])
+										strcat(buf2,"%%%");
+								}
+								strcpy(str[a], buf2);
+								free(buf1); 
+								free(buf2);
+								JPLog("JackPilot is saving: %s -> %s\n",strA,str[a]);
+								fprintf(schemeFile,"\t%s\t%d\t%s\t%d",strA, -1,str[a],-1);
 							}
-							strcpy(str[a],buf4);
-							free(buf3); free(buf4);
-							JPLog("JackPilot is saving: %s -> %s\n",strA,str[a]);
-							fprintf(schemeFile,"\t%s\t%d\t%s\t%d",strA, -1,str[a],-1);
-						}
-						
-						if ([lista1 count] == 1 && [lista2 count] != 1) {
-							int cici;
-							char *buf1,*buf2;
-							buf1 = (char*)calloc(256,sizeof(char));
-							buf2 = (char*)calloc(256,sizeof(char));
-							
-							for(cici=0;cici<[lista2 count];cici++) {
-								NSString *pre = [lista2 objectAtIndex:cici];
-								[pre getCString:buf1];
-								strcat(buf2,buf1);
-								if(cici+1!=[lista2 count])strcat(buf2,"%%%");
-							}
-							strcpy(str[a],buf2);
-							free(buf1); free(buf2);
-							JPLog("JackPilot is saving: %s -> %s\n",strA,str[a]);
-							fprintf(schemeFile,"\t%s\t%d\t%s\t%d",strA, -1,str[a],-1);
 						}
 					}
 				}
 			}
+			for (rip = 0; rip < 128; rip++) {
+				free(str[rip]);
+			}
+			free(str);
+			int stopInt = 12341;
+			fprintf(schemeFile,"\t%d",stopInt);
+			fclose(schemeFile);
 		}
-		for(rip=0;rip<128;rip++) {
-			free(str[rip]);
-		}
-		free(str);
-		int stopInt = 12341;
-		fprintf(schemeFile,"\t%d",stopInt);
-		fclose(schemeFile);
-		}
-    } else NSRunAlertPanel(LOCSTR(@"Sorry..."),LOCSTR(@"You must have \"Connections Manager\" window opened, and JACK must be ON."),LOCSTR(@"Ok"),nil,nil);
+	} else 
+		NSRunAlertPanel(LOCSTR(@"Sorry..."),LOCSTR(@"You must have \"Connections Manager\" window opened, and JACK must be ON."),LOCSTR(@"Ok"),nil,nil);
 }
 
 - (IBAction)loadScheme: (id)sender
@@ -512,28 +522,29 @@ int nConnections = 0;
 		
 		int quanteConn = getConnections()/2;
 		
-		if (quanteConn!=0) {
+		if (quanteConn != 0) {
 			
-			for(i = 0;i<chisono;i++) {
+			for (i = 0; i < chisono; i++) {
 				
 				NSString *chi2;
 				chi2 = [datiTab2 getCHisono2:i];
 				[chi2 getCString:aCh];
 				
-				int quanteCc = connessionePerNumero2(i,NULL);
+				int quanteCc = connessionePerNumero2(i, NULL, 0);
 				
 				char **thebuf;
-				thebuf = (char**)alloca(quanteCc*sizeof(char*));
+				thebuf = (char**)alloca(quanteCc * sizeof(char*));
 				int aa;
-				for(aa=0;aa<quanteCc;aa++) {
-					thebuf[aa] = (char*)alloca(256*sizeof(char));
+				for (aa = 0; aa < quanteCc; aa++) {
+					thebuf[aa] = (char*)alloca(256 * sizeof(char));
 				}
 				
-				connessionePerNumero2(i,thebuf);
+				connessionePerNumero2(i, thebuf, quanteCc);
 				
-				for(aa=0;aa<quanteCc;aa++) {
-					int test = disconnectPorts(aCh,thebuf[aa]);
-					if (test != 0) test = disconnectPorts(thebuf[aa],aCh);
+				for (aa = 0; aa < quanteCc; aa++) {
+					int test = disconnectPorts(aCh, thebuf[aa]);
+					if (test != 0) 
+						test = disconnectPorts(thebuf[aa], aCh);
 				}
 			}
 		}
@@ -542,41 +553,41 @@ int nConnections = 0;
 		fscanf(schemeFile,"\t%d",&howMany);
 		JPLog("JackPilot is restoring %d connections \n",howMany);
 		
-		for(i = 0;i<howMany;i++) {
+		for (i = 0; i < howMany; i++) {
 			
 			char *test2;
-			test2 = (char*)calloc(256,sizeof(char));
+			test2 = (char*)calloc(256, sizeof(char));
 			char *strDA;
-			strDA = (char*)calloc(256,sizeof(char));
+			strDA = (char*)calloc(256, sizeof(char));
 			char *strA;
-			strA = (char*)calloc(256,sizeof(char));
+			strA = (char*)calloc(256, sizeof(char));
 			int nullo;
 			
 			scan2:
-			if((fscanf(schemeFile,"\t%s\t%d",test2,&nullo))!=2) {
+			if ((fscanf(schemeFile, "\t%s\t%d", test2, &nullo))!=2) {
 				strcat(strDA,test2);
 				strcat(strDA," ");
 				int c;
 				do c = getc (schemeFile);
 				while (isspace (c));
-				ungetc (c, schemeFile);
+				ungetc(c, schemeFile);
 				goto scan2;
 			}
 			strcat(strDA,test2);
 			scan3:
-			if((fscanf(schemeFile,"\t%s\t%d",test2,&nullo))!=2) {
-				strcat(strA,test2);
-				strcat(strA," ");
+			if ((fscanf(schemeFile,"\t%s\t%d",test2,&nullo))!=2) {
+				strcat(strA, test2);
+				strcat(strA, " ");
 				int c;
-				do c = getc (schemeFile);
-				while (isspace (c));
-				ungetc (c, schemeFile);
+				do c = getc(schemeFile);
+				while (isspace(c));
+				ungetc(c, schemeFile);
 				goto scan3;
 			}
-			strcat(strA,test2);
+			strcat(strA, test2);
 			
-			if (nullo==12341) break;
-			if(strcmp(strDA,"12341")==0) break;
+			if (nullo == 12341) break;
+			if (strcmp(strDA, "12341") == 0) break;
 			
 			NSString *daStr = [NSString stringWithCString:strDA];
 			NSString *aStr = [NSString stringWithCString:strA];
@@ -584,8 +595,8 @@ int nConnections = 0;
 			NSArray *lista2 = [aStr componentsSeparatedByString:@"%%%"];
 			
 			char *buf1,*buf2;
-			buf1 = (char*)calloc(256,sizeof(char));
-			buf2 = (char*)calloc(256,sizeof(char));
+			buf1 = (char*)calloc(256, sizeof(char));
+			buf2 = (char*)calloc(256, sizeof(char));
 			int tick;
 			for(tick=0;tick<[lista1 count];tick++) {
 				NSString *pre = [lista1 objectAtIndex:tick];
@@ -596,26 +607,27 @@ int nConnections = 0;
 			strcpy(strDA,buf2);
 			
 			char *buf3,*buf4;
-			buf3 = (char*)calloc(256,sizeof(char));
-			buf4 = (char*)calloc(256,sizeof(char));
-			for(tick=0;tick<[lista2 count];tick++) {
+			buf3 = (char*)calloc(256, sizeof(char));
+			buf4 = (char*)calloc(256, sizeof(char));
+			for (tick = 0; tick < [lista2 count]; tick++) {
 				NSString *pre = [lista2 objectAtIndex:tick];
 				[pre getCString:buf3];
 				strcat(buf4,buf3);
-				if(tick+1!=[lista2 count])strcat(buf4," ");
+				if (tick + 1 != [lista2 count])
+					strcat(buf4," ");
 			}
 			strcpy(strA,buf4);
 			
 			char buffer[256];
-			sprintf(&buffer[0],"%s and %s\n",strDA,strA);
+			sprintf(&buffer[0],"%s and %s\n", strDA, strA);
 			NSString *warnStr;
 			warnStr = [NSString stringWithCString:buffer];
 			
 			char checkAudio[256];
 			char audioDeviceName[256];
 			
-			memset(&checkAudio,0,sizeof(char)*256);
-			memset(&audioDeviceName,0,sizeof(char)*256);
+			memset(&checkAudio, 0, sizeof(char) * 256);
+			memset(&audioDeviceName, 0, sizeof(char) * 256);
 			int aa;
 			for (aa = 0; aa < strlen(strA); aa++) { 
 				checkAudio[aa] = strA[aa];
@@ -623,9 +635,9 @@ int nConnections = 0;
 					if (strcmp(checkAudio,"portaudio:") == 0 || strcmp(checkAudio,"coreaudio:") == 0) {
 						char audioDevice[256];
 						getCurrentAudioDevice(&audioDevice[0]);
-						strcat(&checkAudio[0],audioDevice);
+						strcat(&checkAudio[0], audioDevice);
 						char port[256];
-						memset(&port,0,sizeof(char)*256);
+						memset(&port, 0, sizeof(char) * 256);
 						int aaa;
 						aa++;
 						int count = 0;
@@ -676,7 +688,7 @@ int nConnections = 0;
 			for (aa = 0; aa < strlen(strDA); aa++) { 
 				checkAudio[aa] = strDA[aa];
 				if (strDA[aa] == ':') {
-					if(strcmp(checkAudio,"portaudio:") == 0 || strcmp(checkAudio,"coreaudio:") == 0) {
+					if (strcmp(checkAudio,"portaudio:") == 0 || strcmp(checkAudio,"coreaudio:") == 0) {
 						char audioDevice[256];
 						getCurrentAudioDevice(&audioDevice[0]);
 						strcat(&checkAudio[0],&audioDevice[0]);
@@ -685,12 +697,12 @@ int nConnections = 0;
 						int aaa;
 						aa++;
 						int count = 0;
-						for(aaa=aa;aaa<strlen(strDA);aaa++) {
+						for (aaa = aa; aaa < strlen(strDA); aaa++) {
 							if(strDA[aaa]!= ':') {
 								audioDeviceName[count] = strDA[aaa];
 								count++;
 							}
-							if(strDA[aaa]  == ':') {
+							if (strDA[aaa]  == ':') {
 								int aaaa;
 								int cc=0;
 								for(aaaa=aaa;aaaa<strlen(strDA);aaaa++) {
@@ -701,13 +713,13 @@ int nConnections = 0;
 							}
 						}
 						char verify[256];
-						strcpy(&verify[0],"portaudio:");
-						strcat(&verify[0],&audioDeviceName[0]);
-						if(strcmp(&verify[0],&checkAudio[0])!=0) {
-							strcpy(&verify[0],"coreaudio:");
-							strcat(&verify[0],audioDeviceName); 
-							if(strcmp(&verify[0],&checkAudio[0])!=0) {
-								strcat(&checkAudio[0],&port[0]);
+						strcpy(&verify[0], "portaudio:");
+						strcat(&verify[0], &audioDeviceName[0]);
+						if (strcmp(&verify[0], &checkAudio[0])!=0) {
+							strcpy(&verify[0], "coreaudio:");
+							strcat(&verify[0], audioDeviceName); 
+							if (strcmp(&verify[0], &checkAudio[0])!=0) {
+								strcat(&checkAudio[0], &port[0]);
 								int check2;
 								NSMutableString *message = [NSMutableString stringWithCapacity:4];
 								[message appendString:LOCSTR(@"The physical driver used with this setup was ")];
@@ -717,8 +729,9 @@ int nConnections = 0;
 								[message appendString:LOCSTR(@", do you want to restore connections to the used with driver ")];
 								[message appendString:[NSString stringWithCString:&audioDevice[0]]];
 								[message appendString:@"?"];
-								check2 = NSRunCriticalAlertPanel(LOCSTR(@"Warning:"),message,LOCSTR(@"Yes"),LOCSTR(@"No"),nil);
-								if(check2==0) goto end;
+								check2 = NSRunCriticalAlertPanel(LOCSTR(@"Warning:"), message, LOCSTR(@"Yes"),LOCSTR(@"No"),nil);
+								if (check2 == 0) 
+									goto end;
 								strcpy(strDA,&checkAudio[0]);
 							}
 						}
@@ -730,9 +743,10 @@ int nConnections = 0;
 			int test;
 			
 			test = connectPorts(strDA,strA);
-			if (test != 0) test = connectPorts(strA,strDA);
+			if (test != 0) 
+				test = connectPorts(strA,strDA);
 			
-			while(test!=0) {
+			while (test != 0) {
 				int a;
 				a = NSRunCriticalAlertPanel(warnStr,LOCSTR(@"CANNOT BE RESTORED. If you need this connection you must open client application and retry"),LOCSTR(@"Retry"),LOCSTR(@"Abort"),LOCSTR(@"Skip"));
 				switch(a) {
@@ -745,12 +759,20 @@ int nConnections = 0;
 						break;
 				}
 				test = connectPorts(strDA,strA);
-				if (test!=0) test = connectPorts(strA,strDA);
-				if (test == 0) break;
+				if (test != 0) 
+					test = connectPorts(strA,strDA);
+				if (test == 0) 
+					break;
 			}
 			
 	end:
-			free(buf3); free(buf4); free(buf1); free(buf2); free(strA); free(strDA); free(test2);
+			free(buf3); 
+			free(buf4); 
+			free(buf1); 
+			free(buf2); 
+			free(strA); 
+			free(strDA); 
+			free(test2);
 		}
 	end2:
 
@@ -758,7 +780,8 @@ int nConnections = 0;
 	}
     [self reload:sender];
     
-    }else NSRunAlertPanel(LOCSTR(@"Sorry..."),LOCSTR(@"You must have \"Connections Manager\" window opened, and JACK must be ON."),LOCSTR(@"Ok"),nil,nil);
+    } else 
+		NSRunAlertPanel(LOCSTR(@"Sorry..."),LOCSTR(@"You must have \"Connections Manager\" window opened, and JACK must be ON."),LOCSTR(@"Ok"),nil,nil);
 }
 
 - (void)fillPortsArray {
@@ -769,38 +792,32 @@ int nConnections = 0;
     nports = numeroPorte();
     JPLog("Number of ports: %d\n",nports);
     int i;
-    char* nomeBuf;
-    nomeBuf = (char*)alloca(256*sizeof(char));
-    for(i = 0; i < nports; i++) {
+    char* nomeBuf = (char*)alloca(256 * sizeof(char));
+    for (i = 0; i < nports; i++) {
         unsigned long tipo;
         portsArrData* data = [[portsArrData alloc] retain];
         portaPerNumero(i, nomeBuf, &tipo);
         JPLog("Port %d : %s of kind: %d\n", i, nomeBuf, tipo);
         int coci;
         for (coci = 0; coci < quantePConnCli; coci++) {
-            //JPLog("YES\n");
-            int connec;
-            connec = connessionePerNumero2(i,NULL);
+            int connec = connessionePerNumero2(i, NULL, 0);
             if (connec != 0) { 
-                //JPLog("IS Connected: %d\n", connec);
-                char **name;
-                name = (char**)alloca(connec*sizeof(char*));
-                char *bufferT;
-                bufferT = (char*)alloca(256*sizeof(char));
+                char **name = (char**)alloca(connec * sizeof(char*));
+                char *bufferT = (char*)alloca(256 * sizeof(char));
                 unsigned long tipo2;
                 portaPerNumero(portSelected[coci], bufferT, &tipo2);
                 int ii;
                 for (ii = 0; ii < connec; ii++) {
-                    name[ii] = (char*)alloca(256*sizeof(char));
+                    name[ii] = (char*)alloca(256 * sizeof(char));
                 }
-                connessionePerNumero2(i,name);
-                for(ii = 0; ii < connec; ii++) {
-                    if (strcmp(bufferT,name[ii]) == 0) 
+                connessionePerNumero2(i, name, connec);
+                for (ii = 0; ii < connec; ii++) {
+                    if (strcmp(bufferT, name[ii]) == 0) 
 						[data setIsConn:1];
-                    //JPLog("COMPARO : %s and %s\n",bufferT,name[ii]);
                 }
                 
-            } else [data setIsConn:0];
+            } else 
+				[data setIsConn:0];
         }
 		
         [data setName:nomeBuf];
@@ -827,7 +844,7 @@ int nConnections = 0;
 
 -(void) reloadTimer {
     if (needsReload == 22) { 
-        JPLog("NEEDS RELOAD\n");
+        JPLog("Needs Reload\n");
         needsReload = 0;
         int i;
         int rigo1 = [tabellaSend selectedRow];
@@ -902,7 +919,6 @@ int nConnections = 0;
 }
 
 -(IBAction) reloadColor:(id)sender {
-    //JPLog("Single Click\n");    
     needsReloadColor = 44;
 }
 

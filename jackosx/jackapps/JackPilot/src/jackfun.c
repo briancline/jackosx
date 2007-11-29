@@ -82,7 +82,7 @@ int my_system (const char *command)
   return status;
 }
 
-int my_system2 (const char *command)
+int my_system2(const char *command)
 {
 	firsttime = 1;
 	int status;
@@ -141,7 +141,8 @@ int ottieniPorte(void)  //why not void instead of int return!!??
 int portaPerNumero(int n, char *nomeOut, unsigned long *tipo) 
 {
     ottieniPorte();
-	if (!jplist) return 0;
+	if (!jplist) 
+		return 0;
     if (jplist[n] != NULL) {
         strcpy(nomeOut, jplist[n]);
         *tipo = getTipoByName(jplist[n]);        
@@ -227,41 +228,43 @@ int connessionePerNumero(int n, char* nomeOut)
 {
     char porta[256];
     jack_port_t* jp;
-    strcpy(nomeOut,"");
+    strcpy(nomeOut, "");
     unsigned long tipo;
-    portaPerNumero(n,&porta[0],&tipo);
-    jp = jack_port_by_name(client,&porta[0]);
-    if (jp == NULL) 
+    portaPerNumero(n, porta, &tipo);
+    jp = jack_port_by_name(client, porta);
+    if (jp == NULL)
 		return 0;
-    connec = jack_port_get_all_connections(client,jp);
+    connec = jack_port_get_all_connections(client, jp);
     if (connec != NULL) {
         int nu = numeroConn();
         int i;
         for (i = 0; i < nu; i++) {
-            if (connec[i] && nomeOut) strcat(nomeOut,connec[i]);
+            if (connec[i] && nomeOut) 
+				strcat(nomeOut, connec[i]);
             return 1;
         }
     }
     return 0;
 }
 
-int connessionePerNumero2(int n, char** nomeOut) 
+int connessionePerNumero2(int n, char** nomeOut, int len) 
 {
     int many = 0;
     char porta[256];
     jack_port_t* jp;
     unsigned long tipo;
-    portaPerNumero(n, &porta[0], &tipo);
-    jp = jack_port_by_name(client, &porta[0]);
-    if (jp == NULL) return 0;
+    portaPerNumero(n, porta, &tipo);
+    jp = jack_port_by_name(client, porta);
+    if (jp == NULL) 
+		return 0;
     connec = jack_port_get_all_connections(client, jp);
 	if (connec != NULL) {
 		int nu = numeroConn();
 		int i;
 		if (nomeOut != NULL) {
-			for (i = 0; i < nu; i++){
+			for (i = 0; i < nu && i < len; i++){
 				if (connec[i] != NULL && nomeOut[i] != NULL) 
-					strcpy(nomeOut[i],connec[i]);
+					strcpy(nomeOut[i], connec[i]);
 			}
 		}
 		many = nu;

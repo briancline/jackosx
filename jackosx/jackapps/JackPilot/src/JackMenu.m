@@ -66,8 +66,7 @@ static BOOL checkDeviceName(char* deviceName)
 		CFStringRef nameRef;
 		size = sizeof(CFStringRef);
 		err = AudioDeviceGetProperty(devices[i], 0, false, kAudioDevicePropertyDeviceNameCFString, &size, &nameRef);
-		//err = AudioDeviceGetProperty(devices[i], 0, false, kAudioDevicePropertyDeviceName, &size, name);
-        if (err != noErr) 
+	    if (err != noErr) 
 			return NO;     
 			
 		CFStringGetCString(nameRef, name, 256, kCFStringEncodingMacRoman);
@@ -275,7 +274,6 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 //Plugins-Menu stuff:
 #ifdef PLUGIN
 	
-	//NSString *fP_NSlots = [Utility getPref:'PlSL'];
 	[self addPluginSlot];
 	
 	//__
@@ -364,7 +362,7 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 	
 	if(![Utility savePref:toPrefs prefType:'winP'])NSLog(@"Cannot save windows positions");
 	
-	//Save plugins status
+	// Save plugins status
 	#ifdef PLUGIN
 	NSMutableArray *openedPlugs = [NSMutableArray array];
 	
@@ -495,7 +493,6 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 		if(plug) [plug jackStatusHasChanged:isOn?kJackIsOn:kJackIsOff];
 	}
 }
-
 
 - (IBAction)startJack:(id)sender
 {	
@@ -926,13 +923,9 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 		CFStringRef nameRef;
 		size = sizeof(CFStringRef);
 		err = AudioDeviceGetProperty(devices[i], 0, false, kAudioDevicePropertyDeviceNameCFString, &size, &nameRef);
-		//err = AudioDeviceGetProperty(devices[i], 0, false, kAudioDevicePropertyDeviceName, &size, &name);
 		if (err != noErr) 
 			return;
-		/*
-		if (strncmp(interface,name,strlen(interface)) == 0)   
-			vDevice = devices[i];
-		*/
+			
 		CFStringGetCString(nameRef, name, 256, kCFStringEncodingMacRoman);
 		CFRelease(nameRef);
 		
@@ -1277,7 +1270,6 @@ Set the selDevID variable to the currently selected device of the system defaukt
 	if ([newPlugTest open:@"JPPlugTest"]) {
 		NSLog(@"Plugin opened, testing:");
 		[newPlugTest openEditor];
-		//[newPlugTest closeEditor];
 		[newPlugTest jackStatusHasChanged:kJackIsOff];
 		[newPlugTest jackStatusHasChanged:kJackIsOn];
 		[newPlugTest release];
@@ -1333,7 +1325,6 @@ Set the selDevID variable to the currently selected device of the system defaukt
 - (void) closePlugin:(id)sender {
 	JPPlugin *plug = [[sender menu] delegate];
 	
-	//[plug release];
 	[plugins_ids removeObject:plug];
 	id item = [[sender menu] itemWithTitle:LOCSTR(@"Open Instance")];
 	if (item) {

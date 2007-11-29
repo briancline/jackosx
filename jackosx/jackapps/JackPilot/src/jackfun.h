@@ -27,7 +27,7 @@ int openJackClient(void);
 int ottieniPorte(void);
 int portaPerNumero(int n,char *nomeOut,unsigned long *tipo);
 int connessionePerNumero(int n,char *nomeOut);
-int connessionePerNumero2(int n,char **nomeOut);
+int connessionePerNumero2(int n,char **nomeOut, int len);
 int getStatus(void);
 int numeroPorte(void);
 int connectPorts( char*da, char*a);

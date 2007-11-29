@@ -8,7 +8,6 @@
 #include "bequite.h"
 #include <CoreAudio/CoreAudio.h>
 #import "Utility.h"
-//#include "sys.h"
 
 #define LOCSTR(s) NSLocalizedString(s,nil)
 
@@ -17,7 +16,7 @@
 {
     NSTask* jackTask;
     IBOutlet id bufferText; 
-    IBOutlet id outputChannels;  //
+    IBOutlet id outputChannels;  
 	IBOutlet id inputChannels;
 	
     id jackPilWin;
@@ -79,7 +78,6 @@
 -(void)warning:(id)sender;
 -(IBAction)jackALstore:(id)sender;
 - (int)writeHomePath;
-//- (IBAction)startJackTask:(id)sender;
 - (IBAction)getJackInfo:(id)sender;
 - (IBAction)openPrefWin:(id)sender;
 - (IBAction)closePrefWin:(id)sender;

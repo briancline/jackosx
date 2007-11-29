@@ -8,21 +8,21 @@
 
 - (int)numberOfRowsInTableView:(NSTableView *)aTableView 
 {	
-    JPLog("GETTING CONNECTIONS\n");
-    if(porte!=nil) [porte release];
+    JPLog("Getting Connections\n");
+    if (porte != nil) 
+		[porte release];
     porte = [[NSMutableArray array] retain];
     
     int i,b,n,many;
     n = *quanteSel;
     many = 0;
     for (i = 0; i < n; i++) {
-        int nn = connessionePerNumero2(porteSelected[i],NULL);
-        char **porta;
-        porta = (char**)alloca(nn*sizeof(char*));
-        for(b=0;b<nn;b++) {
-            porta[b] = (char*)alloca(256*sizeof(char));
+        int nn = connessionePerNumero2(porteSelected[i], NULL, 0);
+        char **porta = (char**)alloca(nn * sizeof(char*));
+        for (b = 0; b < nn; b++) {
+            porta[b] = (char*)alloca(256 * sizeof(char));
         }
-        connessionePerNumero2(porteSelected[i],porta);
+        connessionePerNumero2(porteSelected[i], porta, nn);
         for (b = 0; b < nn; b++) {
             NSString *nome = [NSString init];
             nome = [NSString stringWithCString:porta[b]];
@@ -83,7 +83,9 @@
         NSArray *listaStr = [str componentsSeparatedByString:@":"];
         id obj = [listaStr objectAtIndex:0];
         id check = [dict objectForKey:obj];
-        if (check == nil) { [keys addObject:obj]; [dict setObject:str forKey:obj]; }
+        if (check == nil) { 
+			[keys addObject:obj]; [dict setObject:str forKey:obj]; 
+		}
         if (check != nil) { 
             NSMutableArray *array = [NSMutableArray array];
             if ([check isKindOfClass:[NSString class]]) {
@@ -92,7 +94,7 @@
             }
             if ([check isKindOfClass:[NSMutableArray class]]) {
                 int a;
-                for(a=0;a<[check count];a++) {
+                for (a = 0; a < [check count]; a++) {
                     [array addObject:[check objectAtIndex:a]];
                 }
                 [array addObject:str];
@@ -107,8 +109,10 @@
         if ([ports isKindOfClass:[NSMutableArray class]]) {
             for (a = 0; a < [ports count]; a++) {
                 id objecto = [ports objectAtIndex:a];
-                if ([objecto isKindOfClass:[NSString class]]) [arrayOk addObject:[ports objectAtIndex:a]];
-                if ([objecto isKindOfClass:[NSMutableArray class]]) [arrayOk addObjectsFromArray:objecto];
+                if ([objecto isKindOfClass:[NSString class]]) 
+					[arrayOk addObject:[ports objectAtIndex:a]];
+                if ([objecto isKindOfClass:[NSMutableArray class]]) 
+					[arrayOk addObjectsFromArray:objecto];
             }
         }
         if ([ports isKindOfClass:[NSString class]]) 
