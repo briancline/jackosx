@@ -84,7 +84,8 @@
         id obj = [listaStr objectAtIndex:0];
         id check = [dict objectForKey:obj];
         if (check == nil) { 
-			[keys addObject:obj]; [dict setObject:str forKey:obj]; 
+			[keys addObject:obj]; 
+			[dict setObject:str forKey:obj]; 
 		}
         if (check != nil) { 
             NSMutableArray *array = [NSMutableArray array];
@@ -103,7 +104,7 @@
         }
     }
     
-    for(i = 0;i < [keys count]; i++) {
+    for(i = 0; i < [keys count]; i++) {
         id ports = [dict objectForKey:[keys objectAtIndex:i]]; 
         int a;
         if ([ports isKindOfClass:[NSMutableArray class]]) {

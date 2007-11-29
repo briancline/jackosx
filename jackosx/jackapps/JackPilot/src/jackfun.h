@@ -35,8 +35,6 @@ int disconnectPorts( char*da, char*a);
 float cpuLoad(void);
 unsigned long getTipoByName(const char* name);
 void writeStatus(int n);
-//int loadPrefStat(void);
-//int savePrefStat(int DRIVER,int INTERFACE,int SR,int BUF,int CH);
 int getSR(void);
 int getBUF(void);
 int getDRIVER(void);

@@ -23,7 +23,7 @@ int verboseLevel = 0;
 
 int openJack(const char *stringa) 
 {
-    JPLog("%s\n",stringa);
+    JPLog("%s\n", stringa);
     int a;
     if (firsttime == 0) {
         int test;
@@ -65,17 +65,14 @@ int my_system (const char *command)
 {
   firsttime=1;
   int status;
-  pid_t pid;
-
-  pid = fork();
-  if (pid == 0)
-    {
+  pid_t pid = fork();
+  
+  if (pid == 0) {
       execl(SHELL, SHELL, "-c", command, NULL);
       _exit(EXIT_FAILURE);
-    }
-  else if (pid < 0)
+  } else if (pid < 0) {
     status = -1;
-  else {
+  } else {
       status = 1;
       sleep(4);
   }
@@ -89,12 +86,12 @@ int my_system2(const char *command)
 	pid_t pid;
 
 	pid = fork ();
-	if (pid == 0){
+	if (pid == 0) {
       execl(SHELL, SHELL, "-c", command, NULL);
       _exit(EXIT_FAILURE);
-	} else if (pid < 0)
+	} else if (pid < 0) {
 		status = -1;
-	else {
+	} else {
 		status = 1;
 	}
 	return status;
@@ -221,7 +218,7 @@ int connectPorts(char* da, char* a)
 
 int disconnectPorts(char* da, char* a) 
 {
-    return jack_disconnect(client,da,a);
+    return jack_disconnect(client, da, a);
 }
 
 int connessionePerNumero(int n, char* nomeOut) 
@@ -289,44 +286,6 @@ unsigned long getTipoByName(const char* name)
 		return jack_port_flags(jp);
     return 0;
 }
-
-/*
-int loadPrefStat(void) 
-{
-    FILE *jackpref;
-    char *path;
-    path = (char*)alloca(256*sizeof(char));
-    sprintf(path,"%s/Library/Preferences/JackPilot.jpil",homePath);
-    if ((jackpref = fopen(path, "rt")) == NULL) {
-        sr=44100;
-        buf=512;
-        ch=2;
-        driver=0;
-        interface = 0;
-        return 22;
-    } else {
-        int nullo;
-        fscanf(jackpref,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",&driver, &nullo,&interface,&nullo,&sr,&nullo,&buf,&nullo,&ch); 
-    }
-    return 0;
-}
-*/
-/*
-int savePrefStat(int DRIVER, int INTERFACE, int SR, int BUF, int CH) 
-{
-    FILE *jackpref;
-    char *path;
-    path = (char*)alloca(256*sizeof(char));
-    sprintf(path,"%s/Library/Preferences/JackPilot.jpil",homePath);
-    if ((jackpref = fopen(path, "wt")) == NULL) {
-        return 22;
-    }
-    
-    fprintf(jackpref,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",DRIVER,-1,INTERFACE,-1,SR,-1,BUF,-1,CH);  
-    fclose(jackpref);
-    return 0;
-}
-*/
 
 int getSR(void) 
 {
@@ -439,7 +398,7 @@ int nomeCliente(int n, char* nome)
     }
     int quanti;
     ottieniNomeClienti(array, &quanti);
-    strcpy(nome,array[n]);
+    strcpy(nome, array[n]);
     for (i = 0; i < nporte; i++) {
         free(array[i]);
     }
@@ -468,12 +427,12 @@ int ottieniNomeClienti(char** nome, int* quanti)
             if (jplist[i][a] == ':') 
 				break;
         }
-        if (strcmp(&idport[0],&oldIdport[0]) == 0) { 
+        if (strcmp(&idport[0], &oldIdport[0]) == 0) { 
 			goto end; 
 		}
         if (nome) {
 			if (nome[progr]) 
-				strcpy(nome[progr],jplist[i]);
+				strcpy(nome[progr], jplist[i]);
 		}
         progr++;
     end:
@@ -487,9 +446,9 @@ void writeHomePath(char *path)
 {
     if (homePath != NULL) 
 		free(homePath);
-    homePath = (char*)malloc(sizeof(char)*strlen(path)+1);
-	memset(homePath, 0x0, sizeof(char)*strlen(path)+1);
-    strcpy(homePath,path);
+    homePath = (char*)malloc(sizeof(char) * strlen(path) + 1);
+	memset(homePath, 0x0, sizeof(char)*strlen(path) + 1);
+    strcpy(homePath, path);
 }
 
 int getFlagOfJack(void) 
@@ -505,12 +464,12 @@ jack_client_t* getClient(void)
 void getCurrentAudioDevice(char* outName) 
 {
     if (outName != NULL) 
-		strcpy(outName,&coreAudioDevice[0]);
+		strcpy(outName, &coreAudioDevice[0]);
 }
 void setCurrentAudioDevice(char* inName) 
 {
     if (inName != NULL) 
-		strcpy(&coreAudioDevice[0],inName);
+		strcpy(&coreAudioDevice[0], inName);
 }
 
 void JPLog(char *fmt,...) 
