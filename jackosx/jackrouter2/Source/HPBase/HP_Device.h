@@ -1,4 +1,4 @@
-/*	Copyright © 2007 Apple Inc. All Rights Reserved.
+/*	Copyright ï¿½ 2007 Apple Inc. All Rights Reserved.
 	
 	Disclaimer: IMPORTANT:  This Apple software is supplied to you by 
 			Apple Inc. ("Apple") in consideration of your agreement to the
@@ -54,6 +54,7 @@
 
 //  PublicUtility Includes
 #include "CAMutex.h"
+#include "CAGuard.h"
 
 //  Standard Library Includes
 #include <vector>
@@ -222,6 +223,8 @@ protected:
 	bool					mUseIOBuffers;
 	UInt32					mIOBufferFrameSize;
 	bool					mIOEngineIsRunning;
+	
+	CAGuard					mCommandGuard;
 
 //	IO Cycle Telemetry Support
 public:

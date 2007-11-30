@@ -53,6 +53,7 @@ History
 28-11-07 : Fix DVD-Player issue: it works only at 1024 frames. kAudioDevicePropertyBufferFrameSize and kAudioDevicePropertyBufferSize properties are now Settable. 
 		   Correct JackRouterDevice::BufferSize.
 29-11-07 : New JackRouterDevice::GetBufferSize method for dynamic buffer size changes. Optimization in Process.
+30-11-07 : Remove usleep in command thread: use a Wait/Notify mechanism.
 
 */
 

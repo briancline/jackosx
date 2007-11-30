@@ -101,7 +101,6 @@ char JackRouterDevice::fCoreAudioDriverUID[128];
 // Additional thread for deferred commands execution
 CommandThread::CommandThread(JackRouterDevice* inDevice):
 	mDevice(inDevice),
-	mStopWorkLoop(false),
 	mCommandGuard("CommandGuard"),
 	mCommandThread(reinterpret_cast<CAPThread::ThreadRoutine>(ThreadEntry), this, CAPThread::kDefaultThreadPriority)
 {}
@@ -117,27 +116,14 @@ void*	CommandThread::ThreadEntry(CommandThread* inIOThread)
 
 void	CommandThread::WorkLoop()
 {
-	while (!mStopWorkLoop) {
-		if (mDevice->GetCommands() > 0) {
-			mDevice->GetIOGuard()->Lock();
-			mDevice->ExecuteAllCommands(); 
-			mDevice->GetIOGuard()->Unlock(); 
-		}
-		usleep(200000);
+	while (true) {
+		mDevice->ExecuteAllCommands(); 
 	}
-	
-	mCommandGuard.NotifyAll();
 }
 
 void	CommandThread::Start()
 {
 	mCommandThread.Start();
-}
-
-void	CommandThread::Stop()
-{
-	mStopWorkLoop = true;
-	mCommandGuard.Wait();
 }
 
 JackRouterDevice::JackRouterDevice(AudioDeviceID inAudioDeviceID, JackRouterPlugIn* inPlugIn)
@@ -211,9 +197,7 @@ void	JackRouterDevice::Teardown()
         free(fOuputListTemp[i]);
     free(fOuputListTemp);
 	
-	mCommandThread->Stop();
 	delete mCommandThread;
-	
 	HP_Device::Teardown();
 }
 

@@ -91,6 +91,7 @@ HP_Device::HP_Device(AudioDeviceID inAudioDeviceID, AudioClassID inClassID, HP_H
 	mIOBufferFrameSize(512),
 	mIOEngineIsRunning(false),
 	mIOCycleTelemetry(NULL),
+	mCommandGuard("CommandGuard"),
 	mInputStreamList(),
 	mOutputStreamList()
 {
@@ -1345,18 +1346,30 @@ void	HP_Device::ExecuteCommand(HP_Command* inCommand)
 	}
 	else
 	{
-		printf("push_back mCommandList size %d\n", mCommandList.size());
+		JARLog("HP_Device::ExecuteCommand mCommandList size = %ld\n", mCommandList.size());
 		//	we can't, so put it in the list for later execution
 		mCommandList.push_back(inCommand);
+		
+		mCommandGuard.Lock();		
+		mCommandGuard.NotifyAll();	
+		mCommandGuard.Unlock();		
 	}
 }
 
 void	HP_Device::ExecuteAllCommands()
 {
+	JARLog("HP_Device::ExecuteAllCommands \n");
+	
 	//	This routine must always be called at a time when
 	//	it is safe to execute commands. This routine should
 	//	empty the list regardless of whether all the commands
 	//	have been executed.
+	
+	mCommandGuard.Lock();	
+	mCommandGuard.Wait();				
+	JARLog("HP_Device::ExecuteAllCommands wait OK\n");
+	CAGuard* theIOGuard = GetIOGuard(); 
+	theIOGuard->Lock();		
 	
 	CommandList::iterator theIterator = mCommandList.begin();
 	while(theIterator != mCommandList.end())
@@ -1377,6 +1390,8 @@ void	HP_Device::ExecuteAllCommands()
 		std::advance(theIterator, 1);
 	}
 	
+	theIOGuard->Unlock();	
+	mCommandGuard.Unlock(); 
 	mCommandList.clear();
 }
 
@@ -1473,7 +1488,7 @@ void	HP_Device::Do_DestroyIOProcID(AudioDeviceIOProcID inIOProcID)
 	if(mIOProcList->HasIOProcID(inIOProcID))
 	{
 		HP_Command* theCommand = new HP_RemoveIOProcCommand(inIOProcID);
-		printf("HP_Device::Do_DestroyIOProcID %ld\n", inIOProcID);
+		JARLog("HP_Device::Do_DestroyIOProcID %d\n", int(inIOProcID));
 		ExecuteCommand(theCommand);
 	}
 }
@@ -1482,50 +1497,50 @@ void	HP_Device::Do_AddIOProc(AudioDeviceIOProc inProc, void* inClientData)
 {
 	ThrowIf(mIOProcList->HasIOProc(inProc, inClientData, false), CAException(kAudioHardwareIllegalOperationError), "HP_Device::Do_AddIOProc: IOProc was already added");
 	HP_Command* theCommand = new HP_AddIOProcCommand(inProc, inClientData);
-	printf("HP_Device::Do_AddIOProc %ld\n", inProc);
+	JARLog("HP_Device::Do_AddIOProc %d\n", int(inProc));
 	ExecuteCommand(theCommand);
 }
 
 void	HP_Device::AddIOProc(AudioDeviceIOProc inProc, void* inClientData)
 {
-	printf("HP_Device::AddIOProc %ld\n", inProc);
+	JARLog("HP_Device::AddIOProc %d\n", int(inProc));
 	mIOProcList->AddIOProc(inProc, inClientData, false);
 }
 
 void	HP_Device::Do_RemoveIOProc(AudioDeviceIOProc inProc)
 {
-	printf("HP_Device::Do_RemoveIOProc %ld\n", inProc);
+	JARLog("HP_Device::Do_RemoveIOProc %d\n", int(inProc));
 
 	if(mIOProcList->HasIOProcID(inProc))
 	{
 		HP_Command* theCommand = new HP_RemoveIOProcCommand(inProc);
-		printf("HP_Device::Do_RemoveIOProc %ld\n", inProc);
+		JARLog("HP_Device::Do_RemoveIOProc %d\n", int(inProc));
 		ExecuteCommand(theCommand);
 	}
 }
 
 void	HP_Device::RemoveIOProc(AudioDeviceIOProc inProc)
 {
-	printf("HP_Device::RemoveIOProc %ld\n", inProc);
+	JARLog("HP_Device::RemoveIOProc %d\n", int(inProc));
 	StopIOProc(inProc);
 	mIOProcList->RemoveIOProc(inProc);
 }
 
 void	HP_Device::Do_StartIOProc(AudioDeviceIOProcID inProcID)
 {
-	printf("HP_Device::Do_StartIOProc 0 %ld\n", inProcID);
+	JARLog("HP_Device::Do_StartIOProc 0 %d\n", int(inProcID));
 	if(inProcID != NULL)
 	{
 		ThrowIf(!mIOProcList->HasIOProcID(inProcID), CAException(kAudioHardwareIllegalOperationError), "HP_Device::Do_StartIOProc: IOProc wasn't previously added");
 	}
 	HP_Command* theCommand = new HP_StartIOProcCommand(inProcID);
-	printf("HP_Device::Do_StartIOProc 1 %ld\n", inProcID);
+	JARLog("HP_Device::Do_StartIOProc 1 %d\n", int(inProcID));
 	ExecuteCommand(theCommand);
 }
 
 void	HP_Device::StartIOProc(AudioDeviceIOProcID inProcID)
 {
-	printf("HP_Device::StartIOProc %ld\n", inProcID);
+	JARLog("HP_Device::StartIOProc %d\n", int(inProcID));
 	mIOProcList->StartIOProc(inProcID);
 	
 	if(mIOProcList->IsOnlyOneThingEnabled())
@@ -1537,7 +1552,7 @@ void	HP_Device::StartIOProc(AudioDeviceIOProcID inProcID)
 
 void	HP_Device::Do_StartIOProcAtTime(AudioDeviceIOProcID inProcID, AudioTimeStamp& ioStartTime, UInt32 inStartTimeFlags)
 {
-	printf("HP_Device::Do_StartIOProcAtTime %ld\n", inProcID);
+	JARLog("HP_Device::Do_StartIOProcAtTime %d\n", int(inProcID));
 	if(inProcID == NULL)
 	{
 		Do_StartIOProc(inProcID);
@@ -1559,14 +1574,14 @@ void	HP_Device::Do_StartIOProcAtTime(AudioDeviceIOProcID inProcID, AudioTimeStam
 		
 		//	make a command and execute it
 		HP_Command* theCommand = new HP_StartIOProcCommand(inProcID, ioStartTime, inStartTimeFlags);
-		printf("HP_Device::Do_StartIOProcAtTime %ld\n", inProcID);
+		JARLog("HP_Device::Do_StartIOProcAtTime %d\n", int(inProcID));
 		ExecuteCommand(theCommand);
 	}
 }
 
 void	HP_Device::StartIOProcAtTime(AudioDeviceIOProcID inProcID, const AudioTimeStamp& inStartTime, UInt32 inStartTimeFlags)
 {
-	printf("HP_Device::StartIOProcAtTime %ld\n", inProcID);
+	JARLog("HP_Device::StartIOProcAtTime %d\n", int(inProcID));
 	mIOProcList->StartIOProcAtTime(inProcID, inStartTime, inStartTimeFlags);
 	
 	if(mIOProcList->IsOnlyOneIOProcEnabled())
@@ -1578,19 +1593,19 @@ void	HP_Device::StartIOProcAtTime(AudioDeviceIOProcID inProcID, const AudioTimeS
 
 void	HP_Device::Do_StopIOProc(AudioDeviceIOProcID inProcID)
 {
-	printf("HP_Device::Do_StopIOProc %ld\n", inProcID);
+	JARLog("HP_Device::Do_StopIOProc %d\n", int(inProcID));
 	if(inProcID != NULL)
 	{
 		ThrowIf(!mIOProcList->HasIOProcID(inProcID), CAException(kAudioHardwareIllegalOperationError), "HP_Device::Do_StopIOProc: IOProc wasn't previously added");
 	}
 	HP_Command* theCommand = new HP_StopIOProcCommand(inProcID);
-	printf("HP_Device::Do_StopIOProc %ld\n", inProcID);
+	JARLog("HP_Device::Do_StopIOProc %d\n", int(inProcID));
 	ExecuteCommand(theCommand);
 }
 
 void	HP_Device::StopIOProc(AudioDeviceIOProcID inProcID)
 {
-	printf("HP_Device::StopIOProc %ld\n", inProcID);
+	JARLog("HP_Device::StopIOProc %d\n", int(inProcID));
 	mIOProcList->StopIOProc(inProcID);
 	
 	if(mIOProcList->IsNothingEnabled())
@@ -1603,17 +1618,17 @@ void	HP_Device::StopIOProc(AudioDeviceIOProcID inProcID)
 void	HP_Device::Do_StopAllIOProcs()
 {
 	HP_Command* theCommand = new HP_StopAllIOProcsCommand();
-	printf("HP_Device::Do_StopAllIOProcs\n");
+	JARLog("HP_Device::Do_StopAllIOProcs\n");
 	ExecuteCommand(theCommand);
 }
 
 void	HP_Device::StopAllIOProcs()
 {	
-	printf("HP_Device::StopAllIOProcs 0\n");
+	JARLog("HP_Device::StopAllIOProcs 0\n");
 	if(mIOProcList->IsAnythingEnabled())
 	{
 		mIOProcList->StopAllIOProcs();
-		printf("HP_Device::StopAllIOProcs 1\n");
+		JARLog("HP_Device::StopAllIOProcs 1\n");
 		StopIOEngine();
 	}
 }
@@ -1622,7 +1637,7 @@ void	HP_Device::Do_SetIOProcStreamUsage(AudioDeviceIOProcID inProcID, bool inIsI
 {
 	ThrowIf(!mIOProcList->HasIOProcID(inProcID), CAException(kAudioHardwareIllegalOperationError), "HP_Device::Do_SetIOProcStreamUsage: IOProc wasn't previously added");
 	HP_Command* theCommand = new HP_ChangeIOProcStreamUsageCommand(inProcID, inIsInput, inNumberStreams, inStreamUsage);
-	printf("HP_Device::Do_SetIOProcStreamUsage\n");
+	JARLog("HP_Device::Do_SetIOProcStreamUsage\n");
 	ExecuteCommand(theCommand);
 }
 
@@ -1650,7 +1665,7 @@ UInt32	HP_Device::GetMinimumIOBufferFrameSize() const
 {
 	UInt32 theAnswer = 2;
 	
-	printf("HP_Device::GetMinimumIOBufferFrameSize\n");
+	JARLog("HP_Device::GetMinimumIOBufferFrameSize\n");
 	
 	if(!HasAnyNonLinearPCMStreams())
 	{
@@ -1668,7 +1683,7 @@ UInt32	HP_Device::GetMinimumIOBufferFrameSize() const
 
 UInt32	HP_Device::GetMaximumIOBufferFrameSize() const
 {
-	printf("HP_Device::GetMaximumIOBufferFrameSize\n");
+	JARLog("HP_Device::GetMaximumIOBufferFrameSize\n");
 	UInt32 theAnswer = 4096;
 	if(!HasAnyNonLinearPCMStreams())
 	{
@@ -1731,19 +1746,19 @@ UInt32	HP_Device::DetermineIOBufferFrameSize() const
 
 void	HP_Device::Do_SetIOBufferFrameSize(UInt32 inIOBufferFrameSize)
 {
-	printf("HP_Device::Do_SetIOBufferFrameSize 0 %ld\n", inIOBufferFrameSize);
+	JARLog("HP_Device::Do_SetIOBufferFrameSize 0 %ld\n", inIOBufferFrameSize);
 	ThrowIf(!IsValidIOBufferFrameSize(inIOBufferFrameSize), CAException(kAudioHardwareIllegalOperationError), "HP_Device::Do_SetIOBufferFrameSize: buffer size isn't valid");
 	if(inIOBufferFrameSize != mIOBufferFrameSize)
 	{
 		HP_Command* theCommand = new HP_ChangeBufferSizeCommand(inIOBufferFrameSize);
-		printf("HP_Device::Do_SetIOBufferFrameSize 1 %ld\n", inIOBufferFrameSize);
+		JARLog("HP_Device::Do_SetIOBufferFrameSize 1 %ld\n", inIOBufferFrameSize);
 		ExecuteCommand(theCommand);
 	}
 }
 
 void	HP_Device::SetIOBufferFrameSize(UInt32 inIOBufferFrameSize)
 {
-	printf("HP_Device::SetIOBufferFrameSize 0 %ld\n", inIOBufferFrameSize);
+	JARLog("HP_Device::SetIOBufferFrameSize 0 %ld\n", inIOBufferFrameSize);
 	if(mIOBufferFrameSize != inIOBufferFrameSize)
 	{
 		//  do the work
@@ -1821,7 +1836,7 @@ void	HP_Device::CalculateIOThreadTimeConstraints(UInt64& outPeriod, UInt32& outQ
 
 bool	HP_Device::IsIOEngineRunningSomewhere() const
 {
-	printf("HP_Device::IsIOEngineRunningSomewhere\n");
+	JARLog("HP_Device::IsIOEngineRunningSomewhere\n");
 	return IsIOEngineRunning();
 }
 
@@ -1851,19 +1866,19 @@ void	HP_Device::IOBufferFrameSizeChanged(CAPropertyAddressList& /*outChangedProp
 
 void	HP_Device::StartIOEngine()
 {
-	printf("HP_Device::StartIOEngine\n");
+	JARLog("HP_Device::StartIOEngine\n");
 	mIOEngineIsRunning = true;
 }
 
 void	HP_Device::StartIOEngineAtTime(const AudioTimeStamp& /*inStartTime*/, UInt32 /*inStartTimeFlags*/)
 {
-	printf("HP_Device::StartIOEngineAtTime\n");
+	JARLog("HP_Device::StartIOEngineAtTime\n");
 	mIOEngineIsRunning = true;
 }
 
 void	HP_Device::StopIOEngine()
 {
-	printf("HP_Device::StopIOEngine\n");
+	JARLog("HP_Device::StopIOEngine\n");
 	mIOEngineIsRunning = false;
 }
 

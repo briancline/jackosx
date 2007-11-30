@@ -75,41 +75,6 @@
 		4B193B100CE3573000C1F56E /* JackRouterStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B193B0E0CE3573000C1F56E /* JackRouterStream.cpp */; };
 		4B193B110CE3573000C1F56E /* JackRouterStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B193B0F0CE3573000C1F56E /* JackRouterStream.h */; };
 		4B193B410CE3586F00C1F56E /* JackRouterPrefix.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B193B400CE3586F00C1F56E /* JackRouterPrefix.h */; };
-		4B45E2C30CE31EE8001FB4D8 /* HP_Command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B45E29B0CE31EE8001FB4D8 /* HP_Command.cpp */; };
-		4B45E2C40CE31EE8001FB4D8 /* HP_Command.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B45E29C0CE31EE8001FB4D8 /* HP_Command.h */; };
-		4B45E2C50CE31EE8001FB4D8 /* HP_Control.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B45E29D0CE31EE8001FB4D8 /* HP_Control.cpp */; };
-		4B45E2C60CE31EE8001FB4D8 /* HP_Control.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B45E29E0CE31EE8001FB4D8 /* HP_Control.h */; };
-		4B45E2C90CE31EE8001FB4D8 /* HP_DeviceCommands.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B45E2A10CE31EE8001FB4D8 /* HP_DeviceCommands.cpp */; };
-		4B45E2CA0CE31EE8001FB4D8 /* HP_DeviceCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B45E2A20CE31EE8001FB4D8 /* HP_DeviceCommands.h */; };
-		4B45E2CB0CE31EE8001FB4D8 /* HP_DeviceInfoList.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B45E2A30CE31EE8001FB4D8 /* HP_DeviceInfoList.h */; };
-		4B45E2CC0CE31EE8001FB4D8 /* HP_DeviceSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B45E2A40CE31EE8001FB4D8 /* HP_DeviceSettings.cpp */; };
-		4B45E2CD0CE31EE8001FB4D8 /* HP_DeviceSettings.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B45E2A50CE31EE8001FB4D8 /* HP_DeviceSettings.h */; };
-		4B45E2CE0CE31EE8001FB4D8 /* HP_DriverPlugIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B45E2A60CE31EE8001FB4D8 /* HP_DriverPlugIn.cpp */; };
-		4B45E2CF0CE31EE8001FB4D8 /* HP_DriverPlugIn.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B45E2A70CE31EE8001FB4D8 /* HP_DriverPlugIn.h */; };
-		4B45E2D00CE31EE8001FB4D8 /* HP_FormatList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B45E2A80CE31EE8001FB4D8 /* HP_FormatList.cpp */; };
-		4B45E2D10CE31EE8001FB4D8 /* HP_FormatList.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B45E2A90CE31EE8001FB4D8 /* HP_FormatList.h */; };
-		4B45E2D20CE31EE8001FB4D8 /* HP_HardwarePlugIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B45E2AA0CE31EE8001FB4D8 /* HP_HardwarePlugIn.cpp */; };
-		4B45E2D30CE31EE8001FB4D8 /* HP_HardwarePlugIn.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B45E2AB0CE31EE8001FB4D8 /* HP_HardwarePlugIn.h */; };
-		4B45E2D50CE31EE8001FB4D8 /* HP_HogMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B45E2AD0CE31EE8001FB4D8 /* HP_HogMode.cpp */; };
-		4B45E2D60CE31EE8001FB4D8 /* HP_HogMode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B45E2AE0CE31EE8001FB4D8 /* HP_HogMode.h */; };
-		4B45E2D70CE31EE8001FB4D8 /* HP_IOCycleTelemetry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B45E2AF0CE31EE8001FB4D8 /* HP_IOCycleTelemetry.cpp */; };
-		4B45E2D80CE31EE8001FB4D8 /* HP_IOCycleTelemetry.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B45E2B00CE31EE8001FB4D8 /* HP_IOCycleTelemetry.h */; };
-		4B45E2DB0CE31EE8001FB4D8 /* HP_IOThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B45E2B30CE31EE8001FB4D8 /* HP_IOThread.cpp */; };
-		4B45E2DC0CE31EE8001FB4D8 /* HP_IOThread.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B45E2B40CE31EE8001FB4D8 /* HP_IOThread.h */; };
-		4B45E2DD0CE31EE8001FB4D8 /* HP_Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B45E2B50CE31EE8001FB4D8 /* HP_Object.cpp */; };
-		4B45E2DE0CE31EE8001FB4D8 /* HP_Object.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B45E2B60CE31EE8001FB4D8 /* HP_Object.h */; };
-		4B45E2DF0CE31EE8001FB4D8 /* HP_PreferredChannels.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B45E2B70CE31EE8001FB4D8 /* HP_PreferredChannels.cpp */; };
-		4B45E2E00CE31EE8001FB4D8 /* HP_PreferredChannels.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B45E2B80CE31EE8001FB4D8 /* HP_PreferredChannels.h */; };
-		4B45E2E10CE31EE8001FB4D8 /* HP_Property.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B45E2B90CE31EE8001FB4D8 /* HP_Property.cpp */; };
-		4B45E2E20CE31EE8001FB4D8 /* HP_Property.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B45E2BA0CE31EE8001FB4D8 /* HP_Property.h */; };
-		4B45E2E30CE31EE8001FB4D8 /* HP_ReferenceCounted.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B45E2BB0CE31EE8001FB4D8 /* HP_ReferenceCounted.cpp */; };
-		4B45E2E40CE31EE8001FB4D8 /* HP_ReferenceCounted.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B45E2BC0CE31EE8001FB4D8 /* HP_ReferenceCounted.h */; };
-		4B45E2E50CE31EE8001FB4D8 /* HP_Stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B45E2BD0CE31EE8001FB4D8 /* HP_Stream.cpp */; };
-		4B45E2E60CE31EE8001FB4D8 /* HP_Stream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B45E2BE0CE31EE8001FB4D8 /* HP_Stream.h */; };
-		4B45E2E70CE31EE8001FB4D8 /* HP_SystemInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B45E2BF0CE31EE8001FB4D8 /* HP_SystemInfo.cpp */; };
-		4B45E2E80CE31EE8001FB4D8 /* HP_SystemInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B45E2C00CE31EE8001FB4D8 /* HP_SystemInfo.h */; };
-		4B45E2E90CE31EE8001FB4D8 /* HP_TelemetryServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B45E2C10CE31EE8001FB4D8 /* HP_TelemetryServer.cpp */; };
-		4B45E2EA0CE31EE8001FB4D8 /* HP_TelemetryServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B45E2C20CE31EE8001FB4D8 /* HP_TelemetryServer.h */; };
 		4B45E3020CE31F53001FB4D8 /* JackRouter.exp in Sources */ = {isa = PBXBuildFile; fileRef = 4B45E3010CE31F53001FB4D8 /* JackRouter.exp */; };
 		4B8492A20CE34E7A00B43385 /* bequite.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B84929E0CE34E7A00B43385 /* bequite.c */; };
 		4B8492A30CE34E7A00B43385 /* bequite.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B84929F0CE34E7A00B43385 /* bequite.h */; };
@@ -118,11 +83,46 @@
 		4B8492B80CE34F1600B43385 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8492B70CE34F1600B43385 /* Carbon.framework */; };
 		4B84938F0CE3513300B43385 /* JARLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B84938D0CE3513300B43385 /* JARLog.h */; };
 		4B8493900CE3513300B43385 /* JARLog.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B84938E0CE3513300B43385 /* JARLog.c */; };
-		4BEA9BDB0CEB07FF000A974C /* HP_Device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BEA9BD90CEB07FF000A974C /* HP_Device.cpp */; };
-		4BEA9BDC0CEB07FF000A974C /* HP_Device.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BEA9BDA0CEB07FF000A974C /* HP_Device.h */; };
-		4BEA9BE50CEB09E1000A974C /* HP_IOProcList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BEA9BE30CEB09E1000A974C /* HP_IOProcList.cpp */; };
-		4BEA9BE60CEB09E1000A974C /* HP_IOProcList.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BEA9BE40CEB09E1000A974C /* HP_IOProcList.h */; };
-		4BEA9C2F0CEB10EC000A974C /* HP_HardwarePlugInInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BEA9C2E0CEB10EC000A974C /* HP_HardwarePlugInInterface.cpp */; };
+		4BD9B2210D00264500A4E509 /* HP_Command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B1F90D00264500A4E509 /* HP_Command.cpp */; };
+		4BD9B2220D00264500A4E509 /* HP_Command.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B1FA0D00264500A4E509 /* HP_Command.h */; };
+		4BD9B2230D00264500A4E509 /* HP_Control.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B1FB0D00264500A4E509 /* HP_Control.cpp */; };
+		4BD9B2240D00264500A4E509 /* HP_Control.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B1FC0D00264500A4E509 /* HP_Control.h */; };
+		4BD9B2250D00264500A4E509 /* HP_Device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B1FD0D00264500A4E509 /* HP_Device.cpp */; };
+		4BD9B2260D00264500A4E509 /* HP_Device.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B1FE0D00264500A4E509 /* HP_Device.h */; };
+		4BD9B2270D00264500A4E509 /* HP_DeviceCommands.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B1FF0D00264500A4E509 /* HP_DeviceCommands.cpp */; };
+		4BD9B2280D00264500A4E509 /* HP_DeviceCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2000D00264500A4E509 /* HP_DeviceCommands.h */; };
+		4BD9B2290D00264500A4E509 /* HP_DeviceInfoList.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2010D00264500A4E509 /* HP_DeviceInfoList.h */; };
+		4BD9B22A0D00264500A4E509 /* HP_DeviceSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B2020D00264500A4E509 /* HP_DeviceSettings.cpp */; };
+		4BD9B22B0D00264500A4E509 /* HP_DeviceSettings.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2030D00264500A4E509 /* HP_DeviceSettings.h */; };
+		4BD9B22C0D00264500A4E509 /* HP_DriverPlugIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B2040D00264500A4E509 /* HP_DriverPlugIn.cpp */; };
+		4BD9B22D0D00264500A4E509 /* HP_DriverPlugIn.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2050D00264500A4E509 /* HP_DriverPlugIn.h */; };
+		4BD9B22E0D00264500A4E509 /* HP_FormatList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B2060D00264500A4E509 /* HP_FormatList.cpp */; };
+		4BD9B22F0D00264500A4E509 /* HP_FormatList.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2070D00264500A4E509 /* HP_FormatList.h */; };
+		4BD9B2300D00264500A4E509 /* HP_HardwarePlugIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B2080D00264500A4E509 /* HP_HardwarePlugIn.cpp */; };
+		4BD9B2310D00264500A4E509 /* HP_HardwarePlugIn.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2090D00264500A4E509 /* HP_HardwarePlugIn.h */; };
+		4BD9B2320D00264500A4E509 /* HP_HardwarePlugInInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B20A0D00264500A4E509 /* HP_HardwarePlugInInterface.cpp */; };
+		4BD9B2330D00264500A4E509 /* HP_HogMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B20B0D00264500A4E509 /* HP_HogMode.cpp */; };
+		4BD9B2340D00264500A4E509 /* HP_HogMode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B20C0D00264500A4E509 /* HP_HogMode.h */; };
+		4BD9B2350D00264500A4E509 /* HP_IOCycleTelemetry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B20D0D00264500A4E509 /* HP_IOCycleTelemetry.cpp */; };
+		4BD9B2360D00264500A4E509 /* HP_IOCycleTelemetry.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B20E0D00264500A4E509 /* HP_IOCycleTelemetry.h */; };
+		4BD9B2370D00264500A4E509 /* HP_IOProcList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B20F0D00264500A4E509 /* HP_IOProcList.cpp */; };
+		4BD9B2380D00264500A4E509 /* HP_IOProcList.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2100D00264500A4E509 /* HP_IOProcList.h */; };
+		4BD9B2390D00264500A4E509 /* HP_IOThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B2110D00264500A4E509 /* HP_IOThread.cpp */; };
+		4BD9B23A0D00264500A4E509 /* HP_IOThread.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2120D00264500A4E509 /* HP_IOThread.h */; };
+		4BD9B23B0D00264500A4E509 /* HP_Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B2130D00264500A4E509 /* HP_Object.cpp */; };
+		4BD9B23C0D00264500A4E509 /* HP_Object.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2140D00264500A4E509 /* HP_Object.h */; };
+		4BD9B23D0D00264500A4E509 /* HP_PreferredChannels.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B2150D00264500A4E509 /* HP_PreferredChannels.cpp */; };
+		4BD9B23E0D00264500A4E509 /* HP_PreferredChannels.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2160D00264500A4E509 /* HP_PreferredChannels.h */; };
+		4BD9B23F0D00264500A4E509 /* HP_Property.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B2170D00264500A4E509 /* HP_Property.cpp */; };
+		4BD9B2400D00264500A4E509 /* HP_Property.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2180D00264500A4E509 /* HP_Property.h */; };
+		4BD9B2410D00264500A4E509 /* HP_ReferenceCounted.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B2190D00264500A4E509 /* HP_ReferenceCounted.cpp */; };
+		4BD9B2420D00264500A4E509 /* HP_ReferenceCounted.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B21A0D00264500A4E509 /* HP_ReferenceCounted.h */; };
+		4BD9B2430D00264500A4E509 /* HP_Stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B21B0D00264500A4E509 /* HP_Stream.cpp */; };
+		4BD9B2440D00264500A4E509 /* HP_Stream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B21C0D00264500A4E509 /* HP_Stream.h */; };
+		4BD9B2450D00264500A4E509 /* HP_SystemInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B21D0D00264500A4E509 /* HP_SystemInfo.cpp */; };
+		4BD9B2460D00264500A4E509 /* HP_SystemInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B21E0D00264500A4E509 /* HP_SystemInfo.h */; };
+		4BD9B2470D00264500A4E509 /* HP_TelemetryServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B21F0D00264500A4E509 /* HP_TelemetryServer.cpp */; };
+		4BD9B2480D00264500A4E509 /* HP_TelemetryServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2200D00264500A4E509 /* HP_TelemetryServer.h */; };
 		8D576314048677EA00EA77CD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -196,46 +196,6 @@
 		4B193B0E0CE3573000C1F56E /* JackRouterStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = JackRouterStream.cpp; path = Source/JackRouterStream.cpp; sourceTree = SOURCE_ROOT; };
 		4B193B0F0CE3573000C1F56E /* JackRouterStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JackRouterStream.h; path = Source/JackRouterStream.h; sourceTree = SOURCE_ROOT; };
 		4B193B400CE3586F00C1F56E /* JackRouterPrefix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JackRouterPrefix.h; path = Source/JackRouterPrefix.h; sourceTree = SOURCE_ROOT; };
-		4B45E29B0CE31EE8001FB4D8 /* HP_Command.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_Command.cpp; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_Command.cpp; sourceTree = "<absolute>"; };
-		4B45E29C0CE31EE8001FB4D8 /* HP_Command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_Command.h; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_Command.h; sourceTree = "<absolute>"; };
-		4B45E29D0CE31EE8001FB4D8 /* HP_Control.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_Control.cpp; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_Control.cpp; sourceTree = "<absolute>"; };
-		4B45E29E0CE31EE8001FB4D8 /* HP_Control.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_Control.h; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_Control.h; sourceTree = "<absolute>"; };
-		4B45E29F0CE31EE8001FB4D8 /* HP_Device.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_Device.cpp; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_Device.cpp; sourceTree = "<absolute>"; };
-		4B45E2A00CE31EE8001FB4D8 /* HP_Device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_Device.h; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_Device.h; sourceTree = "<absolute>"; };
-		4B45E2A10CE31EE8001FB4D8 /* HP_DeviceCommands.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_DeviceCommands.cpp; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_DeviceCommands.cpp; sourceTree = "<absolute>"; };
-		4B45E2A20CE31EE8001FB4D8 /* HP_DeviceCommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_DeviceCommands.h; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_DeviceCommands.h; sourceTree = "<absolute>"; };
-		4B45E2A30CE31EE8001FB4D8 /* HP_DeviceInfoList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_DeviceInfoList.h; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_DeviceInfoList.h; sourceTree = "<absolute>"; };
-		4B45E2A40CE31EE8001FB4D8 /* HP_DeviceSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_DeviceSettings.cpp; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_DeviceSettings.cpp; sourceTree = "<absolute>"; };
-		4B45E2A50CE31EE8001FB4D8 /* HP_DeviceSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_DeviceSettings.h; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_DeviceSettings.h; sourceTree = "<absolute>"; };
-		4B45E2A60CE31EE8001FB4D8 /* HP_DriverPlugIn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_DriverPlugIn.cpp; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_DriverPlugIn.cpp; sourceTree = "<absolute>"; };
-		4B45E2A70CE31EE8001FB4D8 /* HP_DriverPlugIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_DriverPlugIn.h; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_DriverPlugIn.h; sourceTree = "<absolute>"; };
-		4B45E2A80CE31EE8001FB4D8 /* HP_FormatList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_FormatList.cpp; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_FormatList.cpp; sourceTree = "<absolute>"; };
-		4B45E2A90CE31EE8001FB4D8 /* HP_FormatList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_FormatList.h; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_FormatList.h; sourceTree = "<absolute>"; };
-		4B45E2AA0CE31EE8001FB4D8 /* HP_HardwarePlugIn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_HardwarePlugIn.cpp; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_HardwarePlugIn.cpp; sourceTree = "<absolute>"; };
-		4B45E2AB0CE31EE8001FB4D8 /* HP_HardwarePlugIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_HardwarePlugIn.h; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_HardwarePlugIn.h; sourceTree = "<absolute>"; };
-		4B45E2AC0CE31EE8001FB4D8 /* HP_HardwarePlugInInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_HardwarePlugInInterface.cpp; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_HardwarePlugInInterface.cpp; sourceTree = "<absolute>"; };
-		4B45E2AD0CE31EE8001FB4D8 /* HP_HogMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_HogMode.cpp; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_HogMode.cpp; sourceTree = "<absolute>"; };
-		4B45E2AE0CE31EE8001FB4D8 /* HP_HogMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_HogMode.h; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_HogMode.h; sourceTree = "<absolute>"; };
-		4B45E2AF0CE31EE8001FB4D8 /* HP_IOCycleTelemetry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_IOCycleTelemetry.cpp; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_IOCycleTelemetry.cpp; sourceTree = "<absolute>"; };
-		4B45E2B00CE31EE8001FB4D8 /* HP_IOCycleTelemetry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_IOCycleTelemetry.h; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_IOCycleTelemetry.h; sourceTree = "<absolute>"; };
-		4B45E2B10CE31EE8001FB4D8 /* HP_IOProcList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_IOProcList.cpp; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_IOProcList.cpp; sourceTree = "<absolute>"; };
-		4B45E2B20CE31EE8001FB4D8 /* HP_IOProcList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_IOProcList.h; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_IOProcList.h; sourceTree = "<absolute>"; };
-		4B45E2B30CE31EE8001FB4D8 /* HP_IOThread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_IOThread.cpp; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_IOThread.cpp; sourceTree = "<absolute>"; };
-		4B45E2B40CE31EE8001FB4D8 /* HP_IOThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_IOThread.h; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_IOThread.h; sourceTree = "<absolute>"; };
-		4B45E2B50CE31EE8001FB4D8 /* HP_Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_Object.cpp; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_Object.cpp; sourceTree = "<absolute>"; };
-		4B45E2B60CE31EE8001FB4D8 /* HP_Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_Object.h; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_Object.h; sourceTree = "<absolute>"; };
-		4B45E2B70CE31EE8001FB4D8 /* HP_PreferredChannels.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_PreferredChannels.cpp; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_PreferredChannels.cpp; sourceTree = "<absolute>"; };
-		4B45E2B80CE31EE8001FB4D8 /* HP_PreferredChannels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_PreferredChannels.h; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_PreferredChannels.h; sourceTree = "<absolute>"; };
-		4B45E2B90CE31EE8001FB4D8 /* HP_Property.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_Property.cpp; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_Property.cpp; sourceTree = "<absolute>"; };
-		4B45E2BA0CE31EE8001FB4D8 /* HP_Property.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_Property.h; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_Property.h; sourceTree = "<absolute>"; };
-		4B45E2BB0CE31EE8001FB4D8 /* HP_ReferenceCounted.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_ReferenceCounted.cpp; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_ReferenceCounted.cpp; sourceTree = "<absolute>"; };
-		4B45E2BC0CE31EE8001FB4D8 /* HP_ReferenceCounted.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_ReferenceCounted.h; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_ReferenceCounted.h; sourceTree = "<absolute>"; };
-		4B45E2BD0CE31EE8001FB4D8 /* HP_Stream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_Stream.cpp; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_Stream.cpp; sourceTree = "<absolute>"; };
-		4B45E2BE0CE31EE8001FB4D8 /* HP_Stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_Stream.h; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_Stream.h; sourceTree = "<absolute>"; };
-		4B45E2BF0CE31EE8001FB4D8 /* HP_SystemInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_SystemInfo.cpp; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_SystemInfo.cpp; sourceTree = "<absolute>"; };
-		4B45E2C00CE31EE8001FB4D8 /* HP_SystemInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_SystemInfo.h; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_SystemInfo.h; sourceTree = "<absolute>"; };
-		4B45E2C10CE31EE8001FB4D8 /* HP_TelemetryServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_TelemetryServer.cpp; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_TelemetryServer.cpp; sourceTree = "<absolute>"; };
-		4B45E2C20CE31EE8001FB4D8 /* HP_TelemetryServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_TelemetryServer.h; path = /Developer/Examples/CoreAudio/HAL/HPBase/HP_TelemetryServer.h; sourceTree = "<absolute>"; };
 		4B45E3010CE31F53001FB4D8 /* JackRouter.exp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.exports; path = JackRouter.exp; sourceTree = "<group>"; };
 		4B84929E0CE34E7A00B43385 /* bequite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bequite.c; path = Source/procinfo/bequite.c; sourceTree = SOURCE_ROOT; };
 		4B84929F0CE34E7A00B43385 /* bequite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bequite.h; path = Source/procinfo/bequite.h; sourceTree = SOURCE_ROOT; };
@@ -244,11 +204,46 @@
 		4B8492B70CE34F1600B43385 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		4B84938D0CE3513300B43385 /* JARLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JARLog.h; sourceTree = "<group>"; };
 		4B84938E0CE3513300B43385 /* JARLog.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = JARLog.c; sourceTree = "<group>"; };
-		4BEA9BD90CEB07FF000A974C /* HP_Device.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_Device.cpp; path = Source/HP_Device.cpp; sourceTree = SOURCE_ROOT; };
-		4BEA9BDA0CEB07FF000A974C /* HP_Device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_Device.h; path = Source/HP_Device.h; sourceTree = SOURCE_ROOT; };
-		4BEA9BE30CEB09E1000A974C /* HP_IOProcList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_IOProcList.cpp; path = Source/HP_IOProcList.cpp; sourceTree = SOURCE_ROOT; };
-		4BEA9BE40CEB09E1000A974C /* HP_IOProcList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_IOProcList.h; path = Source/HP_IOProcList.h; sourceTree = SOURCE_ROOT; };
-		4BEA9C2E0CEB10EC000A974C /* HP_HardwarePlugInInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_HardwarePlugInInterface.cpp; path = Source/HP_HardwarePlugInInterface.cpp; sourceTree = SOURCE_ROOT; };
+		4BD9B1F90D00264500A4E509 /* HP_Command.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_Command.cpp; path = Source/HPBase/HP_Command.cpp; sourceTree = SOURCE_ROOT; };
+		4BD9B1FA0D00264500A4E509 /* HP_Command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_Command.h; path = Source/HPBase/HP_Command.h; sourceTree = SOURCE_ROOT; };
+		4BD9B1FB0D00264500A4E509 /* HP_Control.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_Control.cpp; path = Source/HPBase/HP_Control.cpp; sourceTree = SOURCE_ROOT; };
+		4BD9B1FC0D00264500A4E509 /* HP_Control.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_Control.h; path = Source/HPBase/HP_Control.h; sourceTree = SOURCE_ROOT; };
+		4BD9B1FD0D00264500A4E509 /* HP_Device.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_Device.cpp; path = Source/HPBase/HP_Device.cpp; sourceTree = SOURCE_ROOT; };
+		4BD9B1FE0D00264500A4E509 /* HP_Device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_Device.h; path = Source/HPBase/HP_Device.h; sourceTree = SOURCE_ROOT; };
+		4BD9B1FF0D00264500A4E509 /* HP_DeviceCommands.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_DeviceCommands.cpp; path = Source/HPBase/HP_DeviceCommands.cpp; sourceTree = SOURCE_ROOT; };
+		4BD9B2000D00264500A4E509 /* HP_DeviceCommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_DeviceCommands.h; path = Source/HPBase/HP_DeviceCommands.h; sourceTree = SOURCE_ROOT; };
+		4BD9B2010D00264500A4E509 /* HP_DeviceInfoList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_DeviceInfoList.h; path = Source/HPBase/HP_DeviceInfoList.h; sourceTree = SOURCE_ROOT; };
+		4BD9B2020D00264500A4E509 /* HP_DeviceSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_DeviceSettings.cpp; path = Source/HPBase/HP_DeviceSettings.cpp; sourceTree = SOURCE_ROOT; };
+		4BD9B2030D00264500A4E509 /* HP_DeviceSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_DeviceSettings.h; path = Source/HPBase/HP_DeviceSettings.h; sourceTree = SOURCE_ROOT; };
+		4BD9B2040D00264500A4E509 /* HP_DriverPlugIn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_DriverPlugIn.cpp; path = Source/HPBase/HP_DriverPlugIn.cpp; sourceTree = SOURCE_ROOT; };
+		4BD9B2050D00264500A4E509 /* HP_DriverPlugIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_DriverPlugIn.h; path = Source/HPBase/HP_DriverPlugIn.h; sourceTree = SOURCE_ROOT; };
+		4BD9B2060D00264500A4E509 /* HP_FormatList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_FormatList.cpp; path = Source/HPBase/HP_FormatList.cpp; sourceTree = SOURCE_ROOT; };
+		4BD9B2070D00264500A4E509 /* HP_FormatList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_FormatList.h; path = Source/HPBase/HP_FormatList.h; sourceTree = SOURCE_ROOT; };
+		4BD9B2080D00264500A4E509 /* HP_HardwarePlugIn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_HardwarePlugIn.cpp; path = Source/HPBase/HP_HardwarePlugIn.cpp; sourceTree = SOURCE_ROOT; };
+		4BD9B2090D00264500A4E509 /* HP_HardwarePlugIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_HardwarePlugIn.h; path = Source/HPBase/HP_HardwarePlugIn.h; sourceTree = SOURCE_ROOT; };
+		4BD9B20A0D00264500A4E509 /* HP_HardwarePlugInInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_HardwarePlugInInterface.cpp; path = Source/HPBase/HP_HardwarePlugInInterface.cpp; sourceTree = SOURCE_ROOT; };
+		4BD9B20B0D00264500A4E509 /* HP_HogMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_HogMode.cpp; path = Source/HPBase/HP_HogMode.cpp; sourceTree = SOURCE_ROOT; };
+		4BD9B20C0D00264500A4E509 /* HP_HogMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_HogMode.h; path = Source/HPBase/HP_HogMode.h; sourceTree = SOURCE_ROOT; };
+		4BD9B20D0D00264500A4E509 /* HP_IOCycleTelemetry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_IOCycleTelemetry.cpp; path = Source/HPBase/HP_IOCycleTelemetry.cpp; sourceTree = SOURCE_ROOT; };
+		4BD9B20E0D00264500A4E509 /* HP_IOCycleTelemetry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_IOCycleTelemetry.h; path = Source/HPBase/HP_IOCycleTelemetry.h; sourceTree = SOURCE_ROOT; };
+		4BD9B20F0D00264500A4E509 /* HP_IOProcList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_IOProcList.cpp; path = Source/HPBase/HP_IOProcList.cpp; sourceTree = SOURCE_ROOT; };
+		4BD9B2100D00264500A4E509 /* HP_IOProcList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_IOProcList.h; path = Source/HPBase/HP_IOProcList.h; sourceTree = SOURCE_ROOT; };
+		4BD9B2110D00264500A4E509 /* HP_IOThread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_IOThread.cpp; path = Source/HPBase/HP_IOThread.cpp; sourceTree = SOURCE_ROOT; };
+		4BD9B2120D00264500A4E509 /* HP_IOThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_IOThread.h; path = Source/HPBase/HP_IOThread.h; sourceTree = SOURCE_ROOT; };
+		4BD9B2130D00264500A4E509 /* HP_Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_Object.cpp; path = Source/HPBase/HP_Object.cpp; sourceTree = SOURCE_ROOT; };
+		4BD9B2140D00264500A4E509 /* HP_Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_Object.h; path = Source/HPBase/HP_Object.h; sourceTree = SOURCE_ROOT; };
+		4BD9B2150D00264500A4E509 /* HP_PreferredChannels.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_PreferredChannels.cpp; path = Source/HPBase/HP_PreferredChannels.cpp; sourceTree = SOURCE_ROOT; };
+		4BD9B2160D00264500A4E509 /* HP_PreferredChannels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_PreferredChannels.h; path = Source/HPBase/HP_PreferredChannels.h; sourceTree = SOURCE_ROOT; };
+		4BD9B2170D00264500A4E509 /* HP_Property.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_Property.cpp; path = Source/HPBase/HP_Property.cpp; sourceTree = SOURCE_ROOT; };
+		4BD9B2180D00264500A4E509 /* HP_Property.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_Property.h; path = Source/HPBase/HP_Property.h; sourceTree = SOURCE_ROOT; };
+		4BD9B2190D00264500A4E509 /* HP_ReferenceCounted.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_ReferenceCounted.cpp; path = Source/HPBase/HP_ReferenceCounted.cpp; sourceTree = SOURCE_ROOT; };
+		4BD9B21A0D00264500A4E509 /* HP_ReferenceCounted.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_ReferenceCounted.h; path = Source/HPBase/HP_ReferenceCounted.h; sourceTree = SOURCE_ROOT; };
+		4BD9B21B0D00264500A4E509 /* HP_Stream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_Stream.cpp; path = Source/HPBase/HP_Stream.cpp; sourceTree = SOURCE_ROOT; };
+		4BD9B21C0D00264500A4E509 /* HP_Stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_Stream.h; path = Source/HPBase/HP_Stream.h; sourceTree = SOURCE_ROOT; };
+		4BD9B21D0D00264500A4E509 /* HP_SystemInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_SystemInfo.cpp; path = Source/HPBase/HP_SystemInfo.cpp; sourceTree = SOURCE_ROOT; };
+		4BD9B21E0D00264500A4E509 /* HP_SystemInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_SystemInfo.h; path = Source/HPBase/HP_SystemInfo.h; sourceTree = SOURCE_ROOT; };
+		4BD9B21F0D00264500A4E509 /* HP_TelemetryServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_TelemetryServer.cpp; path = Source/HPBase/HP_TelemetryServer.cpp; sourceTree = SOURCE_ROOT; };
+		4BD9B2200D00264500A4E509 /* HP_TelemetryServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_TelemetryServer.h; path = Source/HPBase/HP_TelemetryServer.h; sourceTree = SOURCE_ROOT; };
 		8D576316048677EA00EA77CD /* JackRouter.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JackRouter.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D576317048677EA00EA77CD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -271,7 +266,7 @@
 			isa = PBXGroup;
 			children = (
 				08FB77AFFE84173DC02AAC07 /* Source */,
-				4B45E29A0CE31EE8001FB4D8 /* HPBase */,
+				4BD9B1F80D00264500A4E509 /* HPBase */,
 				2DF7BC3008DA4A5400EE5510 /* PublicUtility */,
 				2DF7BC7008DA4D5100EE5510 /* Resources */,
 				089C1671FE841209C02AAC07 /* Frameworks */,
@@ -293,11 +288,6 @@
 		08FB77AFFE84173DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				4BEA9C2E0CEB10EC000A974C /* HP_HardwarePlugInInterface.cpp */,
-				4BEA9BE30CEB09E1000A974C /* HP_IOProcList.cpp */,
-				4BEA9BE40CEB09E1000A974C /* HP_IOProcList.h */,
-				4BEA9BD90CEB07FF000A974C /* HP_Device.cpp */,
-				4BEA9BDA0CEB07FF000A974C /* HP_Device.h */,
 				4B84929D0CE34E7A00B43385 /* procinfo */,
 				4B45E3010CE31F53001FB4D8 /* JackRouter.exp */,
 				4B84938D0CE3513300B43385 /* JARLog.h */,
@@ -397,54 +387,6 @@
 			path = Resources;
 			sourceTree = SOURCE_ROOT;
 		};
-		4B45E29A0CE31EE8001FB4D8 /* HPBase */ = {
-			isa = PBXGroup;
-			children = (
-				4B45E29B0CE31EE8001FB4D8 /* HP_Command.cpp */,
-				4B45E29C0CE31EE8001FB4D8 /* HP_Command.h */,
-				4B45E29D0CE31EE8001FB4D8 /* HP_Control.cpp */,
-				4B45E29E0CE31EE8001FB4D8 /* HP_Control.h */,
-				4B45E29F0CE31EE8001FB4D8 /* HP_Device.cpp */,
-				4B45E2A00CE31EE8001FB4D8 /* HP_Device.h */,
-				4B45E2A10CE31EE8001FB4D8 /* HP_DeviceCommands.cpp */,
-				4B45E2A20CE31EE8001FB4D8 /* HP_DeviceCommands.h */,
-				4B45E2A30CE31EE8001FB4D8 /* HP_DeviceInfoList.h */,
-				4B45E2A40CE31EE8001FB4D8 /* HP_DeviceSettings.cpp */,
-				4B45E2A50CE31EE8001FB4D8 /* HP_DeviceSettings.h */,
-				4B45E2A60CE31EE8001FB4D8 /* HP_DriverPlugIn.cpp */,
-				4B45E2A70CE31EE8001FB4D8 /* HP_DriverPlugIn.h */,
-				4B45E2A80CE31EE8001FB4D8 /* HP_FormatList.cpp */,
-				4B45E2A90CE31EE8001FB4D8 /* HP_FormatList.h */,
-				4B45E2AA0CE31EE8001FB4D8 /* HP_HardwarePlugIn.cpp */,
-				4B45E2AB0CE31EE8001FB4D8 /* HP_HardwarePlugIn.h */,
-				4B45E2AC0CE31EE8001FB4D8 /* HP_HardwarePlugInInterface.cpp */,
-				4B45E2AD0CE31EE8001FB4D8 /* HP_HogMode.cpp */,
-				4B45E2AE0CE31EE8001FB4D8 /* HP_HogMode.h */,
-				4B45E2AF0CE31EE8001FB4D8 /* HP_IOCycleTelemetry.cpp */,
-				4B45E2B00CE31EE8001FB4D8 /* HP_IOCycleTelemetry.h */,
-				4B45E2B10CE31EE8001FB4D8 /* HP_IOProcList.cpp */,
-				4B45E2B20CE31EE8001FB4D8 /* HP_IOProcList.h */,
-				4B45E2B30CE31EE8001FB4D8 /* HP_IOThread.cpp */,
-				4B45E2B40CE31EE8001FB4D8 /* HP_IOThread.h */,
-				4B45E2B50CE31EE8001FB4D8 /* HP_Object.cpp */,
-				4B45E2B60CE31EE8001FB4D8 /* HP_Object.h */,
-				4B45E2B70CE31EE8001FB4D8 /* HP_PreferredChannels.cpp */,
-				4B45E2B80CE31EE8001FB4D8 /* HP_PreferredChannels.h */,
-				4B45E2B90CE31EE8001FB4D8 /* HP_Property.cpp */,
-				4B45E2BA0CE31EE8001FB4D8 /* HP_Property.h */,
-				4B45E2BB0CE31EE8001FB4D8 /* HP_ReferenceCounted.cpp */,
-				4B45E2BC0CE31EE8001FB4D8 /* HP_ReferenceCounted.h */,
-				4B45E2BD0CE31EE8001FB4D8 /* HP_Stream.cpp */,
-				4B45E2BE0CE31EE8001FB4D8 /* HP_Stream.h */,
-				4B45E2BF0CE31EE8001FB4D8 /* HP_SystemInfo.cpp */,
-				4B45E2C00CE31EE8001FB4D8 /* HP_SystemInfo.h */,
-				4B45E2C10CE31EE8001FB4D8 /* HP_TelemetryServer.cpp */,
-				4B45E2C20CE31EE8001FB4D8 /* HP_TelemetryServer.h */,
-			);
-			name = HPBase;
-			path = /Developer/Examples/CoreAudio/HAL/HPBase;
-			sourceTree = "<absolute>";
-		};
 		4B84929D0CE34E7A00B43385 /* procinfo */ = {
 			isa = PBXGroup;
 			children = (
@@ -455,6 +397,54 @@
 			);
 			name = procinfo;
 			path = Source/procinfo;
+			sourceTree = SOURCE_ROOT;
+		};
+		4BD9B1F80D00264500A4E509 /* HPBase */ = {
+			isa = PBXGroup;
+			children = (
+				4BD9B1F90D00264500A4E509 /* HP_Command.cpp */,
+				4BD9B1FA0D00264500A4E509 /* HP_Command.h */,
+				4BD9B1FB0D00264500A4E509 /* HP_Control.cpp */,
+				4BD9B1FC0D00264500A4E509 /* HP_Control.h */,
+				4BD9B1FD0D00264500A4E509 /* HP_Device.cpp */,
+				4BD9B1FE0D00264500A4E509 /* HP_Device.h */,
+				4BD9B1FF0D00264500A4E509 /* HP_DeviceCommands.cpp */,
+				4BD9B2000D00264500A4E509 /* HP_DeviceCommands.h */,
+				4BD9B2010D00264500A4E509 /* HP_DeviceInfoList.h */,
+				4BD9B2020D00264500A4E509 /* HP_DeviceSettings.cpp */,
+				4BD9B2030D00264500A4E509 /* HP_DeviceSettings.h */,
+				4BD9B2040D00264500A4E509 /* HP_DriverPlugIn.cpp */,
+				4BD9B2050D00264500A4E509 /* HP_DriverPlugIn.h */,
+				4BD9B2060D00264500A4E509 /* HP_FormatList.cpp */,
+				4BD9B2070D00264500A4E509 /* HP_FormatList.h */,
+				4BD9B2080D00264500A4E509 /* HP_HardwarePlugIn.cpp */,
+				4BD9B2090D00264500A4E509 /* HP_HardwarePlugIn.h */,
+				4BD9B20A0D00264500A4E509 /* HP_HardwarePlugInInterface.cpp */,
+				4BD9B20B0D00264500A4E509 /* HP_HogMode.cpp */,
+				4BD9B20C0D00264500A4E509 /* HP_HogMode.h */,
+				4BD9B20D0D00264500A4E509 /* HP_IOCycleTelemetry.cpp */,
+				4BD9B20E0D00264500A4E509 /* HP_IOCycleTelemetry.h */,
+				4BD9B20F0D00264500A4E509 /* HP_IOProcList.cpp */,
+				4BD9B2100D00264500A4E509 /* HP_IOProcList.h */,
+				4BD9B2110D00264500A4E509 /* HP_IOThread.cpp */,
+				4BD9B2120D00264500A4E509 /* HP_IOThread.h */,
+				4BD9B2130D00264500A4E509 /* HP_Object.cpp */,
+				4BD9B2140D00264500A4E509 /* HP_Object.h */,
+				4BD9B2150D00264500A4E509 /* HP_PreferredChannels.cpp */,
+				4BD9B2160D00264500A4E509 /* HP_PreferredChannels.h */,
+				4BD9B2170D00264500A4E509 /* HP_Property.cpp */,
+				4BD9B2180D00264500A4E509 /* HP_Property.h */,
+				4BD9B2190D00264500A4E509 /* HP_ReferenceCounted.cpp */,
+				4BD9B21A0D00264500A4E509 /* HP_ReferenceCounted.h */,
+				4BD9B21B0D00264500A4E509 /* HP_Stream.cpp */,
+				4BD9B21C0D00264500A4E509 /* HP_Stream.h */,
+				4BD9B21D0D00264500A4E509 /* HP_SystemInfo.cpp */,
+				4BD9B21E0D00264500A4E509 /* HP_SystemInfo.h */,
+				4BD9B21F0D00264500A4E509 /* HP_TelemetryServer.cpp */,
+				4BD9B2200D00264500A4E509 /* HP_TelemetryServer.h */,
+			);
+			name = HPBase;
+			path = Source/HPBase;
 			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
@@ -499,24 +489,6 @@
 				2DF7BD1B08DA584F00EE5510 /* CAStreamRangedDescription.h in Headers */,
 				2DF7BD1C08DA584F00EE5510 /* CATokenMap.h in Headers */,
 				2DF7BD1E08DA584F00EE5510 /* CAVolumeCurve.h in Headers */,
-				4B45E2C40CE31EE8001FB4D8 /* HP_Command.h in Headers */,
-				4B45E2C60CE31EE8001FB4D8 /* HP_Control.h in Headers */,
-				4B45E2CA0CE31EE8001FB4D8 /* HP_DeviceCommands.h in Headers */,
-				4B45E2CB0CE31EE8001FB4D8 /* HP_DeviceInfoList.h in Headers */,
-				4B45E2CD0CE31EE8001FB4D8 /* HP_DeviceSettings.h in Headers */,
-				4B45E2CF0CE31EE8001FB4D8 /* HP_DriverPlugIn.h in Headers */,
-				4B45E2D10CE31EE8001FB4D8 /* HP_FormatList.h in Headers */,
-				4B45E2D30CE31EE8001FB4D8 /* HP_HardwarePlugIn.h in Headers */,
-				4B45E2D60CE31EE8001FB4D8 /* HP_HogMode.h in Headers */,
-				4B45E2D80CE31EE8001FB4D8 /* HP_IOCycleTelemetry.h in Headers */,
-				4B45E2DC0CE31EE8001FB4D8 /* HP_IOThread.h in Headers */,
-				4B45E2DE0CE31EE8001FB4D8 /* HP_Object.h in Headers */,
-				4B45E2E00CE31EE8001FB4D8 /* HP_PreferredChannels.h in Headers */,
-				4B45E2E20CE31EE8001FB4D8 /* HP_Property.h in Headers */,
-				4B45E2E40CE31EE8001FB4D8 /* HP_ReferenceCounted.h in Headers */,
-				4B45E2E60CE31EE8001FB4D8 /* HP_Stream.h in Headers */,
-				4B45E2E80CE31EE8001FB4D8 /* HP_SystemInfo.h in Headers */,
-				4B45E2EA0CE31EE8001FB4D8 /* HP_TelemetryServer.h in Headers */,
 				4B8492A30CE34E7A00B43385 /* bequite.h in Headers */,
 				4B8492A50CE34E7A00B43385 /* procinfo.h in Headers */,
 				4B84938F0CE3513300B43385 /* JARLog.h in Headers */,
@@ -524,8 +496,26 @@
 				4B193B020CE356C000C1F56E /* JackRouterDevice.h in Headers */,
 				4B193B110CE3573000C1F56E /* JackRouterStream.h in Headers */,
 				4B193B410CE3586F00C1F56E /* JackRouterPrefix.h in Headers */,
-				4BEA9BDC0CEB07FF000A974C /* HP_Device.h in Headers */,
-				4BEA9BE60CEB09E1000A974C /* HP_IOProcList.h in Headers */,
+				4BD9B2220D00264500A4E509 /* HP_Command.h in Headers */,
+				4BD9B2240D00264500A4E509 /* HP_Control.h in Headers */,
+				4BD9B2260D00264500A4E509 /* HP_Device.h in Headers */,
+				4BD9B2280D00264500A4E509 /* HP_DeviceCommands.h in Headers */,
+				4BD9B2290D00264500A4E509 /* HP_DeviceInfoList.h in Headers */,
+				4BD9B22B0D00264500A4E509 /* HP_DeviceSettings.h in Headers */,
+				4BD9B22D0D00264500A4E509 /* HP_DriverPlugIn.h in Headers */,
+				4BD9B22F0D00264500A4E509 /* HP_FormatList.h in Headers */,
+				4BD9B2310D00264500A4E509 /* HP_HardwarePlugIn.h in Headers */,
+				4BD9B2340D00264500A4E509 /* HP_HogMode.h in Headers */,
+				4BD9B2360D00264500A4E509 /* HP_IOCycleTelemetry.h in Headers */,
+				4BD9B2380D00264500A4E509 /* HP_IOProcList.h in Headers */,
+				4BD9B23A0D00264500A4E509 /* HP_IOThread.h in Headers */,
+				4BD9B23C0D00264500A4E509 /* HP_Object.h in Headers */,
+				4BD9B23E0D00264500A4E509 /* HP_PreferredChannels.h in Headers */,
+				4BD9B2400D00264500A4E509 /* HP_Property.h in Headers */,
+				4BD9B2420D00264500A4E509 /* HP_ReferenceCounted.h in Headers */,
+				4BD9B2440D00264500A4E509 /* HP_Stream.h in Headers */,
+				4BD9B2460D00264500A4E509 /* HP_SystemInfo.h in Headers */,
+				4BD9B2480D00264500A4E509 /* HP_TelemetryServer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -614,23 +604,6 @@
 				2DF7BD1808DA584F00EE5510 /* CAStreamBasicDescription.cpp in Sources */,
 				2DF7BD1A08DA584F00EE5510 /* CAStreamRangedDescription.cpp in Sources */,
 				2DF7BD1D08DA584F00EE5510 /* CAVolumeCurve.cpp in Sources */,
-				4B45E2C30CE31EE8001FB4D8 /* HP_Command.cpp in Sources */,
-				4B45E2C50CE31EE8001FB4D8 /* HP_Control.cpp in Sources */,
-				4B45E2C90CE31EE8001FB4D8 /* HP_DeviceCommands.cpp in Sources */,
-				4B45E2CC0CE31EE8001FB4D8 /* HP_DeviceSettings.cpp in Sources */,
-				4B45E2CE0CE31EE8001FB4D8 /* HP_DriverPlugIn.cpp in Sources */,
-				4B45E2D00CE31EE8001FB4D8 /* HP_FormatList.cpp in Sources */,
-				4B45E2D20CE31EE8001FB4D8 /* HP_HardwarePlugIn.cpp in Sources */,
-				4B45E2D50CE31EE8001FB4D8 /* HP_HogMode.cpp in Sources */,
-				4B45E2D70CE31EE8001FB4D8 /* HP_IOCycleTelemetry.cpp in Sources */,
-				4B45E2DB0CE31EE8001FB4D8 /* HP_IOThread.cpp in Sources */,
-				4B45E2DD0CE31EE8001FB4D8 /* HP_Object.cpp in Sources */,
-				4B45E2DF0CE31EE8001FB4D8 /* HP_PreferredChannels.cpp in Sources */,
-				4B45E2E10CE31EE8001FB4D8 /* HP_Property.cpp in Sources */,
-				4B45E2E30CE31EE8001FB4D8 /* HP_ReferenceCounted.cpp in Sources */,
-				4B45E2E50CE31EE8001FB4D8 /* HP_Stream.cpp in Sources */,
-				4B45E2E70CE31EE8001FB4D8 /* HP_SystemInfo.cpp in Sources */,
-				4B45E2E90CE31EE8001FB4D8 /* HP_TelemetryServer.cpp in Sources */,
 				4B45E3020CE31F53001FB4D8 /* JackRouter.exp in Sources */,
 				4B8492A20CE34E7A00B43385 /* bequite.c in Sources */,
 				4B8492A40CE34E7A00B43385 /* procinfo.c in Sources */,
@@ -638,9 +611,26 @@
 				4B193AD00CE3556200C1F56E /* JackRouterPlugIn.cpp in Sources */,
 				4B193B030CE356C000C1F56E /* JackRouterDevice.cpp in Sources */,
 				4B193B100CE3573000C1F56E /* JackRouterStream.cpp in Sources */,
-				4BEA9BDB0CEB07FF000A974C /* HP_Device.cpp in Sources */,
-				4BEA9BE50CEB09E1000A974C /* HP_IOProcList.cpp in Sources */,
-				4BEA9C2F0CEB10EC000A974C /* HP_HardwarePlugInInterface.cpp in Sources */,
+				4BD9B2210D00264500A4E509 /* HP_Command.cpp in Sources */,
+				4BD9B2230D00264500A4E509 /* HP_Control.cpp in Sources */,
+				4BD9B2250D00264500A4E509 /* HP_Device.cpp in Sources */,
+				4BD9B2270D00264500A4E509 /* HP_DeviceCommands.cpp in Sources */,
+				4BD9B22A0D00264500A4E509 /* HP_DeviceSettings.cpp in Sources */,
+				4BD9B22C0D00264500A4E509 /* HP_DriverPlugIn.cpp in Sources */,
+				4BD9B22E0D00264500A4E509 /* HP_FormatList.cpp in Sources */,
+				4BD9B2300D00264500A4E509 /* HP_HardwarePlugIn.cpp in Sources */,
+				4BD9B2320D00264500A4E509 /* HP_HardwarePlugInInterface.cpp in Sources */,
+				4BD9B2330D00264500A4E509 /* HP_HogMode.cpp in Sources */,
+				4BD9B2350D00264500A4E509 /* HP_IOCycleTelemetry.cpp in Sources */,
+				4BD9B2370D00264500A4E509 /* HP_IOProcList.cpp in Sources */,
+				4BD9B2390D00264500A4E509 /* HP_IOThread.cpp in Sources */,
+				4BD9B23B0D00264500A4E509 /* HP_Object.cpp in Sources */,
+				4BD9B23D0D00264500A4E509 /* HP_PreferredChannels.cpp in Sources */,
+				4BD9B23F0D00264500A4E509 /* HP_Property.cpp in Sources */,
+				4BD9B2410D00264500A4E509 /* HP_ReferenceCounted.cpp in Sources */,
+				4BD9B2430D00264500A4E509 /* HP_Stream.cpp in Sources */,
+				4BD9B2450D00264500A4E509 /* HP_SystemInfo.cpp in Sources */,
+				4BD9B2470D00264500A4E509 /* HP_TelemetryServer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

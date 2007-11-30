@@ -95,11 +95,9 @@ public:
 	
 	CAPThread			mCommandThread;
 	CAGuard				mCommandGuard;
-	bool				mStopWorkLoop;
 	void				WorkLoop();
 	
 	void				Start();
-	void				Stop();
 	
 protected:	
 	
