@@ -54,6 +54,8 @@ History
 		   Correct JackRouterDevice::BufferSize.
 29-11-07 : New JackRouterDevice::GetBufferSize method for dynamic buffer size changes. Optimization in Process.
 30-11-07 : Remove usleep in command thread: use a Wait/Notify mechanism.
+04-12-07 : Another dirty buffers fix in JackRouterDevice::Process.
+06-12-07 : Another dirty buffers fix in JackRouterDevice::Process.
 
 */
 

@@ -1100,8 +1100,10 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 			
                 for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
                     if (proc->IsStreamEnabled(false, i) && client->fOutputPortList[i]) {
-						client->fOutputList->mBuffers[i].mData = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);;
-                    } else {
+						float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
+						memset(output, 0, nframes * sizeof(float));
+						client->fOutputList->mBuffers[i].mData = output;
+		           } else {
                         client->fOutputList->mBuffers[i].mData = NULL;
                     }
                 }
@@ -1135,7 +1137,9 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 			#ifdef OPTIMIZE_PROCESS
 
                 for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
-		           client->fOutputList->mBuffers[i].mData = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
+					float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
+					memset(output, 0, nframes * sizeof(float));
+					client->fOutputList->mBuffers[i].mData = output;
                 }
 				
 			#else
