@@ -5,10 +5,71 @@
 #import "JackMenu.h"
 #import "JPPlugin.h"
 #import "JackCon1.3.h"
+#include <sys/sysctl.h>
 
 //#define NOTIFICATION
 
 #include <CoreFoundation/CFNotificationCenter.h>
+
+static bool gJackRunning = true;
+
+static char* DefaultServerName()
+{
+    char* server_name;
+    if ((server_name = getenv("JACK_DEFAULT_SERVER")) == NULL)
+        server_name = "default";
+    return server_name;
+}
+
+static void startCallback(CFNotificationCenterRef center,
+                         void*	observer,
+                         CFStringRef name,
+                         const void* object,
+                         CFDictionaryRef userInfo)
+{}
+
+static void stopCallback(CFNotificationCenterRef center,
+                         void*	observer,
+                         CFStringRef name,
+                         const void* object,
+                         CFDictionaryRef userInfo)
+{
+	if (gJackRunning) {
+		gJackRunning = false;
+	
+		NSString *mess1 = NSLocalizedString(@"Fatal error:", nil);
+		NSString *mess2 = NSLocalizedString(@"Jack server has been stopped, JackPilot will quit.", nil);
+		NSString *mess3 = NSLocalizedString(@"Ok", nil);
+	
+		NSRunCriticalAlertPanel(mess1, mess2, mess3, nil, nil);
+		closeJack();
+		exit(1);
+	}
+}
+
+static void StartNotification()
+{
+	CFStringRef ref = CFStringCreateWithCString(NULL, DefaultServerName(), kCFStringEncodingMacRoman);
+	CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(),
+									NULL, startCallback, CFSTR("com.grame.jackserver.start"),
+									ref, CFNotificationSuspensionBehaviorDeliverImmediately);
+	CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(),
+									NULL, stopCallback, CFSTR("com.grame.jackserver.stop"),
+									ref, CFNotificationSuspensionBehaviorDeliverImmediately);
+	CFRelease(ref);
+}
+
+static void StopNotification()
+{
+	printf("StopNotification name = %s \n", DefaultServerName());
+	CFStringRef ref = CFStringCreateWithCString(NULL, DefaultServerName(), kCFStringEncodingMacRoman);
+	CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(), NULL,
+										CFSTR("com.grame.jackserver.start"), ref);
+	CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(), NULL,
+										CFSTR("com.grame.jackserver.stop"), ref);
+	CFRelease(ref);
+}
+
 
 static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boolean isInput);
 
@@ -100,26 +161,9 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
     UInt32				outSize;
     Boolean				outWritable;
     AudioBufferList*	bufferList = 0;
-	AudioStreamID*		streamList = 0;
-    int					i, numStream;
+	unsigned int i;
 	
-	err = AudioDeviceGetPropertyInfo(device, 0, isInput, kAudioDevicePropertyStreams, &outSize, &outWritable);
-	if (err == noErr) {
-		streamList = (AudioStreamID*)malloc(outSize);
-		numStream = outSize/sizeof(AudioStreamID);
-		JPLog("getTotalChannels device stream number %ld %ld\n", device, numStream);
-		err = AudioDeviceGetProperty(device, 0, isInput, kAudioDevicePropertyStreams, &outSize, streamList);
-		if (err == noErr) {
-			AudioStreamBasicDescription streamDesc;
-			outSize = sizeof(AudioStreamBasicDescription);
-			for (i = 0; i < numStream; i++) {
-				err = AudioStreamGetProperty(streamList[i], 0, kAudioDevicePropertyStreamFormat, &outSize, &streamDesc);
-				JPLog("getTotalChannels streamDesc mFormatFlags %ld mChannelsPerFrame %ld\n", streamDesc.mFormatFlags, streamDesc.mChannelsPerFrame);
-			}
-		}
-	}
-	
-    *channelCount = 0;
+	*channelCount = 0;
     err = AudioDeviceGetPropertyInfo(device, 0, isInput, kAudioDevicePropertyStreamConfiguration, &outSize, &outWritable);
     if (err == noErr) {
         bufferList = (AudioBufferList*)malloc(outSize);
@@ -128,14 +172,10 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
             for (i = 0; i < bufferList->mNumberBuffers; i++) 
                 *channelCount += bufferList->mBuffers[i].mNumberChannels;
         }
+		if (bufferList) 
+			free(bufferList);	
     }
-	
-	if (streamList) 
-		free(streamList);
-	if (bufferList) 
-		free(bufferList);	
-		
-    return (err);
+	return (err);
 }
 
 @implementation JackMenu
@@ -591,7 +631,12 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 				[self error:LOCSTR(@"Cannot start Jack server,\nPlease check the console or retry after a system reboot.")]; 
 				writeStatus(0); 
 			}
-			//free(stringa); free(driver); free(samplerate); free(buffersize); free(channels); free(interface); 
+			//free(stringa); 
+			//free(driver); 
+			//free(samplerate); 
+			//free(buffersize); 
+			//free(channels); 
+			//free(interface); 
 		}
 		[self jackALstore:sender];
     }
@@ -953,8 +998,18 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 	
 	char drivername[128];
 	getDeviceUIDFromID(vDevice,drivername);
-    
-    //strcpy(stringa,"/usr/local/bin/./jackd -R -d ");
+
+/* For Leopard only...	
+#if defined(__i386__)
+	strcpy(stringa, "arch -i386 /usr/local/bin/./jackdmp -R -d ");
+#elif defined(__x86_64__)
+	strcpy(stringa,"/usr/local/bin/./jackdmp -R -d ");
+#elif defined(__ppc__)
+	strcpy(stringa, "arch -ppc /usr/local/bin/./jackdmp -R -d ");
+#elif defined(__ppc64__)
+	strcpy(stringa,"/usr/local/bin/./jackdmp -R -d ");
+#endif
+*/
 	strcpy(stringa,"/usr/local/bin/./jackdmp -R -d ");
     strcat(stringa,driver);
 	strcat(stringa," -r ");
@@ -984,7 +1039,8 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 	free(out_channels); 
 	free(in_channels); 
 	free(interface); 
-	
+
+/*	
 #ifdef NOTIFICATION	
 	// Send notification to be used in the Jack Router
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(),
@@ -993,13 +1049,18 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 										NULL,
 										true);
 #endif  
+*/
+	StartNotification();
 }
 
 - (IBAction) closeJackDeamon:(id) sender {
 	[managerWin orderOut:sender];
 	
-	[[JackConnections getSelf] stopTimer];
+	StopNotification();
 	
+	[[JackConnections getSelf] stopTimer];
+
+/*	
 #ifdef NOTIFICATION
 	// Send notification to be used in the Jack Router
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(),
@@ -1008,6 +1069,7 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 										NULL,
 										true);
 #endif
+*/
 	
 	if (checkJack() != 0) {    
 		[self sendJackStatusToPlugins:NO];

@@ -7,9 +7,10 @@
 //
 
 #import <Cocoa/Cocoa.h>
-
+#include <CoreFoundation/CFNotificationCenter.h>
+#include "jackfun.h"
 
 int main(int argc, const char *argv[])
 {
-    return NSApplicationMain(argc, argv);
+	return NSApplicationMain(argc, argv);
 }

@@ -34,6 +34,7 @@
 "The physical driver used with this setup was " = "Le driver physique utilise avec cette configuration ";
 ", now Jack is using " = ", maintenant Jack utilise ";
 ", do you want to restore connections to the used with driver " = ", voulez vous restorer les connections avec le driver ";
+"Jack server has been stopped, JackPilot will quit." = "Le serveur Jack s'est arrete, JackPilot va quitter. ";
 
 /* "You have %d clients running, they will stop working or maybe crash!!\n" */
 "You have " = "Vous avez ";

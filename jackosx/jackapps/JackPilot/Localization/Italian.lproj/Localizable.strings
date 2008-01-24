@@ -34,6 +34,7 @@
 "The physical driver used with this setup was " = "Il dispositivo audio usato in questo setup era ";
 ", now Jack is using " = ", adesso Jack sta usando ";
 ", do you want to restore connections to the used with driver " = ", vuoi ricaricare le connesionni usando l'attuale driver ";
+"Jack server has been stopped, JackPilot will quit." = "Jack server has been stopped, JackPilot will quit.";
 
 /* "You have %d clients running, they will stop working or maybe crash!!\n" */
 "You have " = "Hai ";

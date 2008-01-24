@@ -10,12 +10,12 @@ int firsttime = 0;
 int status;
 jack_client_t* client = NULL;
 const char** jplist;
-const char **connec;
+const char** connec;
 int sr,buf,driver,ch;
 int inch,outch,autoc;
 int nConnect;
 int interface;
-char *homePath = NULL;
+char* homePath = NULL;
 int flag;
 char coreAudioDevice[256];
 int defInput,defOutput,defSystem;
@@ -61,25 +61,25 @@ int closeJack(void)
 	return 1;
 }
 
-int my_system (const char *command)
+int my_system (const char* command)
 {
-  firsttime=1;
-  int status;
-  pid_t pid = fork();
+	firsttime=1;
+	int status;
+	pid_t pid = fork();
   
-  if (pid == 0) {
-      execl(SHELL, SHELL, "-c", command, NULL);
-      _exit(EXIT_FAILURE);
-  } else if (pid < 0) {
-    status = -1;
-  } else {
-      status = 1;
-      sleep(4);
-  }
-  return status;
+	if (pid == 0) {
+		execl(SHELL, SHELL, "-c", command, NULL);
+		_exit(EXIT_FAILURE);
+	} else if (pid < 0) {
+		status = -1;
+	} else {
+		status = 1;
+		sleep(4);
+	}
+	return status;
 }
 
-int my_system2(const char *command)
+int my_system2(const char* command)
 {
 	firsttime = 1;
 	int status;
@@ -104,7 +104,7 @@ int checkJack(void)
     int i;
     for (i = 0; i < quanti; i++) {
         int test;
-        //test = strcmp("jackd", ottieniNome(i));
+	   //test = strcmp("jackd", ottieniNome(i));
 		test = strcmp("jackdmp", ottieniNome(i));
 		if (test == 0) { 
 			flag = ottieniFlag(i); 
@@ -135,7 +135,7 @@ int ottieniPorte(void)  //why not void instead of int return!!??
     return 1;
 }
 
-int portaPerNumero(int n, char *nomeOut, unsigned long *tipo) 
+int portaPerNumero(int n, char* nomeOut, unsigned long* tipo) 
 {
     ottieniPorte();
 	if (!jplist) 

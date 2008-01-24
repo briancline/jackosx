@@ -34,7 +34,7 @@
 }
 
 -(id)getNomeCliente {
-    if(nomeCliente==NULL) return @"NIL";
+    if (nomeCliente == NULL) return @"NIL";
     //NSLog(@"Name required");
     NSString *res = [NSString stringWithCString:nomeCliente];
 #ifdef DEBUGGO
@@ -49,8 +49,9 @@
             //NSLog(@"Case 1");
             id style;
             id testo = [[NSAttributedString alloc] autorelease];
-            if([items count]==2)  { fres = [items objectAtIndex:0]; style = [NSDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName]; }
-            else { 
+            if ([items count] == 2) { 
+				fres = [items objectAtIndex:0]; style = [NSDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName];
+			} else { 
                 fres = [items objectAtIndex:1];
                 style = [NSMutableDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName]; 
                 [style setObject:[NSFont boldSystemFontOfSize:13.0f] forKey:NSFontAttributeName];  
@@ -63,7 +64,7 @@
         default:
         {
             //NSLog(@"Case Def");
-            if([items count]==3) { 
+            if ([items count] == 3) { 
                 id testo = [[NSAttributedString alloc] autorelease];
                 NSMutableDictionary *style;
                 fres = [items objectAtIndex:1]; 
@@ -91,12 +92,12 @@
     nPorte = nporte;
     
     porte = [NSMutableArray arrayWithArray:nomi];
-    nomiPorte = (char**)malloc(sizeof(char**)*nPorte);
+    nomiPorte = (char**)malloc(sizeof(char**) * nPorte);
     idPorte = [[NSMutableArray array] retain];
     portIsConnected = [[NSMutableArray array] retain];
     int i;
-    for(i=0;i<nPorte;i++) {
-        nomiPorte[i] = (char*)malloc(sizeof(char*)*256);
+    for (i = 0; i < nPorte; i++) {
+        nomiPorte[i] = (char*)malloc(sizeof(char*) * 256);
         portsArrData *porta;
         porta = [porte objectAtIndex:i];
         NSString *portaName = [porta getName];
@@ -104,18 +105,19 @@
         NSNumber *idporta = [NSNumber numberWithInt:[porta getID]];
         [idPorte addObject:idporta];
         NSNumber *isconn = [NSNumber numberWithInt:[porta IsConn]];
-        if([porta IsConn]==1) isConnected = 1;
+        if ([porta IsConn] == 1) 
+			isConnected = 1;
         [portIsConnected addObject:isconn];
     }
    
-    nomeCliente = (char*)malloc(sizeof(char*)*256);
+    nomeCliente = (char*)malloc(sizeof(char*) * 256);
     strcpy(nomeCliente,nome);
     tipoCliente = tipo;
 }
 
 -(void)destroy {
     int i;
-    for(i=0;i<nPorte;i++) {
+    for (i = 0; i < nPorte; i++) {
         free(nomiPorte[i]);
     }
     free(nomiPorte);
@@ -134,8 +136,10 @@
 #ifdef DEBUGGO
     //JPLog("ASK1\n");
 #endif
-    if(item==nil) return [ [self startPoint] count ];
-    if([item isKindOfClass:[portsArrData class]]) return 0;
+    if (item == nil) 
+		return [[self startPoint] count];
+    if ([item isKindOfClass:[portsArrData class]]) 
+		return 0;
     return [item getNPorte];
 }
 
@@ -143,10 +147,21 @@
 #ifdef DEBUGGO
     //JPLog("ASK2\n");
 #endif
-    if(item==nil) { richiesta=22; return YES; }
-    if([item isKindOfClass:[portsArrData class]]) { richiesta=0; return NO; }
-    if([item getNPorte]!=0) { richiesta=22; return YES; }
-    else { richiesta=22; return NO; }
+    if (item == nil) {
+		richiesta = 22; 
+		return YES; 
+	}
+    if ([item isKindOfClass:[portsArrData class]]) {
+		richiesta = 0; 
+		return NO; 
+	}
+    if ([item getNPorte] != 0) { 
+		richiesta = 22; 
+		return YES; 
+	} else { 
+		richiesta = 22; 
+		return NO; 
+	}
     return NO;
 }
 
@@ -164,11 +179,12 @@
 - (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item {
     theOutline=outlineView;
     *chi = 21;
-    if(item==nil) return @"NIL";
+    if (item == nil) 
+		return @"NIL";
 #ifdef DEBUGGO
     //JPLog("RICHIESTA : %d\n",richiesta);
 #endif
-    if([item isKindOfClass:[portsArrData class]]) {
+    if ([item isKindOfClass:[portsArrData class]]) {
         const char *buf;
         buf = [item getCPort];
         if(buf!=NULL) {
@@ -179,36 +195,39 @@
 #ifdef DEBUGGO
            //JPLog("Selezionata: %d\n",selectedPort);
 #endif
-        if([item IsConn]==1) {
-            id testo = [[NSAttributedString alloc] autorelease];
-            NSDictionary *style = [NSDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName];
-            [testo initWithString:res attributes:style];
-            kindCliItem = 666;
-            [self needsReload];
-            [itemsToRelease addObject:item];
-            return testo;
-        }
-        kindCliItem = 333;
-        [self needsReload];
-        [itemsToRelease addObject:item];
-        return res; 
+		if ([item IsConn] == 1) {
+				id testo = [[NSAttributedString alloc] autorelease];
+				NSDictionary *style = [NSDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName];
+				[testo initWithString:res attributes:style];
+				kindCliItem = 666;
+				[self needsReload];
+				[itemsToRelease addObject:item];
+				return testo;
+			}
+			kindCliItem = 333;
+			[self needsReload];
+			[itemsToRelease addObject:item];
+			return res; 
         }
         return @"NIL";
     }
-    if([item isKindOfClass:[DatiSend2 class]]) { 
+    if ([item isKindOfClass:[DatiSend2 class]]) { 
         //JPLog("CLIENTE SELEZIONATO");
         selectedPort = -10;
         selectedItem = item;
         [self selezionaPorte];
         [self needsReload];
         id result = [item getNomeCliente];
-        if([item getIsConn]!=1) kindCliItem = 333;
-        else kindCliItem = 666;
+        if ([item getIsConn] != 1) 
+			kindCliItem = 333;
+        else 
+			kindCliItem = 666;
         //if(kindCliItem==666){ [outlineView reloadItem:item reloadChildren:YES]; [outlineView expandItem:item expandChildren:YES]; }
         [itemsToRelease addObject:item];
         return result;
     }
-    if(richiesta == 21) return [item getNomeCliente];
+    if (richiesta == 21) 
+		return [item getNomeCliente];
     return @"NIL";
 }
 
@@ -225,7 +244,7 @@
     if([theItem isKindOfClass:[DatiSend2 class]]) {
     int quante = [theItem getNPorte];
     int i;
-    for(i=0;i<quante;i++) {
+    for (i = 0; i < quante; i++) {
         portsArrData *data2;
         data2 = [theItem getNomePorta:i];
         porteSelected[i] = [data2 getID];
@@ -239,7 +258,7 @@
     *quanteXCli = quante;
     *needsRelo=2;
     }
-    if([theItem isKindOfClass:[portsArrData class]]) {
+    if ([theItem isKindOfClass:[portsArrData class]]) {
         porteSelected[0] = [theItem getID];
 #ifdef DEBUGGO
         //char *tempBuf;
@@ -271,7 +290,7 @@
 	quantiCli = quantiClienti();
 	
 	int i;
-	for (i=0;i<quantiCli;i++) {
+	for (i = 0; i < quantiCli; i++) {
 		NSEnumerator *enumerator = [names_to_verify objectEnumerator];
 		id anObject;
 		BOOL bypass = NO;
@@ -295,7 +314,7 @@
 		if(bypass) continue;
 		
 		NSMutableArray *nomi = [self getPortsForClient:testclient withData:testo1];
-		if(nomi!=nil) {
+		if (nomi != nil) {
 			[dataToSend setData:[nomi count] nomiPorte:nomi nomeCliente:nomeCli kind:tipoPorta];
 			[data addObject:dataToSend];
 			quantiItem++;
@@ -308,7 +327,7 @@
 -(void)flush: (id)sender
 {
     int i;
-    for(i=0;i<[data count];i++) {
+    for (i = 0; i < [data count]; i++) {
         [[data objectAtIndex:i] destroy];
     }
     [data removeAllObjects];
@@ -319,14 +338,14 @@
 
 -(id)getCHisono: (int)numero
 {
-    if(selectedPort!=-10) {
+    if (selectedPort != -10) {
         int test;
         ottieniPorte();
         unsigned long tipo;
-        porta = (char*)alloca(256*sizeof(char));
+        porta = (char*)alloca(256 * sizeof(char));
         id item = [theOutline itemAtRow:[theOutline selectedRow]];
-        if([item isKindOfClass:[portsArrData class]]) {
-            test = portaPerNumero([item getID],porta,&tipo);
+        if ([item isKindOfClass:[portsArrData class]]) {
+            test = portaPerNumero([item getID], porta, &tipo);
             //JPLog("FROM: %s\n",porta);
             NSString *stringa;
             stringa = [NSString stringWithCString:porta];
@@ -340,10 +359,10 @@
 {
     NSMutableArray *result = [[NSMutableArray array] retain];
     id theItem = [theOutline itemAtRow:[theOutline selectedRow]];
-    if(![theItem isKindOfClass:[portsArrData class]]) {
+    if (![theItem isKindOfClass:[portsArrData class]]) {
 		int quante = [theItem getNPorte];
 		int i;
-		for(i=0;i<quante;i++) {
+		for (i = 0; i < quante; i++) {
 			portsArrData *data2 = [theItem getNomePorta:i];
 			unsigned long tipo;
 			int test;
@@ -358,7 +377,7 @@
     } else {
         int test;
         unsigned long tipo;
-        porta = (char*)alloca(256*sizeof(char));
+        porta = (char*)alloca(256 * sizeof(char));
         test = portaPerNumero([theItem getID],porta,&tipo);
         NSString *res = [NSString stringWithCString:porta];
         [result addObject:res];
@@ -371,7 +390,7 @@
     int test;
     ottieniPorte();
     unsigned long tipo;
-    porta = (char*)alloca(256*sizeof(char));
+    porta = (char*)alloca(256 * sizeof(char));
     test = portaPerNumero(numero,porta,&tipo);
     JPLog("TO (saving): %s\n",porta);
     NSString *stringa;
@@ -392,12 +411,12 @@
     NSArray *listaNC = [nome componentsSeparatedByString:@":"];
     NSString *cliente = [listaNC objectAtIndex:0];
     
-    for(i=0;i<quantep;i++) {
+    for (i = 0; i < quantep; i++) {
         portsArrData *portData = [data2 objectAtIndex:i];
         NSString *name = [portData getName];
         NSArray *lista = [name componentsSeparatedByString:@":"];
-        if([[lista objectAtIndex:0] isEqualToString:cliente]) {
-			if([portData getTipo] & JackPortIsInput) {
+        if ([[lista objectAtIndex:0] isEqualToString:cliente]) {
+			if ([portData getTipo] & JackPortIsInput) {
                 portsArrData *sendData = [portsArrData alloc];
                 [sendData setNameB:name];
                 [sendData setID:[portData getID]];
@@ -407,7 +426,8 @@
             }
         }
     }
-    if(written==0) return nil;
+    if (written == 0) 
+		return nil;
     return res;
 }
 
@@ -428,8 +448,11 @@
 
 -(int)getTipoString {
     id item = [theOutline itemAtRow:[theOutline selectedRow]];
-    if([item isKindOfClass:[portsArrData class]]) { if([item IsConn]==1) return 666; }
-    else return kindCliItem;
+    if ([item isKindOfClass:[portsArrData class]]) { 
+		if ([item IsConn] == 1) 
+		return 666; 
+	} else 
+		return kindCliItem;
     return 333;
 }
 
