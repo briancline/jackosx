@@ -1488,7 +1488,7 @@ void	HP_Device::Do_DestroyIOProcID(AudioDeviceIOProcID inIOProcID)
 	if(mIOProcList->HasIOProcID(inIOProcID))
 	{
 		HP_Command* theCommand = new HP_RemoveIOProcCommand(inIOProcID);
-		JARLog("HP_Device::Do_DestroyIOProcID %d\n", int(inIOProcID));
+		//JARLog("HP_Device::Do_DestroyIOProcID %d\n", int(inIOProcID));
 		ExecuteCommand(theCommand);
 	}
 }
@@ -1497,50 +1497,50 @@ void	HP_Device::Do_AddIOProc(AudioDeviceIOProc inProc, void* inClientData)
 {
 	ThrowIf(mIOProcList->HasIOProc(inProc, inClientData, false), CAException(kAudioHardwareIllegalOperationError), "HP_Device::Do_AddIOProc: IOProc was already added");
 	HP_Command* theCommand = new HP_AddIOProcCommand(inProc, inClientData);
-	JARLog("HP_Device::Do_AddIOProc %d\n", int(inProc));
+	//JARLog("HP_Device::Do_AddIOProc %d\n", int(inProc));
 	ExecuteCommand(theCommand);
 }
 
 void	HP_Device::AddIOProc(AudioDeviceIOProc inProc, void* inClientData)
 {
-	JARLog("HP_Device::AddIOProc %d\n", int(inProc));
+	//JARLog("HP_Device::AddIOProc %d\n", int(inProc));
 	mIOProcList->AddIOProc(inProc, inClientData, false);
 }
 
 void	HP_Device::Do_RemoveIOProc(AudioDeviceIOProc inProc)
 {
-	JARLog("HP_Device::Do_RemoveIOProc %d\n", int(inProc));
+	//JARLog("HP_Device::Do_RemoveIOProc %d\n", int(inProc));
 
 	if(mIOProcList->HasIOProcID(inProc))
 	{
 		HP_Command* theCommand = new HP_RemoveIOProcCommand(inProc);
-		JARLog("HP_Device::Do_RemoveIOProc %d\n", int(inProc));
+		//JARLog("HP_Device::Do_RemoveIOProc %d\n", int(inProc));
 		ExecuteCommand(theCommand);
 	}
 }
 
 void	HP_Device::RemoveIOProc(AudioDeviceIOProc inProc)
 {
-	JARLog("HP_Device::RemoveIOProc %d\n", int(inProc));
+	//JARLog("HP_Device::RemoveIOProc %d\n", int(inProc));
 	StopIOProc(inProc);
 	mIOProcList->RemoveIOProc(inProc);
 }
 
 void	HP_Device::Do_StartIOProc(AudioDeviceIOProcID inProcID)
 {
-	JARLog("HP_Device::Do_StartIOProc 0 %d\n", int(inProcID));
+	//JARLog("HP_Device::Do_StartIOProc 0 %d\n", int(inProcID));
 	if(inProcID != NULL)
 	{
 		ThrowIf(!mIOProcList->HasIOProcID(inProcID), CAException(kAudioHardwareIllegalOperationError), "HP_Device::Do_StartIOProc: IOProc wasn't previously added");
 	}
 	HP_Command* theCommand = new HP_StartIOProcCommand(inProcID);
-	JARLog("HP_Device::Do_StartIOProc 1 %d\n", int(inProcID));
+	//JARLog("HP_Device::Do_StartIOProc 1 %d\n", int(inProcID));
 	ExecuteCommand(theCommand);
 }
 
 void	HP_Device::StartIOProc(AudioDeviceIOProcID inProcID)
 {
-	JARLog("HP_Device::StartIOProc %d\n", int(inProcID));
+	//JARLog("HP_Device::StartIOProc %d\n", int(inProcID));
 	mIOProcList->StartIOProc(inProcID);
 	
 	if(mIOProcList->IsOnlyOneThingEnabled())
@@ -1552,7 +1552,7 @@ void	HP_Device::StartIOProc(AudioDeviceIOProcID inProcID)
 
 void	HP_Device::Do_StartIOProcAtTime(AudioDeviceIOProcID inProcID, AudioTimeStamp& ioStartTime, UInt32 inStartTimeFlags)
 {
-	JARLog("HP_Device::Do_StartIOProcAtTime %d\n", int(inProcID));
+	//JARLog("HP_Device::Do_StartIOProcAtTime %d\n", int(inProcID));
 	if(inProcID == NULL)
 	{
 		Do_StartIOProc(inProcID);
@@ -1574,14 +1574,14 @@ void	HP_Device::Do_StartIOProcAtTime(AudioDeviceIOProcID inProcID, AudioTimeStam
 		
 		//	make a command and execute it
 		HP_Command* theCommand = new HP_StartIOProcCommand(inProcID, ioStartTime, inStartTimeFlags);
-		JARLog("HP_Device::Do_StartIOProcAtTime %d\n", int(inProcID));
+		//JARLog("HP_Device::Do_StartIOProcAtTime %d\n", int(inProcID));
 		ExecuteCommand(theCommand);
 	}
 }
 
 void	HP_Device::StartIOProcAtTime(AudioDeviceIOProcID inProcID, const AudioTimeStamp& inStartTime, UInt32 inStartTimeFlags)
 {
-	JARLog("HP_Device::StartIOProcAtTime %d\n", int(inProcID));
+	//JARLog("HP_Device::StartIOProcAtTime %d\n", int(inProcID));
 	mIOProcList->StartIOProcAtTime(inProcID, inStartTime, inStartTimeFlags);
 	
 	if(mIOProcList->IsOnlyOneIOProcEnabled())
@@ -1593,19 +1593,19 @@ void	HP_Device::StartIOProcAtTime(AudioDeviceIOProcID inProcID, const AudioTimeS
 
 void	HP_Device::Do_StopIOProc(AudioDeviceIOProcID inProcID)
 {
-	JARLog("HP_Device::Do_StopIOProc %d\n", int(inProcID));
+	//JARLog("HP_Device::Do_StopIOProc %d\n", int(inProcID));
 	if(inProcID != NULL)
 	{
 		ThrowIf(!mIOProcList->HasIOProcID(inProcID), CAException(kAudioHardwareIllegalOperationError), "HP_Device::Do_StopIOProc: IOProc wasn't previously added");
 	}
 	HP_Command* theCommand = new HP_StopIOProcCommand(inProcID);
-	JARLog("HP_Device::Do_StopIOProc %d\n", int(inProcID));
+	//JARLog("HP_Device::Do_StopIOProc %d\n", int(inProcID));
 	ExecuteCommand(theCommand);
 }
 
 void	HP_Device::StopIOProc(AudioDeviceIOProcID inProcID)
 {
-	JARLog("HP_Device::StopIOProc %d\n", int(inProcID));
+	//JARLog("HP_Device::StopIOProc %d\n", int(inProcID));
 	mIOProcList->StopIOProc(inProcID);
 	
 	if(mIOProcList->IsNothingEnabled())

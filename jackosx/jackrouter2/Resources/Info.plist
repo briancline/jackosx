@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>JackRouter</string>
 	<key>CFBundleGetInfoString</key>
-	<string>JackRouter 0.8.6, @2004-2007 Grame</string>
+	<string>JackRouter 0.8.6, @2004-2008 Grame</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.grame.JackRouter</string>
 	<key>CFBundleInfoDictionaryVersion</key>
