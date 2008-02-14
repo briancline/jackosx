@@ -65,7 +65,7 @@
 		4BC402E704ED2C6000053105 /* AudioHardwarePlugIn.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = AudioHardwarePlugIn.h; path = /System/Library/Frameworks/CoreAudio.framework/Versions/A/Headers/AudioHardwarePlugIn.h; sourceTree = "<absolute>"; };
 		4BC402E804ED2C6000053105 /* CoreAudioTypes.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CoreAudioTypes.h; path = /System/Library/Frameworks/CoreAudio.framework/Versions/A/Headers/CoreAudioTypes.h; sourceTree = "<absolute>"; };
 		4BC402E904ED2C6000053105 /* AudioHardware.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = AudioHardware.h; path = /System/Library/Frameworks/CoreAudio.framework/Versions/A/Headers/AudioHardware.h; sourceTree = "<absolute>"; };
-		4BC6C63F0CE1C23300477F5C /* Info-JackRouter.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-JackRouter.plist"; sourceTree = "<group>"; };
+		4BC6C63F0CE1C23300477F5C /* Info-JackRouter.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "Info-JackRouter.plist"; sourceTree = "<group>"; };
 		6B72988F04D054E500D1CFAB /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		6B9F593E04D95CAC00000064 /* Kernel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kernel.framework; path = /System/Library/Frameworks/Kernel.framework; sourceTree = "<absolute>"; };
 		6BCFE50A04CFE4B100A8650F /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
@@ -227,7 +227,6 @@
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 4B8CA6810B862AB500043AC8 /* Build configuration list for PBXProject "jack_router_mp" */;
-			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 089C166AFE841209C02AAC07 /* dummyaudioplug */;
 			projectDirPath = "";
