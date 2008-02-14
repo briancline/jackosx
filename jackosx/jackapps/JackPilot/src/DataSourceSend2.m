@@ -278,7 +278,6 @@
 	needsRelo = testo2;
 	porteSelected = portSelected;
 	int n;
-	ottieniPorte();
 	stat = 1;
 	n=numeroPorte();
 	quanteporte=n;
@@ -339,14 +338,11 @@
 -(id)getCHisono: (int)numero
 {
     if (selectedPort != -10) {
-        int test;
-        ottieniPorte();
-        unsigned long tipo;
+		unsigned long tipo;
         porta = (char*)alloca(256 * sizeof(char));
         id item = [theOutline itemAtRow:[theOutline selectedRow]];
         if ([item isKindOfClass:[portsArrData class]]) {
-            test = portaPerNumero([item getID], porta, &tipo);
-            //JPLog("FROM: %s\n",porta);
+     		portaPerNumero([item getID], porta, &tipo);
             NSString *stringa;
             stringa = [NSString stringWithCString:porta];
             return stringa;
@@ -365,20 +361,16 @@
 		for (i = 0; i < quante; i++) {
 			portsArrData *data2 = [theItem getNomePorta:i];
 			unsigned long tipo;
-			int test;
-			porta = (char*)alloca(256*sizeof(char));
-			test = portaPerNumero([data2 getID],porta,&tipo);
-			
+			porta = (char*)alloca(256 * sizeof(char));
+			portaPerNumero([data2 getID], porta, &tipo);
 			NSString *res = [NSString stringWithCString:porta];
 			[result addObject:res];
-			
 		}
 		return result;
     } else {
-        int test;
         unsigned long tipo;
         porta = (char*)alloca(256 * sizeof(char));
-        test = portaPerNumero([theItem getID],porta,&tipo);
+ 		portaPerNumero([theItem getID], porta, &tipo);
         NSString *res = [NSString stringWithCString:porta];
         [result addObject:res];
     }
@@ -387,11 +379,9 @@
 
 -(id)getCHisono2: (int)numero
 {
-    int test;
-    ottieniPorte();
-    unsigned long tipo;
+	unsigned long tipo;
     porta = (char*)alloca(256 * sizeof(char));
-    test = portaPerNumero(numero,porta,&tipo);
+	portaPerNumero(numero,porta,&tipo);
     JPLog("TO (saving): %s\n",porta);
     NSString *stringa;
     stringa = [NSString stringWithCString:porta];
@@ -431,11 +421,12 @@
     return res;
 }
 
--(void) needsReload {
-    ottieniPorte();
+-(void) needsReload 
+{
     int n = numeroPorte();
-    if(quanteporte!=n) { //JPLog("porvo NEEDDSS\n"); 
-    *needsRelo = 22; }
+    if (quanteporte != n) { 
+		*needsRelo = 22; 
+	}
 }
 
 -(int)getQuantiItem {

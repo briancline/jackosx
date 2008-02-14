@@ -244,7 +244,6 @@
 		4B4F1BA50C5616A50096B3EE /* Info-JackPilot.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "Info-JackPilot.plist"; sourceTree = SOURCE_ROOT; };
 		4B4F3D7009E2D5E000D2EC22 /* JackPilot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JackPilot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4BA3BF1F0D2D4BB3005711D3 /* JackPilot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JackPilot.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		4BA3BF210D2D4BB3005711D3 /* Info-JackPilot copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-JackPilot copy.plist"; sourceTree = "<group>"; };
 		B219AC61051E53A500730C30 /* jks.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = jks.icns; path = resources/jks.icns; sourceTree = "<group>"; };
 		B2292EC10559813D004A67B1 /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Utility.h; path = src/Utility.h; sourceTree = "<group>"; };
 		B2292EC20559813D004A67B1 /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = Utility.m; path = src/Utility.m; sourceTree = "<group>"; };
@@ -406,7 +405,6 @@
 				B2A591F9052093FA00D722DC /* jackpilot.icns */,
 				B246B5E205287DAF00E53F5B /* jackdocFR.pdf */,
 				B246B5E305287DAF00E53F5B /* jackdocIT.pdf */,
-				4BA3BF210D2D4BB3005711D3 /* Info-JackPilot copy.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1049,7 +1047,7 @@
 				GCC_PREFIX_HEADER = src/JackPilot1.0_Prefix.h;
 				GCC_PREPROCESSOR_DEFINITIONS = "PLUGIN=1";
 				HEADER_SEARCH_PATHS = /usr/local/include;
-				INFOPLIST_FILE = "/Volumes/Document1/Developpement/ProjectsCVS/JackCVS/JackOSX/jackosx/jackapps/JackPilot/Info-JackPilot copy.plist";
+				INFOPLIST_FILE = "Info-JackPilot.plist";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-ljack";
 				OTHER_REZFLAGS = "";
@@ -1083,7 +1081,7 @@
 				GCC_PREFIX_HEADER = src/JackPilot1.0_Prefix.h;
 				GCC_PREPROCESSOR_DEFINITIONS = "PLUGIN=1";
 				HEADER_SEARCH_PATHS = /usr/local/include;
-				INFOPLIST_FILE = "/Volumes/Document1/Developpement/ProjectsCVS/JackCVS/JackOSX/jackosx/jackapps/JackPilot/Info-JackPilot copy.plist";
+				INFOPLIST_FILE = "Info-JackPilot.plist";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-ljack";
 				OTHER_REZFLAGS = "";
@@ -1114,7 +1112,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = src/JackPilot1.0_Prefix.h;
 				GCC_PREPROCESSOR_DEFINITIONS = "PLUGIN=1";
-				INFOPLIST_FILE = "/Volumes/Document1/Developpement/ProjectsCVS/JackCVS/JackOSX/jackosx/jackapps/JackPilot/Info-JackPilot copy.plist";
+				INFOPLIST_FILE = "Info-JackPilot.plist";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";

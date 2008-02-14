@@ -21,6 +21,8 @@
 				<string>id</string>
 				<key>launchJackDeamon</key>
 				<string>id</string>
+				<key>openAMS</key>
+				<string>id</string>
 				<key>openAboutWin</key>
 				<string>id</string>
 				<key>openDocsFile</key>
@@ -32,6 +34,8 @@
 				<key>openPlugin</key>
 				<string>id</string>
 				<key>openPrefWin</key>
+				<string>id</string>
+				<key>openSP</key>
 				<string>id</string>
 				<key>reloadPref</key>
 				<string>id</string>
@@ -127,6 +131,14 @@
 				<key>warnPanel</key>
 				<string>NSPanel</string>
 			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>NSMenuItem</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
 			<key>SUPERCLASS</key>
 			<string>NSObject</string>
 		</dict>

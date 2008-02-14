@@ -368,8 +368,6 @@ int nConnections = 0;
 			return;
 		} else {
 			
-			ottieniPorte();
-			
 			int chisono = numeroPorte();
 			int chisono2 = getConnections();
 			int i;
@@ -516,7 +514,6 @@ int nConnections = 0;
         return;
 	} else {
 		
-		ottieniPorte();
 		int chisono = numeroPorte();
 		int i;
 		
@@ -784,15 +781,17 @@ int nConnections = 0;
 		NSRunAlertPanel(LOCSTR(@"Sorry..."),LOCSTR(@"You must have \"Connections Manager\" window opened, and JACK must be ON."),LOCSTR(@"Ok"),nil,nil);
 }
 
-- (void)fillPortsArray {
-    if(portsArr!=nil) { /*JPLog("Releasing old objects\n");*/ [portsArr removeAllObjects]; [portsArr release]; } //mod 1
-    portsArr = [[NSMutableArray array]  retain];
-    ottieniPorte();
-    int nports = 0;
-    nports = numeroPorte();
-    JPLog("Number of ports: %d\n",nports);
+- (void)fillPortsArray 
+{
+    if (portsArr != nil) { 
+		[portsArr removeAllObjects]; 
+		[portsArr release]; 
+	} 
+    portsArr = [[NSMutableArray array] retain];
+    int nports = numeroPorte();
+    JPLog("Number of ports: %d\n", nports);
     int i;
-    char* nomeBuf = (char*)alloca(256 * sizeof(char));
+    char nomeBuf[256];
     for (i = 0; i < nports; i++) {
         unsigned long tipo;
         portsArrData* data = [[portsArrData alloc] retain];
@@ -802,20 +801,23 @@ int nConnections = 0;
         for (coci = 0; coci < quantePConnCli; coci++) {
             int connec = connessionePerNumero2(i, NULL, 0);
             if (connec != 0) { 
-                char **name = (char**)alloca(connec * sizeof(char*));
-                char *bufferT = (char*)alloca(256 * sizeof(char));
+				char **name = (char**)malloc(connec * sizeof(char*));
+				char bufferT[256];
                 unsigned long tipo2;
                 portaPerNumero(portSelected[coci], bufferT, &tipo2);
                 int ii;
                 for (ii = 0; ii < connec; ii++) {
-                    name[ii] = (char*)alloca(256 * sizeof(char));
+              		name[ii] = (char*)malloc(256 * sizeof(char)); 
                 }
                 connessionePerNumero2(i, name, connec);
                 for (ii = 0; ii < connec; ii++) {
                     if (strcmp(bufferT, name[ii]) == 0) 
 						[data setIsConn:1];
                 }
-                
+        		for (ii = 0; ii < connec; ii++) {
+                    free(name[ii]);
+                }
+				free(name);
             } else 
 				[data setIsConn:0];
         }

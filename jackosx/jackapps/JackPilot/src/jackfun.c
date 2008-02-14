@@ -9,11 +9,11 @@
 int firsttime = 0;
 int status;
 jack_client_t* client = NULL;
-const char** jplist;
-const char** connec;
-int sr,buf,driver,ch;
-int inch,outch,autoc;
-int nConnect;
+//const char** jplist;
+//const char** connec;
+int sr, buf, driver, ch;
+int inch, outch, autoc;
+//int nConnect;
 int interface;
 char* homePath = NULL;
 int flag;
@@ -34,7 +34,7 @@ int openJack(const char *stringa)
     }
     a = my_system(stringa);
     if (a == 1) { 
-        nConnect = 0;
+       //nConnect = 0;  // steph 
         a = checkJack();
     }
     return a;
@@ -63,7 +63,7 @@ int closeJack(void)
 
 int my_system (const char* command)
 {
-	firsttime=1;
+	firsttime = 1;
 	int status;
 	pid_t pid = fork();
   
@@ -121,84 +121,79 @@ int openJackClient(void)
 	return 1;
 }
 
-int ottieniPorte(void)  //why not void instead of int return!!??
+const char** getAllPorts(void)
 {
-    if (client != NULL) {
-        if (jplist != NULL) {
-            free(jplist);
-            jplist = NULL;
-        }
-        jplist = jack_get_ports(client, NULL, NULL, 0);
-		return 1;
-    }
-	jplist = NULL;
-    return 1;
-}
-
-int portaPerNumero(int n, char* nomeOut, unsigned long* tipo) 
-{
-    ottieniPorte();
-	if (!jplist) 
+	if (client) {
+		return jack_get_ports(client, NULL, NULL, 0);
+	} else {
 		return 0;
-    if (jplist[n] != NULL) {
-        strcpy(nomeOut, jplist[n]);
-        *tipo = getTipoByName(jplist[n]);        
-        return 1;
-    }
-    return 0;
+	}
 }
 
-int numeroPorte(void) 
+void portaPerNumero(int n, char* nomeOut, unsigned long* tipo) 
 {
-    if (jplist != NULL) { 
-        int i = 0;
-        while (*jplist != NULL) {
-            *jplist++;
-            i++;
-        }
-        int a;
-        for (a = 0; a < i; a++) {
-            *jplist--;
-        }
-        return i;
-    }
-    return 0;
+	const char** ports = getAllPorts();
+	if (!ports) 
+		return;
+    if (ports[n] != NULL) {
+        strcpy(nomeOut, ports[n]);
+        *tipo = getTipoByName(ports[n]);        
+	}
+	free(ports);
+}
+
+int numeroPorte() 
+{
+	const char** ports = getAllPorts();
+	int i = 0;
+	if (ports) {
+		for (i = 0; i < 1024; i++) {
+			if (ports[i] == NULL) {
+				free(ports);
+				return i;
+			}
+		}
+	}
+	free(ports);
+	return i;
 }
 
 int getConnections(void) 
 {
-    nConnect=0;
-    ottieniPorte();
-    int a = numeroPorte();
+    int nConnect = 0;
+ 	const char** ports = getAllPorts();
+    int a = numeroPorte(ports);
     int i;
     for (i = 0; i < a; i++) {
         const char** aa;
         jack_port_t* jp;
-        jp = jack_port_by_name(client, jplist[i]);
-        if (jp != NULL) 
+        jp = jack_port_by_name(client, ports[i]);
+        if (jp != NULL) {
 			if ((aa = jack_port_get_all_connections(client, jp)) != NULL) {
-            int g = 0;
-            while (aa[g] != NULL) {
-                g++;
-            }
-            nConnect += g;
-        }
+				int g = 0;
+				while (aa[g] != NULL) {
+					g++;
+				}
+				nConnect += g;
+				free(aa);  
+			}
+		}
     }
+	if (ports)
+		free(ports);
     return nConnect;
 }
 
-int numeroConn(void) 
+int numeroConn(const char** connec) 
 {
-    int i = 0;
-    while (*connec != NULL) {
-        *connec++;
-        i++;
-    }
-    int a;
-    for (a = 0; a < i; a++) {
-        *connec--;
-    }
-    return i;
+	int i = 0;
+	if (connec) {
+		for (i = 0; i < 1024; i++) {
+			if (connec[i] == NULL)
+				return i;
+		}
+	}
+	return i;
 }
 
 void writeStatus(int n) 
@@ -231,15 +226,16 @@ int connessionePerNumero(int n, char* nomeOut)
     jp = jack_port_by_name(client, porta);
     if (jp == NULL)
 		return 0;
-    connec = jack_port_get_all_connections(client, jp);
+    const char** connec = jack_port_get_all_connections(client, jp);
     if (connec != NULL) {
-        int nu = numeroConn();
+        int nu = numeroConn(connec);
         int i;
         for (i = 0; i < nu; i++) {
             if (connec[i] && nomeOut) 
 				strcat(nomeOut, connec[i]);
             return 1;
         }
+		free(connec);
     }
     return 0;
 }
@@ -254,9 +250,9 @@ int connessionePerNumero2(int n, char** nomeOut, int len)
     jp = jack_port_by_name(client, porta);
     if (jp == NULL) 
 		return 0;
-    connec = jack_port_get_all_connections(client, jp);
+    const char** connec = jack_port_get_all_connections(client, jp);
 	if (connec != NULL) {
-		int nu = numeroConn();
+		int nu = numeroConn(connec);
 		int i;
 		if (nomeOut != NULL) {
 			for (i = 0; i < nu && i < len; i++){
@@ -265,6 +261,7 @@ int connessionePerNumero2(int n, char** nomeOut, int len)
 			}
 		}
 		many = nu;
+		free(connec); 
 	}
     return many;
 }
@@ -389,7 +386,8 @@ int nomeCliente(int n, char* nome)
 { 
 	//!!Fix me, why lots of malloc for only one name!!
     char** array;
-    int nporte = numeroPorte();
+	const char** ports = getAllPorts();
+    int nporte = numeroPorte(ports);
     array = (char**)malloc(nporte * sizeof(char*));
     int i;
     for (i = 0; i < nporte; i++) {
@@ -403,6 +401,8 @@ int nomeCliente(int n, char* nome)
         free(array[i]);
     }
     free(array);
+	if (ports)
+		free(ports);
     return 1;
 }
 
@@ -412,19 +412,18 @@ int quantiClienti(void)
     ottieniNomeClienti(NULL,&quanti);
     return quanti;
 }
-
 int ottieniNomeClienti(char** nome, int* quanti) 
 {
-    ottieniPorte();
-    int nPorts = numeroPorte();
+	const char** ports = getAllPorts();
+    int nPorts = numeroPorte(ports);
     int i;
     char idport[256], oldIdport[256];
     int progr = 0;
     for (i = 0; i < nPorts; i++) {
         int a;
-        for (a = 0; a < strlen(jplist[i]); a++) { 
-            idport[a] = jplist[i][a];
-            if (jplist[i][a] == ':') 
+        for (a = 0; a < strlen(ports[i]); a++) { 
+            idport[a] = ports[i][a];
+            if (ports[i][a] == ':') 
 				break;
         }
         if (strcmp(&idport[0], &oldIdport[0]) == 0) { 
@@ -432,13 +431,15 @@ int ottieniNomeClienti(char** nome, int* quanti)
 		}
         if (nome) {
 			if (nome[progr]) 
-				strcpy(nome[progr], jplist[i]);
+				strcpy(nome[progr], ports[i]);
 		}
         progr++;
     end:
         strcpy(&oldIdport[0], &idport[0]);
     }
     *quanti = progr;
+	if (ports) 
+		free(ports);
     return 0;
 }
 

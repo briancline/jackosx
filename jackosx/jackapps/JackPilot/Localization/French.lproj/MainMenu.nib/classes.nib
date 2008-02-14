@@ -19,6 +19,8 @@
 				<string>id</string>
 				<key>launchJackDeamon</key>
 				<string>id</string>
+				<key>openAMS</key>
+				<string>id</string>
 				<key>openAboutWin</key>
 				<string>id</string>
 				<key>openDocsFile</key>
@@ -28,6 +30,8 @@
 				<key>openJohnnyMail</key>
 				<string>id</string>
 				<key>openPrefWin</key>
+				<string>id</string>
+				<key>openSP</key>
 				<string>id</string>
 				<key>reloadPref</key>
 				<string>id</string>

@@ -80,6 +80,8 @@
 - (int)writeHomePath;
 - (IBAction)getJackInfo:(id)sender;
 - (IBAction)openPrefWin:(id)sender;
+- (IBAction)openAMS:(id)sender;
+- (IBAction)openSP:(id)sender;
 - (IBAction)closePrefWin:(id)sender;
 - (IBAction)openAboutWin:(id)sender;
 - (IBAction)closeAboutWin:(id)sender;

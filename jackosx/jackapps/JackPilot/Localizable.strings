@@ -35,6 +35,7 @@
 ", now Jack is using " = ", now Jack is using ";
 ", do you want to restore connections to the used with driver " = ", do you want to restore connections to the used with driver ";
 "Jack server has been stopped, JackPilot will quit." = "Jack server has been stopped, JackPilot will quit.";
+"CoreAudio driver has been restarted, unexpected behaviour may result." = "CoreAudio driver has been restarted, unexpected behaviour may result.";
 
 /* "You have %d clients running, they will stop working or maybe crash!!\n" */
 "You have " = "You have ";
