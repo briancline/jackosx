@@ -134,7 +134,8 @@ JackRouterDevice::JackRouterDevice(AudioDeviceID inAudioDeviceID, JackRouterPlug
 	fInputList(NULL),
 	fOutputList(NULL),
 	fOuputListTemp(NULL),
-	fFirstActivate(true)
+	fFirstActivate(true),
+	mLogFile(NULL)
 {}
 
 JackRouterDevice::~JackRouterDevice()
@@ -179,6 +180,7 @@ void	JackRouterDevice::Initialize()
 	//  set the default buffer size before we go any further
 	mIOBufferFrameSize = fBufferSize;
 	JARLog("JackRouterDevice Initialize OK\n");
+	
 }
 
 void	JackRouterDevice::Teardown()
@@ -1091,8 +1093,10 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
                 for (int i = 0; i < JackRouterDevice::fInputChannels; i++) {
                     if (proc->IsStreamEnabled(true, i) && client->fInputPortList[i]) {
                         client->fInputList->mBuffers[i].mData = (float*)jack_port_get_buffer(client->fInputPortList[i], nframes);
+						client->fInputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
                     } else {
                         client->fInputList->mBuffers[i].mData = NULL;
+						client->fInputList->mBuffers[i].mDataByteSize = 0;
                     }
                 }
 
@@ -1103,8 +1107,10 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 						float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
 						memset(output, 0, nframes * sizeof(float));
 						client->fOutputList->mBuffers[i].mData = output;
+						client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
 		           } else {
                         client->fOutputList->mBuffers[i].mData = NULL;
+						client->fOutputList->mBuffers[i].mDataByteSize = 0;
                     }
                 }
 				
@@ -1114,8 +1120,10 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
                     if (proc->IsStreamEnabled(false, i)) {
 						memset(client->fOuputListTemp[i], 0, nframes * sizeof(float));
 						client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
+						client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
                     } else {
                         client->fOutputList->mBuffers[i].mData = NULL;
+						client->fOutputList->mBuffers[i].mDataByteSize = 0;
                     }
                 }
 				
@@ -1129,24 +1137,39 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
                 for (int i = 0; i < JackRouterDevice::fInputChannels; i++) {
 					if (client->fInputPortList[i]) {
 						client->fInputList->mBuffers[i].mData = (float*)jack_port_get_buffer(client->fInputPortList[i], nframes);
+						client->fInputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
 					} else {
 						//JARLog("JackRouterDevice::Process client->fInputPortList[i] %d is null\n",i);
+						client->fInputList->mBuffers[i].mData = NULL;
+						client->fInputList->mBuffers[i].mDataByteSize = 0;
 					}
                 }
 				
 			#ifdef OPTIMIZE_PROCESS
 
                 for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
-					float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
-					memset(output, 0, nframes * sizeof(float));
-					client->fOutputList->mBuffers[i].mData = output;
+					if (client->fOutputPortList[i]) {
+						float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
+						memset(output, 0, nframes * sizeof(float));
+						client->fOutputList->mBuffers[i].mData = output;
+						client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
+					} else {
+						client->fOutputList->mBuffers[i].mData = NULL;
+						client->fOutputList->mBuffers[i].mDataByteSize = 0;
+					}
                 }
 				
 			#else
 				
 				for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
-					memset(client->fOuputListTemp[i], 0, nframes * sizeof(float));
-                    client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
+					if (client->fOutputPortList[i]) {
+						memset(client->fOuputListTemp[i], 0, nframes * sizeof(float));
+						client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
+						client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
+					} else {
+						client->fOutputList->mBuffers[i].mData = NULL;
+						client->fOutputList->mBuffers[i].mDataByteSize = 0;
+					}
                 }
 				
 			#endif
@@ -1214,8 +1237,10 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
                     for (int i = 0; i < JackRouterDevice::fInputChannels; i++) {
                         if (proc->IsStreamEnabled(true, i)) {
                             client->fInputList->mBuffers[i].mData = (float*)jack_port_get_buffer(client->fInputPortList[i], nframes);
+							client->fInputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
                         } else {
                             client->fInputList->mBuffers[i].mData = NULL;
+							client->fInputList->mBuffers[i].mDataByteSize = 0;
                         }
                     }
 
@@ -1224,41 +1249,55 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
                         if (proc->IsStreamEnabled(false, i)) {
 							memset(client->fOuputListTemp[i], 0, nframes * sizeof(float));
 							client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
+							client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
                         } else {
                             client->fOutputList->mBuffers[i].mData = NULL;
+							client->fOutputList->mBuffers[i].mDataByteSize = 0;
                         }
                     }
 
                 } else {
 				
 					//JARLog("Process GetStreamUsage input NO k = %d proc = %ld\n", k, proc->GetIOProc());
-
-                    for (int i = 0; i < fInputChannels; i++) {
+				
+					for (int i = 0; i < JackRouterDevice::fInputChannels; i++) {
 						if (client->fInputPortList[i]) {
 							client->fInputList->mBuffers[i].mData = (float*)jack_port_get_buffer(client->fInputPortList[i], nframes);
-						}else {
+							client->fInputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
+						} else {
 							//JARLog("JackRouterDevice::Process client->fInputPortList[i] %d is null\n",i);
+							client->fInputList->mBuffers[i].mData = NULL;
+							client->fInputList->mBuffers[i].mDataByteSize = 0;	
 						}
                     }
 
-                    for (int i = 0; i < fOutputChannels; i++) {
+                    for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
                         // Use an intermediate mixing buffer
-						memset(client->fOuputListTemp[i], 0, nframes * sizeof(float));
-                        client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
+						if (client->fOutputPortList[i]) {
+							memset(client->fOuputListTemp[i], 0, nframes * sizeof(float));
+							client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
+							client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
+						} else {
+							client->fOutputList->mBuffers[i].mData = NULL;
+							client->fOutputList->mBuffers[i].mDataByteSize = 0;	
+						}
 					}
                 }
 
 				// Unlock before calling IO proc
 				client->mIOGuard.Unlock();
+				
+				//JARLog("Process GetIOProc() = %ld\n", proc->GetIOProc());
 
-                err = (proc->GetIOProc()) (client->mObjectID,
+	            err = (proc->GetIOProc()) (client->mObjectID,
 											&inNow,
 											client->fInputList,
 											&inInputTime,
 											client->fOutputList,
 											&inOutputTime,
 											proc->GetClientData());
-
+				
+				
 				if (JAR_fDebug && err != kAudioHardwareNoError) {
 					JARLog("Process error = %ld\n", err);
 				}
@@ -1386,6 +1425,11 @@ bool JackRouterDevice::Open()
 		jack_on_shutdown(fClient, Shutdown, this);
 		jack_set_buffer_size_callback(fClient, BufferSize, this);
 		jack_set_xrun_callback(fClient, XRun, this);
+		
+		char logfile[128];
+		snprintf(logfile, sizeof(logfile) - 1, "%s_%s", "/tmp/JackRouter_latency", id_name);
+		mLogFile = new CALatencyLog(logfile, ".txt");
+
 		return true;
 	}
 }
@@ -1399,6 +1443,7 @@ void JackRouterDevice::Close()
             JARLog("JackRouterDevice::Close cannot close client\n");
         }
 		fClient = NULL;
+		delete mLogFile;
     }
 }
 
@@ -1486,6 +1531,7 @@ int JackRouterDevice::XRun(void* arg)
 {
     JARLog("XRun\n");
 	JackRouterDevice* client = (JackRouterDevice*)arg;
+	//client->mLogFile->Capture(AudioGetCurrentHostTime() - AudioConvertNanosToHostTime(LOG_SAMPLE_DURATION * 1000000), AudioGetCurrentHostTime(), true, "Captured Latency Log for I/O Cycle Overload\n");
 	CAPropertyAddress theProcessorOverloadAddress(kAudioDeviceProcessorOverload);
 	client->PropertiesChanged(1, &theProcessorOverloadAddress);
     return 0;

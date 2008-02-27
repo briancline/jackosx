@@ -80,6 +80,10 @@ class	JackRouterDevice;
 #define MAX_JACK_PORTS 128
 #define JACK_PORT_NAME_LEN 256
 
+#include "CALatencyLog.h"
+#define LOG_SAMPLE_DURATION 3	// in millisecond
+
+
 class CommandThread
 {
 
@@ -167,6 +171,8 @@ private:
 	
 	CAGuard	mIOGuard;
 	CommandThread* mCommandThread;
+	
+	CALatencyLog* mLogFile;
 
 public:
 	

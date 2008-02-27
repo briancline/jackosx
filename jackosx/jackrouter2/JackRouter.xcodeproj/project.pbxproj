@@ -240,6 +240,10 @@
 		4BF44FF10D4747F500D4B8F6 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */; };
 		4BF44FF20D4747F500D4B8F6 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DF7BC5308DA4CCA00EE5510 /* CoreAudio.framework */; };
 		4BF44FF30D4747F500D4B8F6 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8492B70CE34F1600B43385 /* Carbon.framework */; };
+		4BFE0AC40D6F2AF50078D16C /* CALatencyLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BFE0AC30D6F2AF50078D16C /* CALatencyLog.cpp */; };
+		4BFE0AC50D6F2AF50078D16C /* CALatencyLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BFE0AC30D6F2AF50078D16C /* CALatencyLog.cpp */; };
+		4BFE0B130D6F2E880078D16C /* latency.c in Sources */ = {isa = PBXBuildFile; fileRef = 4BFE0B120D6F2E880078D16C /* latency.c */; };
+		4BFE0B140D6F2E880078D16C /* latency.c in Sources */ = {isa = PBXBuildFile; fileRef = 4BFE0B120D6F2E880078D16C /* latency.c */; };
 		8D576314048677EA00EA77CD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -362,7 +366,8 @@
 		4BD9B21F0D00264500A4E509 /* HP_TelemetryServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_TelemetryServer.cpp; path = Source/HPBase/HP_TelemetryServer.cpp; sourceTree = SOURCE_ROOT; };
 		4BD9B2200D00264500A4E509 /* HP_TelemetryServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_TelemetryServer.h; path = Source/HPBase/HP_TelemetryServer.h; sourceTree = SOURCE_ROOT; };
 		4BF44FF80D4747F500D4B8F6 /* JackRouter.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JackRouter.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
-		4BF44FF90D4747F500D4B8F6 /* Info copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info copy.plist"; sourceTree = "<group>"; };
+		4BFE0AC30D6F2AF50078D16C /* CALatencyLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CALatencyLog.cpp; path = /Developer/Examples/CoreAudio/PublicUtility/CALatencyLog.cpp; sourceTree = "<absolute>"; };
+		4BFE0B120D6F2E880078D16C /* latency.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = latency.c; path = /Developer/Examples/CoreAudio/PublicUtility/latency.c; sourceTree = "<absolute>"; };
 		8D576316048677EA00EA77CD /* JackRouter.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JackRouter.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D576317048677EA00EA77CD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -444,6 +449,7 @@
 		2DF7BC3008DA4A5400EE5510 /* PublicUtility */ = {
 			isa = PBXGroup;
 			children = (
+				4BFE0B120D6F2E880078D16C /* latency.c */,
 				2DF7BCA908DA584F00EE5510 /* CAAudioBufferList.cpp */,
 				2DF7BCAA08DA584F00EE5510 /* CAAudioBufferList.h */,
 				2DF7BCAB08DA584F00EE5510 /* CAAudioChannelLayout.cpp */,
@@ -486,6 +492,7 @@
 				2DF7BCD108DA584F00EE5510 /* CAHostTimeBase.cpp */,
 				2DF7BCD208DA584F00EE5510 /* CAHostTimeBase.h */,
 				2DF7BCD308DA584F00EE5510 /* CALogMacros.h */,
+				4BFE0AC30D6F2AF50078D16C /* CALatencyLog.cpp */,
 				2DF7BCD408DA584F00EE5510 /* CAMutex.cpp */,
 				2DF7BCD508DA584F00EE5510 /* CAMutex.h */,
 				2DE2145008E38A52008DCE9D /* CAProcess.cpp */,
@@ -513,7 +520,6 @@
 			isa = PBXGroup;
 			children = (
 				8D576317048677EA00EA77CD /* Info.plist */,
-				4BF44FF90D4747F500D4B8F6 /* Info copy.plist */,
 			);
 			path = Resources;
 			sourceTree = SOURCE_ROOT;
@@ -864,6 +870,8 @@
 				4BF44FED0D4747F500D4B8F6 /* HP_Stream.cpp in Sources */,
 				4BF44FEE0D4747F500D4B8F6 /* HP_SystemInfo.cpp in Sources */,
 				4BF44FEF0D4747F500D4B8F6 /* HP_TelemetryServer.cpp in Sources */,
+				4BFE0AC50D6F2AF50078D16C /* CALatencyLog.cpp in Sources */,
+				4BFE0B140D6F2E880078D16C /* latency.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -923,6 +931,8 @@
 				4BD9B2430D00264500A4E509 /* HP_Stream.cpp in Sources */,
 				4BD9B2450D00264500A4E509 /* HP_SystemInfo.cpp in Sources */,
 				4BD9B2470D00264500A4E509 /* HP_TelemetryServer.cpp in Sources */,
+				4BFE0AC40D6F2AF50078D16C /* CALatencyLog.cpp in Sources */,
+				4BFE0B130D6F2E880078D16C /* latency.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -973,7 +983,11 @@
 				INSTALL_PATH = "/Library/Audio/Plug-Ins/HAL";
 				LIBRARY_STYLE = BUNDLE;
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				OTHER_CFLAGS = "-fconstant-cfstrings";
+				OTHER_CFLAGS = (
+					"-fconstant-cfstrings",
+					"-DLATENCY_SAMPLING_ONLY",
+				);
+				OTHER_CPLUSPLUSFLAGS = "";
 				OTHER_LDFLAGS = "-ljack";
 				PRODUCT_NAME = JackRouter;
 				WRAPPER_EXTENSION = plugin;
@@ -1023,7 +1037,10 @@
 				INSTALL_PATH = "/Library/Audio/Plug-Ins/HAL";
 				LIBRARY_STYLE = BUNDLE;
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				OTHER_CFLAGS = "-fconstant-cfstrings";
+				OTHER_CFLAGS = (
+					"-fconstant-cfstrings",
+					"-DLATENCY_SAMPLING_ONLY",
+				);
 				OTHER_LDFLAGS = "-ljack";
 				PRODUCT_NAME = JackRouter;
 				WRAPPER_EXTENSION = plugin;
@@ -1033,7 +1050,12 @@
 		2D926CFC08DA3A5A00AB1DB7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				ARCHS = (
+					i386,
+					ppc,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				OTHER_CPLUSPLUSFLAGS = "-DKERNEL_PRIVATE";
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Release;
