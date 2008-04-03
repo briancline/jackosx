@@ -56,7 +56,8 @@ History
 30-11-07 : Remove usleep in command thread: use a Wait/Notify mechanism.
 04-12-07 : Another dirty buffers fix in JackRouterDevice::Process.
 06-12-07 : Another dirty buffers fix in JackRouterDevice::Process.
-06-12-07 : Version 0.87 : S Letz: correct JackRouterDevice::Process when null buffers are used.
+06-12-07 : Version 0.87 : S Letz: correct JackRouterDevice::Process when null buffers are used. Correct timing information in the Process callback: mSampleTime is now 
+           incremented a whole buffer each callback.
 
 */
 

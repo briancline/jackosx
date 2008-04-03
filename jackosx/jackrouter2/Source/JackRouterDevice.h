@@ -173,6 +173,7 @@ private:
 	CommandThread* mCommandThread;
 	
 	CALatencyLog* mLogFile;
+    
 
 public:
 	
@@ -188,6 +189,8 @@ public:
 	
 	static int fBufferSize;
 	static float fSampleRate;
+    
+    static UInt64 fSampleCount; 
 	
 	static char fCoreAudioDriverUID[128];		// The CoreAudio driver currently loaded by Jack
 

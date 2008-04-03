@@ -96,6 +96,8 @@ bool JackRouterDevice::fDefaultSystem = true;
 int JackRouterDevice::fBufferSize;
 float JackRouterDevice::fSampleRate;
 
+UInt64 JackRouterDevice::fSampleCount = 0;
+
 char JackRouterDevice::fCoreAudioDriverUID[128];
 
 // Additional thread for deferred commands execution
@@ -135,7 +137,7 @@ JackRouterDevice::JackRouterDevice(AudioDeviceID inAudioDeviceID, JackRouterPlug
 	fOutputList(NULL),
 	fOuputListTemp(NULL),
 	fFirstActivate(true),
-	mLogFile(NULL)
+   	mLogFile(NULL)
 {}
 
 JackRouterDevice::~JackRouterDevice()
@@ -695,9 +697,8 @@ void	JackRouterDevice::GetCurrentTime(AudioTimeStamp& outTime)
 	ThrowIf(!IsIOEngineRunning(), CAException(kAudioHardwareNotRunningError), "JackRouterDevice::GetCurrentTime: can't because the engine isn't running");
 	
 	outTime.mSampleTime = jack_frame_time(fClient);
-	outTime.mHostTime = AudioGetCurrentHostTime();
+    outTime.mHostTime = CAHostTimeBase::GetTheCurrentTime();
 	outTime.mRateScalar = 1.0;
-	outTime.mWordClockTime = 0;
 	outTime.mFlags = kAudioTimeFlags;
 }
 
@@ -996,7 +997,6 @@ static void SetTime(AudioTimeStamp* timeVal, long curTime, UInt64 time)
     timeVal->mSampleTime = curTime;
     timeVal->mHostTime = time;
     timeVal->mRateScalar = 1.0;
-    timeVal->mWordClockTime = 0;
     timeVal->mFlags = kAudioTimeFlags;
 }
 
@@ -1071,11 +1071,11 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 	
 	//JARLog("Process \n");
 	
-    UInt64 time = AudioGetCurrentHostTime();
-    UInt64 curTime = jack_frame_time(client->fClient);
-	SetTime(&inNow, curTime, time);
-	SetTime(&inInputTime, curTime - JackRouterDevice::fBufferSize, time);
-    SetTime(&inOutputTime, curTime + JackRouterDevice::fBufferSize, time);
+    UInt64 time = CAHostTimeBase::GetTheCurrentTime();
+    fSampleCount += JackRouterDevice::fBufferSize;
+  	SetTime(&inNow, fSampleCount, time);
+	SetTime(&inInputTime, fSampleCount - JackRouterDevice::fBufferSize, time);
+    SetTime(&inOutputTime, fSampleCount + JackRouterDevice::fBufferSize, time);
 	
 	// One IOProc
   	if (client->mIOProcList->GetNumberIOProcs() == 1) {
