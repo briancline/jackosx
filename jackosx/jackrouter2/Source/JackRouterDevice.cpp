@@ -1235,7 +1235,7 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 
                     // Only set up buffers that are really needed
                     for (int i = 0; i < JackRouterDevice::fInputChannels; i++) {
-                        if (proc->IsStreamEnabled(true, i)) {
+                        if (proc->IsStreamEnabled(true, i) && client->fInputPortList[i]) {
                             client->fInputList->mBuffers[i].mData = (float*)jack_port_get_buffer(client->fInputPortList[i], nframes);
 							client->fInputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
                         } else {
@@ -1317,7 +1317,7 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 					
 						//JARLog("Process GetStreamUsage YES i = %ld\n", i);
                         
-                        if (proc->IsStreamEnabled(false, i)) {
+                        if (proc->IsStreamEnabled(false, i) && client->fOutputPortList[i]) {
 							float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
 							if (firstproc[i]) {	// first proc : copy
 								//JARLog("Process GetStreamUsage YES first proc : copy = %ld\n", proc->GetIOProc());
