@@ -834,8 +834,7 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 }
 
 - (IBAction)getJackInfo:(id)sender {
-    NSBundle *bundle = [NSBundle bundleWithIdentifier:@"com.grame.JackAudioServer"];
-	if (!bundle) bundle = [NSBundle bundleWithIdentifier:@"com.grame.JackRouter"];
+    NSBundle *bundle = [NSBundle bundleWithIdentifier:@"com.grame.JackRouter"];
     if (!bundle) {
 		NSLog(@"JAS not found");
 		[jasVerText setStringValue:LOCSTR(@"not installed.")];
@@ -848,7 +847,6 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
         [jasCopyRText setStringValue:jasCopyR];
     }
     
-    //bundle = [NSBundle bundleWithIdentifier:@"com.grame.Jack"];
 	bundle = [NSBundle bundleWithIdentifier:@"com.grame.Jackmp"];
     if (!bundle) {
         NSLog(@"JackFramework not found");

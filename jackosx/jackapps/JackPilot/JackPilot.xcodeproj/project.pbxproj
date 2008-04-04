@@ -657,7 +657,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "rm build/Development/JackPilot.app/Contents/Resources/Localizable.strings";
+			shellScript = "rm build/Deployment/JackPilot.app/Contents/Resources/Localizable.strings";
 		};
 		4B4F3D6909E2D5E000D2EC22 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -670,7 +670,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -R Localization/Italian.lproj build/Development/JackPilot.app/Contents/Resources/";
+			shellScript = "cp -R Localization/Italian.lproj build/Deployment/JackPilot.app/Contents/Resources/";
 		};
 		4B4F3D6A09E2D5E000D2EC22 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -683,7 +683,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -R Localization/French.lproj build/Development/JackPilot.app/Contents/Resources/";
+			shellScript = "cp -R Localization/French.lproj build/Deployment/JackPilot.app/Contents/Resources/";
 		};
 		4BA3BF180D2D4BB3005711D3 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
