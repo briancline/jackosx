@@ -104,6 +104,9 @@ static char* DefaultServerName()
     return server_name;
 }
 
+static void silent_jack_error_callback(const char *desc)
+{}
+
 static void startCallback(CFNotificationCenterRef /*center*/,
                           void*	/*observer*/,
                           CFStringRef /*name*/,
@@ -512,10 +515,17 @@ bool JackRouterPlugIn::ReadPref()
 				JackRouterDevice::fDefaultOutput = default_output;
 				JackRouterDevice::fDefaultSystem = default_system;
 				JAR_fDebug = debug;
+                
+                // Print messages in console only in debug mode...
+                if (!JAR_fDebug) {
+                    jack_set_error_function(silent_jack_error_callback);
+                    jack_set_info_function(silent_jack_error_callback);
+                }
+                    
                 //printf("Reading Preferences fInputChannels: %d fOutputChannels: %d fAutoConnect: %d\n",
-                     //  JackRouterDevice::fInputChannels, JackRouterDevice::fOutputChannels, JackRouterDevice::fAutoConnect);
+                //  JackRouterDevice::fInputChannels, JackRouterDevice::fOutputChannels, JackRouterDevice::fAutoConnect);
 				//printf("Reading Preferences fDefaultInput: %d fDefaultOutput: %d fAutoConnect: %d\n",
-                      // JackRouterDevice::fDefaultInput, JackRouterDevice::fDefaultOutput, JackRouterDevice::fDefaultSystem);
+                // JackRouterDevice::fDefaultInput, JackRouterDevice::fDefaultOutput, JackRouterDevice::fDefaultSystem);
 				//printf("Reading Preferences debug: %d\n", debug);
 
                 res = true;
