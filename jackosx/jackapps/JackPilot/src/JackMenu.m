@@ -82,7 +82,6 @@ static void StartNotification()
 
 static void StopNotification()
 {
-	printf("StopNotification name = %s \n", DefaultServerName());
 	CFStringRef ref = CFStringCreateWithCString(NULL, DefaultServerName(), kCFStringEncodingMacRoman);
 	CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(), NULL,
 										CFSTR("com.grame.jackserver.start"), ref);
@@ -92,7 +91,6 @@ static void StopNotification()
 										CFSTR("com.grame.jackserver.restart"), ref);									
 	CFRelease(ref);
 }
-
 
 static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boolean isInput);
 

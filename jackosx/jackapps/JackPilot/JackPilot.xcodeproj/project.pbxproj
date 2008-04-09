@@ -101,8 +101,6 @@
 		4B4F3D4B09E2D5E000D2EC22 /* jks.icns in Resources */ = {isa = PBXBuildFile; fileRef = B219AC61051E53A500730C30 /* jks.icns */; };
 		4B4F3D4C09E2D5E000D2EC22 /* jackdoc.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B2B49890051E5DAD00A80204 /* jackdoc.pdf */; };
 		4B4F3D4D09E2D5E000D2EC22 /* jackpilot.icns in Resources */ = {isa = PBXBuildFile; fileRef = B2A591F9052093FA00D722DC /* jackpilot.icns */; };
-		4B4F3D4E09E2D5E000D2EC22 /* jackdocFR.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B246B5E205287DAF00E53F5B /* jackdocFR.pdf */; };
-		4B4F3D4F09E2D5E000D2EC22 /* jackdocIT.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B246B5E305287DAF00E53F5B /* jackdocIT.pdf */; };
 		4B4F3D5009E2D5E000D2EC22 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B2FF9BAA05EFDCA700F1AD06 /* Localizable.strings */; };
 		4B4F3D5109E2D5E000D2EC22 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B2FF9BAA05EFDCA700F1AD06 /* Localizable.strings */; };
 		4B4F3D5309E2D5E000D2EC22 /* jackfun.c in Sources */ = {isa = PBXBuildFile; fileRef = B2B9A25F04BDC3000031A363 /* jackfun.c */; };
@@ -139,8 +137,6 @@
 		4BA3BEFB0D2D4BB3005711D3 /* jks.icns in Resources */ = {isa = PBXBuildFile; fileRef = B219AC61051E53A500730C30 /* jks.icns */; };
 		4BA3BEFC0D2D4BB3005711D3 /* jackdoc.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B2B49890051E5DAD00A80204 /* jackdoc.pdf */; };
 		4BA3BEFD0D2D4BB3005711D3 /* jackpilot.icns in Resources */ = {isa = PBXBuildFile; fileRef = B2A591F9052093FA00D722DC /* jackpilot.icns */; };
-		4BA3BEFE0D2D4BB3005711D3 /* jackdocFR.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B246B5E205287DAF00E53F5B /* jackdocFR.pdf */; };
-		4BA3BEFF0D2D4BB3005711D3 /* jackdocIT.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B246B5E305287DAF00E53F5B /* jackdocIT.pdf */; };
 		4BA3BF000D2D4BB3005711D3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B2FF9BAA05EFDCA700F1AD06 /* Localizable.strings */; };
 		4BA3BF010D2D4BB3005711D3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B2FF9BAA05EFDCA700F1AD06 /* Localizable.strings */; };
 		4BA3BF020D2D4BB3005711D3 /* Info-JackPilot.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B4F1BA50C5616A50096B3EE /* Info-JackPilot.plist */; };
@@ -164,8 +160,6 @@
 		B219AC62051E53A500730C30 /* jks.icns in Resources */ = {isa = PBXBuildFile; fileRef = B219AC61051E53A500730C30 /* jks.icns */; };
 		B2292EC30559813D004A67B1 /* Utility.h in Headers */ = {isa = PBXBuildFile; fileRef = B2292EC10559813D004A67B1 /* Utility.h */; };
 		B2292EC40559813D004A67B1 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = B2292EC20559813D004A67B1 /* Utility.m */; };
-		B246B5E405287DAF00E53F5B /* jackdocFR.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B246B5E205287DAF00E53F5B /* jackdocFR.pdf */; };
-		B246B5E505287DAF00E53F5B /* jackdocIT.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B246B5E305287DAF00E53F5B /* jackdocIT.pdf */; };
 		B292F8F70510AAE700D45475 /* bequite.h in Headers */ = {isa = PBXBuildFile; fileRef = B292F8F60510AAE700D45475 /* bequite.h */; };
 		B292F8FA0510D90700D45475 /* DataSourceSend2.h in Headers */ = {isa = PBXBuildFile; fileRef = B292F8F80510D90700D45475 /* DataSourceSend2.h */; };
 		B292F8FB0510D90700D45475 /* DataSourceSend2.m in Sources */ = {isa = PBXBuildFile; fileRef = B292F8F90510D90700D45475 /* DataSourceSend2.m */; };
@@ -200,6 +194,17 @@
 		B2FF9D9705EFEFA300F1AD06 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B2FF9BAA05EFDCA700F1AD06 /* Localizable.strings */; };
 		B2FF9DA005EFEFB300F1AD06 /* Localizable.strings in CopyFiles */ = {isa = PBXBuildFile; fileRef = B2FF9BAA05EFDCA700F1AD06 /* Localizable.strings */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXBuildRule section */
+		4B9E2EF80DAA8BF000F5F690 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.gcc;
+			fileType = sourcecode.c;
+			isEditable = 1;
+			outputFiles = (
+			);
+		};
+/* End PBXBuildRule section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		4B4F3D6609E2D5E000D2EC22 /* CopyFiles */ = {
@@ -247,8 +252,6 @@
 		B219AC61051E53A500730C30 /* jks.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = jks.icns; path = resources/jks.icns; sourceTree = "<group>"; };
 		B2292EC10559813D004A67B1 /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Utility.h; path = src/Utility.h; sourceTree = "<group>"; };
 		B2292EC20559813D004A67B1 /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = Utility.m; path = src/Utility.m; sourceTree = "<group>"; };
-		B246B5E205287DAF00E53F5B /* jackdocFR.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = jackdocFR.pdf; path = resources/jackdocFR.pdf; sourceTree = "<group>"; };
-		B246B5E305287DAF00E53F5B /* jackdocIT.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = jackdocIT.pdf; path = resources/jackdocIT.pdf; sourceTree = "<group>"; };
 		B24BD00305060C0F00947A3C /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
 		B24BD00705060C6C00947A3C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
 		B292F8F60510AAE700D45475 /* bequite.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = bequite.h; path = src/bequite.h; sourceTree = "<group>"; };
@@ -403,8 +406,6 @@
 				B219AC61051E53A500730C30 /* jks.icns */,
 				B2EA0B9F050F432E00FED62D /* MainMenu.nib */,
 				B2A591F9052093FA00D722DC /* jackpilot.icns */,
-				B246B5E205287DAF00E53F5B /* jackdocFR.pdf */,
-				B246B5E305287DAF00E53F5B /* jackdocIT.pdf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -509,6 +510,7 @@
 				4B4F3D6A09E2D5E000D2EC22 /* ShellScript */,
 			);
 			buildRules = (
+				4B9E2EF80DAA8BF000F5F690 /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
@@ -578,8 +580,6 @@
 				4B4F3D4B09E2D5E000D2EC22 /* jks.icns in Resources */,
 				4B4F3D4C09E2D5E000D2EC22 /* jackdoc.pdf in Resources */,
 				4B4F3D4D09E2D5E000D2EC22 /* jackpilot.icns in Resources */,
-				4B4F3D4E09E2D5E000D2EC22 /* jackdocFR.pdf in Resources */,
-				4B4F3D4F09E2D5E000D2EC22 /* jackdocIT.pdf in Resources */,
 				4B4F3D5009E2D5E000D2EC22 /* Localizable.strings in Resources */,
 				4B4F3D5109E2D5E000D2EC22 /* Localizable.strings in Resources */,
 				4B4F1BA60C5616A50096B3EE /* Info-JackPilot.plist in Resources */,
@@ -595,8 +595,6 @@
 				4BA3BEFB0D2D4BB3005711D3 /* jks.icns in Resources */,
 				4BA3BEFC0D2D4BB3005711D3 /* jackdoc.pdf in Resources */,
 				4BA3BEFD0D2D4BB3005711D3 /* jackpilot.icns in Resources */,
-				4BA3BEFE0D2D4BB3005711D3 /* jackdocFR.pdf in Resources */,
-				4BA3BEFF0D2D4BB3005711D3 /* jackdocIT.pdf in Resources */,
 				4BA3BF000D2D4BB3005711D3 /* Localizable.strings in Resources */,
 				4BA3BF010D2D4BB3005711D3 /* Localizable.strings in Resources */,
 				4BA3BF020D2D4BB3005711D3 /* Info-JackPilot.plist in Resources */,
@@ -612,8 +610,6 @@
 				B219AC62051E53A500730C30 /* jks.icns in Resources */,
 				B2B49891051E5DAD00A80204 /* jackdoc.pdf in Resources */,
 				B2A591FA052093FA00D722DC /* jackpilot.icns in Resources */,
-				B246B5E405287DAF00E53F5B /* jackdocFR.pdf in Resources */,
-				B246B5E505287DAF00E53F5B /* jackdocIT.pdf in Resources */,
 				B2FF9BAB05EFDCA700F1AD06 /* Localizable.strings in Resources */,
 				B2FF9D9705EFEFA300F1AD06 /* Localizable.strings in Resources */,
 			);
@@ -934,6 +930,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "PLUGIN=1";
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				INFOPLIST_FILE = "Info-JackPilot.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-ljack";
 				OTHER_REZFLAGS = "";
