@@ -41,7 +41,7 @@ void JARLog(char *fmt, ...)
 }
 */
 
-void JARLog(char *fmt, ...)
+void JARLog(const char *fmt, ...)
 {
     if (JAR_fDebug) {
         va_list ap;
@@ -53,7 +53,7 @@ void JARLog(char *fmt, ...)
     }
 }
 
-void JARPrint4CharCode(char* msg, long c)
+void JARPrint4CharCode(const char* msg, long c)
 {
     if (JAR_fDebug) {
         unsigned int  __4CC_number = (c);

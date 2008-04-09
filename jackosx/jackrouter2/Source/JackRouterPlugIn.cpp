@@ -110,7 +110,7 @@ static void startCallback(CFNotificationCenterRef /*center*/,
                           const void* /*object*/,
                           CFDictionaryRef /*userInfo*/)
 {
-	printf("com.grame.jackserver.start notification\n");
+	//printf("com.grame.jackserver.start notification\n");
 	JackRouterPlugIn::fIntance->AddForHAL();
 }
 
@@ -120,13 +120,13 @@ static void stopCallback(CFNotificationCenterRef /*center*/,
                          const void* /*object*/,
                          CFDictionaryRef /*userInfo*/)
 {
-	printf("com.grame.jackserver.stop notification\n");
+	//printf("com.grame.jackserver.stop notification\n");
  	JackRouterPlugIn::fIntance->RemoveFromHAL();
 }
 
 static void StartNotification()
 {
-	printf("StartNotification name = %s \n", DefaultServerName());
+	//printf("StartNotification name = %s \n", DefaultServerName());
 	CFStringRef ref = CFStringCreateWithCString(NULL, DefaultServerName(), kCFStringEncodingMacRoman);
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(),
 									NULL, startCallback, CFSTR("com.grame.jackserver.start"),
@@ -139,7 +139,7 @@ static void StartNotification()
 
 static void StopNotification()
 {
-	printf("StopNotification name = %s \n", DefaultServerName());
+	//printf("StopNotification name = %s \n", DefaultServerName());
 	CFStringRef ref = CFStringCreateWithCString(NULL, DefaultServerName(), kCFStringEncodingMacRoman);
 	CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(), NULL,
 										CFSTR("com.grame.jackserver.start"), ref);
@@ -171,7 +171,7 @@ JackRouterPlugIn::~JackRouterPlugIn()
 
 void	JackRouterPlugIn::InitializeWithObjectID(AudioObjectID inObjectID)
 {
-	printf("JackRouterPlugIn::InitializeWithObjectID\n");
+	//printf("JackRouterPlugIn::InitializeWithObjectID\n");
 	JackRouterPlugIn::fPlugInRef = inObjectID;
 	
 	//	initialize the super class
@@ -179,7 +179,7 @@ void	JackRouterPlugIn::InitializeWithObjectID(AudioObjectID inObjectID)
 	bool prefOK = ReadPref();
 
 	char* id_name = bequite_getNameFromPid((int)getpid());
-  	printf("Initialize inSelf =  %ld name = %s\n", inObjectID, id_name);
+  	//printf("Initialize inSelf =  %ld name = %s\n", inObjectID, id_name);
    
 	// Reject "blacklisted" clients
     if (fBlackList->find(id_name) != fBlackList->end()) {
@@ -473,7 +473,7 @@ bool JackRouterPlugIn::ReadPref()
     char path[256];
     bool res = false;
 	
-	printf("JackRouterPlugIn::ReadPref\n");
+	//printf("JackRouterPlugIn::ReadPref\n");
 
     err = FSFindFolder(kUserDomain, kPreferencesFolderType, kDontCreateFolder, &prefFolderRef);
     if (err == noErr) {
@@ -512,11 +512,11 @@ bool JackRouterPlugIn::ReadPref()
 				JackRouterDevice::fDefaultOutput = default_output;
 				JackRouterDevice::fDefaultSystem = default_system;
 				JAR_fDebug = debug;
-                printf("Reading Preferences fInputChannels: %d fOutputChannels: %d fAutoConnect: %d\n",
-                       JackRouterDevice::fInputChannels, JackRouterDevice::fOutputChannels, JackRouterDevice::fAutoConnect);
-				printf("Reading Preferences fDefaultInput: %d fDefaultOutput: %d fAutoConnect: %d\n",
-                       JackRouterDevice::fDefaultInput, JackRouterDevice::fDefaultOutput, JackRouterDevice::fDefaultSystem);
-				printf("Reading Preferences debug: %d\n", debug);
+                //printf("Reading Preferences fInputChannels: %d fOutputChannels: %d fAutoConnect: %d\n",
+                     //  JackRouterDevice::fInputChannels, JackRouterDevice::fOutputChannels, JackRouterDevice::fAutoConnect);
+				//printf("Reading Preferences fDefaultInput: %d fDefaultOutput: %d fAutoConnect: %d\n",
+                      // JackRouterDevice::fDefaultInput, JackRouterDevice::fDefaultOutput, JackRouterDevice::fDefaultSystem);
+				//printf("Reading Preferences debug: %d\n", debug);
 
                 res = true;
             }
@@ -545,9 +545,10 @@ jack_client_t* JackRouterPlugIn::CheckServer(AudioObjectID inSelf)
 {
     jack_client_t * client;
     char name[JACK_CLIENT_NAME_LEN];
+ 	jack_status_t status;
     sprintf(name, "JAR::%ld", inSelf);
 
-    if ((client = jack_client_new(name))) {
+    if ((client = jack_client_open(name, JackNoStartServer, &status))) {
         JackRouterDevice::fBufferSize = jack_get_buffer_size(client);
         JackRouterDevice::fSampleRate = jack_get_sample_rate(client);
 

@@ -150,7 +150,7 @@ public:
 	virtual CFStringRef			CopyDeviceManufacturerName() const;
 	virtual CFStringRef			CopyDeviceUID() const;
 	
-	bool JackRouterDevice::CanBeDefaultDevice(bool /*inIsInput*/, bool /*inIsSystem*/) const;
+	bool CanBeDefaultDevice(bool /*inIsInput*/, bool /*inIsSystem*/) const;
 
 private:
 

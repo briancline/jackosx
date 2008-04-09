@@ -1,4 +1,4 @@
-/*	Copyright © 2007 Apple Inc. All Rights Reserved.
+/*	Copyright ï¿½ 2007 Apple Inc. All Rights Reserved.
 	
 	Disclaimer: IMPORTANT:  This Apple software is supplied to you by 
 			Apple Inc. ("Apple") in consideration of your agreement to the
@@ -325,7 +325,7 @@ void	HP_Object::Show() const
 	}
 	
 	//  print the information to the standard output
-	printf("AudioObjectID:\t\t0x%lX\n\tAudioClassID:\t'%s'\n\tName:\t\t\t%s\n", (long unsigned int)mObjectID, theClassID, theName);
+	//printf("AudioObjectID:\t\t0x%lX\n\tAudioClassID:\t'%s'\n\tName:\t\t\t%s\n", (long unsigned int)mObjectID, theClassID, theName);
 }
 
 HP_Object*	HP_Object::GetObjectByID(AudioObjectID inObjectID)

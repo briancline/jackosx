@@ -1562,7 +1562,7 @@ bool JackRouterDevice::Desactivate()
     JARLog("Desactivate\n");
 	SaveConnections();
 
-    if (jack_deactivate(fClient)) {
+    if (fClient != NULL && jack_deactivate(fClient)) {
         JARLog("cannot deactivate client\n");
         return false;
     }

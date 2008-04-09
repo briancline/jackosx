@@ -1,4 +1,4 @@
-/*	Copyright © 2007 Apple Inc. All Rights Reserved.
+/*	Copyright ï¿½ 2007 Apple Inc. All Rights Reserved.
 	
 	Disclaimer: IMPORTANT:  This Apple software is supplied to you by 
 			Apple Inc. ("Apple") in consideration of your agreement to the
@@ -491,7 +491,7 @@ void	HP_Stream::Show() const
 	}
 	
 	//  print the information to the standard output
-	printf("AudioObjectID:\t0x%lX\n\tClass:\t\t%s\n\tName:\t\t%s\n\tDirection:\t%s\n\tChannels:\t%lu\n", (long unsigned int)mObjectID, "Audio Stream", theName, (IsInput() ? "Input" : "Output"), (long unsigned int)GetCurrentNumberChannels());
+	//printf("AudioObjectID:\t0x%lX\n\tClass:\t\t%s\n\tName:\t\t%s\n\tDirection:\t%s\n\tChannels:\t%lu\n", (long unsigned int)mObjectID, "Audio Stream", theName, (IsInput() ? "Input" : "Output"), (long unsigned int)GetCurrentNumberChannels());
 }
 
 void	HP_Stream::RegisterIOBuffer(UInt32 /*inBufferSetID*/, UInt32 /*inBufferByteSize*/, void* /*inBuffer*/)

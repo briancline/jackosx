@@ -1,4 +1,4 @@
-/*	Copyright © 2007 Apple Inc. All Rights Reserved.
+/*	Copyright ï¿½ 2007 Apple Inc. All Rights Reserved.
 	
 	Disclaimer: IMPORTANT:  This Apple software is supplied to you by 
 			Apple Inc. ("Apple") in consideration of your agreement to the
@@ -116,7 +116,7 @@ void	HP_Control::Show() const
 	}
 	
 	//	get a string for the scope
-	char* theScope = NULL;
+	const char* theScope = NULL;
 	switch(GetPropertyScope())
 	{
 		case kAudioDevicePropertyScopeInput:
@@ -138,7 +138,7 @@ void	HP_Control::Show() const
 	};
 	
 	//  print the information to the standard output
-	printf("AudioObjectID:\t\t0x%lX\n\tAudioClassID:\t'%s'\n\tName:\t\t\t%s\n\tScope:\t\t\t%s\n\tChannel:\t\t%lu\n", (long unsigned int)mObjectID, theClassID, theName, theScope, (long unsigned int)GetPropertyElement());
+	//printf("AudioObjectID:\t\t0x%lX\n\tAudioClassID:\t'%s'\n\tName:\t\t\t%s\n\tScope:\t\t\t%s\n\tChannel:\t\t%lu\n", (long unsigned int)mObjectID, theClassID, theName, theScope, (long unsigned int)GetPropertyElement());
 }
 
 CFStringRef	HP_Control::CopyName() const

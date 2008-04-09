@@ -29,8 +29,8 @@ extern "C"
 
 extern int JAR_fDebug;
 
-void JARLog(char *fmt, ...);
-void JARPrint4CharCode(char* msg, long c);
+void JARLog(const char *fmt, ...);
+void JARPrint4CharCode(const char* msg, long c);
 
 #ifdef __cplusplus
 }

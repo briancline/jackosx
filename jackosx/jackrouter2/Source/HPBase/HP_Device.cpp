@@ -291,7 +291,7 @@ void	HP_Device::Show() const
 {
 	JARLog("HP_Device::Show\n");
 	//  make a string for the class name
-	char* theClassName = NULL;
+	const char* theClassName = NULL;
 	
 	switch(mClassID)
 	{
@@ -331,7 +331,7 @@ void	HP_Device::Show() const
 	}
 	
 	//  print the information to the standard output
-	printf("AudioObjectID:\t\t\t0x%lX\n\tClass:\t\t\t\t%s\n\tName:\t\t\t\t%s\n\tInput Channels:\t\t%lu\n\tOutput Channels:\t%lu\n", (long unsigned int)mObjectID, theClassName, theName, (long unsigned int)GetTotalNumberChannels(true), (long unsigned int)GetTotalNumberChannels(false));
+	//printf("AudioObjectID:\t\t\t0x%lX\n\tClass:\t\t\t\t%s\n\tName:\t\t\t\t%s\n\tInput Channels:\t\t%lu\n\tOutput Channels:\t%lu\n", (long unsigned int)mObjectID, theClassName, theName, (long unsigned int)GetTotalNumberChannels(true), (long unsigned int)GetTotalNumberChannels(false));
 }
 
 bool	HP_Device::HasProperty(const AudioObjectPropertyAddress& inAddress) const
