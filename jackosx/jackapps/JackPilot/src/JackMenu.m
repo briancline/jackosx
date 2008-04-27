@@ -410,6 +410,9 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 	NSMutableArray *toPrefs = [NSMutableArray array];
 	NSRect jpFrame = [jpWinController frame];
 	NSRect mangerFrame = [managerWin frame];
+    
+    // Close jack client
+    closeJack1();
 	
 	[toPrefs addObject:[NSNumber numberWithFloat:jpFrame.origin.x]];
 	[toPrefs addObject:[NSNumber numberWithFloat:jpFrame.origin.y]];

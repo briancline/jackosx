@@ -2,18 +2,15 @@
 /*check license.txt for more infos					*/
 /*Copyright (c) 2004 Johnny Petrantoni, jackosx.com */
 
-#include <jackfun.h>
+#include "jackfun.h"
 
 #define SHELL "/bin/sh"
 
 int firsttime = 0;
 int status;
 jack_client_t* client = NULL;
-//const char** jplist;
-//const char** connec;
 int sr, buf, driver, ch;
 int inch, outch, autoc;
-//int nConnect;
 int interface;
 char* homePath = NULL;
 int flag;
@@ -38,6 +35,14 @@ int openJack(const char *stringa)
         a = checkJack();
     }
     return a;
+}
+
+void closeJack1(void) 
+{
+	if (client != NULL) {
+		jack_client_close(client);
+		client = NULL;
+	}
 }
 
 int closeJack(void) 
@@ -136,6 +141,7 @@ void portaPerNumero(int n, char* nomeOut, unsigned long* tipo)
 	if (!ports) 
 		return;
     if (ports[n] != NULL) {
+        printf("size %ld port %s\n",  strlen( ports[n]), ports[n]);
         strcpy(nomeOut, ports[n]);
         *tipo = getTipoByName(ports[n]);        
 	}

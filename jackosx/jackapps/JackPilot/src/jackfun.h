@@ -20,6 +20,7 @@ int getVerboseLevel(void);
 
 int openJack(const char *stringa);
 int closeJack(void);
+void closeJack1(void);
 int my_system(const char*command);
 int my_system2(const char*command);
 int checkJack(void);
