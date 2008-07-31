@@ -77,12 +77,10 @@ class	JackRouterDevice;
 //	JackRouterDevice
 //=============================================================================
 
-#define MAX_JACK_PORTS 128
 #define JACK_PORT_NAME_LEN 256
 
 #include "CALatencyLog.h"
 #define LOG_SAMPLE_DURATION 3	// in millisecond
-
 
 class CommandThread
 {
@@ -154,10 +152,11 @@ public:
 
 private:
 
-	jack_client_t* fClient;												// Jack client
+	jack_client_t* fClient;				// Jack client
+  
+    jack_port_t** fInputPortList;		// Jack input ports
+	jack_port_t** fOutputPortList;		// Jack output ports
 
-	jack_port_t* fInputPortList[MAX_JACK_PORTS];						// Jack input ports
-	jack_port_t* fOutputPortList[MAX_JACK_PORTS];						// Jack output ports
 	std::map<int, std::pair<float*, jack_port_t*> > fPlugInPortsVST;	// Map of temp buffers and associated Jack ports to be used by AU plug-ins
 	std::map<int, std::pair<float*, jack_port_t*> > fPlugInPortsAU;		// Map of temp buffers and associated Jack ports to be used by VST plug-ins
 
@@ -173,7 +172,6 @@ private:
 	CommandThread* mCommandThread;
 	
 	CALatencyLog* mLogFile;
-    
 
 public:
 	

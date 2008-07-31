@@ -56,8 +56,9 @@ History
 30-11-07 : Remove usleep in command thread: use a Wait/Notify mechanism.
 04-12-07 : Another dirty buffers fix in JackRouterDevice::Process.
 06-12-07 : Another dirty buffers fix in JackRouterDevice::Process.
-06-12-07 : Version 0.87 : S Letz: correct JackRouterDevice::Process when null buffers are used. Correct timing information in the Process callback: mSampleTime is now 
+01-03-08 : Version 0.87 : S Letz: correct JackRouterDevice::Process when null buffers are used. Correct timing information in the Process callback: mSampleTime is now 
            incremented a whole buffer each callback.
+31-07-08 : Version 0.88 : S Letz: remove MAX_JACK_PORTS. Dynamic allocation of fInputPortList and fOutputPortList.
 
 */
 
@@ -172,7 +173,7 @@ JackRouterPlugIn::~JackRouterPlugIn()
 	StopNotification();
 }
 
-void	JackRouterPlugIn::InitializeWithObjectID(AudioObjectID inObjectID)
+void JackRouterPlugIn::InitializeWithObjectID(AudioObjectID inObjectID)
 {
 	//printf("JackRouterPlugIn::InitializeWithObjectID\n");
 	JackRouterPlugIn::fPlugInRef = inObjectID;
@@ -213,10 +214,7 @@ void	JackRouterPlugIn::InitializeWithObjectID(AudioObjectID inObjectID)
 			JackRouterDevice::fOutputChannels = max(2, i); // At least 2 channels
 		}
 		
-		if (JackRouterDevice::fInputChannels >= MAX_JACK_PORTS || JackRouterDevice::fOutputChannels >= MAX_JACK_PORTS)
-			throw CAException(kAudioHardwareIllegalOperationError);
-
-		JARLog("fInputChannels = %ld \n", JackRouterDevice::fInputChannels);
+    	JARLog("fInputChannels = %ld \n", JackRouterDevice::fInputChannels);
 		JARLog("fOutputChannels = %ld \n", JackRouterDevice::fOutputChannels);
 		jack_client_close(client);
 

@@ -76,6 +76,125 @@
 		4B193B110CE3573000C1F56E /* JackRouterStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B193B0F0CE3573000C1F56E /* JackRouterStream.h */; };
 		4B193B410CE3586F00C1F56E /* JackRouterPrefix.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B193B400CE3586F00C1F56E /* JackRouterPrefix.h */; };
 		4B45E3020CE31F53001FB4D8 /* JackRouter.exp in Sources */ = {isa = PBXBuildFile; fileRef = 4B45E3010CE31F53001FB4D8 /* JackRouter.exp */; };
+		4B7C2E500E0A8A2D00220808 /* CAAudioBufferList.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCAA08DA584F00EE5510 /* CAAudioBufferList.h */; };
+		4B7C2E510E0A8A2D00220808 /* CAAudioChannelLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCAC08DA584F00EE5510 /* CAAudioChannelLayout.h */; };
+		4B7C2E520E0A8A2D00220808 /* CAAudioTimeStamp.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCAE08DA584F00EE5510 /* CAAudioTimeStamp.h */; };
+		4B7C2E530E0A8A2D00220808 /* CAAudioValueRange.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCB008DA584F00EE5510 /* CAAudioValueRange.h */; };
+		4B7C2E540E0A8A2D00220808 /* CAAutoDisposer.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCB108DA584F00EE5510 /* CAAutoDisposer.h */; };
+		4B7C2E550E0A8A2D00220808 /* CABool.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCB208DA584F00EE5510 /* CABool.h */; };
+		4B7C2E560E0A8A2D00220808 /* CACFArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCB408DA584F00EE5510 /* CACFArray.h */; };
+		4B7C2E570E0A8A2D00220808 /* CACFData.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCB508DA584F00EE5510 /* CACFData.h */; };
+		4B7C2E580E0A8A2D00220808 /* CACFDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCB708DA584F00EE5510 /* CACFDictionary.h */; };
+		4B7C2E590E0A8A2D00220808 /* CACFMachPort.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCB908DA584F00EE5510 /* CACFMachPort.h */; };
+		4B7C2E5A0E0A8A2D00220808 /* CACFMessagePort.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCBB08DA584F00EE5510 /* CACFMessagePort.h */; };
+		4B7C2E5B0E0A8A2D00220808 /* CACFNumber.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCBD08DA584F00EE5510 /* CACFNumber.h */; };
+		4B7C2E5C0E0A8A2D00220808 /* CACFObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCBE08DA584F00EE5510 /* CACFObject.h */; };
+		4B7C2E5D0E0A8A2D00220808 /* CACFPlugIn.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCBF08DA584F00EE5510 /* CACFPlugIn.h */; };
+		4B7C2E5E0E0A8A2D00220808 /* CACFPreferences.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCC108DA584F00EE5510 /* CACFPreferences.h */; };
+		4B7C2E5F0E0A8A2D00220808 /* CACFRunLoopTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCC308DA584F00EE5510 /* CACFRunLoopTimer.h */; };
+		4B7C2E600E0A8A2D00220808 /* CACFString.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCC508DA584F00EE5510 /* CACFString.h */; };
+		4B7C2E610E0A8A2D00220808 /* CADebugger.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCC808DA584F00EE5510 /* CADebugger.h */; };
+		4B7C2E620E0A8A2D00220808 /* CADebugMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCCA08DA584F00EE5510 /* CADebugMacros.h */; };
+		4B7C2E630E0A8A2D00220808 /* CADebugPrintf.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCCC08DA584F00EE5510 /* CADebugPrintf.h */; };
+		4B7C2E640E0A8A2D00220808 /* CAException.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCCD08DA584F00EE5510 /* CAException.h */; };
+		4B7C2E650E0A8A2D00220808 /* CAGuard.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCCF08DA584F00EE5510 /* CAGuard.h */; };
+		4B7C2E660E0A8A2D00220808 /* CAHALTelemetry.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCD008DA584F00EE5510 /* CAHALTelemetry.h */; };
+		4B7C2E670E0A8A2D00220808 /* CAHostTimeBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCD208DA584F00EE5510 /* CAHostTimeBase.h */; };
+		4B7C2E680E0A8A2D00220808 /* CALogMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCD308DA584F00EE5510 /* CALogMacros.h */; };
+		4B7C2E690E0A8A2D00220808 /* CAMutex.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCD508DA584F00EE5510 /* CAMutex.h */; };
+		4B7C2E6A0E0A8A2D00220808 /* CAProcess.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DE2145108E38A52008DCE9D /* CAProcess.h */; };
+		4B7C2E6B0E0A8A2D00220808 /* CAPropertyAddress.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCD608DA584F00EE5510 /* CAPropertyAddress.h */; };
+		4B7C2E6C0E0A8A2D00220808 /* CAPThread.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCD808DA584F00EE5510 /* CAPThread.h */; };
+		4B7C2E6D0E0A8A2D00220808 /* CASettingsStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCDA08DA584F00EE5510 /* CASettingsStorage.h */; };
+		4B7C2E6E0E0A8A2D00220808 /* CASharedLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCDC08DA584F00EE5510 /* CASharedLibrary.h */; };
+		4B7C2E6F0E0A8A2D00220808 /* CAStreamBasicDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCDE08DA584F00EE5510 /* CAStreamBasicDescription.h */; };
+		4B7C2E700E0A8A2D00220808 /* CAStreamRangedDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCE008DA584F00EE5510 /* CAStreamRangedDescription.h */; };
+		4B7C2E710E0A8A2D00220808 /* CATokenMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCE108DA584F00EE5510 /* CATokenMap.h */; };
+		4B7C2E720E0A8A2D00220808 /* CAVolumeCurve.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCE308DA584F00EE5510 /* CAVolumeCurve.h */; };
+		4B7C2E730E0A8A2D00220808 /* bequite.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B84929F0CE34E7A00B43385 /* bequite.h */; };
+		4B7C2E740E0A8A2D00220808 /* procinfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B8492A10CE34E7A00B43385 /* procinfo.h */; };
+		4B7C2E750E0A8A2D00220808 /* JARLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B84938D0CE3513300B43385 /* JARLog.h */; };
+		4B7C2E760E0A8A2D00220808 /* JackRouterPlugIn.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B193ACD0CE3556200C1F56E /* JackRouterPlugIn.h */; };
+		4B7C2E770E0A8A2D00220808 /* JackRouterDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B193B000CE356C000C1F56E /* JackRouterDevice.h */; };
+		4B7C2E780E0A8A2D00220808 /* JackRouterStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B193B0F0CE3573000C1F56E /* JackRouterStream.h */; };
+		4B7C2E790E0A8A2D00220808 /* JackRouterPrefix.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B193B400CE3586F00C1F56E /* JackRouterPrefix.h */; };
+		4B7C2E7A0E0A8A2D00220808 /* HP_Command.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B1FA0D00264500A4E509 /* HP_Command.h */; };
+		4B7C2E7B0E0A8A2D00220808 /* HP_Control.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B1FC0D00264500A4E509 /* HP_Control.h */; };
+		4B7C2E7C0E0A8A2D00220808 /* HP_Device.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B1FE0D00264500A4E509 /* HP_Device.h */; };
+		4B7C2E7D0E0A8A2D00220808 /* HP_DeviceCommands.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2000D00264500A4E509 /* HP_DeviceCommands.h */; };
+		4B7C2E7E0E0A8A2D00220808 /* HP_DeviceInfoList.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2010D00264500A4E509 /* HP_DeviceInfoList.h */; };
+		4B7C2E7F0E0A8A2D00220808 /* HP_DeviceSettings.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2030D00264500A4E509 /* HP_DeviceSettings.h */; };
+		4B7C2E800E0A8A2D00220808 /* HP_DriverPlugIn.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2050D00264500A4E509 /* HP_DriverPlugIn.h */; };
+		4B7C2E810E0A8A2D00220808 /* HP_FormatList.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2070D00264500A4E509 /* HP_FormatList.h */; };
+		4B7C2E820E0A8A2D00220808 /* HP_HardwarePlugIn.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2090D00264500A4E509 /* HP_HardwarePlugIn.h */; };
+		4B7C2E830E0A8A2D00220808 /* HP_HogMode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B20C0D00264500A4E509 /* HP_HogMode.h */; };
+		4B7C2E840E0A8A2D00220808 /* HP_IOCycleTelemetry.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B20E0D00264500A4E509 /* HP_IOCycleTelemetry.h */; };
+		4B7C2E850E0A8A2D00220808 /* HP_IOProcList.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2100D00264500A4E509 /* HP_IOProcList.h */; };
+		4B7C2E860E0A8A2D00220808 /* HP_IOThread.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2120D00264500A4E509 /* HP_IOThread.h */; };
+		4B7C2E870E0A8A2D00220808 /* HP_Object.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2140D00264500A4E509 /* HP_Object.h */; };
+		4B7C2E880E0A8A2D00220808 /* HP_PreferredChannels.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2160D00264500A4E509 /* HP_PreferredChannels.h */; };
+		4B7C2E890E0A8A2D00220808 /* HP_Property.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2180D00264500A4E509 /* HP_Property.h */; };
+		4B7C2E8A0E0A8A2D00220808 /* HP_ReferenceCounted.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B21A0D00264500A4E509 /* HP_ReferenceCounted.h */; };
+		4B7C2E8B0E0A8A2D00220808 /* HP_Stream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B21C0D00264500A4E509 /* HP_Stream.h */; };
+		4B7C2E8C0E0A8A2D00220808 /* HP_SystemInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B21E0D00264500A4E509 /* HP_SystemInfo.h */; };
+		4B7C2E8D0E0A8A2D00220808 /* HP_TelemetryServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2200D00264500A4E509 /* HP_TelemetryServer.h */; };
+		4B7C2E8F0E0A8A2D00220808 /* CAAudioBufferList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCA908DA584F00EE5510 /* CAAudioBufferList.cpp */; };
+		4B7C2E900E0A8A2D00220808 /* CAAudioChannelLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCAB08DA584F00EE5510 /* CAAudioChannelLayout.cpp */; };
+		4B7C2E910E0A8A2D00220808 /* CAAudioTimeStamp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCAD08DA584F00EE5510 /* CAAudioTimeStamp.cpp */; };
+		4B7C2E920E0A8A2D00220808 /* CAAudioValueRange.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCAF08DA584F00EE5510 /* CAAudioValueRange.cpp */; };
+		4B7C2E930E0A8A2D00220808 /* CACFArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCB308DA584F00EE5510 /* CACFArray.cpp */; };
+		4B7C2E940E0A8A2D00220808 /* CACFDictionary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCB608DA584F00EE5510 /* CACFDictionary.cpp */; };
+		4B7C2E950E0A8A2D00220808 /* CACFMachPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCB808DA584F00EE5510 /* CACFMachPort.cpp */; };
+		4B7C2E960E0A8A2D00220808 /* CACFMessagePort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCBA08DA584F00EE5510 /* CACFMessagePort.cpp */; };
+		4B7C2E970E0A8A2D00220808 /* CACFNumber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCBC08DA584F00EE5510 /* CACFNumber.cpp */; };
+		4B7C2E980E0A8A2D00220808 /* CACFPreferences.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCC008DA584F00EE5510 /* CACFPreferences.cpp */; };
+		4B7C2E990E0A8A2D00220808 /* CACFRunLoopTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCC208DA584F00EE5510 /* CACFRunLoopTimer.cpp */; };
+		4B7C2E9A0E0A8A2D00220808 /* CACFString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCC408DA584F00EE5510 /* CACFString.cpp */; };
+		4B7C2E9B0E0A8A2D00220808 /* CADebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCC708DA584F00EE5510 /* CADebugger.cpp */; };
+		4B7C2E9C0E0A8A2D00220808 /* CADebugMacros.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCC908DA584F00EE5510 /* CADebugMacros.cpp */; };
+		4B7C2E9D0E0A8A2D00220808 /* CADebugPrintf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCCB08DA584F00EE5510 /* CADebugPrintf.cpp */; };
+		4B7C2E9E0E0A8A2D00220808 /* CAGuard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCCE08DA584F00EE5510 /* CAGuard.cpp */; };
+		4B7C2E9F0E0A8A2D00220808 /* CAHostTimeBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCD108DA584F00EE5510 /* CAHostTimeBase.cpp */; };
+		4B7C2EA00E0A8A2D00220808 /* CAMutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCD408DA584F00EE5510 /* CAMutex.cpp */; };
+		4B7C2EA10E0A8A2D00220808 /* CAProcess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DE2145008E38A52008DCE9D /* CAProcess.cpp */; };
+		4B7C2EA20E0A8A2D00220808 /* CAPThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCD708DA584F00EE5510 /* CAPThread.cpp */; };
+		4B7C2EA30E0A8A2D00220808 /* CASettingsStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCD908DA584F00EE5510 /* CASettingsStorage.cpp */; };
+		4B7C2EA40E0A8A2D00220808 /* CASharedLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCDB08DA584F00EE5510 /* CASharedLibrary.cpp */; };
+		4B7C2EA50E0A8A2D00220808 /* CAStreamBasicDescription.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCDD08DA584F00EE5510 /* CAStreamBasicDescription.cpp */; };
+		4B7C2EA60E0A8A2D00220808 /* CAStreamRangedDescription.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCDF08DA584F00EE5510 /* CAStreamRangedDescription.cpp */; };
+		4B7C2EA70E0A8A2D00220808 /* CAVolumeCurve.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DF7BCE208DA584F00EE5510 /* CAVolumeCurve.cpp */; };
+		4B7C2EA80E0A8A2D00220808 /* JackRouter.exp in Sources */ = {isa = PBXBuildFile; fileRef = 4B45E3010CE31F53001FB4D8 /* JackRouter.exp */; };
+		4B7C2EA90E0A8A2D00220808 /* bequite.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B84929E0CE34E7A00B43385 /* bequite.c */; };
+		4B7C2EAA0E0A8A2D00220808 /* procinfo.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B8492A00CE34E7A00B43385 /* procinfo.c */; };
+		4B7C2EAB0E0A8A2D00220808 /* JARLog.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B84938E0CE3513300B43385 /* JARLog.c */; };
+		4B7C2EAC0E0A8A2D00220808 /* JackRouterPlugIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B193ACE0CE3556200C1F56E /* JackRouterPlugIn.cpp */; };
+		4B7C2EAD0E0A8A2D00220808 /* JackRouterDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B193B010CE356C000C1F56E /* JackRouterDevice.cpp */; };
+		4B7C2EAE0E0A8A2D00220808 /* JackRouterStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B193B0E0CE3573000C1F56E /* JackRouterStream.cpp */; };
+		4B7C2EAF0E0A8A2D00220808 /* HP_Command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B1F90D00264500A4E509 /* HP_Command.cpp */; };
+		4B7C2EB00E0A8A2D00220808 /* HP_Control.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B1FB0D00264500A4E509 /* HP_Control.cpp */; };
+		4B7C2EB10E0A8A2D00220808 /* HP_Device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B1FD0D00264500A4E509 /* HP_Device.cpp */; };
+		4B7C2EB20E0A8A2D00220808 /* HP_DeviceCommands.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B1FF0D00264500A4E509 /* HP_DeviceCommands.cpp */; };
+		4B7C2EB30E0A8A2D00220808 /* HP_DeviceSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B2020D00264500A4E509 /* HP_DeviceSettings.cpp */; };
+		4B7C2EB40E0A8A2D00220808 /* HP_DriverPlugIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B2040D00264500A4E509 /* HP_DriverPlugIn.cpp */; };
+		4B7C2EB50E0A8A2D00220808 /* HP_FormatList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B2060D00264500A4E509 /* HP_FormatList.cpp */; };
+		4B7C2EB60E0A8A2D00220808 /* HP_HardwarePlugIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B2080D00264500A4E509 /* HP_HardwarePlugIn.cpp */; };
+		4B7C2EB70E0A8A2D00220808 /* HP_HardwarePlugInInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B20A0D00264500A4E509 /* HP_HardwarePlugInInterface.cpp */; };
+		4B7C2EB80E0A8A2D00220808 /* HP_HogMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B20B0D00264500A4E509 /* HP_HogMode.cpp */; };
+		4B7C2EB90E0A8A2D00220808 /* HP_IOCycleTelemetry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B20D0D00264500A4E509 /* HP_IOCycleTelemetry.cpp */; };
+		4B7C2EBA0E0A8A2D00220808 /* HP_IOProcList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B20F0D00264500A4E509 /* HP_IOProcList.cpp */; };
+		4B7C2EBB0E0A8A2D00220808 /* HP_IOThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B2110D00264500A4E509 /* HP_IOThread.cpp */; };
+		4B7C2EBC0E0A8A2D00220808 /* HP_Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B2130D00264500A4E509 /* HP_Object.cpp */; };
+		4B7C2EBD0E0A8A2D00220808 /* HP_PreferredChannels.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B2150D00264500A4E509 /* HP_PreferredChannels.cpp */; };
+		4B7C2EBE0E0A8A2D00220808 /* HP_Property.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B2170D00264500A4E509 /* HP_Property.cpp */; };
+		4B7C2EBF0E0A8A2D00220808 /* HP_ReferenceCounted.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B2190D00264500A4E509 /* HP_ReferenceCounted.cpp */; };
+		4B7C2EC00E0A8A2D00220808 /* HP_Stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B21B0D00264500A4E509 /* HP_Stream.cpp */; };
+		4B7C2EC10E0A8A2D00220808 /* HP_SystemInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B21D0D00264500A4E509 /* HP_SystemInfo.cpp */; };
+		4B7C2EC20E0A8A2D00220808 /* HP_TelemetryServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B21F0D00264500A4E509 /* HP_TelemetryServer.cpp */; };
+		4B7C2EC30E0A8A2D00220808 /* CALatencyLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BFE0AC30D6F2AF50078D16C /* CALatencyLog.cpp */; };
+		4B7C2EC40E0A8A2D00220808 /* latency.c in Sources */ = {isa = PBXBuildFile; fileRef = 4BFE0B120D6F2E880078D16C /* latency.c */; };
+		4B7C2EC60E0A8A2D00220808 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */; };
+		4B7C2EC70E0A8A2D00220808 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DF7BC5308DA4CCA00EE5510 /* CoreAudio.framework */; };
+		4B7C2EC80E0A8A2D00220808 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B8492B70CE34F1600B43385 /* Carbon.framework */; };
 		4B8492A20CE34E7A00B43385 /* bequite.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B84929E0CE34E7A00B43385 /* bequite.c */; };
 		4B8492A30CE34E7A00B43385 /* bequite.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B84929F0CE34E7A00B43385 /* bequite.h */; };
 		4B8492A40CE34E7A00B43385 /* procinfo.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B8492A00CE34E7A00B43385 /* procinfo.c */; };
@@ -248,6 +367,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
+		4B7C2ECA0E0A8A2D00220808 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.gcc.4_2;
+			fileType = sourcecode.c;
+			isEditable = 1;
+			outputFiles = (
+			);
+		};
 		4B9E2EAC0DAA88B400F5F690 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.gcc.4_2;
@@ -345,6 +472,7 @@
 		4B193B0F0CE3573000C1F56E /* JackRouterStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JackRouterStream.h; path = Source/JackRouterStream.h; sourceTree = SOURCE_ROOT; };
 		4B193B400CE3586F00C1F56E /* JackRouterPrefix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JackRouterPrefix.h; path = Source/JackRouterPrefix.h; sourceTree = SOURCE_ROOT; };
 		4B45E3010CE31F53001FB4D8 /* JackRouter.exp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.exports; path = JackRouter.exp; sourceTree = "<group>"; };
+		4B7C2ECE0E0A8A2D00220808 /* JackRouter.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JackRouter.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B84929E0CE34E7A00B43385 /* bequite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bequite.c; path = Source/procinfo/bequite.c; sourceTree = SOURCE_ROOT; };
 		4B84929F0CE34E7A00B43385 /* bequite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bequite.h; path = Source/procinfo/bequite.h; sourceTree = SOURCE_ROOT; };
 		4B8492A00CE34E7A00B43385 /* procinfo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = procinfo.c; path = Source/procinfo/procinfo.c; sourceTree = SOURCE_ROOT; };
@@ -353,7 +481,6 @@
 		4B84938D0CE3513300B43385 /* JARLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JARLog.h; sourceTree = "<group>"; };
 		4B84938E0CE3513300B43385 /* JARLog.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = JARLog.c; sourceTree = "<group>"; };
 		4B9E2C9B0DAA27DD00F5F690 /* JackRouter.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JackRouter.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
-		4B9E2C9C0DAA27DD00F5F690 /* Info copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info copy.plist"; sourceTree = "<group>"; };
 		4BD9B1F90D00264500A4E509 /* HP_Command.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_Command.cpp; path = Source/HPBase/HP_Command.cpp; sourceTree = SOURCE_ROOT; };
 		4BD9B1FA0D00264500A4E509 /* HP_Command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_Command.h; path = Source/HPBase/HP_Command.h; sourceTree = SOURCE_ROOT; };
 		4BD9B1FB0D00264500A4E509 /* HP_Control.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_Control.cpp; path = Source/HPBase/HP_Control.cpp; sourceTree = SOURCE_ROOT; };
@@ -397,10 +524,20 @@
 		4BFE0AC30D6F2AF50078D16C /* CALatencyLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CALatencyLog.cpp; path = /Developer/Examples/CoreAudio/PublicUtility/CALatencyLog.cpp; sourceTree = "<absolute>"; };
 		4BFE0B120D6F2E880078D16C /* latency.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = latency.c; path = /Developer/Examples/CoreAudio/PublicUtility/latency.c; sourceTree = "<absolute>"; };
 		8D576316048677EA00EA77CD /* JackRouter.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JackRouter.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
-		8D576317048677EA00EA77CD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
+		8D576317048677EA00EA77CD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4B7C2EC50E0A8A2D00220808 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B7C2EC60E0A8A2D00220808 /* CoreFoundation.framework in Frameworks */,
+				4B7C2EC70E0A8A2D00220808 /* CoreAudio.framework in Frameworks */,
+				4B7C2EC80E0A8A2D00220808 /* Carbon.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4B9E2C930DAA27DD00F5F690 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -470,6 +607,7 @@
 			children = (
 				8D576316048677EA00EA77CD /* JackRouter.plugin */,
 				4B9E2C9B0DAA27DD00F5F690 /* JackRouter.plugin */,
+				4B7C2ECE0E0A8A2D00220808 /* JackRouter.plugin */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -548,7 +686,6 @@
 			isa = PBXGroup;
 			children = (
 				8D576317048677EA00EA77CD /* Info.plist */,
-				4B9E2C9C0DAA27DD00F5F690 /* Info copy.plist */,
 			);
 			path = Resources;
 			sourceTree = SOURCE_ROOT;
@@ -685,6 +822,75 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4B7C2E4F0E0A8A2D00220808 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B7C2E500E0A8A2D00220808 /* CAAudioBufferList.h in Headers */,
+				4B7C2E510E0A8A2D00220808 /* CAAudioChannelLayout.h in Headers */,
+				4B7C2E520E0A8A2D00220808 /* CAAudioTimeStamp.h in Headers */,
+				4B7C2E530E0A8A2D00220808 /* CAAudioValueRange.h in Headers */,
+				4B7C2E540E0A8A2D00220808 /* CAAutoDisposer.h in Headers */,
+				4B7C2E550E0A8A2D00220808 /* CABool.h in Headers */,
+				4B7C2E560E0A8A2D00220808 /* CACFArray.h in Headers */,
+				4B7C2E570E0A8A2D00220808 /* CACFData.h in Headers */,
+				4B7C2E580E0A8A2D00220808 /* CACFDictionary.h in Headers */,
+				4B7C2E590E0A8A2D00220808 /* CACFMachPort.h in Headers */,
+				4B7C2E5A0E0A8A2D00220808 /* CACFMessagePort.h in Headers */,
+				4B7C2E5B0E0A8A2D00220808 /* CACFNumber.h in Headers */,
+				4B7C2E5C0E0A8A2D00220808 /* CACFObject.h in Headers */,
+				4B7C2E5D0E0A8A2D00220808 /* CACFPlugIn.h in Headers */,
+				4B7C2E5E0E0A8A2D00220808 /* CACFPreferences.h in Headers */,
+				4B7C2E5F0E0A8A2D00220808 /* CACFRunLoopTimer.h in Headers */,
+				4B7C2E600E0A8A2D00220808 /* CACFString.h in Headers */,
+				4B7C2E610E0A8A2D00220808 /* CADebugger.h in Headers */,
+				4B7C2E620E0A8A2D00220808 /* CADebugMacros.h in Headers */,
+				4B7C2E630E0A8A2D00220808 /* CADebugPrintf.h in Headers */,
+				4B7C2E640E0A8A2D00220808 /* CAException.h in Headers */,
+				4B7C2E650E0A8A2D00220808 /* CAGuard.h in Headers */,
+				4B7C2E660E0A8A2D00220808 /* CAHALTelemetry.h in Headers */,
+				4B7C2E670E0A8A2D00220808 /* CAHostTimeBase.h in Headers */,
+				4B7C2E680E0A8A2D00220808 /* CALogMacros.h in Headers */,
+				4B7C2E690E0A8A2D00220808 /* CAMutex.h in Headers */,
+				4B7C2E6A0E0A8A2D00220808 /* CAProcess.h in Headers */,
+				4B7C2E6B0E0A8A2D00220808 /* CAPropertyAddress.h in Headers */,
+				4B7C2E6C0E0A8A2D00220808 /* CAPThread.h in Headers */,
+				4B7C2E6D0E0A8A2D00220808 /* CASettingsStorage.h in Headers */,
+				4B7C2E6E0E0A8A2D00220808 /* CASharedLibrary.h in Headers */,
+				4B7C2E6F0E0A8A2D00220808 /* CAStreamBasicDescription.h in Headers */,
+				4B7C2E700E0A8A2D00220808 /* CAStreamRangedDescription.h in Headers */,
+				4B7C2E710E0A8A2D00220808 /* CATokenMap.h in Headers */,
+				4B7C2E720E0A8A2D00220808 /* CAVolumeCurve.h in Headers */,
+				4B7C2E730E0A8A2D00220808 /* bequite.h in Headers */,
+				4B7C2E740E0A8A2D00220808 /* procinfo.h in Headers */,
+				4B7C2E750E0A8A2D00220808 /* JARLog.h in Headers */,
+				4B7C2E760E0A8A2D00220808 /* JackRouterPlugIn.h in Headers */,
+				4B7C2E770E0A8A2D00220808 /* JackRouterDevice.h in Headers */,
+				4B7C2E780E0A8A2D00220808 /* JackRouterStream.h in Headers */,
+				4B7C2E790E0A8A2D00220808 /* JackRouterPrefix.h in Headers */,
+				4B7C2E7A0E0A8A2D00220808 /* HP_Command.h in Headers */,
+				4B7C2E7B0E0A8A2D00220808 /* HP_Control.h in Headers */,
+				4B7C2E7C0E0A8A2D00220808 /* HP_Device.h in Headers */,
+				4B7C2E7D0E0A8A2D00220808 /* HP_DeviceCommands.h in Headers */,
+				4B7C2E7E0E0A8A2D00220808 /* HP_DeviceInfoList.h in Headers */,
+				4B7C2E7F0E0A8A2D00220808 /* HP_DeviceSettings.h in Headers */,
+				4B7C2E800E0A8A2D00220808 /* HP_DriverPlugIn.h in Headers */,
+				4B7C2E810E0A8A2D00220808 /* HP_FormatList.h in Headers */,
+				4B7C2E820E0A8A2D00220808 /* HP_HardwarePlugIn.h in Headers */,
+				4B7C2E830E0A8A2D00220808 /* HP_HogMode.h in Headers */,
+				4B7C2E840E0A8A2D00220808 /* HP_IOCycleTelemetry.h in Headers */,
+				4B7C2E850E0A8A2D00220808 /* HP_IOProcList.h in Headers */,
+				4B7C2E860E0A8A2D00220808 /* HP_IOThread.h in Headers */,
+				4B7C2E870E0A8A2D00220808 /* HP_Object.h in Headers */,
+				4B7C2E880E0A8A2D00220808 /* HP_PreferredChannels.h in Headers */,
+				4B7C2E890E0A8A2D00220808 /* HP_Property.h in Headers */,
+				4B7C2E8A0E0A8A2D00220808 /* HP_ReferenceCounted.h in Headers */,
+				4B7C2E8B0E0A8A2D00220808 /* HP_Stream.h in Headers */,
+				4B7C2E8C0E0A8A2D00220808 /* HP_SystemInfo.h in Headers */,
+				4B7C2E8D0E0A8A2D00220808 /* HP_TelemetryServer.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4B9E2C1D0DAA27DD00F5F690 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -757,6 +963,26 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		4B7C2E4E0E0A8A2D00220808 /* JackRouter libjack */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4B7C2ECB0E0A8A2D00220808 /* Build configuration list for PBXNativeTarget "JackRouter libjack" */;
+			buildPhases = (
+				4B7C2E4F0E0A8A2D00220808 /* Headers */,
+				4B7C2E8E0E0A8A2D00220808 /* Sources */,
+				4B7C2EC50E0A8A2D00220808 /* Frameworks */,
+				4B7C2EC90E0A8A2D00220808 /* ShellScript */,
+			);
+			buildRules = (
+				4B7C2ECA0E0A8A2D00220808 /* PBXBuildRule */,
+			);
+			dependencies = (
+			);
+			name = "JackRouter libjack";
+			productInstallPath = "$(HOME)/Library/Bundles";
+			productName = SampleHardwarePlugIn;
+			productReference = 4B7C2ECE0E0A8A2D00220808 /* JackRouter.plugin */;
+			productType = "com.apple.product-type.bundle";
+		};
 		4B9E2C1C0DAA27DD00F5F690 /* JackRouter All */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4B9E2C980DAA27DD00F5F690 /* Build configuration list for PBXNativeTarget "JackRouter All" */;
@@ -812,11 +1038,25 @@
 			targets = (
 				8D57630D048677EA00EA77CD /* JackRouter */,
 				4B9E2C1C0DAA27DD00F5F690 /* JackRouter All */,
+				4B7C2E4E0E0A8A2D00220808 /* JackRouter libjack */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		4B7C2EC90E0A8A2D00220808 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp BlackList.txt build/Debug/JackRouter.plugin/Contents && cp BlackList.txt build/Release/JackRouter.plugin/Contents";
+		};
 		4B9E2C970DAA27DD00F5F690 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -846,6 +1086,67 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		4B7C2E8E0E0A8A2D00220808 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B7C2E8F0E0A8A2D00220808 /* CAAudioBufferList.cpp in Sources */,
+				4B7C2E900E0A8A2D00220808 /* CAAudioChannelLayout.cpp in Sources */,
+				4B7C2E910E0A8A2D00220808 /* CAAudioTimeStamp.cpp in Sources */,
+				4B7C2E920E0A8A2D00220808 /* CAAudioValueRange.cpp in Sources */,
+				4B7C2E930E0A8A2D00220808 /* CACFArray.cpp in Sources */,
+				4B7C2E940E0A8A2D00220808 /* CACFDictionary.cpp in Sources */,
+				4B7C2E950E0A8A2D00220808 /* CACFMachPort.cpp in Sources */,
+				4B7C2E960E0A8A2D00220808 /* CACFMessagePort.cpp in Sources */,
+				4B7C2E970E0A8A2D00220808 /* CACFNumber.cpp in Sources */,
+				4B7C2E980E0A8A2D00220808 /* CACFPreferences.cpp in Sources */,
+				4B7C2E990E0A8A2D00220808 /* CACFRunLoopTimer.cpp in Sources */,
+				4B7C2E9A0E0A8A2D00220808 /* CACFString.cpp in Sources */,
+				4B7C2E9B0E0A8A2D00220808 /* CADebugger.cpp in Sources */,
+				4B7C2E9C0E0A8A2D00220808 /* CADebugMacros.cpp in Sources */,
+				4B7C2E9D0E0A8A2D00220808 /* CADebugPrintf.cpp in Sources */,
+				4B7C2E9E0E0A8A2D00220808 /* CAGuard.cpp in Sources */,
+				4B7C2E9F0E0A8A2D00220808 /* CAHostTimeBase.cpp in Sources */,
+				4B7C2EA00E0A8A2D00220808 /* CAMutex.cpp in Sources */,
+				4B7C2EA10E0A8A2D00220808 /* CAProcess.cpp in Sources */,
+				4B7C2EA20E0A8A2D00220808 /* CAPThread.cpp in Sources */,
+				4B7C2EA30E0A8A2D00220808 /* CASettingsStorage.cpp in Sources */,
+				4B7C2EA40E0A8A2D00220808 /* CASharedLibrary.cpp in Sources */,
+				4B7C2EA50E0A8A2D00220808 /* CAStreamBasicDescription.cpp in Sources */,
+				4B7C2EA60E0A8A2D00220808 /* CAStreamRangedDescription.cpp in Sources */,
+				4B7C2EA70E0A8A2D00220808 /* CAVolumeCurve.cpp in Sources */,
+				4B7C2EA80E0A8A2D00220808 /* JackRouter.exp in Sources */,
+				4B7C2EA90E0A8A2D00220808 /* bequite.c in Sources */,
+				4B7C2EAA0E0A8A2D00220808 /* procinfo.c in Sources */,
+				4B7C2EAB0E0A8A2D00220808 /* JARLog.c in Sources */,
+				4B7C2EAC0E0A8A2D00220808 /* JackRouterPlugIn.cpp in Sources */,
+				4B7C2EAD0E0A8A2D00220808 /* JackRouterDevice.cpp in Sources */,
+				4B7C2EAE0E0A8A2D00220808 /* JackRouterStream.cpp in Sources */,
+				4B7C2EAF0E0A8A2D00220808 /* HP_Command.cpp in Sources */,
+				4B7C2EB00E0A8A2D00220808 /* HP_Control.cpp in Sources */,
+				4B7C2EB10E0A8A2D00220808 /* HP_Device.cpp in Sources */,
+				4B7C2EB20E0A8A2D00220808 /* HP_DeviceCommands.cpp in Sources */,
+				4B7C2EB30E0A8A2D00220808 /* HP_DeviceSettings.cpp in Sources */,
+				4B7C2EB40E0A8A2D00220808 /* HP_DriverPlugIn.cpp in Sources */,
+				4B7C2EB50E0A8A2D00220808 /* HP_FormatList.cpp in Sources */,
+				4B7C2EB60E0A8A2D00220808 /* HP_HardwarePlugIn.cpp in Sources */,
+				4B7C2EB70E0A8A2D00220808 /* HP_HardwarePlugInInterface.cpp in Sources */,
+				4B7C2EB80E0A8A2D00220808 /* HP_HogMode.cpp in Sources */,
+				4B7C2EB90E0A8A2D00220808 /* HP_IOCycleTelemetry.cpp in Sources */,
+				4B7C2EBA0E0A8A2D00220808 /* HP_IOProcList.cpp in Sources */,
+				4B7C2EBB0E0A8A2D00220808 /* HP_IOThread.cpp in Sources */,
+				4B7C2EBC0E0A8A2D00220808 /* HP_Object.cpp in Sources */,
+				4B7C2EBD0E0A8A2D00220808 /* HP_PreferredChannels.cpp in Sources */,
+				4B7C2EBE0E0A8A2D00220808 /* HP_Property.cpp in Sources */,
+				4B7C2EBF0E0A8A2D00220808 /* HP_ReferenceCounted.cpp in Sources */,
+				4B7C2EC00E0A8A2D00220808 /* HP_Stream.cpp in Sources */,
+				4B7C2EC10E0A8A2D00220808 /* HP_SystemInfo.cpp in Sources */,
+				4B7C2EC20E0A8A2D00220808 /* HP_TelemetryServer.cpp in Sources */,
+				4B7C2EC30E0A8A2D00220808 /* CALatencyLog.cpp in Sources */,
+				4B7C2EC40E0A8A2D00220808 /* latency.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4B9E2C5C0DAA27DD00F5F690 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1100,6 +1401,111 @@
 			};
 			name = Debug;
 		};
+		4B7C2ECC0E0A8A2D00220808 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH)";
+				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = YES;
+				EXPORTED_SYMBOLS_FILE = Source/JackRouter.exp;
+				GCC_AUTO_VECTORIZATION = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DEBUGGING_SYMBOLS = full;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_MODEL_TUNING = G4;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PFE_FILE_C_DIALECTS = "c++";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Source/JackRouterPrefix.h;
+				GCC_PREPROCESSOR_DEFINITIONS = "HAL_Build=1";
+				GCC_UNROLL_LOOPS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include/;
+				INFOPLIST_FILE = Resources/Info.plist;
+				INSTALL_PATH = "/Library/Audio/Plug-Ins/HAL";
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				LIBRARY_STYLE = BUNDLE;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				OTHER_CFLAGS = (
+					"-fconstant-cfstrings",
+					"-DLATENCY_SAMPLING_ONLY",
+				);
+				OTHER_CPLUSPLUSFLAGS = "";
+				OTHER_LDFLAGS = "-ljack";
+				PRODUCT_NAME = JackRouter;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				WRAPPER_EXTENSION = plugin;
+			};
+			name = Release;
+		};
+		4B7C2ECD0E0A8A2D00220808 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH)";
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				EXPORTED_SYMBOLS_FILE = Source/JackRouter.exp;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DEBUGGING_SYMBOLS = full;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_MODEL_TUNING = G4;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PFE_FILE_C_DIALECTS = "c++";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Source/JackRouterPrefix.h;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"HAL_Build=1",
+					"CoreAudio_Debug=1",
+				);
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				INFOPLIST_FILE = "/Volumes/Document1/Developpement/ProjectsCVS/JackCVS/JackOSX/jackosx/jackrouter2/Resources/Info copy 3.plist";
+				INSTALL_PATH = "/Library/Audio/Plug-Ins/HAL";
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				LIBRARY_STYLE = BUNDLE;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				OTHER_CFLAGS = (
+					"-fconstant-cfstrings",
+					"-DLATENCY_SAMPLING_ONLY",
+				);
+				OTHER_LDFLAGS = "-ljack";
+				PRODUCT_NAME = JackRouter;
+				WRAPPER_EXTENSION = plugin;
+			};
+			name = Debug;
+		};
 		4B9E2C990DAA27DD00F5F690 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1138,7 +1544,7 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/local/include/;
-				INFOPLIST_FILE = "/Volumes/Document1/Developpement/ProjectsCVS/JackCVS/JackOSX/jackosx/jackrouter2/Resources/Info copy.plist";
+				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "/Library/Audio/Plug-Ins/HAL";
 				LIBRARY_STYLE = BUNDLE;
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
@@ -1223,6 +1629,15 @@
 			buildConfigurations = (
 				2D926CFC08DA3A5A00AB1DB7 /* Release */,
 				2D926CFD08DA3A5A00AB1DB7 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4B7C2ECB0E0A8A2D00220808 /* Build configuration list for PBXNativeTarget "JackRouter libjack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B7C2ECC0E0A8A2D00220808 /* Release */,
+				4B7C2ECD0E0A8A2D00220808 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

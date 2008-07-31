@@ -171,8 +171,16 @@ void	JackRouterDevice::Initialize()
         memset(fOuputListTemp[i], 0, JackRouterDevice::fBufferSize * sizeof(float));
      }
 
-    for (int i = 0; i < MAX_JACK_PORTS; i++) {
+    fInputPortList = (jack_port_t**)malloc(JackRouterDevice::fInputChannels * sizeof(jack_port_t*));
+    assert(fInputPortList);
+    fOutputPortList = (jack_port_t**)malloc(JackRouterDevice::fOutputChannels * sizeof(jack_port_t*));
+    assert(fOutputPortList);
+    
+    for (int i = 0; i < fInputChannels; i++) {
         fInputPortList[i] = NULL;
+    }
+    
+    for (int i = 0; i < fOutputChannels; i++) {
         fOutputPortList[i] = NULL;
     }
 
@@ -196,6 +204,9 @@ void	JackRouterDevice::Teardown()
 	// JACK
     free(fInputList);
     free(fOutputList);
+    
+    free(fInputPortList);
+    free(fOutputPortList);
 
     for (int i = 0; i < JackRouterDevice::fOutputChannels; i++)
         free(fOuputListTemp[i]);
@@ -544,10 +555,18 @@ void	JackRouterDevice::AddIOProc(AudioDeviceIOProc inProc, void* inClientData)
 	
 	// First IO proc start JACK
 	if (mIOProcList->GetNumberIOProcs() == 1) {
-		Open();
-		AllocatePorts();
-		Activate();
+		if (!Open())
+            goto error;
+		if (!AllocatePorts())
+            goto error;
+		if (!Activate())
+            goto error;
 	}
+    
+    return;
+    
+error:
+    throw CAException(kAudioHardwareIllegalOperationError);
 }
 
 void	JackRouterDevice::RemoveIOProc(AudioDeviceIOProc inProc)
@@ -570,12 +589,19 @@ AudioDeviceIOProcID	JackRouterDevice::Do_CreateIOProcID(AudioDeviceIOProc inProc
 	
 	// First IO proc start JACK
 	if (mIOProcList->GetNumberIOProcs() == 1) {
-		Open();
-		AllocatePorts();
-		Activate();
+		if (!Open())
+            goto error;
+		if (!AllocatePorts())
+            goto error;
+		if (!Activate())
+            goto error;
 	}
 	
 	return res;
+
+error:
+    throw CAException(kAudioHardwareIllegalOperationError);
+    return NULL;
 }	
 
 void	JackRouterDevice::StopAllIOProcs()
