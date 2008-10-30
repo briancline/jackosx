@@ -141,7 +141,6 @@ void portaPerNumero(int n, char* nomeOut, unsigned long* tipo)
 	if (!ports) 
 		return;
     if (ports[n] != NULL) {
-        printf("size %ld port %s\n",  strlen( ports[n]), ports[n]);
         strcpy(nomeOut, ports[n]);
         *tipo = getTipoByName(ports[n]);        
 	}
