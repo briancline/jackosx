@@ -251,7 +251,7 @@ private:
 //  Stream Management
 private:
 	void						CreateStreams();
-	void						ReleaseStreams();
+ 	void						ReleaseStreams();
 
 private:
 	
@@ -277,7 +277,7 @@ private:
 	void						ReleasePlugInPortAU(int num);
 	
 	int							GetBufferSize();
-	
+  	
 	// JACK callbacks
 	static int					Process(jack_nframes_t nframes, void* arg);
 	static int					BufferSize(jack_nframes_t nframes, void* arg);

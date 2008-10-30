@@ -59,6 +59,7 @@ History
 01-03-08 : Version 0.87 : S Letz: correct JackRouterDevice::Process when null buffers are used. Correct timing information in the Process callback: mSampleTime is now 
            incremented a whole buffer each callback.
 31-07-08 : Version 0.88 : S Letz: remove MAX_JACK_PORTS. Dynamic allocation of fInputPortList and fOutputPortList.
+28-10-08 : Version 0.89 : S Letz: correct JackRouterDevice::Process for cases when kAudioDevicePropertyIOProcStreamUsage is not used.
 
 */
 
@@ -260,7 +261,7 @@ void JackRouterPlugIn::InitializeWithObjectID(AudioObjectID inObjectID)
 	AssertNoError(theError, "JackRouterPlugIn::InitializeWithObjectID: got an error telling the HAL a device died");
 }
 
-void	JackRouterPlugIn::Teardown()
+void JackRouterPlugIn::Teardown()
 {
 	//  first figure out if this is being done as part of the process being torn down
 	UInt32 isInitingOrExiting = 0;
@@ -322,7 +323,7 @@ void	JackRouterPlugIn::Teardown()
 	}
 }
 
-void	JackRouterPlugIn::AddForHAL()
+void JackRouterPlugIn::AddForHAL()
 {
 	char* id_name = bequite_getNameFromPid((int)getpid());
   	JARLog("AddForHAL name = %s\n", id_name);
@@ -371,14 +372,14 @@ void	JackRouterPlugIn::AddForHAL()
 	AssertNoError(theError, "JackRouterPlugIn::InitializeWithObjectID: got an error telling the HAL a device died");
 }
 
-void	JackRouterPlugIn::RemoveFromHAL()
+void JackRouterPlugIn::RemoveFromHAL()
 {
 	if (mDevice) {
 		mDevice->ReleaseFromHAL();
 	}
 }
 
-bool	JackRouterPlugIn::HasProperty(const AudioObjectPropertyAddress& inAddress) const
+bool JackRouterPlugIn::HasProperty(const AudioObjectPropertyAddress& inAddress) const
 {
 	JARLog("JackRouterPlugIn::HasProperty\n");
 	//	initialize the return value
@@ -398,7 +399,7 @@ bool	JackRouterPlugIn::HasProperty(const AudioObjectPropertyAddress& inAddress) 
 	return theAnswer;
 }
 
-bool	JackRouterPlugIn::IsPropertySettable(const AudioObjectPropertyAddress& inAddress) const
+bool JackRouterPlugIn::IsPropertySettable(const AudioObjectPropertyAddress& inAddress) const
 {
 	JARLog("JackRouterPlugIn::IsPropertySettable\n");
 	bool theAnswer = false;
@@ -417,7 +418,7 @@ bool	JackRouterPlugIn::IsPropertySettable(const AudioObjectPropertyAddress& inAd
 	return theAnswer;
 }
 
-UInt32	JackRouterPlugIn::GetPropertyDataSize(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void* inQualifierData) const
+UInt32 JackRouterPlugIn::GetPropertyDataSize(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void* inQualifierData) const
 {
 	JARLog("JackRouterPlugIn::GetPropertyDataSize\n");
 	UInt32 theAnswer = 0;
@@ -436,7 +437,7 @@ UInt32	JackRouterPlugIn::GetPropertyDataSize(const AudioObjectPropertyAddress& i
 	return theAnswer;
 }
 
-void	JackRouterPlugIn::GetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void* inQualifierData, UInt32& ioDataSize, void* outData) const
+void JackRouterPlugIn::GetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void* inQualifierData, UInt32& ioDataSize, void* outData) const
 {
 	JARLog("JackRouterPlugIn::GetPropertyData\n");
 	switch(inAddress.mSelector)
@@ -453,7 +454,7 @@ void	JackRouterPlugIn::GetPropertyData(const AudioObjectPropertyAddress& inAddre
 	};
 }
 
-void	JackRouterPlugIn::SetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void* inQualifierData, UInt32 inDataSize, const void* inData, const AudioTimeStamp* inWhen)
+void JackRouterPlugIn::SetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void* inQualifierData, UInt32 inDataSize, const void* inData, const AudioTimeStamp* inWhen)
 {
 	JARLog("JackRouterPlugIn::SetPropertyData\n");
 	switch(inAddress.mSelector)
@@ -520,12 +521,6 @@ bool JackRouterPlugIn::ReadPref()
                     jack_set_info_function(silent_jack_error_callback);
                 }
                     
-                //printf("Reading Preferences fInputChannels: %d fOutputChannels: %d fAutoConnect: %d\n",
-                //  JackRouterDevice::fInputChannels, JackRouterDevice::fOutputChannels, JackRouterDevice::fAutoConnect);
-				//printf("Reading Preferences fDefaultInput: %d fDefaultOutput: %d fAutoConnect: %d\n",
-                // JackRouterDevice::fDefaultInput, JackRouterDevice::fDefaultOutput, JackRouterDevice::fDefaultSystem);
-				//printf("Reading Preferences debug: %d\n", debug);
-
                 res = true;
             }
 			CFRelease(prefURL);

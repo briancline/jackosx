@@ -110,20 +110,20 @@ CommandThread::CommandThread(JackRouterDevice* inDevice):
 CommandThread::~CommandThread()
 {}
 
-void*	CommandThread::ThreadEntry(CommandThread* inIOThread)
+void* CommandThread::ThreadEntry(CommandThread* inIOThread)
 {
 	inIOThread->WorkLoop();
 	return NULL;
 }
 
-void	CommandThread::WorkLoop()
+void CommandThread::WorkLoop()
 {
 	while (true) {
 		mDevice->ExecuteAllCommands(); 
 	}
 }
 
-void	CommandThread::Start()
+void CommandThread::Start()
 {
 	mCommandThread.Start();
 }
@@ -143,7 +143,7 @@ JackRouterDevice::JackRouterDevice(AudioDeviceID inAudioDeviceID, JackRouterPlug
 JackRouterDevice::~JackRouterDevice()
 {}
 
-void	JackRouterDevice::Initialize()
+void JackRouterDevice::Initialize()
 {
 	JARLog("JackRouterDevice Initialize\n");
 	
@@ -169,7 +169,7 @@ void	JackRouterDevice::Initialize()
         fOuputListTemp[i] = (float*)malloc(sizeof(float) * JackRouterDevice::fBufferSize);
 		assert(fOuputListTemp[i]);
         memset(fOuputListTemp[i], 0, JackRouterDevice::fBufferSize * sizeof(float));
-     }
+    }
 
     fInputPortList = (jack_port_t**)malloc(JackRouterDevice::fInputChannels * sizeof(jack_port_t*));
     assert(fInputPortList);
@@ -190,10 +190,9 @@ void	JackRouterDevice::Initialize()
 	//  set the default buffer size before we go any further
 	mIOBufferFrameSize = fBufferSize;
 	JARLog("JackRouterDevice Initialize OK\n");
-	
 }
 
-void	JackRouterDevice::Teardown()
+void JackRouterDevice::Teardown()
 {
 	JARLog("JackRouterDevice Teardown\n");
 		
@@ -216,7 +215,7 @@ void	JackRouterDevice::Teardown()
 	HP_Device::Teardown();
 }
 
-void	JackRouterDevice::Finalize()
+void JackRouterDevice::Finalize()
 {
 	//	Finalize() is called in place of Teardown() when we're being lazy about
 	//	cleaning up. The idea is to do as little work as possible here.
@@ -269,7 +268,7 @@ bool JackRouterDevice::CanBeDefaultDevice(bool /*inIsInput */, bool inIsSystem) 
 	return (inIsSystem) ? false : true;
 }
 
-bool	JackRouterDevice::HasProperty(const AudioObjectPropertyAddress& inAddress) const
+bool JackRouterDevice::HasProperty(const AudioObjectPropertyAddress& inAddress) const
 {
 	bool theAnswer = false;
 	
@@ -303,7 +302,7 @@ bool	JackRouterDevice::HasProperty(const AudioObjectPropertyAddress& inAddress) 
 	return theAnswer;
 }
 
-bool	JackRouterDevice::IsPropertySettable(const AudioObjectPropertyAddress& inAddress) const
+bool JackRouterDevice::IsPropertySettable(const AudioObjectPropertyAddress& inAddress) const
 {
 	bool theAnswer = false;
 	
@@ -320,11 +319,16 @@ bool	JackRouterDevice::IsPropertySettable(const AudioObjectPropertyAddress& inAd
 		case kAudioDevicePropertyBufferSize:
 			theAnswer = true;
 			break;
-			
-		case kAudioDevicePropertyIOProcStreamUsage:
+	
+    	case kAudioDevicePropertyIOProcStreamUsage:
 			theAnswer = true;
 			break;
-
+        /*
+        case kAudioDevicePropertyIOProcStreamUsage:
+			theAnswer = false;
+			break;
+        */
+        
 		case kAudioDevicePropertyGetJackClient:
         case kAudioDevicePropertyReleaseJackClient:
             theAnswer = false;
@@ -356,7 +360,7 @@ bool	JackRouterDevice::IsPropertySettable(const AudioObjectPropertyAddress& inAd
 	return theAnswer;
 }
 
-UInt32	JackRouterDevice::GetPropertyDataSize(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void* inQualifierData) const
+UInt32 JackRouterDevice::GetPropertyDataSize(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void* inQualifierData) const
 {
 	UInt32	theAnswer = 0;
 	
@@ -397,7 +401,7 @@ UInt32	JackRouterDevice::GetPropertyDataSize(const AudioObjectPropertyAddress& i
 	return theAnswer;
 }
 
-void	JackRouterDevice::GetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void* inQualifierData, UInt32& ioDataSize, void* outData) const
+void JackRouterDevice::GetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void* inQualifierData, UInt32& ioDataSize, void* outData) const
 {
 	//	take and hold the state mutex
 	CAMutex::Locker theStateMutex(const_cast<JackRouterDevice*>(this)->GetStateMutex());
@@ -410,7 +414,7 @@ void	JackRouterDevice::GetPropertyData(const AudioObjectPropertyAddress& inAddre
 		
 		case kAudioDevicePropertyBufferFrameSize:
 			ThrowIf(ioDataSize != GetPropertyDataSize(inAddress, inQualifierDataSize, inQualifierData), CAException(kAudioHardwareBadPropertySizeError), "JackRouterDevice::GetPropertyData: wrong data size for kAudioDevicePropertyLatency");
-			*static_cast<UInt32*>(outData) =  const_cast<JackRouterDevice*>(this)->GetBufferSize();
+			*static_cast<UInt32*>(outData) = const_cast<JackRouterDevice*>(this)->GetBufferSize();
 			break;
 			
 		case kAudioDevicePropertyGetJackClient: 
@@ -443,7 +447,7 @@ void	JackRouterDevice::GetPropertyData(const AudioObjectPropertyAddress& inAddre
 	};
 }
 
-void	JackRouterDevice::SetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void* inQualifierData, UInt32 inDataSize, const void* inData, const AudioTimeStamp* inWhen)
+void JackRouterDevice::SetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void* inQualifierData, UInt32 inDataSize, const void* inData, const AudioTimeStamp* inWhen)
 {
 	JARLog("JackRouterDevice::SetPropertyData\n");
 	JARPrint4CharCode("JackRouterDevice::SetPropertyData ", inAddress.mSelector);
@@ -485,13 +489,18 @@ void	JackRouterDevice::SetPropertyData(const AudioObjectPropertyAddress& inAddre
 			break;
      		
 		case kAudioDevicePropertyIOProcStreamUsage: {
+            
 			AudioHardwareIOProcStreamUsage* inData1 = (AudioHardwareIOProcStreamUsage*)inData;
 			JARLog("DeviceSetProperty inAddress.mScope %ld : mNumberStreams %d\n", inAddress.mScope, inData1->mNumberStreams);
+            
+            int new_input = 0;
+            int new_output = 0;
 			
 			if (inAddress.mScope == kAudioDevicePropertyScopeInput && fClient) {
 				JARLog("DeviceSetProperty input : mNumberStreams %d\n", inData1->mNumberStreams);
 				for (UInt32 i = 0; i < inData1->mNumberStreams; i++) {
 					if (inData1->mStreamIsOn[i]) {
+                        new_input++;
 						if (fInputPortList[i] == 0) {
 							char in_port_name [JACK_PORT_NAME_LEN];
 							sprintf(in_port_name, "in%lu", i + 1);
@@ -513,6 +522,7 @@ void	JackRouterDevice::SetPropertyData(const AudioObjectPropertyAddress& inAddre
 				JARLog("DeviceSetProperty output : mNumberStreams %d\n", inData1->mNumberStreams);
 				for (UInt32 i = 0; i < inData1->mNumberStreams; i++) {
 					if (inData1->mStreamIsOn[i]) {
+                        new_output++;
 						if (fOutputPortList[i] == 0) {
 							char out_port_name [JACK_PORT_NAME_LEN];
 							sprintf(out_port_name, "out%lu", i + 1);
@@ -529,8 +539,8 @@ void	JackRouterDevice::SetPropertyData(const AudioObjectPropertyAddress& inAddre
 					JARLog("DeviceSetProperty : input kAudioDevicePropertyIOProcStreamUsage input inData->mStreamIsOn %ld \n", inData1->mStreamIsOn[i]);
 				}
 			}
-			
-			// Autoconnect is only done for the first activation
+            
+            // Autoconnect is only done for the first activation
 			if (fFirstActivate) {
 				AutoConnect();
 				fFirstActivate = false;
@@ -548,7 +558,7 @@ void	JackRouterDevice::SetPropertyData(const AudioObjectPropertyAddress& inAddre
 	};
 }
 
-void	JackRouterDevice::AddIOProc(AudioDeviceIOProc inProc, void* inClientData)
+void JackRouterDevice::AddIOProc(AudioDeviceIOProc inProc, void* inClientData)
 {
 	HP_Device::AddIOProc(inProc, inClientData);
 	JARLog("JackRouterDevice::AddIOProc\n");
@@ -569,7 +579,7 @@ error:
     throw CAException(kAudioHardwareIllegalOperationError);
 }
 
-void	JackRouterDevice::RemoveIOProc(AudioDeviceIOProc inProc)
+void JackRouterDevice::RemoveIOProc(AudioDeviceIOProc inProc)
 {
 	HP_Device::RemoveIOProc(inProc);
 	JARLog("JackRouterDevice::RemoveIOProc\n");
@@ -604,7 +614,7 @@ error:
     return NULL;
 }	
 
-void	JackRouterDevice::StopAllIOProcs()
+void JackRouterDevice::StopAllIOProcs()
 {
 	HP_Device::StopAllIOProcs();
 	JARLog("JackRouterDevice::StopAllIOProcs\n");
@@ -617,31 +627,31 @@ void	JackRouterDevice::StopAllIOProcs()
 	}
 }
 
-void	JackRouterDevice::PropertyListenerAdded(const AudioObjectPropertyAddress& inAddress)
+void JackRouterDevice::PropertyListenerAdded(const AudioObjectPropertyAddress& inAddress)
 {
 	JARLog("JackRouterDevice::PropertyListenerAdded\n");
 	HP_Object::PropertyListenerAdded(inAddress);
 }
 
-void	JackRouterDevice::Do_StartIOProc(AudioDeviceIOProc inProc)
+void JackRouterDevice::Do_StartIOProc(AudioDeviceIOProc inProc)
 {
 	//	start
 	HP_Device::Do_StartIOProc(inProc);
 }
 
-void	JackRouterDevice::Do_StartIOProcAtTime(AudioDeviceIOProc inProc, AudioTimeStamp& ioStartTime, UInt32 inStartTimeFlags)
+void JackRouterDevice::Do_StartIOProcAtTime(AudioDeviceIOProc inProc, AudioTimeStamp& ioStartTime, UInt32 inStartTimeFlags)
 {
     //	start
 	HP_Device::Do_StartIOProcAtTime(inProc, ioStartTime, inStartTimeFlags);
 }
 
-void	JackRouterDevice::Do_StopIOProc(AudioDeviceIOProc inProc)
+void JackRouterDevice::Do_StopIOProc(AudioDeviceIOProc inProc)
 {
 	//	stop
 	HP_Device::Do_StopIOProc(inProc);
 }
 
-void	JackRouterDevice::StartIOEngine()
+void JackRouterDevice::StartIOEngine()
 {
 	JARLog("JackRouterDevice::StartIOEngine\n");
 	if (!IsIOEngineRunning()) {
@@ -649,7 +659,7 @@ void	JackRouterDevice::StartIOEngine()
 	}
 }
 
-void	JackRouterDevice::StartIOEngineAtTime(const AudioTimeStamp&  /*inStartTime*/, UInt32 /*inStartTimeFlags*/)
+void JackRouterDevice::StartIOEngineAtTime(const AudioTimeStamp&  /*inStartTime*/, UInt32 /*inStartTimeFlags*/)
 {
 	JARLog("JackRouterDevice::StartIOEngineAtTime\n");
 	if (!IsIOEngineRunning()) {
@@ -657,7 +667,7 @@ void	JackRouterDevice::StartIOEngineAtTime(const AudioTimeStamp&  /*inStartTime*
 	}
 }
 
-void	JackRouterDevice::StopIOEngine()
+void JackRouterDevice::StopIOEngine()
 {
 	JARLog("JackRouterDevice::StopIOEngine\n");
 	if (IsIOEngineRunning()) {
@@ -665,7 +675,7 @@ void	JackRouterDevice::StopIOEngine()
 	}
 }
 
-void	JackRouterDevice::StartHardware()
+void JackRouterDevice::StartHardware()
 {
 	//	the calling thread must have already locked the Guard prior to calling this method
 	JARLog("JackRouterDevice::StartHardware\n");
@@ -678,7 +688,7 @@ void	JackRouterDevice::StartHardware()
 	PropertiesChanged(1, &theIsRunningAddress);	
 }
 
-void	JackRouterDevice::StopHardware()
+void JackRouterDevice::StopHardware()
 {
 	JARLog("JackRouterDevice::StopHardware\n");
 	
@@ -690,7 +700,7 @@ void	JackRouterDevice::StopHardware()
 	PropertiesChanged(1, &theIsRunningAddress);
 }
 
-bool	JackRouterDevice::IsSafeToExecuteCommand()
+bool JackRouterDevice::IsSafeToExecuteCommand()
 {
 	bool theAnswer = true;
 
@@ -703,14 +713,14 @@ bool	JackRouterDevice::IsSafeToExecuteCommand()
 	return theAnswer;
 }
 
-bool	JackRouterDevice::StartCommandExecution(void** outSavedCommandState)
+bool JackRouterDevice::StartCommandExecution(void** outSavedCommandState)
 {
 	JARLog("JackRouterDevice::StartCommandExecution \n");
 	*outSavedCommandState = mIOGuard.Lock() ? (void*)1 : (void*)0;
 	return true;
 }
 
-void	JackRouterDevice::FinishCommandExecution(void* inSavedCommandState)
+void JackRouterDevice::FinishCommandExecution(void* inSavedCommandState)
 {
 	JARLog("JackRouterDevice::FinishCommandExecution \n");
 	if (inSavedCommandState != 0) {
@@ -718,7 +728,7 @@ void	JackRouterDevice::FinishCommandExecution(void* inSavedCommandState)
 	}
 }
 
-void	JackRouterDevice::GetCurrentTime(AudioTimeStamp& outTime)
+void JackRouterDevice::GetCurrentTime(AudioTimeStamp& outTime)
 {
 	ThrowIf(!IsIOEngineRunning(), CAException(kAudioHardwareNotRunningError), "JackRouterDevice::GetCurrentTime: can't because the engine isn't running");
 	
@@ -728,7 +738,7 @@ void	JackRouterDevice::GetCurrentTime(AudioTimeStamp& outTime)
 	outTime.mFlags = kAudioTimeFlags;
 }
 
-void	JackRouterDevice::SafeGetCurrentTime(AudioTimeStamp& outTime)
+void JackRouterDevice::SafeGetCurrentTime(AudioTimeStamp& outTime)
 {
 	//	The difference between GetCurrentTime and SafeGetCurrentTime is that GetCurrentTime should only
 	//	be called in situations where the device state or clock state is in a known good state, such
@@ -742,7 +752,7 @@ void	JackRouterDevice::SafeGetCurrentTime(AudioTimeStamp& outTime)
 	GetCurrentTime(outTime);
 }
 
-void	JackRouterDevice::TranslateTime(const AudioTimeStamp& inTime, AudioTimeStamp& outTime)
+void JackRouterDevice::TranslateTime(const AudioTimeStamp& inTime, AudioTimeStamp& outTime)
 {
 	//	the input time stamp has to have at least one of the sample or host time valid
 	ThrowIf((inTime.mFlags & kAudioTimeStampSampleHostTimeValid) == 0, CAException(kAudioHardwareIllegalOperationError), "JackRouterDevice::TranslateTime: have to have either sample time or host time valid on the input");
@@ -752,22 +762,22 @@ void	JackRouterDevice::TranslateTime(const AudioTimeStamp& inTime, AudioTimeStam
 	memcpy(&outTime, &inTime, sizeof(AudioTimeStamp));
 }
 
-UInt32	JackRouterDevice::GetMinimumIOBufferFrameSize() const
+UInt32 JackRouterDevice::GetMinimumIOBufferFrameSize() const
 {
 	return fBufferSize;
 }
 
-UInt32	JackRouterDevice::GetMaximumIOBufferFrameSize() const
+UInt32 JackRouterDevice::GetMaximumIOBufferFrameSize() const
 {
 	return fBufferSize;
 }
 
-void	JackRouterDevice::GetNearestStartTime(AudioTimeStamp& /*ioRequestedStartTime*/, UInt32 /*inFlags*/)
+void JackRouterDevice::GetNearestStartTime(AudioTimeStamp& /*ioRequestedStartTime*/, UInt32 /*inFlags*/)
 {
 	JARLog("JackRouterDevice::GetNearestStartTime\n");
 }
 
-void	JackRouterDevice::CreateStreams()
+void JackRouterDevice::CreateStreams()
 {
 	//  common variables
 	OSStatus		theError = 0;
@@ -843,14 +853,14 @@ void	JackRouterDevice::CreateStreams()
 	}
 }
 
-void	JackRouterDevice::CreateForHAL(AudioDeviceID theNewDeviceID)
+void JackRouterDevice::CreateForHAL(AudioDeviceID theNewDeviceID)
 {
 	JARLog("CreateForHAL\n");
 	SetObjectID(theNewDeviceID);  // setup the new deviceID
 	CreateStreams();
 }
 
-void	JackRouterDevice::ReleaseStreams()
+void JackRouterDevice::ReleaseStreams()
 {
 	//	This method is only called when tearing down, so there isn't any need to inform the HAL about changes
 	//	since the HAL has long since released it's internal representation of these stream objects. Note that
@@ -890,7 +900,7 @@ void	JackRouterDevice::ReleaseStreams()
 	}
 }
 
-void	JackRouterDevice::ReleaseFromHAL()
+void JackRouterDevice::ReleaseFromHAL()
 {
 		AudioObjectID theObjectID = GetObjectID();
 #if	(MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_4)
@@ -1108,7 +1118,7 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 		//JARLog("GetNumberIOProcs == 1 \n");
 
     	HP_IOProc* proc = client->mIOProcList->GetIOProcByIndex(0);
-
+    
     	if (proc->IsEnabled()) {
 		
 			if (proc->GetStreamUsage(true).size() > 0 || proc->GetStreamUsage(false).size() > 0) {  // A VERIFIER
@@ -1122,37 +1132,33 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 						client->fInputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
                     } else {
                         client->fInputList->mBuffers[i].mData = NULL;
-						client->fInputList->mBuffers[i].mDataByteSize = 0;
-                    }
+		             }
                 }
-
+      
 			#ifdef OPTIMIZE_PROCESS
-			
                 for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
                     if (proc->IsStreamEnabled(false, i) && client->fOutputPortList[i]) {
-						float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
+                        //JARLog("Process GetStreamUsage %i\n", i);
+                        float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
 						memset(output, 0, nframes * sizeof(float));
 						client->fOutputList->mBuffers[i].mData = output;
 						client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
-		           } else {
+                    } else {
                         client->fOutputList->mBuffers[i].mData = NULL;
-						client->fOutputList->mBuffers[i].mDataByteSize = 0;
-                    }
+	               }
                 }
-				
+      			
 			#else
-				
-				for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
+         		for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
                     if (proc->IsStreamEnabled(false, i)) {
+                        count++;
 						memset(client->fOuputListTemp[i], 0, nframes * sizeof(float));
 						client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
 						client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
                     } else {
                         client->fOutputList->mBuffers[i].mData = NULL;
-						client->fOutputList->mBuffers[i].mDataByteSize = 0;
-                    }
+	                 }
                 }
-				
 			#endif
 
             } else {
@@ -1162,42 +1168,39 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 				// Non Interleaved
                 for (int i = 0; i < JackRouterDevice::fInputChannels; i++) {
 					if (client->fInputPortList[i]) {
-						client->fInputList->mBuffers[i].mData = (float*)jack_port_get_buffer(client->fInputPortList[i], nframes);
+       				client->fInputList->mBuffers[i].mData = (float*)jack_port_get_buffer(client->fInputPortList[i], nframes);
 						client->fInputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
 					} else {
 						//JARLog("JackRouterDevice::Process client->fInputPortList[i] %d is null\n",i);
 						client->fInputList->mBuffers[i].mData = NULL;
-						client->fInputList->mBuffers[i].mDataByteSize = 0;
+						client->fInputList->mBuffers[i].mDataByteSize = 0;  // MUST be set when NO GetStreamUsage (iMovie HD crash...)
 					}
                 }
-				
+	            
 			#ifdef OPTIMIZE_PROCESS
-
                 for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
 					if (client->fOutputPortList[i]) {
-						float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
+         				float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
 						memset(output, 0, nframes * sizeof(float));
 						client->fOutputList->mBuffers[i].mData = output;
 						client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
 					} else {
 						client->fOutputList->mBuffers[i].mData = NULL;
-						client->fOutputList->mBuffers[i].mDataByteSize = 0;
+						client->fOutputList->mBuffers[i].mDataByteSize = 0; // MUST be set when NO GetStreamUsage (iMovie HD crash...)
 					}
                 }
-				
 			#else
-				
+				count = 0;
 				for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
 					if (client->fOutputPortList[i]) {
-						memset(client->fOuputListTemp[i], 0, nframes * sizeof(float));
+    					memset(client->fOuputListTemp[i], 0, nframes * sizeof(float));
 						client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
 						client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
 					} else {
 						client->fOutputList->mBuffers[i].mData = NULL;
-						client->fOutputList->mBuffers[i].mDataByteSize = 0;
+						client->fOutputList->mBuffers[i].mDataByteSize = 0; // MUST be set when NO GetStreamUsage (iMovie HD crash...)
 					}
                 }
-				
 			#endif
             }
 			
@@ -1266,8 +1269,7 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 							client->fInputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
                         } else {
                             client->fInputList->mBuffers[i].mData = NULL;
-							client->fInputList->mBuffers[i].mDataByteSize = 0;
-                        }
+		                }
                     }
 
                     for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
@@ -1278,8 +1280,7 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 							client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
                         } else {
                             client->fOutputList->mBuffers[i].mData = NULL;
-							client->fOutputList->mBuffers[i].mDataByteSize = 0;
-                        }
+		                }
                     }
 
                 } else {
@@ -1293,7 +1294,7 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 						} else {
 							//JARLog("JackRouterDevice::Process client->fInputPortList[i] %d is null\n",i);
 							client->fInputList->mBuffers[i].mData = NULL;
-							client->fInputList->mBuffers[i].mDataByteSize = 0;	
+							client->fInputList->mBuffers[i].mDataByteSize = 0;	// MUST be set when NO GetStreamUsage (iMovie HD crash...)
 						}
                     }
 
@@ -1305,7 +1306,7 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 							client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
 						} else {
 							client->fOutputList->mBuffers[i].mData = NULL;
-							client->fOutputList->mBuffers[i].mDataByteSize = 0;	
+							client->fOutputList->mBuffers[i].mDataByteSize = 0;	 // MUST be set when NO GetStreamUsage (iMovie HD crash...)
 						}
 					}
                 }
