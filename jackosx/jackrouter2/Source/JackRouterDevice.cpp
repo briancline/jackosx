@@ -272,7 +272,6 @@ bool JackRouterDevice::HasProperty(const AudioObjectPropertyAddress& inAddress) 
 {
 	bool theAnswer = false;
 	
-	JARLog("JackRouterDevice::HasProperty\n");
 	JARPrint4CharCode("JackRouterDevice::HasProperty ", inAddress.mSelector);
 	
 	//	take and hold the state mutex
@@ -306,7 +305,6 @@ bool JackRouterDevice::IsPropertySettable(const AudioObjectPropertyAddress& inAd
 {
 	bool theAnswer = false;
 	
-	JARLog("JackRouterDevice::IsPropertySettable\n");
 	JARPrint4CharCode("JackRouterDevice::IsPropertySettable ", inAddress.mSelector);
 	
 	//	take and hold the state mutex
@@ -314,7 +312,7 @@ bool JackRouterDevice::IsPropertySettable(const AudioObjectPropertyAddress& inAd
 	
 	switch(inAddress.mSelector)
 	{
-
+    
 		case kAudioDevicePropertyBufferFrameSize:
 		case kAudioDevicePropertyBufferSize:
 			theAnswer = true;
@@ -323,12 +321,7 @@ bool JackRouterDevice::IsPropertySettable(const AudioObjectPropertyAddress& inAd
     	case kAudioDevicePropertyIOProcStreamUsage:
 			theAnswer = true;
 			break;
-        /*
-        case kAudioDevicePropertyIOProcStreamUsage:
-			theAnswer = false;
-			break;
-        */
-        
+         
 		case kAudioDevicePropertyGetJackClient:
         case kAudioDevicePropertyReleaseJackClient:
             theAnswer = false;
@@ -364,7 +357,6 @@ UInt32 JackRouterDevice::GetPropertyDataSize(const AudioObjectPropertyAddress& i
 {
 	UInt32	theAnswer = 0;
 	
-	JARLog("JackRouterDevice::GetPropertyDataSize\n");
 	JARPrint4CharCode("JackRouterDevice::GetPropertyDataSize ", inAddress.mSelector);
 	
 	//	take and hold the state mutex
@@ -406,7 +398,6 @@ void JackRouterDevice::GetPropertyData(const AudioObjectPropertyAddress& inAddre
 	//	take and hold the state mutex
 	CAMutex::Locker theStateMutex(const_cast<JackRouterDevice*>(this)->GetStateMutex());
 	
-	JARLog("JackRouterDevice::GetPropertyData %ld\n", inAddress.mSelector);
 	JARPrint4CharCode("JackRouterDevice::GetPropertyData ", inAddress.mSelector);
 	
 	switch(inAddress.mSelector)
@@ -449,7 +440,6 @@ void JackRouterDevice::GetPropertyData(const AudioObjectPropertyAddress& inAddre
 
 void JackRouterDevice::SetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void* inQualifierData, UInt32 inDataSize, const void* inData, const AudioTimeStamp* inWhen)
 {
-	JARLog("JackRouterDevice::SetPropertyData\n");
 	JARPrint4CharCode("JackRouterDevice::SetPropertyData ", inAddress.mSelector);
 	
 	//	take and hold the state mutex
@@ -458,7 +448,7 @@ void JackRouterDevice::SetPropertyData(const AudioObjectPropertyAddress& inAddre
 	switch(inAddress.mSelector)
 	{
 		
-		 case kAudioDevicePropertyAllocateJackPortVST: 
+        case kAudioDevicePropertyAllocateJackPortVST: 
 			JARLog("JackRouterDevice::SetPropertyData kAudioDevicePropertyAllocateJackPortVST\n");
 			const_cast<JackRouterDevice*>(this)->AllocatePlugInPortVST(inDataSize);
 			break;
@@ -867,7 +857,7 @@ void JackRouterDevice::ReleaseStreams()
 	//	if this method needs to be called outside of teardown, it would need to be modified to call
 	//	AudioObjectsPublishedAndDied (or AudioHardwareStreamsDied on pre-Tiger systems) to notify the HAL about
 	//	the state change.
-	while(GetNumberStreams(true) > 0)
+	while (GetNumberStreams(true) > 0)
 	{
 		//	get the stream
 		JackRouterStream* theStream = static_cast<JackRouterStream*>(GetStreamByIndex(true, 0));
@@ -883,7 +873,7 @@ void JackRouterDevice::ReleaseStreams()
 		delete theStream;
 	}
 	
-	while(GetNumberStreams(false) > 0)
+	while (GetNumberStreams(false) > 0)
 	{
 		//	get the stream
 		JackRouterStream* theStream = static_cast<JackRouterStream*>(GetStreamByIndex(false, 0));
@@ -909,7 +899,6 @@ void JackRouterDevice::ReleaseFromHAL()
 		OSStatus theError = AudioObjectsPublishedAndDied(mSHPPlugIn->GetInterface(), kAudioObjectSystemObject, 0, NULL, 1, &theObjectID);
 #endif
 		AssertNoError(theError, "JackRouterPlugIn::Teardown: got an error telling the HAL a device died");
-		
 		Destroy();
 }
 

@@ -929,7 +929,6 @@ void	HP_Device::GetPropertyData(const AudioObjectPropertyAddress& inAddress, UIn
 	HP_Stream* theStream = NULL;
 	UInt32 theIndex = 0;
 	
-	JARLog("HP_Device::GetPropertyData %ld\n", inAddress.mSelector);
 	JARPrint4CharCode("HP_Device::GetPropertyData ", inAddress.mSelector);
 	
 	//	Figure out what section is involved. Note that the HAL's API calls HasProperty before calling
@@ -1086,7 +1085,7 @@ void	HP_Device::GetPropertyData(const AudioObjectPropertyAddress& inAddress, UIn
 			
 		case kAudioDevicePropertyStreamConfiguration:
 			{
-				UInt32 theExpectedSize = GetPropertyDataSize(inAddress, inQualifierDataSize, inQualifierData);
+                UInt32 theExpectedSize = GetPropertyDataSize(inAddress, inQualifierDataSize, inQualifierData);
 				ThrowIf(ioDataSize < theExpectedSize, CAException(kAudioHardwareBadPropertySizeError), "HP_Device::GetPropertyData: wrong data size for kAudioDevicePropertyStreamConfiguration");
 				ioDataSize = theExpectedSize;
 				AudioBufferList* theBufferList = static_cast<AudioBufferList*>(outData);
@@ -1097,8 +1096,8 @@ void	HP_Device::GetPropertyData(const AudioObjectPropertyAddress& inAddress, UIn
 					theBufferList->mBuffers[theIndex].mNumberChannels = theStream->GetCurrentNumberChannels();
 					theBufferList->mBuffers[theIndex].mDataByteSize = theStream->CalculateIOBufferByteSize(GetIOBufferFrameSize());
 					theBufferList->mBuffers[theIndex].mData = NULL;
-				}
-			}
+         		}
+        	}
 			break;
 			
 		case kAudioDevicePropertyIOProcStreamUsage:
@@ -1358,7 +1357,7 @@ void	HP_Device::ExecuteCommand(HP_Command* inCommand)
 
 void	HP_Device::ExecuteAllCommands()
 {
-	JARLog("HP_Device::ExecuteAllCommands \n");
+	JARLog("HP_Device::ExecuteAllCommands\n");
 	
 	//	This routine must always be called at a time when
 	//	it is safe to execute commands. This routine should
@@ -1443,7 +1442,7 @@ AudioDeviceIOProcID	HP_Device::Do_CreateIOProcID(AudioDeviceIOProc inProc, void*
 	//	sadly, this effectively means that we cannot defer this command
 	AudioDeviceIOProcID theAnswer = NULL;
 	
-	JARLog("HP_Device::Do_CreateIOProcID \n");
+	JARLog("HP_Device::Do_CreateIOProcID\n");
 	
 	//	see if we can execute the command immediately
 	if(IsSafeToExecuteCommand())
@@ -1625,8 +1624,7 @@ void	HP_Device::Do_StopAllIOProcs()
 void	HP_Device::StopAllIOProcs()
 {	
 	JARLog("HP_Device::StopAllIOProcs 0\n");
-	if(mIOProcList->IsAnythingEnabled())
-	{
+	if (mIOProcList->IsAnythingEnabled()) {
 		mIOProcList->StopAllIOProcs();
 		JARLog("HP_Device::StopAllIOProcs 1\n");
 		StopIOEngine();

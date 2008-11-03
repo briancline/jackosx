@@ -116,7 +116,7 @@ static void startCallback(CFNotificationCenterRef /*center*/,
                           CFDictionaryRef /*userInfo*/)
 {
 	//printf("com.grame.jackserver.start notification\n");
-	JackRouterPlugIn::fIntance->AddForHAL();
+    JackRouterPlugIn::fIntance->AddForHAL();
 }
 
 static void stopCallback(CFNotificationCenterRef /*center*/,
@@ -126,7 +126,7 @@ static void stopCallback(CFNotificationCenterRef /*center*/,
                          CFDictionaryRef /*userInfo*/)
 {
 	//printf("com.grame.jackserver.stop notification\n");
- 	JackRouterPlugIn::fIntance->RemoveFromHAL();
+ 	JackRouterPlugIn::fIntance->ReleaseFromHAL();
 }
 
 static void StartNotification()
@@ -328,13 +328,13 @@ void JackRouterPlugIn::AddForHAL()
 	char* id_name = bequite_getNameFromPid((int)getpid());
   	JARLog("AddForHAL name = %s\n", id_name);
    
-	// Reject "blacklisted" clients
+	// reject "blacklisted" clients
     if (fBlackList->find(id_name) != fBlackList->end()) {
         JARLog("Rejected client = %s\n", id_name);
         return;
     }
 	
-	//	instantiate a new AudioDevice object in the HAL
+	// instantiate a new AudioDevice object in the HAL
 	AudioDeviceID theNewDeviceID = 0;
 #if	(MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_4)
 	OSStatus theError = AudioHardwareClaimAudioDeviceID(GetInterface(), &theNewDeviceID);
@@ -343,7 +343,7 @@ void JackRouterPlugIn::AddForHAL()
 #endif
 	ThrowIfError(theError, CAException(theError), "JackRouterPlugIn::InitializeWithObjectID: couldn't instantiate the AudioDevice object");
 	
-	//	device already allocated
+	// device already allocated
 	if (mDevice) {
 		//mDevice->SetObjectID(theNewDeviceID);  // setup the new deviceID
 		mDevice->CreateForHAL(theNewDeviceID);
@@ -352,18 +352,18 @@ void JackRouterPlugIn::AddForHAL()
 		mDevice->Initialize();
 	}
 
-	//	restore it's settings if necessary
+	// restore it's settings if necessary
 	UInt32 isMaster = 0;
 	UInt32 theSize = sizeof(UInt32);
 	AudioHardwareGetProperty(kAudioHardwarePropertyProcessIsMaster, &theSize, &isMaster);
-	if(isMaster != 0) {
+	if (isMaster != 0) {
 		HP_DeviceSettings::RestoreFromPrefs(*mDevice, HP_DeviceSettings::sStandardControlsToSave, HP_DeviceSettings::kStandardNumberControlsToSave);
 	}
 
-	//	set the object state mutex
+	// set the object state mutex
 	HP_Object::SetObjectStateMutexForID(theNewDeviceID, mDevice->GetObjectStateMutex());
 
-	//	tell the HAL about the device
+	// tell the HAL about the device
 #if	(MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_4)
 	theError = AudioHardwareDevicesCreated(GetInterface(), 1, &theNewDeviceID);
 #else
@@ -372,7 +372,7 @@ void JackRouterPlugIn::AddForHAL()
 	AssertNoError(theError, "JackRouterPlugIn::InitializeWithObjectID: got an error telling the HAL a device died");
 }
 
-void JackRouterPlugIn::RemoveFromHAL()
+void JackRouterPlugIn::ReleaseFromHAL()
 {
 	if (mDevice) {
 		mDevice->ReleaseFromHAL();
@@ -567,10 +567,10 @@ jack_client_t* JackRouterPlugIn::CheckServer(AudioObjectID inSelf)
 extern "C" void*
 New_JackRouterPlugIn(CFAllocatorRef /*inAllocator*/, CFUUIDRef inRequestedTypeUUID) 
 {
-	void*	theAnswer = NULL;
+	void* theAnswer = NULL;
 	
-	if(CFEqual(inRequestedTypeUUID, kAudioHardwarePlugInTypeID)) {
-		JackRouterPlugIn*	thePlugIn = new JackRouterPlugIn(inRequestedTypeUUID);
+	if (CFEqual(inRequestedTypeUUID, kAudioHardwarePlugInTypeID)) {
+		JackRouterPlugIn* thePlugIn = new JackRouterPlugIn(inRequestedTypeUUID);
 		thePlugIn->Retain();
 		theAnswer = thePlugIn->GetInterface();
 	}

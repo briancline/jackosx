@@ -81,7 +81,7 @@ public:
 	virtual void	Teardown();
 	
 	virtual void	AddForHAL();
-	virtual void	RemoveFromHAL();
+	virtual void	ReleaseFromHAL();
 	
 	static AudioObjectID		fPlugInRef;
 	static JackRouterPlugIn*    fIntance;
