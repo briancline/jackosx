@@ -60,6 +60,7 @@ History
            incremented a whole buffer each callback.
 31-07-08 : Version 0.88 : S Letz: remove MAX_JACK_PORTS. Dynamic allocation of fInputPortList and fOutputPortList.
 28-10-08 : Version 0.89 : S Letz: correct JackRouterDevice::Process for cases when kAudioDevicePropertyIOProcStreamUsage is not used.
+07-01-09 : Version 0.90 : S Letz: JackFakeRouterDevice device to be used bu "coreaudiod" process (do not need to access JACK server).
 
 */
 
@@ -69,11 +70,13 @@ History
 
 //	Self Include
 #include "JackRouterPlugIn.h"
+
 #include "bequite.h"
 #include "JARLog.h"
 
 //	Internal Includes
 #include "JackRouterDevice.h"
+#include "JackFakeRouterDevice.h"
 
 //	HPBase Includes
 #include "HP_DeviceSettings.h"
@@ -92,7 +95,7 @@ using namespace std;
 
 set<string>*		JackRouterPlugIn::fBlackList = NULL;
 AudioObjectID		JackRouterPlugIn::fPlugInRef = 0;
-JackRouterPlugIn*   JackRouterPlugIn::fIntance = NULL;
+JackRouterPlugIn*   JackRouterPlugIn::fInstance = NULL;
 
 //=============================================================================
 //	JackRouterPlugIn
@@ -106,7 +109,7 @@ static char* DefaultServerName()
     return server_name;
 }
 
-static void silent_jack_error_callback(const char *desc)
+static void silent_jack_error_callback(const char*)
 {}
 
 static void startCallback(CFNotificationCenterRef /*center*/,
@@ -116,7 +119,7 @@ static void startCallback(CFNotificationCenterRef /*center*/,
                           CFDictionaryRef /*userInfo*/)
 {
 	//printf("com.grame.jackserver.start notification\n");
-    JackRouterPlugIn::fIntance->AddForHAL();
+    JackRouterPlugIn::fInstance->AddForHAL();
 }
 
 static void stopCallback(CFNotificationCenterRef /*center*/,
@@ -126,7 +129,7 @@ static void stopCallback(CFNotificationCenterRef /*center*/,
                          CFDictionaryRef /*userInfo*/)
 {
 	//printf("com.grame.jackserver.stop notification\n");
- 	JackRouterPlugIn::fIntance->ReleaseFromHAL();
+ 	JackRouterPlugIn::fInstance->ReleaseFromHAL();
 }
 
 static void StartNotification()
@@ -158,7 +161,7 @@ JackRouterPlugIn::JackRouterPlugIn(CFUUIDRef inFactoryUUID)
 	HP_HardwarePlugIn(inFactoryUUID),
 	mDevice(NULL)
 {
-	JackRouterPlugIn::fIntance = this;
+	JackRouterPlugIn::fInstance = this;
 	// Start getting notification from the jack server
 	StartNotification();
 	
@@ -176,7 +179,7 @@ JackRouterPlugIn::~JackRouterPlugIn()
 
 void JackRouterPlugIn::InitializeWithObjectID(AudioObjectID inObjectID)
 {
-	//printf("JackRouterPlugIn::InitializeWithObjectID\n");
+	//printf("JackRouterPlugIn::InitializeWithObjectID1\n");
 	JackRouterPlugIn::fPlugInRef = inObjectID;
 	
 	//	initialize the super class
@@ -184,7 +187,7 @@ void JackRouterPlugIn::InitializeWithObjectID(AudioObjectID inObjectID)
 	bool prefOK = ReadPref();
 
 	char* id_name = bequite_getNameFromPid((int)getpid());
-  	//printf("Initialize inSelf =  %ld name = %s\n", inObjectID, id_name);
+  	//printf("Initialize inSelf = %ld name = %s\n", inObjectID, id_name);
    
 	// Reject "blacklisted" clients
     if (fBlackList->find(id_name) != fBlackList->end()) {
@@ -344,13 +347,20 @@ void JackRouterPlugIn::AddForHAL()
 	ThrowIfError(theError, CAException(theError), "JackRouterPlugIn::InitializeWithObjectID: couldn't instantiate the AudioDevice object");
 	
 	// device already allocated
-	if (mDevice) {
-		//mDevice->SetObjectID(theNewDeviceID);  // setup the new deviceID
-		mDevice->CreateForHAL(theNewDeviceID);
-	} else { //	make a device object
-		mDevice = new JackRouterDevice(theNewDeviceID, this);
-		mDevice->Initialize();
-	}
+    if (mDevice) {
+        mDevice->ReleaseFromHAL();
+        delete mDevice;
+    }
+    
+    // check loading process...
+    if (strcmp("coreaudiod", id_name) == 0) {
+        mDevice = new JackFakeRouterDevice(theNewDeviceID, this);
+    } else {
+        mDevice = new JackRouterDevice(theNewDeviceID, this);
+    }
+    
+    /// start the plug-in
+    mDevice->Initialize();
 
 	// restore it's settings if necessary
 	UInt32 isMaster = 0;
@@ -374,9 +384,8 @@ void JackRouterPlugIn::AddForHAL()
 
 void JackRouterPlugIn::ReleaseFromHAL()
 {
-	if (mDevice) {
+	if (mDevice) 
 		mDevice->ReleaseFromHAL();
-	}
 }
 
 bool JackRouterPlugIn::HasProperty(const AudioObjectPropertyAddress& inAddress) const
@@ -527,7 +536,7 @@ bool JackRouterPlugIn::ReadPref()
         }
     }
 
-    char* path1 = "/Library/Audio/Plug-Ins/HAL/JackRouter.plugin/Contents/BlackList.txt";
+    const char* path1 = "/Library/Audio/Plug-Ins/HAL/JackRouter.plugin/Contents/BlackList.txt";
     FILE* blackListFile;
 	
     if ((blackListFile = fopen(path1, "rt"))) {

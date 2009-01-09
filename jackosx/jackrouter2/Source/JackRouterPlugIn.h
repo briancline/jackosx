@@ -54,6 +54,7 @@
 
 //	Super Class Includes
 #include "HP_HardwarePlugIn.h"
+#include "JackRouterDeviceInterface.h"
 
 //=============================================================================
 //	Types
@@ -78,13 +79,13 @@ public:
 	virtual			~JackRouterPlugIn();
 
 	virtual void	InitializeWithObjectID(AudioObjectID inObjectID);
-	virtual void	Teardown();
+  	virtual void	Teardown();
 	
 	virtual void	AddForHAL();
 	virtual void	ReleaseFromHAL();
 	
-	static AudioObjectID		fPlugInRef;
-	static JackRouterPlugIn*    fIntance;
+	static AudioObjectID fPlugInRef;
+	static JackRouterPlugIn*    fInstance;
 	
 
 //	Property Access
@@ -97,7 +98,7 @@ public:
 
 //	SHP_SingleDevice Support
 private:
-	JackRouterDevice*		mDevice;
+	JackRouterDeviceInterface*		mDevice;
 	
 	// JACK
 	static std::set<std::string>* fBlackList;

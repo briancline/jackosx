@@ -39,67 +39,102 @@
 			POSSIBILITY OF SUCH DAMAGE.
 */
 /*=============================================================================
-	JackRouterStream.h
+	JackFakeRouterDevice.h
 =============================================================================*/
-#if !defined(__JackRouterStream_h__)
-#define __JackRouterStream_h__
+#if !defined(__JackFakeRouterDevice_h__)
+#define __JackFakeRouterDevice_h__
 
-//=============================================================================
-//	Includes
-//=============================================================================
-
-//	Super Class Includes
-#include "HP_Stream.h"
-
-//	System Includes
-#include <IOKit/IOKitLib.h>
 
 //=============================================================================
 //	Types
 //=============================================================================
 
-class	JackRouterDevice;
+class	HP_DeviceControlProperty;
+class	HP_HogMode;
+class	HP_IOProc;
+class   HP_IOThread;
 class	JackRouterPlugIn;
+class   JackRouterStream;
+class	JackFakeRouterDevice;
 
 //=============================================================================
-//	JackRouterStream
+//	JackFakeRouterDevice
 //=============================================================================
 
-class JackRouterStream
+#define JACK_PORT_NAME_LEN 256
+
+#include "CALatencyLog.h"
+#include "JackRouterDeviceInterface.h"
+
+
+class JackFakeRouterDevice
 :
-	public HP_Stream
+	public JackRouterDeviceInterface
 {
 
-//	Construction/Destruction
+    //	Construction/Destruction
 public:
-						JackRouterStream(AudioStreamID inAudioStreamID, HP_HardwarePlugIn* inPlugIn, HP_Device* inOwningDevice, bool inIsInput, UInt32 inStartingDeviceChannelNumber, Float64 sampleRate);
-	virtual				~JackRouterStream();
+								JackFakeRouterDevice(AudioDeviceID inAudioDeviceID, JackRouterPlugIn* inPlugIn);
+	virtual						~JackFakeRouterDevice();
 
-	virtual void		Initialize();
-	virtual void		Teardown();
-	virtual void		Finalize();
+	virtual void				Initialize();
+	virtual void				Teardown();
+	virtual void				Finalize();
+	
+	virtual void				CreateForHAL(AudioDeviceID theNewDeviceID);
+	virtual void				ReleaseFromHAL();
 
+protected:
+	JackRouterPlugIn*			mSHPPlugIn;
+	
 //	Attributes
+public:
+	JackRouterPlugIn*			GetSHPPlugIn() const { return mSHPPlugIn; }
+	virtual CFStringRef			CopyDeviceName() const;
+	virtual CFStringRef			CopyDeviceManufacturerName() const;
+	virtual CFStringRef			CopyDeviceUID() const;
+	
+	bool CanBeDefaultDevice(bool /*inIsInput*/, bool /*inIsSystem*/) const;
+
 private:
-	HP_HardwarePlugIn*	mSHPPlugIn;
-	HP_Device*			mOwningSHPDevice;
+	
+	CAGuard	mIOGuard;
 
 //	Property Access
 public:
-	virtual bool		HasProperty(const AudioObjectPropertyAddress& inAddress) const;
-	virtual bool		IsPropertySettable(const AudioObjectPropertyAddress& inAddress) const;
-	virtual UInt32		GetPropertyDataSize(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void* inQualifierData) const;
-	virtual void		GetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void* inQualifierData, UInt32& ioDataSize, void* outData) const;
-	virtual void		SetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void* inQualifierData, UInt32 inDataSize, const void* inData, const AudioTimeStamp* inWhen);
-	
-//	Format Management
+	virtual bool				HasProperty(const AudioObjectPropertyAddress& inAddress) const;
+	virtual bool				IsPropertySettable(const AudioObjectPropertyAddress& inAddress) const;
+	virtual void				GetPropertyData(const AudioObjectPropertyAddress& inAddress, UInt32 inQualifierDataSize, const void* inQualifierData, UInt32& ioDataSize, void* outData) const;
+
+//	Command Management
+protected:
+
+	bool						IsSafeToExecuteCommand();
+	virtual bool				StartCommandExecution(void** outSavedCommandState);
+	virtual void				FinishCommandExecution(void* inSavedCommandState);
+
+//	IOProc Management
 public:
 		
-private:
-	void				AddAvailablePhysicalFormats();
+	CAGuard*					GetIOGuard() {return &mIOGuard;}
+	int							GetCommands() {return mCommandList.size();}
 	
-	Float64				mSampleRate;
-
+protected:
+	virtual void				StartIOEngine();
+	virtual void				StartIOEngineAtTime(const AudioTimeStamp& inStartTime, UInt32 inStartTimeFlags);
+	virtual void				StopIOEngine();
+	
+	virtual void				StartHardware();
+	virtual void				StopHardware();
+	
+	UInt32						GetMinimumIOBufferFrameSize() const;
+	UInt32						GetMaximumIOBufferFrameSize() const;
+		
+//  Stream Management
+private:
+	void						CreateStreams();
+ 	void						ReleaseStreams();
+    
 };
 
 #endif

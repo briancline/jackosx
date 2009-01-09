@@ -129,7 +129,7 @@ void CommandThread::Start()
 }
 
 JackRouterDevice::JackRouterDevice(AudioDeviceID inAudioDeviceID, JackRouterPlugIn* inPlugIn)
-:HP_Device(inAudioDeviceID, kAudioDeviceClassID, inPlugIn, 1, false),
+:JackRouterDeviceInterface(inAudioDeviceID, kAudioDeviceClassID, inPlugIn, 1, false),
 	mSHPPlugIn(inPlugIn),
 	mIOGuard("IOGuard"),
 	fClient(NULL),
@@ -1032,7 +1032,7 @@ bool JackRouterDevice::AllocatePorts()
     JARLog("AllocatePorts fInputChannels = %ld fOutputChannels = %ld \n", fInputChannels, fOutputChannels);
 
     for (int i = 0; i < JackRouterDevice::fInputChannels; i++) {
-        sprintf(in_port_name, "in%ld", i + 1);
+        sprintf(in_port_name, "in%d", i + 1);
         if ((fInputPortList[i] = jack_port_register(fClient, in_port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0)) == NULL)
             goto error;
         fInputList->mBuffers[i].mNumberChannels = 1;
@@ -1042,7 +1042,7 @@ bool JackRouterDevice::AllocatePorts()
     char out_port_name[JACK_PORT_NAME_LEN];
 
     for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
-        sprintf(out_port_name, "out%ld", i + 1);
+        sprintf(out_port_name, "out%d", i + 1);
         if ((fOutputPortList[i] = jack_port_register(fClient, out_port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0)) == NULL)
             goto error;
         fOutputList->mBuffers[i].mNumberChannels = 1;

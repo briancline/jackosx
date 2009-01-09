@@ -44,20 +44,6 @@
 #if !defined(__JackRouterDevice_h__)
 #define __JackRouterDevice_h__
 
-//=============================================================================
-//	Includes
-//=============================================================================
-
-//	Super Class Includes
-#include "HP_Device.h"
-#include "CAGuard.h"
-#include "CAPThread.h"
-
-//  System Includes
-#include <IOKit/IOKitLib.h>
-#include <map>
-#include <list>
-
 // JACK include
 #include <jack/jack.h>
 
@@ -78,9 +64,10 @@ class	JackRouterDevice;
 //=============================================================================
 
 #define JACK_PORT_NAME_LEN 256
+#define LOG_SAMPLE_DURATION 3	// in millisecond
 
 #include "CALatencyLog.h"
-#define LOG_SAMPLE_DURATION 3	// in millisecond
+#include "JackRouterDeviceInterface.h"
 
 class CommandThread
 {
@@ -108,7 +95,7 @@ protected:
 
 class JackRouterDevice
 :
-	public HP_Device
+	public JackRouterDeviceInterface
 {
 
 	// Special property fo access from Jack plug-ins (AU, VST)
@@ -124,9 +111,8 @@ class JackRouterDevice
         kAudioDevicePropertyDeactivateJack = 'daja',
         kAudioDevicePropertyActivateJack = 'aaja'
     };
-	
 
-	//	Construction/Destruction
+	// Construction/Destruction
 public:
 								JackRouterDevice(AudioDeviceID inAudioDeviceID, JackRouterPlugIn* inPlugIn);
 	virtual						~JackRouterDevice();

@@ -361,6 +361,12 @@
 		4BD9B2460D00264500A4E509 /* HP_SystemInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B21E0D00264500A4E509 /* HP_SystemInfo.h */; };
 		4BD9B2470D00264500A4E509 /* HP_TelemetryServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BD9B21F0D00264500A4E509 /* HP_TelemetryServer.cpp */; };
 		4BD9B2480D00264500A4E509 /* HP_TelemetryServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BD9B2200D00264500A4E509 /* HP_TelemetryServer.h */; };
+		4BE88D330F162F0300681EC2 /* JackFakeRouterDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BE88D310F162F0300681EC2 /* JackFakeRouterDevice.h */; };
+		4BE88D340F162F0300681EC2 /* JackFakeRouterDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BE88D320F162F0300681EC2 /* JackFakeRouterDevice.cpp */; };
+		4BE88D350F162F0300681EC2 /* JackFakeRouterDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BE88D310F162F0300681EC2 /* JackFakeRouterDevice.h */; };
+		4BE88D360F162F0300681EC2 /* JackFakeRouterDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BE88D320F162F0300681EC2 /* JackFakeRouterDevice.cpp */; };
+		4BE88D370F162F0300681EC2 /* JackFakeRouterDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BE88D310F162F0300681EC2 /* JackFakeRouterDevice.h */; };
+		4BE88D380F162F0300681EC2 /* JackFakeRouterDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BE88D320F162F0300681EC2 /* JackFakeRouterDevice.cpp */; };
 		4BFE0AC40D6F2AF50078D16C /* CALatencyLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BFE0AC30D6F2AF50078D16C /* CALatencyLog.cpp */; };
 		4BFE0B130D6F2E880078D16C /* latency.c in Sources */ = {isa = PBXBuildFile; fileRef = 4BFE0B120D6F2E880078D16C /* latency.c */; };
 		8D576314048677EA00EA77CD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */; };
@@ -521,6 +527,8 @@
 		4BD9B21E0D00264500A4E509 /* HP_SystemInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_SystemInfo.h; path = Source/HPBase/HP_SystemInfo.h; sourceTree = SOURCE_ROOT; };
 		4BD9B21F0D00264500A4E509 /* HP_TelemetryServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HP_TelemetryServer.cpp; path = Source/HPBase/HP_TelemetryServer.cpp; sourceTree = SOURCE_ROOT; };
 		4BD9B2200D00264500A4E509 /* HP_TelemetryServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HP_TelemetryServer.h; path = Source/HPBase/HP_TelemetryServer.h; sourceTree = SOURCE_ROOT; };
+		4BE88D310F162F0300681EC2 /* JackFakeRouterDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JackFakeRouterDevice.h; path = Source/JackFakeRouterDevice.h; sourceTree = SOURCE_ROOT; };
+		4BE88D320F162F0300681EC2 /* JackFakeRouterDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = JackFakeRouterDevice.cpp; path = Source/JackFakeRouterDevice.cpp; sourceTree = SOURCE_ROOT; };
 		4BFE0AC30D6F2AF50078D16C /* CALatencyLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CALatencyLog.cpp; path = /Developer/Examples/CoreAudio/PublicUtility/CALatencyLog.cpp; sourceTree = "<absolute>"; };
 		4BFE0B120D6F2E880078D16C /* latency.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = latency.c; path = /Developer/Examples/CoreAudio/PublicUtility/latency.c; sourceTree = "<absolute>"; };
 		8D576316048677EA00EA77CD /* JackRouter.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JackRouter.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -593,6 +601,8 @@
 				4B84938E0CE3513300B43385 /* JARLog.c */,
 				4B193B010CE356C000C1F56E /* JackRouterDevice.cpp */,
 				4B193B000CE356C000C1F56E /* JackRouterDevice.h */,
+				4BE88D310F162F0300681EC2 /* JackFakeRouterDevice.h */,
+				4BE88D320F162F0300681EC2 /* JackFakeRouterDevice.cpp */,
 				4B193ACE0CE3556200C1F56E /* JackRouterPlugIn.cpp */,
 				4B193ACD0CE3556200C1F56E /* JackRouterPlugIn.h */,
 				4B193B400CE3586F00C1F56E /* JackRouterPrefix.h */,
@@ -819,6 +829,7 @@
 				4BD9B2440D00264500A4E509 /* HP_Stream.h in Headers */,
 				4BD9B2460D00264500A4E509 /* HP_SystemInfo.h in Headers */,
 				4BD9B2480D00264500A4E509 /* HP_TelemetryServer.h in Headers */,
+				4BE88D330F162F0300681EC2 /* JackFakeRouterDevice.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -888,6 +899,7 @@
 				4B7C2E8B0E0A8A2D00220808 /* HP_Stream.h in Headers */,
 				4B7C2E8C0E0A8A2D00220808 /* HP_SystemInfo.h in Headers */,
 				4B7C2E8D0E0A8A2D00220808 /* HP_TelemetryServer.h in Headers */,
+				4BE88D370F162F0300681EC2 /* JackFakeRouterDevice.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -957,6 +969,7 @@
 				4B9E2C590DAA27DD00F5F690 /* HP_Stream.h in Headers */,
 				4B9E2C5A0DAA27DD00F5F690 /* HP_SystemInfo.h in Headers */,
 				4B9E2C5B0DAA27DD00F5F690 /* HP_TelemetryServer.h in Headers */,
+				4BE88D350F162F0300681EC2 /* JackFakeRouterDevice.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1144,6 +1157,7 @@
 				4B7C2EC20E0A8A2D00220808 /* HP_TelemetryServer.cpp in Sources */,
 				4B7C2EC30E0A8A2D00220808 /* CALatencyLog.cpp in Sources */,
 				4B7C2EC40E0A8A2D00220808 /* latency.c in Sources */,
+				4BE88D380F162F0300681EC2 /* JackFakeRouterDevice.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1205,6 +1219,7 @@
 				4B9E2C900DAA27DD00F5F690 /* HP_TelemetryServer.cpp in Sources */,
 				4B9E2C910DAA27DD00F5F690 /* CALatencyLog.cpp in Sources */,
 				4B9E2C920DAA27DD00F5F690 /* latency.c in Sources */,
+				4BE88D360F162F0300681EC2 /* JackFakeRouterDevice.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1266,6 +1281,7 @@
 				4BD9B2470D00264500A4E509 /* HP_TelemetryServer.cpp in Sources */,
 				4BFE0AC40D6F2AF50078D16C /* CALatencyLog.cpp in Sources */,
 				4BFE0B130D6F2E880078D16C /* latency.c in Sources */,
+				4BE88D340F162F0300681EC2 /* JackFakeRouterDevice.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -67,8 +67,8 @@
 //=============================================================================
 
 JackRouterStream::JackRouterStream(AudioStreamID inAudioStreamID, 
-									JackRouterPlugIn* inPlugIn, 
-									JackRouterDevice* inOwningDevice, 
+									HP_HardwarePlugIn* inPlugIn, 
+									HP_Device* inOwningDevice, 
 									bool inIsInput, 
 									UInt32 inStartingDeviceChannelNumber, 
 									Float64 sampleRate)
