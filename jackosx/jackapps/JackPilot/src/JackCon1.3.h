@@ -56,7 +56,8 @@
 - (IBAction)makeCon:(id)sender;
 - (IBAction)orderFront:(id)sender;
 - (IBAction)reload:(id)sender;
-- (void) reload2 ;
+- (void) reload2;
+- (void) askreload;
 - (IBAction)removCon:(id)sender;
 - (IBAction)selectFrom:(id)sender;
 - (IBAction)selectTo:(id)sender;

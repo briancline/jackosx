@@ -122,7 +122,7 @@ int checkJack(void)
 
 int openJackClient(void) 
 {
-    client = jack_client_new("JackPilot");
+    client = jack_client_open("JackPilot", JackNullOption, NULL);
 	return 1;
 }
 

@@ -11,7 +11,237 @@
 
 #include <CoreFoundation/CFNotificationCenter.h>
 
+typedef	UInt8	CAAudioHardwareDeviceSectionID;
+#define	kAudioDeviceSectionGlobal	((CAAudioHardwareDeviceSectionID)0x00)
+
 static bool gJackRunning = true;
+
+static UInt32	sNumberCommonSampleRates = 15;
+static Float64	sCommonSampleRates[] = {	  8000.0,  11025.0,  12000.0,
+											 16000.0,  22050.0,  24000.0,
+											 32000.0,  44100.0,  48000.0,
+											 64000.0,  88200.0,  96000.0,
+											128000.0, 176400.0, 192000.0 };
+
+static bool IsRateCommon(Float64 inRate)
+{
+    UInt32 theIndex;
+	bool theAnswer = false;
+    
+	for(theIndex = 0; !theAnswer && (theIndex < sNumberCommonSampleRates); ++theIndex)
+	{
+		theAnswer = inRate == sCommonSampleRates[theIndex];
+	}
+	return theAnswer;
+}
+
+static UInt32 GetNumberCommonRatesInRange(Float64 inMinimumRate, Float64 inMaximumRate)
+{
+	//	find the index of the first common rate greater than or equal to the minimum
+	UInt32 theFirstIndex = 0;
+	while((theFirstIndex < sNumberCommonSampleRates) && (sCommonSampleRates[theFirstIndex] < inMinimumRate))
+	{
+		++theFirstIndex;
+	}
+	
+	//	find the index of the first common rate greater than or equal to the maximum
+	UInt32 theLastIndex = theFirstIndex;
+	while((theFirstIndex < sNumberCommonSampleRates) && (sCommonSampleRates[theLastIndex] < inMaximumRate))
+	{
+		++theLastIndex;
+	}
+	
+	//	the number in the range is the difference
+	UInt32 theAnswer = theLastIndex - theFirstIndex;
+	if(IsRateCommon(inMinimumRate) || IsRateCommon(inMaximumRate))
+	{
+		++theAnswer;
+	}
+	return theAnswer;
+}
+
+static Float64 GetCommonSampleRateInRangeByIndex(Float64 inMinimumRate, Float64 inMaximumRate, UInt32 inIndex)
+{
+	Float64 theAnswer = 0.0;
+	
+	//	find the index of the first common rate greater than or equal to the minimum
+	UInt32 theFirstIndex = 0;
+	while((theFirstIndex < sNumberCommonSampleRates) && (sCommonSampleRates[theFirstIndex] < inMinimumRate))
+	{
+		++theFirstIndex;
+	}
+	
+	//	find the index of the first common rate greater than or equal to the maximum
+	UInt32 theLastIndex = theFirstIndex;
+	while((theFirstIndex < sNumberCommonSampleRates) && (sCommonSampleRates[theLastIndex] < inMaximumRate))
+	{
+		++theLastIndex;
+	}
+	
+	//	the number in the range is the difference
+	UInt32 theNumberInRange = theLastIndex - theFirstIndex;
+	if(IsRateCommon(inMinimumRate) || IsRateCommon(inMaximumRate))
+	{
+		++theNumberInRange;
+	}
+	
+	//	get the value from the array if it's in range
+	if(inIndex < theNumberInRange)
+	{
+		theAnswer = sCommonSampleRates[inIndex + theFirstIndex];
+	}
+	
+	return theAnswer;
+}
+
+static int numberOfItemsInNominalSampleRateComboBox(AudioDeviceID device)
+{
+	int theAnswer = 0;
+    OSStatus err;
+    UInt32 size;
+    int count;
+    UInt32 theRangeIndex;
+    Boolean isWritable;
+	
+	if (device != 0) {
+	      
+        err = AudioDeviceGetPropertyInfo(device, 0, true, kAudioDevicePropertyAvailableNominalSampleRates, &size, &isWritable);
+        if (err != noErr) {
+            NSLog(@"err in (info) kAudioDevicePropertyAvailableNominalSampleRates");
+        }
+        
+        count = size / sizeof(AudioValueRange);
+        JPLog("Sample rate different values: %ld\n",count);
+	
+        AudioValueRange valueTable[count];
+        err = AudioDeviceGetProperty(device, 0, true, kAudioDevicePropertyAvailableNominalSampleRates, &size, valueTable);
+        if (err != noErr) {
+            NSLog(@"err in (info) kAudioDevicePropertyAvailableNominalSampleRates");
+        }
+        
+        AudioDeviceGetProperty(device, 0, true, kAudioDevicePropertyAvailableNominalSampleRates, &size, &valueTable);
+        if (err != noErr) {
+            NSLog(@"err in (info) kAudioDevicePropertyAvailableNominalSampleRates");
+        }
+		
+		//	iterate through the ranges and add the minimum, maximum, and common rates in between
+		for (theRangeIndex = 0; theRangeIndex < count; ++theRangeIndex)
+		{
+			//	get the number of common rates in the rage
+			UInt32 theNumberCommonRates = GetNumberCommonRatesInRange(valueTable[theRangeIndex].mMinimum, valueTable[theRangeIndex].mMaximum);
+			
+			//	count all the common rates in the range
+			theAnswer += theNumberCommonRates;
+			
+			//	count the minimum if it isn't the first common rate
+			if(!IsRateCommon(valueTable[theRangeIndex].mMinimum))
+			{
+				++theAnswer;
+			}
+			
+			//	count the maximum if it isn't the last common rate
+			if(!IsRateCommon(valueTable[theRangeIndex].mMaximum))
+			{
+				++theAnswer;
+			}
+		}
+	}
+	else
+	{
+		theAnswer = 1;
+	}
+    
+	return theAnswer;
+}
+
+Float64 objectValueForItemAtIndex(AudioDeviceID device, int inItemIndex)
+{
+	Float64 theAnswer = 0;
+    OSStatus err;
+    UInt32 size;
+    int count;
+    UInt32 theRangeIndex;
+    Boolean isWritable;
+		
+	if (device != 0) {
+        
+        err = AudioDeviceGetPropertyInfo(device, 0, true, kAudioDevicePropertyAvailableNominalSampleRates, &size, &isWritable);
+        if (err != noErr) {
+            NSLog(@"err in (info) kAudioDevicePropertyAvailableNominalSampleRates");
+        }
+        
+        count = size / sizeof(AudioValueRange);
+        JPLog("Sample rate different values: %ld\n",count);
+	
+        AudioValueRange valueTable[count];
+        err = AudioDeviceGetProperty(device, 0, true, kAudioDevicePropertyAvailableNominalSampleRates, &size, valueTable);
+        if (err != noErr) {
+            NSLog(@"err in (info) kAudioDevicePropertyAvailableNominalSampleRates");
+        }
+        
+        AudioDeviceGetProperty(device, 0, true, kAudioDevicePropertyAvailableNominalSampleRates, &size, &valueTable);
+        if (err != noErr) {
+            NSLog(@"err in (info) kAudioDevicePropertyAvailableNominalSampleRates");
+        }
+	
+		//	start counting at zero
+		int theIndex = 0;
+		
+		//	iterate through the ranges and add the minimum, maximum, and common rates in between
+		for (theRangeIndex = 0; (theAnswer == 0) && (theRangeIndex < count); ++theRangeIndex)
+		{
+			//	get the number of common rates in the rage
+			int theNumberCommonRates = GetNumberCommonRatesInRange(valueTable[theRangeIndex].mMinimum, valueTable[theRangeIndex].mMaximum);
+			
+			//	get the first and last common rates in the range
+			Float64 theFirstCommonRate = GetCommonSampleRateInRangeByIndex(valueTable[theRangeIndex].mMinimum, valueTable[theRangeIndex].mMaximum, 0);
+			Float64 theLastCommonRate = GetCommonSampleRateInRangeByIndex(valueTable[theRangeIndex].mMinimum, valueTable[theRangeIndex].mMaximum, theNumberCommonRates - 1);
+			
+			//	it's the minimum, if the minimum isn't a common rate
+			if(valueTable[theRangeIndex].mMinimum != theFirstCommonRate)
+			{
+				if(theIndex == inItemIndex)
+				{
+					theAnswer = valueTable[theRangeIndex].mMinimum;
+				}
+				else
+				{
+					++theIndex;
+				}
+			}
+			
+			//	check the common rates in the range
+			if(theAnswer == 0)
+			{
+				if(inItemIndex < (theIndex + theNumberCommonRates))
+				{
+					//	inItemIndex is in the common rates between the range
+					theAnswer = GetCommonSampleRateInRangeByIndex(valueTable[theRangeIndex].mMinimum, valueTable[theRangeIndex].mMaximum, inItemIndex - theIndex);
+				}
+				else if((inItemIndex == (theIndex + theNumberCommonRates)) && (valueTable[theRangeIndex].mMaximum != theLastCommonRate))
+				{
+					//	it's the maximum, since the maximum isn't a common rate
+					theAnswer = valueTable[theRangeIndex].mMaximum;
+				}
+				
+				//	increment by the number of common rates
+				theIndex += theNumberCommonRates;
+				
+				//	also increment if the maximum isn't a common rate
+				if(valueTable[theRangeIndex].mMaximum != theLastCommonRate)
+				{
+					++theIndex;
+				}
+			}
+		}
+	}
+	else
+	{
+		theAnswer = 0;
+	}
+		
+	return theAnswer;
+}
 
 static char* DefaultServerName()
 {
@@ -247,6 +477,7 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
     int test = checkJack();
     if (test != 0) { 
 		openJackClient();
+        //[[JackConnections getSelf] JackCallBacks]; // not used
 		jackstat = 1; 
 		writeStatus(1);
 		[isonBut setStringValue:LOCSTR(@"Jack is On")];
@@ -260,6 +491,7 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 		[interfaceBox setEnabled:NO];
 		[samplerateText setEnabled:NO];
 		[jackdMode setEnabled:NO];
+       
     } else {
 		[routingBut setEnabled:NO];
 		jackstat = 0; 
@@ -635,6 +867,7 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 			if (checkJack() != 0 && getClient() != NULL){
 				jackstat = 1;
 				writeStatus(1); 
+                //[[JackConnections getSelf] JackCallBacks]; // not used
 				[isonBut setStringValue:LOCSTR(@"Jack is On")];
 				[startBut setTitle:LOCSTR(@"Stop Jack")]; [toggleDock setTitle:LOCSTR(@"Stop Jack")];
 				[self setupTimer];
@@ -647,7 +880,7 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 				[jackdMode setEnabled:NO];
 				[self sendJackStatusToPlugins:YES];
 				[routingBut setEnabled:YES];
-				//[[JackConnections getSelf] JackCallBacks]; // not used
+              
 			} else { 
 				jackstat = 0; 
 				[self error:LOCSTR(@"Cannot start Jack server,\nPlease check the console or retry after a system reboot.")]; 
@@ -1149,8 +1382,7 @@ Scan current audio device properties : in/out channels, sampling rate, buffer si
 - (BOOL) writeCAPref:(id)sender {
     OSStatus err;
     UInt32 size;
-    Boolean isWritable;
-	int i;
+	int i, count;
     
 	// Output channels
     UInt32 outChannels = 0;
@@ -1185,36 +1417,17 @@ Scan current audio device properties : in/out channels, sampling rate, buffer si
 		}
 		JPLog("got input channels ok, %d channels\n",inChannels);
     }
+
+    // Sampling rate
+    count = numberOfItemsInNominalSampleRateComboBox(selDevID);
+    JPLog("numberOfItemsInNominalSampleRateComboBox: %ld\n",count);
+    for (i = 0; i < count; i++) {
+        Float64 rate = objectValueForItemAtIndex(selDevID, i);
+        JPLog("Sample rate value = %ld \n", (long)rate);
+        [samplerateText addItemWithTitle:[[NSNumber numberWithLong:(long)rate] stringValue]];
+    }
 	
-	// Sampling rate
-	err = AudioDeviceGetPropertyInfo(selDevID, 0, false, kAudioDevicePropertyAvailableNominalSampleRates, &size, &isWritable);
-    if (err != noErr) {
-		NSLog(@"err in (info) kAudioDevicePropertyAvailableNominalSampleRates");
-	}
-	
-	int count = size / sizeof(AudioValueRange);
-	JPLog("Sample rate different values: %ld\n",count);
-	
-	AudioValueRange valueTable[count];
-	err = AudioDeviceGetProperty(selDevID, 0, false, kAudioDevicePropertyAvailableNominalSampleRates, &size, valueTable);
-    if (err != noErr) {
-		NSLog(@"err in (info) kAudioDevicePropertyAvailableNominalSampleRates");
-	}
-	
-	for (i = 0; i < count; i++) {
-		JPLog("Sample rate value: %ld\n",(long)valueTable[i].mMinimum);
-		[samplerateText addItemWithTitle:[[NSNumber numberWithLong:(long)valueTable[i].mMinimum] stringValue]];
-	}
-	
-	Float64 actualSr;
-    size = sizeof(Float64);
-    err = AudioDeviceGetProperty(selDevID, 0, false, kAudioDevicePropertyNominalSampleRate, &size, &actualSr);
-    if (err != noErr) { 
-		NSLog(@"err in kAudioDevicePropertyNominalSampleRate"); 
-		[samplerateText selectItemWithTitle:[[NSNumber numberWithLong:(long)actualSr] stringValue]]; 
-	}
-	
-	// Buffer size
+ 	// Buffer size
     UInt32 newBufFrame;
     size = sizeof(UInt32);
     err = AudioDeviceGetProperty(selDevID, 0, false, kAudioDevicePropertyBufferFrameSize, &size, &newBufFrame);
