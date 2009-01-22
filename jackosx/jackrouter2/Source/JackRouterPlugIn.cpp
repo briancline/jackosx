@@ -60,7 +60,8 @@ History
            incremented a whole buffer each callback.
 31-07-08 : Version 0.88 : S Letz: remove MAX_JACK_PORTS. Dynamic allocation of fInputPortList and fOutputPortList.
 28-10-08 : Version 0.89 : S Letz: correct JackRouterDevice::Process for cases when kAudioDevicePropertyIOProcStreamUsage is not used.
-07-01-09 : Version 0.90 : S Letz: JackFakeRouterDevice device to be used bu "coreaudiod" process (do not need to access JACK server).
+07-01-09 : Version 0.90 : S Letz: JackFakeRouterDevice device to be used by "coreaudiod" process (do not need to access JACK server).
+22-01-09 : Version 0.91 : S Letz: Fix "dirty buffer issue" with Max/MSP: in JackRouterDevice::Process, output buffers are cleared if GetNumberIOProcs > 0 but GetNumberEnabledIOProcs == 0
 
 */
 

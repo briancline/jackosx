@@ -1339,7 +1339,6 @@ void	HP_IOProcList::StopIOProc(HP_IOProc* inIOProc)
 {
 	JARLog("HP_IOProcList::StopIOProc HP_IOProc* \n");
 
-
 	if(inIOProc->IsEnabled())
 	{
 		

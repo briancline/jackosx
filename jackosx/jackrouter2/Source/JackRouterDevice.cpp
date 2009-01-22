@@ -1101,8 +1101,8 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
   	SetTime(&inNow, fSampleCount, time);
 	SetTime(&inInputTime, fSampleCount - JackRouterDevice::fBufferSize, time);
     SetTime(&inOutputTime, fSampleCount + JackRouterDevice::fBufferSize, time);
-	
-	// One IOProc
+    
+   	// One IOProc
   	if (client->mIOProcList->GetNumberIOProcs() == 1) {
 		//JARLog("GetNumberIOProcs == 1 \n");
 
@@ -1236,149 +1236,163 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
     } else if (client->mIOProcList->GetNumberIOProcs() > 1) { // Several IOProc : need mixing
 
 		//JARLog("GetNumberIOProcs > 1 size = %d\n", client->mIOProcList->GetNumberIOProcs());
-			
-		bool firstproc[JackRouterDevice::fOutputChannels];
-		for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) 
-			firstproc[i] = true;
-			
-		for (UInt32 k = 0; k < client->mIOProcList->GetNumberIOProcs(); k++) {
-
-        	HP_IOProc* proc = client->mIOProcList->GetIOProcByIndex(k);
-		
-			if (proc && proc->IsEnabled()) { // If proc is started
-
-                if (proc->GetStreamUsage(true).size() > 0 || proc->GetStreamUsage(false).size() > 0) {
-				
-					//JARLog("Process GetStreamUsage input YES k = %d proc = %ld\n", k, proc->GetIOProc());
-
-                    // Only set up buffers that are really needed
-                    for (int i = 0; i < JackRouterDevice::fInputChannels; i++) {
-                        if (proc->IsStreamEnabled(true, i) && client->fInputPortList[i]) {
-                            client->fInputList->mBuffers[i].mData = (float*)jack_port_get_buffer(client->fInputPortList[i], nframes);
-							client->fInputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
-                        } else {
-                            client->fInputList->mBuffers[i].mData = NULL;
-		                }
-                    }
-
-                    for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
-                        // Use an intermediate mixing buffer
-                        if (proc->IsStreamEnabled(false, i)) {
-							memset(client->fOuputListTemp[i], 0, nframes * sizeof(float));
-							client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
-							client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
-                        } else {
-                            client->fOutputList->mBuffers[i].mData = NULL;
-		                }
-                    }
-
-                } else {
-				
-					//JARLog("Process GetStreamUsage input NO k = %d proc = %ld\n", k, proc->GetIOProc());
-				
-					for (int i = 0; i < JackRouterDevice::fInputChannels; i++) {
-						if (client->fInputPortList[i]) {
-							client->fInputList->mBuffers[i].mData = (float*)jack_port_get_buffer(client->fInputPortList[i], nframes);
-							client->fInputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
-						} else {
-							//JARLog("JackRouterDevice::Process client->fInputPortList[i] %d is null\n",i);
-							client->fInputList->mBuffers[i].mData = NULL;
-							client->fInputList->mBuffers[i].mDataByteSize = 0;	// MUST be set when NO GetStreamUsage (iMovie HD crash...)
-						}
-                    }
-
-                    for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
-                        // Use an intermediate mixing buffer
-						if (client->fOutputPortList[i]) {
-							memset(client->fOuputListTemp[i], 0, nframes * sizeof(float));
-							client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
-							client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
-						} else {
-							client->fOutputList->mBuffers[i].mData = NULL;
-							client->fOutputList->mBuffers[i].mDataByteSize = 0;	 // MUST be set when NO GetStreamUsage (iMovie HD crash...)
-						}
-					}
+        
+        // If no active IO proc, then clear output buffers
+        if (client->mIOProcList->GetNumberEnabledIOProcs() == 0) {
+            //JARLog("GetNumberEnabledIOProcs = 0\n"); 
+            
+            for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
+                if (client->fOutputPortList[i]) {
+                    float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
+                    memset(output, 0, nframes * sizeof(float));
                 }
+            }
+            
+        } else {  // At least one active IO proc
+    		
+            bool firstproc[JackRouterDevice::fOutputChannels];
+            for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) 
+                firstproc[i] = true;
+                
+            for (UInt32 k = 0; k < client->mIOProcList->GetNumberIOProcs(); k++) {
 
-				// Unlock before calling IO proc
-				client->mIOGuard.Unlock();
-				
-				//JARLog("Process GetIOProc() = %ld\n", proc->GetIOProc());
+                HP_IOProc* proc = client->mIOProcList->GetIOProcByIndex(k);
+            
+                if (proc && proc->IsEnabled()) { // If proc is started
 
-	            err = (proc->GetIOProc()) (client->mObjectID,
-											&inNow,
-											client->fInputList,
-											&inInputTime,
-											client->fOutputList,
-											&inOutputTime,
-											proc->GetClientData());
-				
-				
-				if (JAR_fDebug && err != kAudioHardwareNoError) {
-					JARLog("Process error = %ld\n", err);
-				}
-				
-				// Lock is on, so drop this cycle.
-				if (!client->mIOGuard.Try(wasLocked)) {
-					JARLog("JackRouterDevice::Process LOCK ON\n"); 
-					return 0;
-				}
-				
-                // Only mix buffers that are really needed
-                if (proc->GetStreamUsage(true).size() > 0 || proc->GetStreamUsage(false).size() > 0) {
-				
-					//JARLog("Process GetStreamUsage output YES k = %d proc = %ld\n", k, proc->GetIOProc());
-								
-                    for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
-					
-						//JARLog("Process GetStreamUsage YES i = %ld\n", i);
-                        
-                        if (proc->IsStreamEnabled(false, i) && client->fOutputPortList[i]) {
-							float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
-							if (firstproc[i]) {	// first proc : copy
-								//JARLog("Process GetStreamUsage YES first proc : copy = %ld\n", proc->GetIOProc());
-                                memcpy(output, (float*)client->fOutputList->mBuffers[i].mData, nframes * sizeof(float));
-								firstproc[i] = false;
-                            } else {			// other proc : mix
-								//JARLog("Process GetStreamUsage YES other proc : mix = %ld\n", proc->GetIOProc());
-                                for (UInt32 j = 0; j < nframes; j++) {
-                                    output[j] += ((float*)client->fOutputList->mBuffers[i].mData)[j];
-                                }
+                    if (proc->GetStreamUsage(true).size() > 0 || proc->GetStreamUsage(false).size() > 0) {
+                    
+                        //JARLog("Process GetStreamUsage input YES k = %d proc = %ld\n", k, proc->GetIOProc());
+
+                        // Only set up buffers that are really needed
+                        for (int i = 0; i < JackRouterDevice::fInputChannels; i++) {
+                            if (proc->IsStreamEnabled(true, i) && client->fInputPortList[i]) {
+                                client->fInputList->mBuffers[i].mData = (float*)jack_port_get_buffer(client->fInputPortList[i], nframes);
+                                client->fInputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
+                            } else {
+                                client->fInputList->mBuffers[i].mData = NULL;
                             }
-                        } else {
-                			if (client->fOutputPortList[i] && firstproc[i]) {
-								float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
-								memset(output, 0, nframes * sizeof(float));
-								firstproc[i] = false;
-							}
+                        }
+
+                        for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
+                            // Use an intermediate mixing buffer
+                            if (proc->IsStreamEnabled(false, i)) {
+                                memset(client->fOuputListTemp[i], 0, nframes * sizeof(float));
+                                client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
+                                client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
+                            } else {
+                                client->fOutputList->mBuffers[i].mData = NULL;
+                            }
+                        }
+
+                    } else {
+                    
+                        //JARLog("Process GetStreamUsage input NO k = %d proc = %ld\n", k, proc->GetIOProc());
+                    
+                        for (int i = 0; i < JackRouterDevice::fInputChannels; i++) {
+                            if (client->fInputPortList[i]) {
+                                client->fInputList->mBuffers[i].mData = (float*)jack_port_get_buffer(client->fInputPortList[i], nframes);
+                                client->fInputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
+                            } else {
+                                //JARLog("JackRouterDevice::Process client->fInputPortList[i] %d is null\n",i);
+                                client->fInputList->mBuffers[i].mData = NULL;
+                                client->fInputList->mBuffers[i].mDataByteSize = 0;	// MUST be set when NO GetStreamUsage (iMovie HD crash...)
+                            }
+                        }
+
+                        for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
+                            // Use an intermediate mixing buffer
+                            if (client->fOutputPortList[i]) {
+                                memset(client->fOuputListTemp[i], 0, nframes * sizeof(float));
+                                client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
+                                client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
+                            } else {
+                                client->fOutputList->mBuffers[i].mData = NULL;
+                                client->fOutputList->mBuffers[i].mDataByteSize = 0;	 // MUST be set when NO GetStreamUsage (iMovie HD crash...)
+                            }
                         }
                     }
 
-                } else {
-				
-					//JARLog("Process GetStreamUsage output NO k = %d proc = %ld\n", k, proc->GetIOProc());
-					
-                    for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
-						if (client->fOutputPortList[i]) {
-							float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
-							if (firstproc[i]) {	// first proc : copy
-								//JARLog("Process GetStreamUsage NO first proc : copy = %ld\n", proc->GetIOProc());
-								memcpy(output, (float*)client->fOutputList->mBuffers[i].mData, nframes * sizeof(float));
-								firstproc[i] = false;
-							} else {			// other proc : mix
-								//JARLog("Process GetStreamUsage NO other proc : mix = %ld\n", proc->GetIOProc());
-								for (UInt32 j = 0; j < nframes; j++) {
-									output[j] += ((float*)client->fOutputList->mBuffers[i].mData)[j];
-								}
-							}
-						} else {
-							//JARLog("JackRouterDevice::Process client->fOutputPortList[i] %d is null\n",i); 
-						}
-						
+                    // Unlock before calling IO proc
+                    client->mIOGuard.Unlock();
+                    
+                    //JARLog("Process GetIOProc() = %ld\n", proc->GetIOProc());
+
+                    err = (proc->GetIOProc()) (client->mObjectID,
+                                                &inNow,
+                                                client->fInputList,
+                                                &inInputTime,
+                                                client->fOutputList,
+                                                &inOutputTime,
+                                                proc->GetClientData());
+                    
+                    
+                    if (JAR_fDebug && err != kAudioHardwareNoError) {
+                        JARLog("Process error = %ld\n", err);
+                    }
+                    
+                    // Lock is on, so drop this cycle.
+                    if (!client->mIOGuard.Try(wasLocked)) {
+                        JARLog("JackRouterDevice::Process LOCK ON\n"); 
+                        return 0;
+                    }
+                    
+                    // Only mix buffers that are really needed
+                    if (proc->GetStreamUsage(true).size() > 0 || proc->GetStreamUsage(false).size() > 0) {
+                    
+                        //JARLog("Process GetStreamUsage output YES k = %d proc = %ld\n", k, proc->GetIOProc());
+                                    
+                        for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
+                        
+                            //JARLog("Process GetStreamUsage YES i = %ld\n", i);
+                            
+                            if (proc->IsStreamEnabled(false, i) && client->fOutputPortList[i]) {
+                                float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
+                                if (firstproc[i]) {	// first proc : copy
+                                    //JARLog("Process GetStreamUsage YES first proc : copy = %ld\n", proc->GetIOProc());
+                                    memcpy(output, (float*)client->fOutputList->mBuffers[i].mData, nframes * sizeof(float));
+                                    firstproc[i] = false;
+                                } else {			// other proc : mix
+                                    //JARLog("Process GetStreamUsage YES other proc : mix = %ld\n", proc->GetIOProc());
+                                    for (UInt32 j = 0; j < nframes; j++) {
+                                        output[j] += ((float*)client->fOutputList->mBuffers[i].mData)[j];
+                                    }
+                                }
+                            } else {
+                                if (client->fOutputPortList[i] && firstproc[i]) {
+                                    float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
+                                    memset(output, 0, nframes * sizeof(float));
+                                    firstproc[i] = false;
+                                }
+                            }
+                        }
+
+                    } else {
+                    
+                        //JARLog("Process GetStreamUsage output NO k = %d proc = %ld\n", k, proc->GetIOProc());
+                        
+                        for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
+                            if (client->fOutputPortList[i]) {
+                                float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
+                                if (firstproc[i]) {	// first proc : copy
+                                    //JARLog("Process GetStreamUsage NO first proc : copy = %ld\n", proc->GetIOProc());
+                                    memcpy(output, (float*)client->fOutputList->mBuffers[i].mData, nframes * sizeof(float));
+                                    firstproc[i] = false;
+                                } else {			// other proc : mix
+                                    //JARLog("Process GetStreamUsage NO other proc : mix = %ld\n", proc->GetIOProc());
+                                    for (UInt32 j = 0; j < nframes; j++) {
+                                        output[j] += ((float*)client->fOutputList->mBuffers[i].mData)[j];
+                                    }
+                                }
+                            } else {
+                                //JARLog("JackRouterDevice::Process client->fOutputPortList[i] %d is null\n",i); 
+                            }
+                            
+                        }
                     }
                 }
-			}
-		}
+            }
+        }
 		 
 		// Final Unlock
 		client->mIOGuard.Unlock();
