@@ -503,10 +503,13 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 	NSString *file;
 	NSString *stringa = [NSString init];
 	[driverBox removeAllItems];
+    // Use jackdmp path
 	//NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtPath:@"/usr/local/lib/jack/"];
 	NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtPath:@"/usr/local/lib/jackmp/"];
 	while (file = [enumerator nextObject]) {
-		if ([file hasPrefix:@"jack_"]) {
+        // Only display jack_coreaudio driver...
+		//if ([file hasPrefix:@"jack_"]) {
+        if ([file hasPrefix:@"jack_coreaudio"]) {
 				stringa = (NSString*)[file substringFromIndex:5];
 				NSArray *listItems = [[stringa componentsSeparatedByString:@"."] retain];
 				stringa = [listItems objectAtIndex:0];
