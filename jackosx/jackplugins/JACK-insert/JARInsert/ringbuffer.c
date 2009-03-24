@@ -45,7 +45,7 @@
  */
 long RingBuffer_Init( RingBuffer *rbuf, long numBytes, void *dataPtr )
 {
-    if ( ((numBytes - 1) & numBytes) != 0)
+    if (((numBytes - 1) & numBytes) != 0)
         return -1; /* Not Power of two. */
     rbuf->bufferSize = numBytes;
     rbuf->buffer = (char *)dataPtr;

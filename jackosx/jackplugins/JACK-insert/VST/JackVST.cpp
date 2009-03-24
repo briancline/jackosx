@@ -25,11 +25,11 @@ JackVST::JackVST (audioMasterCallback audioMaster)
 	: AudioEffectX (audioMaster, 1, 1),c_jar(NULL),c_error(JARInsert::kNoErr)// 1 program, 1 parameter only
 {
 	fGain = 1.;				// default to 0 dB
-	setNumInputs (2);		// stereo in
-	setNumOutputs (2);		// stereo out
-	setUniqueID ('JACK');	// identify
-	canProcessReplacing ();	// supports both accumulating and replacing output
-	strcpy (programName, "Default");	// default program name
+	setNumInputs(2);		// stereo in
+	setNumOutputs(2);		// stereo out
+	setUniqueID('JACK');	// identify
+	canProcessReplacing();	// supports both accumulating and replacing output
+	strcpy(programName, "Default");	// default program name
 	
 	c_jar = new JARInsert('vst ');
 	c_error = c_jar->GetError();

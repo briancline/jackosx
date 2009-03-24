@@ -340,7 +340,7 @@ bool JARInsert::OpenAudioClient()
         if (err == noErr) {
             JARILog("Name: %s\n", name);
 
-            if (strcmp(&name[0], "Jack Audio Server") == 0 || strcmp(&name[0], "JackRouter") == 0) {
+            if (strcmp(&name[0], "JackRouter") == 0) {
                 c_jackDevID = device[i];
                 if (device != NULL)
                     free(device);
