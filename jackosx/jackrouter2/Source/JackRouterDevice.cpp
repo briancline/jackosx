@@ -1434,20 +1434,20 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 bool JackRouterDevice::Open()
 {
 	pid_t pid = getpid();
-	jack_options_t options = JackNullOption;
 	jack_status_t status;
     char* id_name = bequite_getNameFromPid(pid);
-    JARLog("JackRouterDevice::Open id %ld name %s\n", pid, id_name);
     assert(id_name != NULL);
-	
+    JARLog("JackRouterDevice::Open id %ld name %s\n", pid, id_name);
+ 	
 	// From previous state
 	if (fClient) {
 		JARLog("Close old client\n");
 		jack_client_close(fClient);
+        fClient = NULL;
 		mIOProcList->RemoveAllIOProcs();
 	}
 
-    if ((fClient = jack_client_open(id_name, options, &status)) == NULL) {
+    if ((fClient = jack_client_open(id_name, JackNoStartServer, &status)) == NULL) {
         JARLog("JackRouterDevice::Open jack server not running?\n");
         return false;
     } else {
@@ -1456,10 +1456,11 @@ bool JackRouterDevice::Open()
 		jack_set_buffer_size_callback(fClient, BufferSize, this);
 		jack_set_xrun_callback(fClient, XRun, this);
 		
+        /*
 		char logfile[128];
 		snprintf(logfile, sizeof(logfile) - 1, "%s_%s", "/tmp/JackRouter_latency", id_name);
 		mLogFile = new CALatencyLog(logfile, ".txt");
-
+        */
 		return true;
 	}
 }
