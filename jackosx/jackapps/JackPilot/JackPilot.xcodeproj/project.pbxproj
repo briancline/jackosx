@@ -304,7 +304,7 @@
 		4B4F1BA50C5616A50096B3EE /* Info-JackPilot.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = "Info-JackPilot.plist"; sourceTree = SOURCE_ROOT; };
 		4B4F3D7009E2D5E000D2EC22 /* JackPilot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JackPilot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B7C2F180E0A8AFE00220808 /* JackPilot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JackPilot.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		4BA3BF1F0D2D4BB3005711D3 /* JackPilot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JackPilot.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BA3BF1F0D2D4BB3005711D3 /* JackPilot_64.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JackPilot_64.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B219AC61051E53A500730C30 /* jks.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = jks.icns; path = resources/jks.icns; sourceTree = "<group>"; };
 		B2292EC10559813D004A67B1 /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Utility.h; path = src/Utility.h; sourceTree = "<group>"; };
 		B2292EC20559813D004A67B1 /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = Utility.m; path = src/Utility.m; sourceTree = "<group>"; };
@@ -435,7 +435,7 @@
 			children = (
 				B2C017320508E0830042DB15 /* JackPilot.app */,
 				4B4F3D7009E2D5E000D2EC22 /* JackPilot.app */,
-				4BA3BF1F0D2D4BB3005711D3 /* JackPilot.app */,
+				4BA3BF1F0D2D4BB3005711D3 /* JackPilot_64.app */,
 				4B7C2F180E0A8AFE00220808 /* JackPilot.app */,
 			);
 			name = Products;
@@ -582,9 +582,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		4B4F3D3A09E2D5E000D2EC22 /* JackPilot Universal */ = {
+		4B4F3D3A09E2D5E000D2EC22 /* JackPilot Universal 32 bits */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4B4F3D6B09E2D5E000D2EC22 /* Build configuration list for PBXNativeTarget "JackPilot Universal" */;
+			buildConfigurationList = 4B4F3D6B09E2D5E000D2EC22 /* Build configuration list for PBXNativeTarget "JackPilot Universal 32 bits" */;
 			buildPhases = (
 				4B4F3D3B09E2D5E000D2EC22 /* Headers */,
 				4B4F3D4809E2D5E000D2EC22 /* Resources */,
@@ -601,7 +601,7 @@
 			);
 			dependencies = (
 			);
-			name = "JackPilot Universal";
+			name = "JackPilot Universal 32 bits";
 			productInstallPath = "$(USER_APPS_DIR)";
 			productName = JackPilot1.3;
 			productReference = 4B4F3D7009E2D5E000D2EC22 /* JackPilot.app */;
@@ -632,9 +632,9 @@
 			productReference = 4B7C2F180E0A8AFE00220808 /* JackPilot.app */;
 			productType = "com.apple.product-type.application";
 		};
-		4BA3BEEA0D2D4BB3005711D3 /* JackPilot Universal All */ = {
+		4BA3BEEA0D2D4BB3005711D3 /* JackPilot Universal 64 bits */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4BA3BF1B0D2D4BB3005711D3 /* Build configuration list for PBXNativeTarget "JackPilot Universal All" */;
+			buildConfigurationList = 4BA3BF1B0D2D4BB3005711D3 /* Build configuration list for PBXNativeTarget "JackPilot Universal 64 bits" */;
 			buildPhases = (
 				4BA3BEEB0D2D4BB3005711D3 /* Headers */,
 				4BA3BEF80D2D4BB3005711D3 /* Resources */,
@@ -650,10 +650,10 @@
 			);
 			dependencies = (
 			);
-			name = "JackPilot Universal All";
+			name = "JackPilot Universal 64 bits";
 			productInstallPath = "$(USER_APPS_DIR)";
 			productName = JackPilot1.3;
-			productReference = 4BA3BF1F0D2D4BB3005711D3 /* JackPilot.app */;
+			productReference = 4BA3BF1F0D2D4BB3005711D3 /* JackPilot_64.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -676,8 +676,8 @@
 			projectRoot = "";
 			targets = (
 				B2C017310508E0830042DB15 /* JackPilot */,
-				4B4F3D3A09E2D5E000D2EC22 /* JackPilot Universal */,
-				4BA3BEEA0D2D4BB3005711D3 /* JackPilot Universal All */,
+				4B4F3D3A09E2D5E000D2EC22 /* JackPilot Universal 32 bits */,
+				4BA3BEEA0D2D4BB3005711D3 /* JackPilot Universal 64 bits */,
 				4B7C2EE40E0A8AFE00220808 /* JackPilot Universal libjack */,
 			);
 		};
@@ -788,7 +788,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "rm build/Deployment/JackPilot.app/Contents/Resources/Localizable.strings";
+			shellScript = "#rm build/Deployment/JackPilot.app/Contents/Resources/Localizable.strings\n\nrm build/Development/JackPilot.app/Contents/Resources/Localizable.strings";
 		};
 		4B4F3D6909E2D5E000D2EC22 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -866,7 +866,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "rm build/Deployment/JackPilot.app/Contents/Resources/Localizable.strings";
+			shellScript = "rm build/Development/JackPilot_64.app/Contents/Resources/Localizable.strings\n\n# rm build/Deployment/JackPilot_64.app/Contents/Resources/Localizable.strings \n";
 		};
 		4BA3BF190D2D4BB3005711D3 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -879,7 +879,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -R Localization/Italian.lproj build/Deployment/JackPilot.app/Contents/Resources/";
+			shellScript = "cp -R Localization/Italian.lproj build/Deployment/JackPilot_64.app/Contents/Resources/";
 		};
 		4BA3BF1A0D2D4BB3005711D3 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -892,7 +892,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -R Localization/French.lproj build/Deployment/JackPilot.app/Contents/Resources/";
+			shellScript = "cp -R Localization/French.lproj build/Deployment/JackPilot_64.app/Contents/Resources/";
 		};
 		4BA6469B072FE87800590705 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1328,7 +1328,7 @@
 				OTHER_LDFLAGS = "-ljack";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
-				PRODUCT_NAME = JackPilot;
+				PRODUCT_NAME = JackPilot_64;
 				SDKROOT = "";
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
@@ -1345,10 +1345,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
-					ppc,
 					ppc64,
 					x86_64,
-					i386,
 				);
 				DEBUG_SYMBOLS = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -1358,11 +1356,12 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "PLUGIN=1";
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				INFOPLIST_FILE = "Info-JackPilot.plist";
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-ljack";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
-				PRODUCT_NAME = JackPilot;
+				PRODUCT_NAME = JackPilot_64;
 				SDKROOT = "";
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
@@ -1418,7 +1417,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
 		};
-		4B4F3D6B09E2D5E000D2EC22 /* Build configuration list for PBXNativeTarget "JackPilot Universal" */ = {
+		4B4F3D6B09E2D5E000D2EC22 /* Build configuration list for PBXNativeTarget "JackPilot Universal 32 bits" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4B4F3D6C09E2D5E000D2EC22 /* Development */,
@@ -1448,7 +1447,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
 		};
-		4BA3BF1B0D2D4BB3005711D3 /* Build configuration list for PBXNativeTarget "JackPilot Universal All" */ = {
+		4BA3BF1B0D2D4BB3005711D3 /* Build configuration list for PBXNativeTarget "JackPilot Universal 64 bits" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4BA3BF1C0D2D4BB3005711D3 /* Development */,
