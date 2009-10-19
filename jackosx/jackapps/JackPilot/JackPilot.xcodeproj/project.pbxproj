@@ -788,7 +788,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#rm build/Deployment/JackPilot.app/Contents/Resources/Localizable.strings\n\nrm build/Development/JackPilot.app/Contents/Resources/Localizable.strings";
+			shellScript = "rm build/Deployment/JackPilot.app/Contents/Resources/Localizable.strings\n\n#rm build/Development/JackPilot.app/Contents/Resources/Localizable.strings";
 		};
 		4B4F3D6909E2D5E000D2EC22 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -866,7 +866,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "rm build/Development/JackPilot_64.app/Contents/Resources/Localizable.strings\n\n# rm build/Deployment/JackPilot_64.app/Contents/Resources/Localizable.strings \n";
+			shellScript = "#rm build/Development/JackPilot_64.app/Contents/Resources/Localizable.strings\n\n rm build/Deployment/JackPilot_64.app/Contents/Resources/Localizable.strings \n";
 		};
 		4BA3BF190D2D4BB3005711D3 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;

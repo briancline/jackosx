@@ -1281,7 +1281,8 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
     if (major == 10 && minor >= 5) {
 
     #if defined(__i386__)
-        strcpy(stringa, "arch -i386 /usr/local/bin/./jackdmp -R -d ");
+        //strcpy(stringa, "arch -i386 /usr/local/bin/./jackdmp -R -d ");
+        strcpy(stringa,"/usr/local/bin/./jackdmp -R -d ");
     #elif defined(__x86_64__)
         strcpy(stringa,"/usr/local/bin/./jackdmp -R -d ");
     #elif defined(__ppc__)
