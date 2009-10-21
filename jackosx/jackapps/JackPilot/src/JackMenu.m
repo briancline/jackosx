@@ -8,6 +8,7 @@
 
 #include <sys/sysctl.h>
 #include <CoreFoundation/CFNotificationCenter.h>
+#include <CoreAudio/CoreAudio.h>
 
 typedef	UInt8	CAAudioHardwareDeviceSectionID;
 
@@ -20,15 +21,15 @@ static void JackInfoShutDown(int code, const char* reason, void *arg)
 	JPLog("JackInfoShutDown\n");
     
     if (gJackRunning) {
+        
+        JackMenu* menu = (JackMenu*)arg;
+        [menu closeJackDeamon1:0];
      
         NSString *mess1 = NSLocalizedString(@"Warning:", nil);
         NSString *mess2 = NSLocalizedString([NSString stringWithCString:reason], nil);
         NSString *mess3 = NSLocalizedString(@"Ok", nil);
         
         NSRunCriticalAlertPanel(mess1, mess2, mess3, nil, nil);
-        
-        JackMenu* menu = (JackMenu*)arg;
-        [menu closeJackDeamon1:0];
     }
 }
 
@@ -170,7 +171,7 @@ static int numberOfItemsInNominalSampleRateComboBox(AudioDeviceID device)
 	return theAnswer;
 }
 
-Float64 objectValueForItemAtIndex(AudioDeviceID device, int inItemIndex)
+static Float64 objectValueForItemAtIndex(AudioDeviceID device, int inItemIndex)
 {
 	Float64 theAnswer = 0;
     OSStatus err;
@@ -452,12 +453,13 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 	return (err);
 }
 
-static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
+static bool availableOneSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 {
     OSStatus err = noErr;
     UInt32 outSize;
     UInt32 used; 
     Float64 usedSampleRate;
+    int i;
     
     // Get running rate
     outSize = sizeof(UInt32);
@@ -466,7 +468,7 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         JPLog("Cannot get device running state\n");
         return true;
     } 
-    
+     
     // Device is not used...
     if (used == 0)
         return true;
@@ -480,6 +482,30 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
     }
     
     return (wantedSampleRate == usedSampleRate);
+}
+
+static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
+{
+    OSStatus err = noErr;
+    int i;
+    
+    AudioObjectID sub_device[32];
+    UInt32 outSize = sizeof(sub_device);
+    err = AudioDeviceGetProperty(device, 0, kAudioDeviceSectionGlobal, kAudioAggregateDevicePropertyActiveSubDeviceList, &outSize, sub_device);
+    
+    if (err != noErr) {
+        JPLog("Device does not have subdevices\n");
+        return availableOneSamplerate(device, wantedSampleRate);
+    } else {
+        int num_devices = outSize / sizeof(AudioObjectID);
+        JPLog("Device does has %d subdevices\n", num_devices);
+        for (i = 0; i < num_devices; i++) {
+            if (!availableOneSamplerate(sub_device[i], wantedSampleRate)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
 
 @implementation JackMenu
