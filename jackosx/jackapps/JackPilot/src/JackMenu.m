@@ -5,16 +5,32 @@
 #import "JackMenu.h"
 #import "JPPlugin.h"
 #import "JackCon1.3.h"
+
 #include <sys/sysctl.h>
-
-//#define NOTIFICATION
-
 #include <CoreFoundation/CFNotificationCenter.h>
 
 typedef	UInt8	CAAudioHardwareDeviceSectionID;
+
 #define	kAudioDeviceSectionGlobal	((CAAudioHardwareDeviceSectionID)0x00)
 
-static bool gJackRunning = true;
+static bool gJackRunning = false;
+
+static void JackInfoShutDown(int code, const char* reason, void *arg) 
+{
+	JPLog("JackInfoShutDown\n");
+    
+    if (gJackRunning) {
+     
+        NSString *mess1 = NSLocalizedString(@"Warning:", nil);
+        NSString *mess2 = NSLocalizedString([NSString stringWithCString:reason], nil);
+        NSString *mess3 = NSLocalizedString(@"Ok", nil);
+        
+        NSRunCriticalAlertPanel(mess1, mess2, mess3, nil, nil);
+        
+        JackMenu* menu = (JackMenu*)arg;
+        [menu closeJackDeamon1:0];
+    }
+}
 
 static UInt32	sNumberCommonSampleRates = 15;
 static Float64	sCommonSampleRates[] = {	  8000.0,  11025.0,  12000.0,
@@ -39,21 +55,21 @@ static UInt32 GetNumberCommonRatesInRange(Float64 inMinimumRate, Float64 inMaxim
 {
 	//	find the index of the first common rate greater than or equal to the minimum
 	UInt32 theFirstIndex = 0;
-	while((theFirstIndex < sNumberCommonSampleRates) && (sCommonSampleRates[theFirstIndex] < inMinimumRate))
+	while ((theFirstIndex < sNumberCommonSampleRates) && (sCommonSampleRates[theFirstIndex] < inMinimumRate))
 	{
 		++theFirstIndex;
 	}
 	
 	//	find the index of the first common rate greater than or equal to the maximum
 	UInt32 theLastIndex = theFirstIndex;
-	while((theFirstIndex < sNumberCommonSampleRates) && (sCommonSampleRates[theLastIndex] < inMaximumRate))
+	while ((theFirstIndex < sNumberCommonSampleRates) && (sCommonSampleRates[theLastIndex] < inMaximumRate))
 	{
 		++theLastIndex;
 	}
 	
 	//	the number in the range is the difference
 	UInt32 theAnswer = theLastIndex - theFirstIndex;
-	if(IsRateCommon(inMinimumRate) || IsRateCommon(inMaximumRate))
+	if (IsRateCommon(inMinimumRate) || IsRateCommon(inMaximumRate))
 	{
 		++theAnswer;
 	}
@@ -276,7 +292,7 @@ static void stopCallback(CFNotificationCenterRef center,
 		exit(1);
 	}
 }
-
+/*
 static void restartCallback(CFNotificationCenterRef center,
                          void*	observer,
                          CFStringRef name,
@@ -294,6 +310,7 @@ static void restartCallback(CFNotificationCenterRef center,
 		gJackRunning = true;
 	}
 }
+ */
 
 static void StartNotification()
 {
@@ -301,12 +318,15 @@ static void StartNotification()
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(),
 									NULL, startCallback, CFSTR("com.grame.jackserver.start"),
 									ref, CFNotificationSuspensionBehaviorDeliverImmediately);
+    
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(),
 									NULL, stopCallback, CFSTR("com.grame.jackserver.stop"),
 									ref, CFNotificationSuspensionBehaviorDeliverImmediately);
+    /*
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(),
 									NULL, restartCallback, CFSTR("com.grame.jackserver.restart"),
 									ref, CFNotificationSuspensionBehaviorDeliverImmediately);
+    */
 	CFRelease(ref);
 }
 
@@ -315,10 +335,13 @@ static void StopNotification()
 	CFStringRef ref = CFStringCreateWithCString(NULL, DefaultServerName(), kCFStringEncodingMacRoman);
 	CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(), NULL,
 										CFSTR("com.grame.jackserver.start"), ref);
+    
 	CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(), NULL,
 										CFSTR("com.grame.jackserver.stop"), ref);
+    /*
 	CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(), NULL,
-										CFSTR("com.grame.jackserver.restart"), ref);									
+										CFSTR("com.grame.jackserver.restart"), ref);	
+    */
 	CFRelease(ref);
 }
 
@@ -401,7 +424,7 @@ static OSStatus getDeviceUIDFromID(AudioDeviceID id, char name[128])
 		JPLog("getDeviceUIDFromID: name = %s\n", name);
 		CFRelease(UI);
 	} else {	
-		JPLog("getDeviceUIDFromID: FAIL name = %s\n", name);
+		JPLog("getDeviceUIDFromID: error name = %s\n", name);
 	}
     return res;
 }
@@ -427,6 +450,36 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 			free(bufferList);	
     }
 	return (err);
+}
+
+static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
+{
+    OSStatus err = noErr;
+    UInt32 outSize;
+    UInt32 used; 
+    Float64 usedSampleRate;
+    
+    // Get running rate
+    outSize = sizeof(UInt32);
+    err = AudioDeviceGetProperty(device, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyDeviceIsRunningSomewhere, &outSize, &used);
+    if (err != noErr) {
+        JPLog("Cannot get device running state\n");
+        return true;
+    } 
+    
+    // Device is not used...
+    if (used == 0)
+        return true;
+    
+    // Get sample rate
+    outSize =  sizeof(Float64);
+    err = AudioDeviceGetProperty(device, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyNominalSampleRate, &outSize, &usedSampleRate);
+    if (err != noErr) {
+        JPLog("Cannot get current sample rate\n");
+        return false;
+    }
+    
+    return (wantedSampleRate == usedSampleRate);
 }
 
 @implementation JackMenu
@@ -477,7 +530,12 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
     int test = checkJack();
     if (test != 0) { 
 		openJackClient();
+        gJackRunning = true;
+        
         //[[JackConnections getSelf] JackCallBacks]; // not used
+        jack_on_info_shutdown(getClient(), JackInfoShutDown, self);
+        jack_activate(getClient());
+        
 		jackstat = 1; 
 		writeStatus(1);
 		[isonBut setStringValue:LOCSTR(@"Jack is On")];
@@ -503,12 +561,14 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 	NSString *file;
 	NSString *stringa = [NSString init];
 	[driverBox removeAllItems];
+    
     // Use jackdmp path
-	//NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtPath:@"/usr/local/lib/jack/"];
+	// NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtPath:@"/usr/local/lib/jack/"];
 	NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtPath:@"/usr/local/lib/jackmp/"];
 	while (file = [enumerator nextObject]) {
+        
         // Only display jack_coreaudio driver...
-		//if ([file hasPrefix:@"jack_"]) {
+		// if ([file hasPrefix:@"jack_"]) {
         if ([file hasPrefix:@"jack_coreaudio"]) {
 				stringa = (NSString*)[file substringFromIndex:5];
 				NSArray *listItems = [[stringa componentsSeparatedByString:@"."] retain];
@@ -536,7 +596,7 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 				[bufferText selectItemWithTitle:[prefs objectAtIndex:3]];
 				[outputChannels selectItemWithTitle:[prefs objectAtIndex:4]];
 				[inputChannels selectItemWithTitle:[prefs objectAtIndex:5]];
-			}  else {  // otherwise opens the preference dialog
+			}  else {  // Otherwise opens the preference dialog
 				[prefWindow center]; 
 				[self openPrefWin:self]; 
 			}
@@ -549,7 +609,7 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 	[self getJackInfo:self];
 	[NSApp setDelegate:self];
 	
-	//restoring windows positions:
+	// Restoring windows positions:
 	NSArray *winPosPrefs = [Utility getPref:'winP'];
 	if (winPosPrefs) {
 		NSRect jpFrame;
@@ -697,7 +757,6 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 	if (![Utility savePref:openedPlugs prefType:'PlOp'])
 		NSLog(@"Cannot plugins instances");
 	#endif
-	//____
 	return NSTerminateNow;
 }
 
@@ -794,7 +853,8 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 
 - (IBAction)startJack:(id)sender
 {	
-	[self launchJackDeamon:sender];
+	if (![self launchJackDeamon:sender])
+        return;
     
 	char drivername[128];
 	getDeviceUIDFromID(selDevID,drivername);
@@ -815,90 +875,39 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 					[sysDefOut state] == NSOnState ? TRUE : FALSE,
 					[verboseBox state] == NSOnState ? 1 : 0,
 					drivername);
-    }
+    }	
 	
-    if (jackstat != 1) {
-		goto end;
-		
-		// steph
-		NSString *str;
-		str = [NSString stringWithCString:"/./CarbonJackd -R -d "];
-		
-		char* driver = (char*)malloc(sizeof(char*)*[[driverBox stringValue] length]+2);
-		[[driverBox titleOfSelectedItem] getCString:driver];
-		char* samplerate = (char*)malloc(sizeof(char*)*[[samplerateText stringValue] length]+2);
-		[[samplerateText titleOfSelectedItem] getCString:samplerate];
-		char* buffersize = (char*)malloc(sizeof(char*)*[[bufferText stringValue] length]+2);
-		[[bufferText titleOfSelectedItem] getCString:buffersize];
-		
-		// steph
-		char* channels = (char*)malloc(sizeof(char*)*[[outputChannels stringValue] length]+2);
-		[[outputChannels titleOfSelectedItem] getCString:channels];
-		
-		NSString *interfaccia = [NSString init];
-		interfaccia = [interfaceBox titleOfSelectedItem];
-		char* interface = (char*)malloc(sizeof(char*)*[interfaccia length]+2);
-		[interfaccia getCString:interface];
-		
-		char *stringa = (char*)malloc(sizeof(char*)*480);
-		[jpPath getCString:stringa];
-		
-		strcat(stringa,"/./CarbonJackd -R -d ");
-		strcat(stringa,driver);
-		strcat(stringa," -r ");
-		strcat(stringa,samplerate);
-		strcat(stringa," -p ");
-		strcat(stringa,buffersize);
-		strcat(stringa," -c ");
-		strcat(stringa,channels);
-		strcat(stringa," -d ");
-		strcat(stringa,"\"");
-		strcat(stringa,interface);
-		strcat(stringa,"\"");
-		
-		int a;
-		id pannelloDiAlert = NSGetAlertPanel(LOCSTR(@"Please Wait..."),LOCSTR(@"Jack server is starting..."),nil,nil,nil);
-		NSModalSession modalSession = [NSApp beginModalSessionForWindow:pannelloDiAlert];
-		a = openJack(stringa);
-		[NSApp endModalSession:modalSession];
-		NSReleaseAlertPanel(pannelloDiAlert);
-
-	end:
-		{
-			openJackClient();
-			
-			if (checkJack() != 0 && getClient() != NULL){
-				jackstat = 1;
-				writeStatus(1); 
-                //[[JackConnections getSelf] JackCallBacks]; // not used
-				[isonBut setStringValue:LOCSTR(@"Jack is On")];
-				[startBut setTitle:LOCSTR(@"Stop Jack")]; [toggleDock setTitle:LOCSTR(@"Stop Jack")];
-				[self setupTimer];
-				[bufferText setEnabled:NO];
-				[outputChannels setEnabled:NO];
-				[inputChannels setEnabled:NO];
-				[driverBox setEnabled:NO];
-				[interfaceBox setEnabled:NO];
-				[samplerateText setEnabled:NO];
-				[jackdMode setEnabled:NO];
-				[self sendJackStatusToPlugins:YES];
-				[routingBut setEnabled:YES];
-              
-			} else { 
-				jackstat = 0; 
-				[self error:LOCSTR(@"Cannot start Jack server,\nPlease check the console or retry after a system reboot.")]; 
-				writeStatus(0); 
-			}
-			//free(stringa); 
-			//free(driver); 
-			//free(samplerate); 
-			//free(buffersize); 
-			//free(channels); 
-			//free(interface); 
-		}
-		[self jackALstore:sender];
+    openJackClient();
+    gJackRunning = true;
+    
+    if (checkJack() != 0 && getClient() != NULL){
+        jackstat = 1;
+        writeStatus(1); 
+        
+        //[[JackConnections getSelf] JackCallBacks]; // not used
+        jack_on_info_shutdown(getClient(), JackInfoShutDown, self);
+        jack_activate(getClient());
+        
+        [isonBut setStringValue:LOCSTR(@"Jack is On")];
+        [startBut setTitle:LOCSTR(@"Stop Jack")]; [toggleDock setTitle:LOCSTR(@"Stop Jack")];
+        [self setupTimer];
+        [bufferText setEnabled:NO];
+        [outputChannels setEnabled:NO];
+        [inputChannels setEnabled:NO];
+        [driverBox setEnabled:NO];
+        [interfaceBox setEnabled:NO];
+        [samplerateText setEnabled:NO];
+        [jackdMode setEnabled:NO];
+        [self sendJackStatusToPlugins:YES];
+        [routingBut setEnabled:YES];
+      
+    } else { 
+        jackstat = 0; 
+        [self error:LOCSTR(@"Cannot start Jack server,\nPlease check the console or retry after a system reboot.")]; 
+        writeStatus(0); 
     }
-}
+    [self jackALstore:sender];
+ }
 
 -(void)warning:(id)sender
 {
@@ -945,6 +954,7 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
             break;
     }
 }
+
 
 - (IBAction)toggle2Jack:(id)sender 
 {
@@ -1180,8 +1190,6 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
     
     [prefWindow center];
     [prefWindow makeKeyAndOrderFront:sender];
-    
-    //[prefWindow display];
 }
 
 - (IBAction)closePrefWin:(id)sender {
@@ -1197,7 +1205,11 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
     [aboutWin orderOut:sender];
 }
 
-- (IBAction) launchJackDeamon:(id) sender {
+- (void)closeFromCallback {
+    [self closeJackDeamon:0];
+}
+
+- (bool) launchJackDeamon:(id) sender {
         
     char* driver = (char*)malloc(sizeof(char)*[[driverBox stringValue] length]+2);
     [[driverBox titleOfSelectedItem] getCString:driver];
@@ -1222,25 +1234,24 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 
 	err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices, &size, &isWritable);
 	if (err != noErr) 
-		return;
+		return false;
 
-	int manyDevices = size/sizeof(AudioDeviceID);
-	JPLog("number of audio devices: %ld\n",manyDevices);
+	int manyDevices = size / sizeof(AudioDeviceID);
+	JPLog("number of audio devices: %ld\n", manyDevices);
 
 	AudioDeviceID devices[manyDevices];
-	err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices, &size ,&devices);
-	if (err != noErr) 
-		return;
-
+	err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices, &size, &devices);
+	if (err != noErr)
+ 		return false;
+ 
 	int i;
-
 	for (i = 0; i < manyDevices; i++) {
 		char name[256];
 		CFStringRef nameRef;
 		size = sizeof(CFStringRef);
 		err = AudioDeviceGetProperty(devices[i], 0, false, kAudioDevicePropertyDeviceNameCFString, &size, &nameRef);
 		if (err != noErr) 
-			return;
+			return false;
 			
 		CFStringGetCString(nameRef, name, 256, kCFStringEncodingMacRoman);
 		CFRelease(nameRef);
@@ -1248,30 +1259,35 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 		if (strcmp(interface, name) == 0)   
 			vDevice = devices[i];
 	}	
+    
+    if (!availableSamplerate(vDevice, (Float64)atoi(samplerate))) {
+        
+        NSString *mess1 = NSLocalizedString(@"Warning:", nil);
+        NSString *mess2 = NSLocalizedString(@"Device is already used with another sample rate, that will be changed...", nil);
+        NSString *mess3 = NSLocalizedString(@"Yes", nil);
+        NSString *mess4 = NSLocalizedString(@"No", nil);
+        NSInteger res = NSRunCriticalAlertPanel(mess1, mess2, mess3, mess4, nil);
+        
+        if (res == 0)
+            goto end;
+    }
 
 	NSString *deviceIDStr = [[NSNumber numberWithLong:vDevice] stringValue];
 	[deviceIDStr getCString:interface];
 		
 	if (strcmp(out_channels,"0") == 0 && strcmp(in_channels,"0") == 0) {
 		openJack("");
-		free(driver); 
-		free(samplerate); 
-		free(buffersize); 
-		free(out_channels); 
-		free(in_channels); 
-		free(interface);
-		return;
+        goto end;
 	}
 	
-    char *stringa;
-    stringa = (char*)malloc(sizeof(char)*480);
-	memset(stringa,0x0,sizeof(char)*480);
+    char* stringa;
+    stringa = (char*)malloc(sizeof(char) * 512);
+	memset(stringa, 0x0, sizeof(char) * 512);
 	
 	char drivername[128];
 	getDeviceUIDFromID(vDevice,drivername);
 
     // Conditionnal start..
-    
     SInt32 major;
     SInt32 minor;
 
@@ -1295,26 +1311,27 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
         strcpy(stringa,"/usr/local/bin/./jackdmp -R -d ");
     }
     
-    strcat(stringa,driver);
-	strcat(stringa," -r ");
-    strcat(stringa,samplerate);
-    strcat(stringa," -p ");
-    strcat(stringa,buffersize);
-    strcat(stringa," -o ");
-    strcat(stringa,out_channels);
-	strcat(stringa," -i ");
-    strcat(stringa,in_channels);
-	strcat(stringa," -d ");
-	strcat(stringa,"\"");
-	strcat(stringa,drivername);
-	strcat(stringa,"\"");
+    strcat(stringa, driver);
+	strcat(stringa, " -r ");
+    strcat(stringa, samplerate);
+    strcat(stringa, " -p ");
+    strcat(stringa, buffersize);
+    strcat(stringa, " -o ");
+    strcat(stringa, out_channels);
+	strcat(stringa, " -i ");
+    strcat(stringa, in_channels);
+	strcat(stringa, " -d ");
+	strcat(stringa, "\"");
+	strcat(stringa, drivername);
+	strcat(stringa, "\"");
     
-    int a;
     id pannelloDiAlert = NSGetAlertPanel(LOCSTR(@"Please Wait..."),LOCSTR(@"Jack server is starting..."),nil,nil,nil);
     NSModalSession modalSession = [NSApp beginModalSessionForWindow:pannelloDiAlert];
-    a = openJack(stringa);
+    int a = openJack(stringa);
     [NSApp endModalSession:modalSession];
     NSReleaseAlertPanel(pannelloDiAlert);
+    
+    StartNotification();
     
     free(stringa); 
 	free(driver); 
@@ -1323,8 +1340,17 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 	free(out_channels); 
 	free(in_channels); 
 	free(interface); 
-
-	StartNotification();
+    return true;
+    
+end:
+    free(stringa); 
+	free(driver); 
+	free(samplerate); 
+	free(buffersize); 
+	free(out_channels); 
+	free(in_channels); 
+	free(interface); 
+    return false;
 }
 
 - (IBAction) closeJackDeamon:(id) sender {
@@ -1361,7 +1387,39 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 	[interfaceBox setEnabled:YES];
 	[samplerateText setEnabled:YES];
 	[routingBut setEnabled:NO];
+    
+    gJackRunning = false;
 }
+
+- (IBAction) closeJackDeamon1:(id) sender {
+	[managerWin orderOut:sender];
+	
+	StopNotification();
+	
+	[[JackConnections getSelf] stopTimer];
+    
+    closeJack2();
+ 	
+	[self stopTimer];
+	jackstat = 0; 
+	writeStatus(0); 
+	[isonBut setStringValue:LOCSTR(@"Jack is Off")];
+	[loadText setFloatValue:0.0f];
+	[cpuLoadBar setDoubleValue:0.0];
+	[startBut setTitle:LOCSTR(@"Start Jack")];
+	[toggleDock setTitle:LOCSTR(@"Start Jack")];
+	[connectionsNumb setIntValue:0];
+	[bufferText setEnabled:YES];
+	[outputChannels setEnabled:YES];
+	[inputChannels setEnabled:YES];
+	[driverBox setEnabled:YES];
+	[interfaceBox setEnabled:YES];
+	[samplerateText setEnabled:YES];
+	[routingBut setEnabled:NO];
+    
+    gJackRunning = false;
+}
+
 
 - (IBAction) reloadPref:(id) sender {
     if ([interfaceBox titleOfSelectedItem]) 
@@ -1379,14 +1437,14 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 	[bufferText addItemWithTitle:@"4096"];
 	[bufferText selectItemWithTitle:@"512"]; // select the 512 value
 	
+    // 19/10/09: non critial error...
 	if (![self writeDevNames]) {
-        [Utility error:'aud2']; 
-        [NSApp terminate:nil];
-    }
+        [Utility error:'aud4']; 
+     }
 	
+    // 19/10/09: non critial error...
     if (![self writeCAPref:sender]) {
-        [Utility error:'aud2']; 
-        [NSApp terminate:nil];
+        [Utility error:'aud4']; 
     }
 }
 
@@ -1446,7 +1504,8 @@ Scan current audio device properties : in/out channels, sampling rate, buffer si
     UInt32 newBufFrame;
     size = sizeof(UInt32);
     err = AudioDeviceGetProperty(selDevID, 0, false, kAudioDevicePropertyBufferFrameSize, &size, &newBufFrame);
-    if (err != noErr) return NO;
+    if (err != noErr) 
+        return NO;
     
 	[bufferText selectItemWithTitle:@"512"]; // forcing to a lower value...
     JPLog("got actual buffersize ok %ld\n",newBufFrame);
@@ -1485,24 +1544,26 @@ Scan current audio device properties : in/out channels, sampling rate, buffer si
     if (err != noErr) 
 		[bufferText removeItemWithTitle:@"4096"];
 
-    JPLog("buffersize tests ok\n");
+    JPLog("buffersize tests OK\n");
 	
 	UInt32 oldSize = newBufFrame;
 	size = sizeof(UInt32);
     err = AudioDeviceGetProperty(selDevID, 0, false, kAudioDevicePropertyBufferFrameSize, &size, &newBufFrame);
-    if (err != noErr) return NO;
+    if (err != noErr) 
+        return NO;
 	
-	JPLog("got actual buffersize ok %ld\n",newBufFrame);
+	JPLog("got actual buffersize OK %ld\n",newBufFrame);
     
 	if (oldSize != newBufFrame) {
 		JPLog("AudioDeviceSetProperty kAudioDevicePropertyBufferFrameSize %ld\n",oldSize);
 		err = AudioDeviceSetProperty(selDevID, NULL, 0, false, kAudioDevicePropertyBufferFrameSize, theSize, &oldSize);
-		if(err) { 
-			NSLog(@"err in kAudioDevicePropertyBufferFrameSize"); return NO; 
+		if (err) { 
+			NSLog(@"err in kAudioDevicePropertyBufferFrameSize"); 
+            return NO; 
 		}
 	}
     
-    JPLog("set old buffersize ok\n");
+    JPLog("set old buffersize OK\n");
     return YES;
 }
 

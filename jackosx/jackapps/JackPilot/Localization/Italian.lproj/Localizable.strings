@@ -39,6 +39,10 @@
 /* "You have %d clients running, they will stop working or maybe crash!!\n" */
 "You have " = "Hai ";
 " clients running, they will stop working or maybe crash!!" = " clients aperti, questi finiranno di funzionare!!";
+"CoreAudio device stream configuration has changed, backend stopped." = "La configuration du device CoreAudio device a change, il est arrete.";
+"CoreAudio device sampling rate has changed, backend stopped." = "La fequence d'echantillonnage du device CoreAudio device a change, il est arrete.";
+"Device is already used with another sample rate, that will be changed..." = "Device is already used with another sample rate, that will be changed...";
+
 
 /* PLUG-INS */
 "Open Instance" = "Apri";

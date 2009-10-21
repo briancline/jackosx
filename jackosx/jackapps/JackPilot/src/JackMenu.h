@@ -86,8 +86,10 @@
 - (IBAction)openAboutWin:(id)sender;
 - (IBAction)closeAboutWin:(id)sender;
 - (IBAction)closeJackDeamon:(id)sender;
-- (IBAction)launchJackDeamon:(id)sender;
+- (IBAction)closeJackDeamon1:(id)sender;
+- (bool)launchJackDeamon:(id)sender;
 - (void)addPluginSlot;
+- (void)closeFromCallback;
 - (void)sendJackStatusToPlugins:(BOOL)isOn;
 
 #ifdef PLUGIN

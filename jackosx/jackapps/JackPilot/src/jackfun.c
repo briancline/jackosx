@@ -45,6 +45,11 @@ void closeJack1(void)
 	}
 }
 
+void closeJack2(void) 
+{
+    firsttime = 0;
+}
+
 int closeJack(void) 
 {
 	if (client != NULL) {
@@ -122,6 +127,10 @@ int checkJack(void)
 
 int openJackClient(void) 
 {
+    if (client != NULL) {
+        jack_client_close(client);
+		client = NULL;
+    }
     client = jack_client_open("JackPilot", JackNullOption, NULL);
 	return 1;
 }

@@ -23,7 +23,7 @@
 "Cannot initialize CoreAudio services, check preferences. " = "Les services CoreAudio ne peuvent pas etre initialises, verifiez les preferences.";
 "Cannot find last audio device, please check preferences. " = "Le dernier peripherique utilise est introuvable, verifiez les preferences.";
 "Use default" = "Utiliez le peripherique pas defaut";
-"Jack Audio Server CoreAudio driver is not installed or is corrupted. " = "Le driver Jack Router CoreAudio n'est pas installe ou est endommage.";
+"Jack Audio Server CoreAudio driver is not installed or is corrupted. " = "Le driver CoreAudio JackRouter n'est pas installe ou est endommage.";
 "Ok" = "Ok";
 "Sorry..." = "Attention...";
 "You must have \"Connections Manager\" window opened, and JACK must be ON." = "Vous devez avoir la fenetre \"Gestionnaire de Connections\" ouverte, et JACK doit etre actif.";
@@ -40,6 +40,10 @@
 /* "You have %d clients running, they will stop working or maybe crash!!\n" */
 "You have " = "Vous avez ";
 " clients running, they will stop working or maybe crash!!" = " client(s) actif(s), il(s) vont s'arreter de fonctionner et peut etre planter!!";
+"CoreAudio device stream configuration has changed, backend stopped." = "La configuration du device CoreAudio a change, il s'est arrete.";
+"CoreAudio device sampling rate has changed, backend stopped." = "La fequence d'echantillonnage du device CoreAudio a change, il s'est arrete.";
+"Device is already used with another sample rate, that will be changed..." = "Le peripherique est deja utilise avec une autre frequence d'echantillonnage, elle sera change...";
+
 
 /* PLUG-INS */
 "Open Instance" = "Demarrer";
