@@ -348,7 +348,7 @@ static void StopNotification()
 
 static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boolean isInput);
 
-static BOOL checkDevice(AudioDeviceID device)
+static bool checkDevice(AudioDeviceID device)
 {
     OSStatus err;
 	
@@ -356,8 +356,8 @@ static BOOL checkDevice(AudioDeviceID device)
     UInt32 outChannels = 0;
     err = getTotalChannels(device, &outChannels, false);
     if (err != noErr) { 
-		NSLog(@"err in getTotalChannels, set to 0");
-		return NO;
+		NSLog(@"err in getTotalChannels");
+		return false;
 	} 
 	
 	// Input channels
@@ -365,14 +365,14 @@ static BOOL checkDevice(AudioDeviceID device)
 	err = getTotalChannels(device, &inChannels, true);
     if (err != noErr) { 
 		NSLog(@"err in getTotalChannels");
-		return NO;
+		return false;
 	} 
 	
-	JPLog("checkDevice input/output: input %ld ouput %ld \n",inChannels, outChannels);
-	return (outChannels == 0) && (inChannels == 0) ? NO : YES;
+	JPLog("checkDevice input/output: input %ld ouput %ld \n", inChannels, outChannels);
+	return (outChannels == 0) && (inChannels == 0) ? false : true;
 }
 
-static BOOL checkDeviceName(char* deviceName)
+static bool checkDeviceName(char* deviceName)
 {
     OSStatus err;
     UInt32 size;
@@ -382,7 +382,7 @@ static BOOL checkDeviceName(char* deviceName)
     
     err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices, &size, &isWritable);
     if (err != noErr) 
-		return NO;
+		return false;
     
     int manyDevices = size/sizeof(AudioDeviceID);
 	JPLog("number of audio devices: %ld\n", manyDevices);
@@ -390,12 +390,12 @@ static BOOL checkDeviceName(char* deviceName)
     AudioDeviceID devices[manyDevices];
     err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices, &size, &devices[0]);
     if (err != noErr) 
-		return NO;
+		return false;
         
     size = sizeof(AudioDeviceID);
     err = AudioHardwareGetProperty(kAudioHardwarePropertyDefaultOutputDevice, &size, &defaultDev);
     if (err != noErr) 
-		return NO;
+		return false;
 		 
     for (i = 0; i < manyDevices; i++) {
 		char name[256];
@@ -403,7 +403,7 @@ static BOOL checkDeviceName(char* deviceName)
 		size = sizeof(CFStringRef);
 		err = AudioDeviceGetProperty(devices[i], 0, false, kAudioDevicePropertyDeviceNameCFString, &size, &nameRef);
 	    if (err != noErr) 
-			return NO;     
+			return false;     
 			
 		CFStringGetCString(nameRef, name, 256, kCFStringEncodingMacRoman);
 		CFRelease(nameRef);
@@ -412,7 +412,7 @@ static BOOL checkDeviceName(char* deviceName)
 			return checkDevice(devices[i]);
 	}
         
-    return NO;
+    return false;
 }
 
 static OSStatus getDeviceUIDFromID(AudioDeviceID id, char name[128])
