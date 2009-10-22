@@ -7,7 +7,7 @@
 //
 
 #import <PreferencePanes/PreferencePanes.h>
-#import <Jack/jack.h>
+#import <jack/jack.h>
 
 #define JCLocalizedString(s) NSLocalizedStringFromTableInBundle(s, nil, [NSBundle bundleForClass:[self class]], @"")
 

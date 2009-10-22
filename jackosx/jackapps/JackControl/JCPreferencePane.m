@@ -268,7 +268,7 @@ static void jackShutdownCallback(void *arg)
 	if (![self isJackRunning])
 	{
 		// if is multiprocessor and if found, start jackdmp instead?
-		NSString *command = [NSString stringWithFormat:@"/usr/local/bin/./jackd -R -d %@ -r %d -p %d -o %d -i %d -n \"%@\"",
+		NSString *command = [NSString stringWithFormat:@"/usr/local/bin/./jackd -R -d %@ -r %d -p %d -o %d -i %d - \"%@\"",
 								[driverPopup titleOfSelectedItem],
 								[sampleRatePopup selectedTag],
 								[bufferSizePopup selectedTag],
@@ -456,7 +456,8 @@ static void jackShutdownCallback(void *arg)
 
 - (void)buildAudioDriverPopup
 {
-	NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtPath:@"/usr/local/lib/jack/"];
+	//NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtPath:@"/usr/local/lib/jack/"];
+    NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtPath:@"/usr/local/lib/jackmp/"];
 	NSString *file;
 	
 	[driverPopup removeAllItems];

@@ -1,5 +1,5 @@
 #import <Cocoa/Cocoa.h>
-#import <Jack/jack.h>
+#import <jack/jack.h>
 
 enum
 {

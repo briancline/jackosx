@@ -18,24 +18,8 @@
 		EA91A367098A6E4E006930DF /* JCPreferencePane.h in Headers */ = {isa = PBXBuildFile; fileRef = EA91A365098A6E4E006930DF /* JCPreferencePane.h */; };
 		EA91A368098A6E4E006930DF /* JCPreferencePane.m in Sources */ = {isa = PBXBuildFile; fileRef = EA91A366098A6E4E006930DF /* JCPreferencePane.m */; };
 		EA91A36A098A6E5A006930DF /* JackControl_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = EA91A369098A6E5A006930DF /* JackControl_Prefix.pch */; };
-		EA91A3CA098A73E8006930DF /* Jack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA91A3C9098A73E8006930DF /* Jack.framework */; };
 		EACD3298099C2C9A0020E255 /* Jack.icns in Resources */ = {isa = PBXBuildFile; fileRef = EACD3297099C2C990020E255 /* Jack.icns */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXBuildStyle section */
-		06F27B30FFEEEFEF11CA0E56 /* Development */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-			};
-			name = Development;
-		};
-		06F27B31FFEEEFEF11CA0E56 /* Deployment */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-			};
-			name = Deployment;
-		};
-/* End PBXBuildStyle section */
 
 /* Begin PBXFileReference section */
 		089C1672FE841209C02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
@@ -67,7 +51,6 @@
 				8D202CF40486D31800D8A456 /* PreferencePanes.framework in Frameworks */,
 				EA210957098A6C4000C84997 /* CoreAudio.framework in Frameworks */,
 				EA210962098A6C4800C84997 /* AudioToolbox.framework in Frameworks */,
-				EA91A3CA098A73E8006930DF /* Jack.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,8 +165,6 @@
 			);
 			buildRules = (
 			);
-			buildSettings = {
-			};
 			dependencies = (
 			);
 			name = "Jack Control";
@@ -198,15 +179,11 @@
 		089C1669FE841209C02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 1DBD214C08BA80EA00186707 /* Build configuration list for PBXProject "JackControl" */;
-			buildSettings = {
-			};
-			buildStyles = (
-				06F27B30FFEEEFEF11CA0E56 /* Development */,
-				06F27B31FFEEEFEF11CA0E56 /* Deployment */,
-			);
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 089C166AFE841209C02AAC07 /* Jack */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				8D202CE80486D31800D8A456 /* Jack Control */,
 			);
@@ -289,8 +266,13 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = JackControl_Prefix.pch;
+				HEADER_SEARCH_PATHS = /usr/local/include;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/PreferencePanes";
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					Jackmp,
+				);
 				PRODUCT_NAME = Jack;
 				SYMROOT = "$(HOME)/Library/PreferencePanes";
 				WRAPPER_EXTENSION = prefPane;
@@ -307,8 +289,13 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = JackControl_Prefix.pch;
+				HEADER_SEARCH_PATHS = /usr/local/include;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/PreferencePanes";
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					Jackmp,
+				);
 				PRODUCT_NAME = Jack;
 				WRAPPER_EXTENSION = prefPane;
 			};
