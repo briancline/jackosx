@@ -21,13 +21,13 @@ int getVerboseLevel(void);
 int openJack(const char *stringa);
 int closeJack(void);
 void closeJack1(void);
+void closeJack2(void);
 int my_system(const char*command);
 int my_system2(const char*command);
 int checkJack(void);
 int openJackClient(void);
 const char** getAllPorts(void);
 void portaPerNumero(int n, char *nomeOut, unsigned long *tipo);
-int connessionePerNumero(int n, char *nomeOut);
 int connessionePerNumero2(int n, char **nomeOut, int len);
 int getStatus(void);
 int numeroPorte();
@@ -48,7 +48,7 @@ int getAutoC(void);
 int getConnections(void);
 int getInterface(void) ;
 int ottieniNomeClienti(char **nomi,int *quanti);
-int nomeCliente(int n,char *nome);
+int nameOfClient(int n,char *nome);
 int quantiClienti(void);
 void writeHomePath(char *path);
 int getFlagOfJack(void);
@@ -56,4 +56,6 @@ jack_client_t* getClient(void);
 void getCurrentAudioDevice(char *outName);
 void setCurrentAudioDevice(char *inName);
 void JPLog(char *fmt,...);
-///other Kill utilities
+
+// Globals
+extern int gPortNum;

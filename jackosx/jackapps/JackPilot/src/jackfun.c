@@ -18,6 +18,17 @@ char coreAudioDevice[256];
 int defInput,defOutput,defSystem;
 int verboseLevel = 0;
 
+#define JACK_MAX_PORTS  2048
+
+int gPortNum = 0;
+
+/*
+static void JackPortRegistration(jack_port_id_t port, int a, void *arg) 
+{
+	gPortNum = numeroPorte_aux();
+}
+*/
+
 int openJack(const char *stringa) 
 {
     JPLog("%s\n", stringa);
@@ -58,10 +69,11 @@ int closeJack(void)
 	}
 	
 #if 1
+    JPLog("closeJack : kill\n");
     int pid = checkJack();
 	if (pid != 0) { 
-		kill(pid,SIGQUIT); //SIGUSR2 is the one that should work (look at jackd.c or engine.c) but doesn't work...
-	} 
+		kill(pid, SIGQUIT); //SIGUSR2 is the one that should work (look at jackd.c or engine.c) but doesn't work...
+  	} 
 #else
 	my_system2("killall jackd"); //this works but to re-start jackd you must close and re open JP (look console logs)
 	my_system2("killall jackd");
@@ -71,7 +83,7 @@ int closeJack(void)
 	return 1;
 }
 
-int my_system (const char* command)
+int my_system(const char* command)
 {
 	firsttime = 1;
 	int status;
@@ -95,7 +107,7 @@ int my_system2(const char* command)
 	int status;
 	pid_t pid;
 
-	pid = fork ();
+	pid = fork();
 	if (pid == 0) {
       execl(SHELL, SHELL, "-c", command, NULL);
       _exit(EXIT_FAILURE);
@@ -106,6 +118,55 @@ int my_system2(const char* command)
 	}
 	return status;
 }
+
+/*
+int my_system(const char* command)
+{
+    firsttime = 1;
+    
+    switch (fork()) {
+        case 0:					// child process 
+            switch (fork()) {
+                case 0:			// grandchild process 
+                    execl(SHELL, SHELL, "-c", command, NULL);
+                    _exit(99);
+                case - 1:
+                    _exit(98);
+                default:
+                    _exit(0);
+            }
+        case - 1:			
+            return -1;		
+            
+        default:
+            sleep(4);
+            return 1;
+    }
+}
+
+int my_system2(const char* command)
+{
+    firsttime = 1;
+    
+    switch (fork()) {
+        case 0:					// child process 
+            switch (fork()) {
+                case 0:			// grandchild process 
+                    execl(SHELL, SHELL, "-c", command, NULL);
+                    _exit(99);
+                case - 1:
+                    _exit(98);
+                default:
+                    _exit(0);
+            }
+        case - 1:			
+            return -1;		
+            
+        default:
+            return 1;
+    }
+}
+ */
 
 int checkJack(void) 
 {
@@ -128,11 +189,12 @@ int checkJack(void)
 int openJackClient(void) 
 {
     if (client != NULL) {
+        JPLog("openJackClient : first close old client \n");
         jack_client_close(client);
 		client = NULL;
     }
     client = jack_client_open("JackPilot", JackNullOption, NULL);
-	return 1;
+  	return 1;
 }
 
 const char** getAllPorts(void)
@@ -158,10 +220,11 @@ void portaPerNumero(int n, char* nomeOut, unsigned long* tipo)
 
 int numeroPorte() 
 {
+    
 	const char** ports = getAllPorts();
 	int i = 0;
 	if (ports) {
-		for (i = 0; i < 1024; i++) {
+		for (i = 0; i < JACK_MAX_PORTS; i++) {
 			if (ports[i] == NULL) {
 				free(ports);
 				return i;
@@ -171,6 +234,24 @@ int numeroPorte()
 	free(ports);
 	return i;
 }
+
+/*
+int numeroPorte_aux() 
+{
+	const char** ports = getAllPorts();
+	int i = 0;
+	if (ports) {
+		for (i = 0; i < JACK_MAX_PORTS; i++) {
+			if (ports[i] == NULL) {
+				free(ports);
+				return i;
+			}
+		}
+	}
+	free(ports);
+	return i;
+}
+*/
 
 int getConnections(void) 
 {
@@ -228,30 +309,6 @@ int connectPorts(char* da, char* a)
 int disconnectPorts(char* da, char* a) 
 {
     return jack_disconnect(client, da, a);
-}
-
-int connessionePerNumero(int n, char* nomeOut) 
-{
-    char porta[256];
-    jack_port_t* jp;
-    strcpy(nomeOut, "");
-    unsigned long tipo;
-    portaPerNumero(n, porta, &tipo);
-    jp = jack_port_by_name(client, porta);
-    if (jp == NULL)
-		return 0;
-    const char** connec = jack_port_get_all_connections(client, jp);
-    if (connec != NULL) {
-        int nu = numeroConn(connec);
-        int i;
-        for (i = 0; i < nu; i++) {
-            if (connec[i] && nomeOut) 
-				strcat(nomeOut, connec[i]);
-            return 1;
-        }
-		free(connec);
-    }
-    return 0;
 }
 
 int connessionePerNumero2(int n, char** nomeOut, int len) 
@@ -396,7 +453,7 @@ int getVerboseLevel(void)
 	return verboseLevel;
 }
 
-int nomeCliente(int n, char* nome) 
+int nameOfClient(int n, char* name) 
 { 
 	//!!Fix me, why lots of malloc for only one name!!
     char** array;
@@ -410,7 +467,7 @@ int nomeCliente(int n, char* nome)
     }
     int quanti;
     ottieniNomeClienti(array, &quanti);
-    strcpy(nome, array[n]);
+    strcpy(name, array[n]);
     for (i = 0; i < nporte; i++) {
         free(array[i]);
     }
@@ -426,7 +483,8 @@ int quantiClienti(void)
     ottieniNomeClienti(NULL,&quanti);
     return quanti;
 }
-int ottieniNomeClienti(char** nome, int* quanti) 
+
+int ottieniNomeClienti(char** name, int* quanti) 
 {
 	const char** ports = getAllPorts();
     int nPorts = numeroPorte(ports);
@@ -443,9 +501,9 @@ int ottieniNomeClienti(char** nome, int* quanti)
         if (strcmp(&idport[0], &oldIdport[0]) == 0) { 
 			goto end; 
 		}
-        if (nome) {
-			if (nome[progr]) 
-				strcpy(nome[progr], ports[i]);
+        if (name) {
+			if (name[progr]) 
+				strcpy(name[progr], ports[i]);
 		}
         progr++;
     end:
@@ -481,6 +539,7 @@ void getCurrentAudioDevice(char* outName)
     if (outName != NULL) 
 		strcpy(outName, &coreAudioDevice[0]);
 }
+
 void setCurrentAudioDevice(char* inName) 
 {
     if (inName != NULL) 

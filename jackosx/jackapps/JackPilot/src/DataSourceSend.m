@@ -268,7 +268,7 @@
 		DatiSend *dataToSend = [DatiSend alloc];
 		char *nomeCli;
 		nomeCli = (char*)alloca(256 * sizeof(char));
-		nomeCliente(i,nomeCli);
+		nameOfClient(i,nomeCli);
 		int tipoPorta = getTipoByName(nomeCli);
 		NSString *testclient = [NSString init];
 		testclient = [NSString stringWithCString:nomeCli];
@@ -281,10 +281,11 @@
 			if([[split0 objectAtIndex:0] isEqualToString:pre_name]) { JPLog("I've found an old client name, bypassing.\n"); bypass = YES; }
 		}
 		
-		if(bypass) continue;
+		if (bypass) 
+            continue;
 		
 		NSMutableArray *nomi = [self getPortsForClient:testclient withData:testo1];
-		if(nomi!=nil) { 
+		if (nomi != nil) { 
 			[dataToSend setData:[nomi count] nomiPorte:nomi nomeCliente:nomeCli kind:tipoPorta];
 			[data addObject:dataToSend];
 			quantiItem++;
@@ -296,7 +297,7 @@
 -(void)flush: (id)sender
 {
     int i;
-    for(i=0;i<[data count];i++) {
+    for(i = 0; i < [data count]; i++) {
         [[data objectAtIndex:i] destroy];
     }
     [data removeAllObjects];
@@ -307,11 +308,11 @@
 
 -(id)getCHisono: (int)numero
 {
-    if(selectedPort != -10) {
+    if (selectedPort != -10) {
         unsigned long tipo;
         porta = (char*)alloca(256 * sizeof(char));
         id item = [theOutline itemAtRow:[theOutline selectedRow]];
-        if([item isKindOfClass:[portsArrData class]]) {
+        if ([item isKindOfClass:[portsArrData class]]) {
         	portaPerNumero([item getID], porta, &tipo);
             JPLog("FROM: %s\n",porta);
             NSString *stringa;
@@ -329,7 +330,7 @@
     if(![theItem isKindOfClass:[portsArrData class]]) {
         int quante = [theItem getNPorte];
         int i;
-        for(i = 0; i < quante; i++) {
+        for (i = 0; i < quante; i++) {
             portsArrData *data2 = [theItem getNomePorta:i];
             unsigned long tipo;
             porta = (char*)alloca(256 * sizeof(char));
@@ -373,7 +374,7 @@
     NSArray *listaNC = [nome componentsSeparatedByString:@":"];
     NSString *cliente = [listaNC objectAtIndex:0];
     
-    for(i = 0;i < quantep; i++) {
+    for (i = 0;i < quantep; i++) {
         portsArrData *portData = [data2 objectAtIndex:i];
         NSString *name = [portData getName];
         NSArray *lista = [name componentsSeparatedByString:@":"];
@@ -388,13 +389,14 @@
             }
         }
     }
-    if(written==0) return nil;
+    if (written == 0) 
+        return nil;
     return res;
 }
 
 -(void) needsReload {
     int n = numeroPorte();
-    if(quanteporte!=n) { 
+    if (quanteporte != n) { 
 		JPLog("Needs Reload, nport changed.\n"); 
 		*needsRelo = 22; 
 	}
@@ -410,7 +412,10 @@
 
 -(int)getTipoString {
     id item = [theOutline itemAtRow:[theOutline selectedRow]];
-    if([item isKindOfClass:[portsArrData class]]) { if([item IsConn]==1) return 666; }
+    if ([item isKindOfClass:[portsArrData class]]) { 
+        if ([item IsConn] == 1) 
+            return 666; 
+    }
     else return kindCliItem;
     return 333;
 }

@@ -1,6 +1,6 @@
-"Start Jack" = "Demarrer";
-"Stop Jack" = "Arreter";
-"Jack is Off" = "Jack est arrete";
+"Start Jack" = "Démarrer";
+"Stop Jack" = "Arrêter";
+"Jack is Off" = "Jack est arrêté";
 "Jack is On" = "Jack est en route";
 
 /* ALERTS */
@@ -40,19 +40,19 @@
 /* "You have %d clients running, they will stop working or maybe crash!!\n" */
 "You have " = "Vous avez ";
 " clients running, they will stop working or maybe crash!!" = " client(s) actif(s), il(s) vont s'arrêter de fonctionner et peut être planter!!";
-"CoreAudio device stream configuration has changed, backend stopped." = "La configuration du device CoreAudio a changé, il s'est arrêté.";
-"CoreAudio device sampling rate has changed, backend stopped." = "La fréquence d'échantillonnage du device CoreAudio a changé, il s'est arrêté.";
-"Device is already used with another sample rate, that will be changed..." = "Le péripherique est déjà utilisé avec une autre fréquence d'échantillonnage, elle sera changée...";
+"Another application has changed the device configuration." = "Le serveur Jack a été stoppé et devra être relancé avec une nouvelle configuration.";
+"Another application has changed the sample rate." = "Le serveur Jack a été stoppé et devra être relancé avec une nouvelle fréquence.";
+"Device is already used with another sample rate, that will be changed..." = "Le périphérique est déjà utilisé avec une autre fréquence d'échantillonnage, elle sera changée...";
 
 
 /* PLUG-INS */
-"Open Instance" = "Demarrer";
-"Close Instance" = "Arreter";
+"Open Instance" = "Démarrer";
+"Close Instance" = "Arrêter";
 "Open Editor" = "Edition";
 
 
 /* ABOUT */
-"not installed." = "non installé.";
+"not installed." = "Non installé.";
 "Maybe too old." = "Peut être trop ancien.";
 "corrupted" = "endommage";
 

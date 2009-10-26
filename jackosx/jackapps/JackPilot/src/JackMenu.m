@@ -21,7 +21,7 @@ static void JackInfoShutDown(int code, const char* reason, void *arg)
 	JPLog("JackInfoShutDown\n");
     
     if (gJackRunning) {
-        
+        id POOL = [[NSAutoreleasePool alloc] init];
         JackMenu* menu = (JackMenu*)arg;
         [menu closeJackDeamon1:0];
      
@@ -30,6 +30,7 @@ static void JackInfoShutDown(int code, const char* reason, void *arg)
         NSString *mess3 = NSLocalizedString(@"Ok", nil);
         
         NSRunCriticalAlertPanel(mess1, mess2, mess3, nil, nil);
+        [POOL release];
     }
 }
 
@@ -281,7 +282,8 @@ static void stopCallback(CFNotificationCenterRef center,
                          const void* object,
                          CFDictionaryRef userInfo)
 {
-	if (gJackRunning) {
+ 	if (gJackRunning) {
+        id POOL = [[NSAutoreleasePool alloc] init];
 		gJackRunning = false;
 	
 		NSString *mess1 = NSLocalizedString(@"Fatal error:", nil);
@@ -290,6 +292,7 @@ static void stopCallback(CFNotificationCenterRef center,
 	
 		NSRunCriticalAlertPanel(mess1, mess2, mess3, nil, nil);
 		closeJack();
+        [POOL release];
 		exit(1);
 	}
 }
@@ -459,14 +462,13 @@ static bool availableOneSamplerate(AudioDeviceID device, Float64 wantedSampleRat
     UInt32 outSize;
     UInt32 used; 
     Float64 usedSampleRate;
-    int i;
-    
+     
     // Get running rate
     outSize = sizeof(UInt32);
     err = AudioDeviceGetProperty(device, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyDeviceIsRunningSomewhere, &outSize, &used);
     if (err != noErr) {
         JPLog("Cannot get device running state\n");
-        return true;
+        return false;
     } 
      
     // Device is not used...
@@ -511,6 +513,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 @implementation JackMenu
 
 - (void)awakeFromNib {
+    
+    id POOL = [[NSAutoreleasePool alloc] init];
 	
 	plugins_ids = [[NSMutableArray array] retain];
     
@@ -725,9 +729,14 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 		if (needsRel) 
 			[self reloadPref:nil];
     }
+    
+    [POOL release];
 }
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
+    
+    id POOL = [[NSAutoreleasePool alloc] init];
+    
 	NSMutableArray *toPrefs = [NSMutableArray array];
 	NSRect jpFrame = [jpWinController frame];
 	NSRect mangerFrame = [managerWin frame];
@@ -783,6 +792,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 	if (![Utility savePref:openedPlugs prefType:'PlOp'])
 		NSLog(@"Cannot plugins instances");
 	#endif
+    
+    [POOL release];
 	return NSTerminateNow;
 }
 
@@ -792,6 +803,9 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 }
 
 - (void)addPluginSlot {
+    
+    id POOL = [[NSAutoreleasePool alloc] init];
+    
 	NSString *str = @"Slot ";
 	NSNumber *actualN = [NSNumber numberWithInt:[pluginsMenu numberOfItems]+1];
 	
@@ -866,6 +880,7 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
     }
 	
 	[pluginsMenu setSubmenu:thisSlot forItem:[pluginsMenu itemWithTitle:[str stringByAppendingString:[actualN stringValue]]] ];
+    [POOL release];
 }
 
 - (void) sendJackStatusToPlugins:(BOOL)isOn {
@@ -879,6 +894,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 
 - (IBAction)startJack:(id)sender
 {	
+    id POOL = [[NSAutoreleasePool alloc] init];
+    
 	if (![self launchJackDeamon:sender])
         return;
     
@@ -915,7 +932,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         jack_activate(getClient());
         
         [isonBut setStringValue:LOCSTR(@"Jack is On")];
-        [startBut setTitle:LOCSTR(@"Stop Jack")]; [toggleDock setTitle:LOCSTR(@"Stop Jack")];
+        [startBut setTitle:LOCSTR(@"Stop Jack")]; 
+        [toggleDock setTitle:LOCSTR(@"Stop Jack")];
         [self setupTimer];
         [bufferText setEnabled:NO];
         [outputChannels setEnabled:NO];
@@ -933,10 +951,14 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         writeStatus(0); 
     }
     [self jackALstore:sender];
+    
+    [POOL release];
  }
 
 -(void)warning:(id)sender
 {
+    id POOL = [[NSAutoreleasePool alloc] init];
+    
     int nClients = quantiClienti()-1;
 	if ([[outputChannels titleOfSelectedItem] intValue] == 0 && [[inputChannels titleOfSelectedItem] intValue] == 0) 
 		nClients++;
@@ -959,12 +981,12 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 			[self closeJackDeamon:sender];
             break;
         case -1:
-            return;
             break;
         case 1:
-            return;
             break;
     }
+    
+    [POOL release];
 }
 
 - (IBAction)toggleJack:(id)sender 
@@ -980,7 +1002,6 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
             break;
     }
 }
-
 
 - (IBAction)toggle2Jack:(id)sender 
 {
@@ -1009,6 +1030,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 
 -(IBAction)jackALstore:(id)sender 
 {
+    id POOL = [[NSAutoreleasePool alloc] init];
+    
 	char drivername[128];
 	getDeviceUIDFromID(selDevID,drivername);
 	
@@ -1058,10 +1081,13 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
     [Utility savePref:toFile prefType:'audi'];
     
     [self closePrefWin:sender];
+    [POOL release];
 }
 
 - (IBAction)openDocsFile:(id)sender {
 
+    id POOL = [[NSAutoreleasePool alloc] init];
+    
     char *commando,*res,*buf2;
     commando = (char*)calloc(256,sizeof(char*));
     res = (char*)calloc(256,sizeof(char*));
@@ -1094,7 +1120,10 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
             break;
     }
     my_system2(commando);
-    free(commando); free(res); free(buf2);
+    free(commando); 
+    free(res); 
+    free(buf2);
+    [POOL release];
 }
 
 - (int)writeHomePath {
@@ -1107,6 +1136,9 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 }
 
 - (IBAction)getJackInfo:(id)sender {
+    
+    id POOL = [[NSAutoreleasePool alloc] init];
+    
     NSBundle *bundle = [NSBundle bundleWithIdentifier:@"com.grame.JackRouter"];
     if (!bundle) {
 		NSLog(@"JAS not found");
@@ -1144,6 +1176,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         [jpCopyRText setStringValue:jpCopyR];
         jpPath = [bundle resourcePath];
     }
+    
+    [POOL release];
 }
 
 -(IBAction)openJackOsxNet:(id)sender {
@@ -1236,6 +1270,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 }
 
 - (bool) launchJackDeamon:(id) sender {
+    
+    id POOL = [[NSAutoreleasePool alloc] init];
         
     char* driver = (char*)malloc(sizeof(char)*[[driverBox stringValue] length]+2);
     [[driverBox titleOfSelectedItem] getCString:driver];
@@ -1306,9 +1342,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         goto end;
 	}
 	
-    char* stringa;
-    stringa = (char*)malloc(sizeof(char) * 512);
-	memset(stringa, 0x0, sizeof(char) * 512);
+    char stringa[512];
+	memset(stringa, 0x0, 512);
 	
 	char drivername[128];
 	getDeviceUIDFromID(vDevice,drivername);
@@ -1319,24 +1354,47 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 
     Gestalt(gestaltSystemVersionMajor, &major);
     Gestalt(gestaltSystemVersionMinor, &minor);
-     
-    if (major == 10 && minor >= 5) {
-
-    #if defined(__i386__)
-        //strcpy(stringa, "arch -i386 /usr/local/bin/./jackdmp -R -d ");
-        strcpy(stringa,"/usr/local/bin/./jackdmp -R -d ");
-    #elif defined(__x86_64__)
-        strcpy(stringa,"/usr/local/bin/./jackdmp -R -d ");
-    #elif defined(__ppc__)
-        strcpy(stringa, "arch -ppc /usr/local/bin/./jackdmp -R -d ");
-    #elif defined(__ppc64__)
-        strcpy(stringa,"/usr/local/bin/./jackdmp -R -d ");
-    #endif
     
+    
+    if (getVerboseLevel() != 0) {
+        
+        if (major == 10 && minor >= 5) {
+                    
+        #if defined(__i386__)
+            //strcpy(stringa, "arch -i386 /usr/local/bin/./jackdmp -R -d ");
+            strcpy(stringa,"/usr/local/bin/./jackdmp -R -v -d ");
+        #elif defined(__x86_64__)
+            strcpy(stringa,"/usr/local/bin/./jackdmp -R  -v -d ");
+        #elif defined(__ppc__)
+            strcpy(stringa, "arch -ppc /usr/local/bin/./jackdmp -R  -v -d ");
+        #elif defined(__ppc64__)
+            strcpy(stringa,"/usr/local/bin/./jackdmp -R  -v -d ");
+        #endif
+            
+        } else {
+            strcpy(stringa,"/usr/local/bin/./jackdmp -R  -v -d ");
+        }
+        
     } else {
-        strcpy(stringa,"/usr/local/bin/./jackdmp -R -d ");
+        
+        if (major == 10 && minor >= 5) {
+        
+        #if defined(__i386__)
+            //strcpy(stringa, "arch -i386 /usr/local/bin/./jackdmp -R -d ");
+            strcpy(stringa,"/usr/local/bin/./jackdmp -R -d ");
+        #elif defined(__x86_64__)
+            strcpy(stringa,"/usr/local/bin/./jackdmp -R -d ");
+        #elif defined(__ppc__)
+            strcpy(stringa, "arch -ppc /usr/local/bin/./jackdmp -R -d ");
+        #elif defined(__ppc64__)
+            strcpy(stringa,"/usr/local/bin/./jackdmp -R -d ");
+        #endif
+        
+        } else {
+            strcpy(stringa,"/usr/local/bin/./jackdmp -R -d ");
+        }
     }
-    
+       
     strcat(stringa, driver);
 	strcat(stringa, " -r ");
     strcat(stringa, samplerate);
@@ -1359,27 +1417,29 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
     
     StartNotification();
     
-    free(stringa); 
-	free(driver); 
+ 	free(driver); 
 	free(samplerate); 
 	free(buffersize); 
 	free(out_channels); 
 	free(in_channels); 
 	free(interface); 
+    [POOL release];
     return true;
     
 end:
-    free(stringa); 
-	free(driver); 
+  	free(driver); 
 	free(samplerate); 
 	free(buffersize); 
 	free(out_channels); 
 	free(in_channels); 
 	free(interface); 
+    [POOL release];
     return false;
 }
 
 - (IBAction) closeJackDeamon:(id) sender {
+    
+    id POOL = [[NSAutoreleasePool alloc] init];
 	[managerWin orderOut:sender];
 	
 	StopNotification();
@@ -1415,9 +1475,11 @@ end:
 	[routingBut setEnabled:NO];
     
     gJackRunning = false;
+    [POOL release];
 }
 
 - (IBAction) closeJackDeamon1:(id) sender {
+    id POOL = [[NSAutoreleasePool alloc] init];
 	[managerWin orderOut:sender];
 	
 	StopNotification();
@@ -1444,10 +1506,14 @@ end:
 	[routingBut setEnabled:NO];
     
     gJackRunning = false;
+    [POOL release];
 }
 
 
 - (IBAction) reloadPref:(id) sender {
+    
+    id POOL = [[NSAutoreleasePool alloc] init];
+    
     if ([interfaceBox titleOfSelectedItem]) 
 		[[interfaceBox titleOfSelectedItem] getCString:&selectedDevice[0]];
     [interfaceBox removeAllItems];
@@ -1472,6 +1538,8 @@ end:
     if (![self writeCAPref:sender]) {
         [Utility error:'aud4']; 
     }
+    
+    [POOL release];
 }
 
 /*
@@ -1479,6 +1547,9 @@ Scan current audio device properties : in/out channels, sampling rate, buffer si
 */
 
 - (BOOL) writeCAPref:(id)sender {
+    
+    id POOL = [[NSAutoreleasePool alloc] init];
+    
     OSStatus err;
     UInt32 size;
 	int i, count;
@@ -1531,7 +1602,7 @@ Scan current audio device properties : in/out channels, sampling rate, buffer si
     size = sizeof(UInt32);
     err = AudioDeviceGetProperty(selDevID, 0, false, kAudioDevicePropertyBufferFrameSize, &size, &newBufFrame);
     if (err != noErr) 
-        return NO;
+        goto end;
     
 	[bufferText selectItemWithTitle:@"512"]; // forcing to a lower value...
     JPLog("got actual buffersize ok %ld\n",newBufFrame);
@@ -1576,7 +1647,7 @@ Scan current audio device properties : in/out channels, sampling rate, buffer si
 	size = sizeof(UInt32);
     err = AudioDeviceGetProperty(selDevID, 0, false, kAudioDevicePropertyBufferFrameSize, &size, &newBufFrame);
     if (err != noErr) 
-        return NO;
+        goto end;
 	
 	JPLog("got actual buffersize OK %ld\n",newBufFrame);
     
@@ -1585,12 +1656,17 @@ Scan current audio device properties : in/out channels, sampling rate, buffer si
 		err = AudioDeviceSetProperty(selDevID, NULL, 0, false, kAudioDevicePropertyBufferFrameSize, theSize, &oldSize);
 		if (err) { 
 			NSLog(@"err in kAudioDevicePropertyBufferFrameSize"); 
-            return NO; 
+            goto end; 
 		}
 	}
     
     JPLog("set old buffersize OK\n");
+    [POOL release];
     return YES;
+    
+end:
+    [POOL release];
+    return NO;
 }
 
 /*
@@ -1604,23 +1680,28 @@ Set the selDevID variable to the currently selected device of the system defaukt
     Boolean isWritable;
     AudioDeviceID defaultDev;
     int i;
+    int manyDevices;
+    
+    id POOL = [[NSAutoreleasePool alloc] init];
     
     err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices, &size, &isWritable);
-    if (err != noErr) 
-		return NO;
+    if (err != noErr) {
+        [POOL release];
+        return NO; 
+    }
     
-    int manyDevices = size/sizeof(AudioDeviceID);
+    manyDevices = size/sizeof(AudioDeviceID);
 	JPLog("number of audio devices: %ld\n",manyDevices);
     
     AudioDeviceID devices[manyDevices];
     err = AudioHardwareGetProperty(kAudioHardwarePropertyDevices, &size, &devices[0]);
     if (err != noErr) 
-		return NO;
+		goto end; 
         
     size = sizeof(AudioDeviceID);
     err = AudioHardwareGetProperty(kAudioHardwarePropertyDefaultOutputDevice, &size, &defaultDev);
     if (err != noErr) 
-		return NO;
+		goto end; 
         
     BOOL selected = NO;
 	JPLog("First selected device: %s.\n", selectedDevice);
@@ -1631,7 +1712,7 @@ Set the selDevID variable to the currently selected device of the system defaukt
 		size = sizeof(CFStringRef);
 		err = AudioDeviceGetProperty(devices[i], 0, false, kAudioDevicePropertyDeviceNameCFString, &size, &nameRef);
         if (err != noErr) 
-			return NO;
+			goto end; 
 		CFStringGetCString(nameRef, name, 256, kCFStringEncodingMacRoman);
 		JPLog("Checking device: %s.\n",name);
 		
@@ -1653,7 +1734,12 @@ Set the selDevID variable to the currently selected device of the system defaukt
     if (!selected) 
 		selDevID = defaultDev; 
     
+    [POOL release];
     return YES;
+    
+end:
+    [POOL release];
+    return NO;
 }
 
 #ifdef PLUGIN

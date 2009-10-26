@@ -34,7 +34,8 @@
 }
 
 -(id)getNomeCliente {
-    if (nomeCliente == NULL) return @"NIL";
+    if (nomeCliente == NULL) 
+        return @"NIL";
     //NSLog(@"Name required");
     NSString *res = [NSString stringWithCString:nomeCliente];
 #ifdef DEBUGGO
@@ -111,7 +112,7 @@
     }
    
     nomeCliente = (char*)malloc(sizeof(char*) * 256);
-    strcpy(nomeCliente,nome);
+    strcpy(nomeCliente, nome);
     tipoCliente = tipo;
 }
 
@@ -297,7 +298,7 @@
 		DatiSend2 *dataToSend = [DatiSend2 alloc];
 		char *nomeCli;
 		nomeCli = (char*)alloca(256*sizeof(char));
-		nomeCliente(i,nomeCli);
+		nameOfClient(i,nomeCli);
 		int tipoPorta = getTipoByName(nomeCli);
 		NSString *testclient = [NSString init];
 		testclient = [NSString stringWithCString:nomeCli];
