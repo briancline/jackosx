@@ -1,225 +1,118 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>IBClasses</key>
-	<array>
-		<dict>
-			<key>ACTIONS</key>
-			<dict>
-				<key>closeAboutWin</key>
-				<string>id</string>
-				<key>closeJackDeamon</key>
-				<string>id</string>
-				<key>closePlugin</key>
-				<string>id</string>
-				<key>closePrefWin</key>
-				<string>id</string>
-				<key>getJackInfo</key>
-				<string>id</string>
-				<key>jackALstore</key>
-				<string>id</string>
-				<key>launchJackDeamon</key>
-				<string>id</string>
-				<key>openAMS</key>
-				<string>id</string>
-				<key>openAboutWin</key>
-				<string>id</string>
-				<key>openDocsFile</key>
-				<string>id</string>
-				<key>openJackOsxNet</key>
-				<string>id</string>
-				<key>openJohnnyMail</key>
-				<string>id</string>
-				<key>openPlugin</key>
-				<string>id</string>
-				<key>openPrefWin</key>
-				<string>id</string>
-				<key>openSP</key>
-				<string>id</string>
-				<key>reloadPref</key>
-				<string>id</string>
-				<key>startJack</key>
-				<string>id</string>
-				<key>stopJack</key>
-				<string>id</string>
-				<key>testPlugin</key>
-				<string>id</string>
-				<key>toggle2Jack</key>
-				<string>id</string>
-				<key>toggleJack</key>
-				<string>id</string>
-				<key>warning</key>
-				<string>id</string>
-			</dict>
-			<key>CLASS</key>
-			<string>JackMenu</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>OUTLETS</key>
-			<dict>
-				<key>JALauto</key>
-				<string>NSButton</string>
-				<key>JALin</key>
-				<string>NSTextField</string>
-				<key>JALout</key>
-				<string>NSTextField</string>
-				<key>aboutWin</key>
-				<string>id</string>
-				<key>bufferText</key>
-				<string>id</string>
-				<key>connectionsNumb</key>
-				<string>NSTextField</string>
-				<key>cpuLoadBar</key>
-				<string>NSProgressIndicator</string>
-				<key>defInput</key>
-				<string>id</string>
-				<key>defOutput</key>
-				<string>id</string>
-				<key>driverBox</key>
-				<string>NSPopUpButton</string>
-				<key>inputChannels</key>
-				<string>id</string>
-				<key>interfaceBox</key>
-				<string>NSPopUpButton</string>
-				<key>isonBut</key>
-				<string>NSTextField</string>
-				<key>jackCopyRText</key>
-				<string>NSTextField</string>
-				<key>jackPilWin</key>
-				<string>id</string>
-				<key>jackVerText</key>
-				<string>NSTextField</string>
-				<key>jackdMode</key>
-				<string>id</string>
-				<key>jasCopyRText</key>
-				<string>NSTextField</string>
-				<key>jasVerText</key>
-				<string>NSTextField</string>
-				<key>jpCopyRText</key>
-				<string>NSTextField</string>
-				<key>jpVerText</key>
-				<string>NSTextField</string>
-				<key>jpWinController</key>
-				<string>id</string>
-				<key>loadText</key>
-				<string>NSTextField</string>
-				<key>managerWin</key>
-				<string>NSWindow</string>
-				<key>outputChannels</key>
-				<string>id</string>
-				<key>pluginSubMenu</key>
-				<string>id</string>
-				<key>pluginsMenu</key>
-				<string>id</string>
-				<key>prefWindow</key>
-				<string>id</string>
-				<key>routingBut</key>
-				<string>id</string>
-				<key>samplerateText</key>
-				<string>id</string>
-				<key>startBut</key>
-				<string>NSButton</string>
-				<key>sysDefOut</key>
-				<string>id</string>
-				<key>toggleDock</key>
-				<string>NSMenuItem</string>
-				<key>verboseBox</key>
-				<string>id</string>
-				<key>waitPanel</key>
-				<string>NSPanel</string>
-				<key>warnPanel</key>
-				<string>NSPanel</string>
-			</dict>
-			<key>SUPERCLASS</key>
-			<string>NSObject</string>
-		</dict>
-		<dict>
-			<key>CLASS</key>
-			<string>NSMenuItem</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>SUPERCLASS</key>
-			<string>NSObject</string>
-		</dict>
-		<dict>
-			<key>CLASS</key>
-			<string>FirstResponder</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>SUPERCLASS</key>
-			<string>NSObject</string>
-		</dict>
-		<dict>
-			<key>ACTIONS</key>
-			<dict>
-				<key>loadScheme</key>
-				<string>id</string>
-				<key>makeCon</key>
-				<string>id</string>
-				<key>orderFront</key>
-				<string>id</string>
-				<key>reload</key>
-				<string>id</string>
-				<key>reloadColor</key>
-				<string>id</string>
-				<key>removCon</key>
-				<string>id</string>
-				<key>removeACon</key>
-				<string>id</string>
-				<key>saveScheme</key>
-				<string>id</string>
-				<key>selectFrom</key>
-				<string>id</string>
-				<key>selectTo</key>
-				<string>id</string>
-			</dict>
-			<key>CLASS</key>
-			<string>JackConnections</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>OUTLETS</key>
-			<dict>
-				<key>aText</key>
-				<string>NSTextField</string>
-				<key>colannaSend</key>
-				<string>NSTableColumn</string>
-				<key>colonnaDest</key>
-				<string>NSTableColumn</string>
-				<key>colonnaSend</key>
-				<string>NSTableColumn</string>
-				<key>colonnaSource</key>
-				<string>NSTableColumn</string>
-				<key>cpuLoadBar</key>
-				<string>NSProgressIndicator</string>
-				<key>daText</key>
-				<string>NSTextField</string>
-				<key>itemCorrente</key>
-				<string>id</string>
-				<key>loadText</key>
-				<string>NSTextField</string>
-				<key>loadWarn</key>
-				<string>NSPanel</string>
-				<key>nCon</key>
-				<string>NSTextField</string>
-				<key>reloadbut</key>
-				<string>NSButton</string>
-				<key>tabellaConnect</key>
-				<string>NSOutlineView</string>
-				<key>tabellaPorte</key>
-				<string>NSTableView</string>
-				<key>tabellaSend</key>
-				<string>NSOutlineView</string>
-				<key>theWindow</key>
-				<string>NSWindow</string>
-				<key>warnText</key>
-				<string>NSTextField</string>
-			</dict>
-			<key>SUPERCLASS</key>
-			<string>NSObject</string>
-		</dict>
-	</array>
-	<key>IBVersion</key>
-	<string>1</string>
-</dict>
-</plist>
+{
+    IBClasses =     (
+                {
+            CLASS = FirstResponder;
+            LANGUAGE = ObjC;
+            SUPERCLASS = NSObject;
+        },
+                {
+            ACTIONS =             {
+                loadScheme = id;
+                makeCon = id;
+                orderFront = id;
+                reload = id;
+                reloadColor = id;
+                removCon = id;
+                removeACon = id;
+                saveScheme = id;
+                selectFrom = id;
+                selectTo = id;
+            };
+            CLASS = JackConnections;
+            LANGUAGE = ObjC;
+            OUTLETS =             {
+                aText = NSTextField;
+                colannaSend = NSTableColumn;
+                colonnaDest = NSTableColumn;
+                colonnaSend = NSTableColumn;
+                colonnaSource = NSTableColumn;
+                cpuLoadBar = NSProgressIndicator;
+                daText = NSTextField;
+                itemCorrente = id;
+                loadText = NSTextField;
+                loadWarn = NSPanel;
+                nCon = NSTextField;
+                reloadbut = NSButton;
+                tabellaConnect = NSOutlineView;
+                tabellaPorte = NSTableView;
+                tabellaSend = NSOutlineView;
+                theWindow = NSWindow;
+                warnText = NSTextField;
+            };
+            SUPERCLASS = NSObject;
+        },
+                {
+            ACTIONS =             {
+                closeAboutWin = id;
+                closeJackDeamon = id;
+                closePlugin = id;
+                closePrefWin = id;
+                getJackInfo = id;
+                jackALstore = id;
+                launchJackDeamon = id;
+                openAMS = id;
+                openAboutWin = id;
+                openDocsFile = id;
+                openJackOsxNet = id;
+                openJohnnyMail = id;
+                openPlugin = id;
+                openPrefWin = id;
+                openSP = id;
+                reloadPref = id;
+                startJack = id;
+                stopJack = id;
+                testPlugin = id;
+                toggle2Jack = id;
+                toggleJack = id;
+                warning = id;
+            };
+            CLASS = JackMenu;
+            LANGUAGE = ObjC;
+            OUTLETS =             {
+                JALauto = NSButton;
+                JALin = NSTextField;
+                JALout = NSTextField;
+                aboutWin = id;
+                bufferText = id;
+                connectionsNumb = NSTextField;
+                cpuLoadBar = NSProgressIndicator;
+                defInput = id;
+                defOutput = id;
+                driverBox = NSPopUpButton;
+                inputChannels = id;
+                interfaceBox = NSPopUpButton;
+                isonBut = NSTextField;
+                jackCopyRText = NSTextField;
+                jackPilWin = id;
+                jackVerText = NSTextField;
+                jackdMode = id;
+                jasCopyRText = NSTextField;
+                jasVerText = NSTextField;
+                jpCopyRText = NSTextField;
+                jpVerText = NSTextField;
+                jpWinController = id;
+                loadText = NSTextField;
+                managerWin = NSWindow;
+                outputChannels = id;
+                pluginSubMenu = id;
+                pluginsMenu = id;
+                prefWindow = id;
+                routingBut = id;
+                samplerateText = id;
+                startBut = NSButton;
+                sysDefOut = id;
+                toggleDock = NSMenuItem;
+                verboseBox = id;
+                waitPanel = NSPanel;
+                warnPanel = NSPanel;
+            };
+            SUPERCLASS = NSObject;
+        },
+                {
+            CLASS = NSMenuItem;
+            LANGUAGE = ObjC;
+            SUPERCLASS = NSObject;
+        }
+    );
+    IBVersion = 1;
+}
