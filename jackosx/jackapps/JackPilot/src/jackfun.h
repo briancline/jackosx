@@ -13,10 +13,17 @@
 #include <jack/jack.h>
 #include <Carbon/Carbon.h>
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+
 int getDefInput(void);
 int getDefOutput(void);
 int getSysOut(void);
 int getVerboseLevel(void);
+int getHogMode(void);
 
 int openJack(const char *stringa);
 int closeJack(void);
@@ -25,7 +32,7 @@ void closeJack2(void);
 int my_system(const char*command);
 int my_system2(const char*command);
 int checkJack(void);
-int openJackClient(void);
+bool openJackClient(void);
 const char** getAllPorts(void);
 void portaPerNumero(int n, char *nomeOut, unsigned long *tipo);
 int connessionePerNumero2(int n, char **nomeOut, int len);
@@ -40,7 +47,7 @@ int getSR(void);
 int getBUF(void);
 int getDRIVER(void);
 int getCHAN(void);
-int jackALStore(int inCH,int outCH,int AUTOC,int DEFinput,int DEFoutput,int DEFsystem,int LOGSLevel,char* UI);
+int jackALStore(int inCH, int outCH, int AUTOC, int DEFinput, int DEFoutput, int DEFsystem, int LOGSLevel, char* driverIn, char* driverOut, int HOG) ;
 int jackALLoad(void);
 int getInCH(void);
 int getOutCH(void);
@@ -59,3 +66,7 @@ void JPLog(char *fmt,...);
 
 // Globals
 extern int gPortNum;
+
+#ifdef __cplusplus
+}
+#endif

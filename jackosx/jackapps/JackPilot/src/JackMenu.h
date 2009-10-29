@@ -10,7 +10,7 @@
 #import "Utility.h"
 
 #define LOCSTR(s) NSLocalizedString(s,nil)
-
+#define NO_DEVICE  "no device"
 
 @interface JackMenu : NSObject
 {
@@ -22,8 +22,10 @@
     id jackPilWin;
     id jackdMode;
 	id verboseBox;
+    id hogBox;
     IBOutlet NSPopUpButton* driverBox;
-    IBOutlet NSPopUpButton* interfaceBox;
+    IBOutlet NSPopUpButton* interfaceInputBox;
+    IBOutlet NSPopUpButton* interfaceOutputBox;
     IBOutlet NSTextField* isonBut;
     IBOutlet NSProgressIndicator *cpuLoadBar;
     IBOutlet NSTextField* loadText;
@@ -51,12 +53,13 @@
     NSModalSession modalSex2;
     id aboutWin;
     NSString *jpPath;
-    char  selectedDevice[256];
-    char  oldSelectedDevice[256];
-    AudioDeviceID selDevID;
+    char  selectedInputDevice[256];
+    char  selectedOutputDevice[256];
+    AudioDeviceID selInputDevID;
+    AudioDeviceID selOutputDevID;
     id defInput,defOutput,sysDefOut;
-	id pluginsMenu; //NSMenu
-	id pluginSubMenu; //NSMenu
+	id pluginsMenu;     //NSMenu
+	id pluginSubMenu;   //NSMenu
 	
 	NSMutableArray *plugins_ids;
 	id routingBut;

@@ -17,6 +17,7 @@ int flag;
 char coreAudioDevice[256];
 int defInput,defOutput,defSystem;
 int verboseLevel = 0;
+int hogmode = 0;
 
 #define JACK_MAX_PORTS  2048
 
@@ -186,7 +187,7 @@ int checkJack(void)
     return 0;
 }
 
-int openJackClient(void) 
+bool openJackClient(void) 
 {
     if (client != NULL) {
         JPLog("openJackClient : first close old client \n");
@@ -194,7 +195,7 @@ int openJackClient(void)
 		client = NULL;
     }
     client = jack_client_open("JackPilot", JackNullOption, NULL);
-  	return 1;
+    return (client != NULL);
 }
 
 const char** getAllPorts(void)
@@ -377,7 +378,7 @@ int getInterface(void)
     return interface;
 }
 
-int jackALStore(int inCH,int outCH,int AUTOC,int DEFinput,int DEFoutput,int DEFsystem,int LOGSLevel,char* UI) 
+int jackALStore(int inCH, int outCH, int AUTOC, int DEFinput, int DEFoutput, int DEFsystem, int LOGSLevel, char* driverIn, char* driverOut, int HOG) 
 {
     FILE *prefFile;
     char *path;
@@ -387,8 +388,9 @@ int jackALStore(int inCH,int outCH,int AUTOC,int DEFinput,int DEFoutput,int DEFs
         return 0;
     } else {	
 		verboseLevel = LOGSLevel;
-		fprintf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s"
-				,inCH, -1, outCH, -1, AUTOC, -1, DEFinput, -1, DEFoutput, -1, DEFsystem, -1, verboseLevel, -1, UI
+        hogmode = HOG;
+		fprintf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s\t%d\t%s\t%d\t%d"
+				,inCH, -1, outCH, -1, AUTOC, -1, DEFinput, -1, DEFoutput, -1, DEFsystem, -1, verboseLevel, -1, driverIn, -1, driverOut, -1, HOG
 				); 
 		fclose(prefFile);
     }
@@ -399,6 +401,8 @@ int jackALLoad(void)
 {
     FILE *prefFile;
     char *path;
+    char driverIn[128];
+    char driverOut[128];
     path = (char*)alloca(256*sizeof(char));
     sprintf(path,"%s/Library/Preferences/JAS.jpil",homePath);
     if ((prefFile = fopen(path, "rt")) == NULL) {
@@ -409,10 +413,12 @@ int jackALLoad(void)
         defOutput = FALSE;
         defSystem = FALSE;
 		verboseLevel = 0;
+        hogmode = 0;
         return 1;
     } else {
 		int nullo;
-		fscanf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d",&inch,&nullo,&outch,&nullo,&autoc,&nullo,&defInput,&nullo,&defOutput,&nullo,&defSystem,&nullo,&verboseLevel); 
+		fscanf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s\t%d\t%s\t%d\t%d",
+            &inch,&nullo,&outch,&nullo,&autoc,&nullo,&defInput,&nullo,&defOutput,&nullo,&defSystem,&nullo,&verboseLevel,&nullo,driverIn, &nullo, driverOut, &nullo, &hogmode); 
  		fclose(prefFile);
     }
     return 1;
@@ -453,6 +459,11 @@ int getVerboseLevel(void)
 	return verboseLevel;
 }
 
+int getHogMode(void) 
+{
+	return hogmode;
+}
+
 int nameOfClient(int n, char* name) 
 { 
 	//!!Fix me, why lots of malloc for only one name!!
@@ -480,7 +491,7 @@ int nameOfClient(int n, char* name)
 int quantiClienti(void) 
 {
     int quanti;
-    ottieniNomeClienti(NULL,&quanti);
+    ottieniNomeClienti(NULL, &quanti);
     return quanti;
 }
 

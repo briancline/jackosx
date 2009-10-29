@@ -73,8 +73,10 @@
                 defInput = id;
                 defOutput = id;
                 driverBox = NSPopUpButton;
+                hogBox = id;
                 inputChannels = id;
-                interfaceBox = NSPopUpButton;
+                interfaceInputBox = NSPopUpButton;
+                interfaceOutputBox = NSPopUpButton;
                 isonBut = NSTextField;
                 jackCopyRText = id;
                 jackPilWin = id;

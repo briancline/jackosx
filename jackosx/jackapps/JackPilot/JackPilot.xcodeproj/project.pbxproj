@@ -83,6 +83,9 @@
 /* End PBXApplicationTarget section */
 
 /* Begin PBXBuildFile section */
+		4B1B89F910986E5500C12170 /* JackMenu.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B1B89F810986E5500C12170 /* JackMenu.mm */; };
+		4B1B89FA10986E5500C12170 /* JackMenu.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B1B89F810986E5500C12170 /* JackMenu.mm */; };
+		4B1B89FB10986E5500C12170 /* JackMenu.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B1B89F810986E5500C12170 /* JackMenu.mm */; };
 		4B4F1BA60C5616A50096B3EE /* Info-JackPilot.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B4F1BA50C5616A50096B3EE /* Info-JackPilot.plist */; };
 		4B4F3D3C09E2D5E000D2EC22 /* jackfun.h in Headers */ = {isa = PBXBuildFile; fileRef = B2B9A25D04BDC2F90031A363 /* jackfun.h */; };
 		4B4F3D3D09E2D5E000D2EC22 /* procinfo.h in Headers */ = {isa = PBXBuildFile; fileRef = B2B9A26504BDD3850031A363 /* procinfo.h */; };
@@ -106,7 +109,6 @@
 		4B4F3D5309E2D5E000D2EC22 /* jackfun.c in Sources */ = {isa = PBXBuildFile; fileRef = B2B9A25F04BDC3000031A363 /* jackfun.c */; };
 		4B4F3D5409E2D5E000D2EC22 /* bequite.c in Sources */ = {isa = PBXBuildFile; fileRef = B2B9A26304BDD3850031A363 /* bequite.c */; };
 		4B4F3D5509E2D5E000D2EC22 /* procinfo.c in Sources */ = {isa = PBXBuildFile; fileRef = B2B9A26404BDD3850031A363 /* procinfo.c */; };
-		4B4F3D5609E2D5E000D2EC22 /* JackMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = B29F407604BDEFB100D20559 /* JackMenu.m */; };
 		4B4F3D5709E2D5E000D2EC22 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		4B4F3D5809E2D5E000D2EC22 /* DataSourceSend.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C0175A0508E1BD0042DB15 /* DataSourceSend.m */; };
 		4B4F3D5909E2D5E000D2EC22 /* JackCon1.3.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C017600508E2600042DB15 /* JackCon1.3.m */; };
@@ -143,7 +145,6 @@
 		4B7C2EFC0E0A8AFE00220808 /* jackfun.c in Sources */ = {isa = PBXBuildFile; fileRef = B2B9A25F04BDC3000031A363 /* jackfun.c */; };
 		4B7C2EFD0E0A8AFE00220808 /* bequite.c in Sources */ = {isa = PBXBuildFile; fileRef = B2B9A26304BDD3850031A363 /* bequite.c */; };
 		4B7C2EFE0E0A8AFE00220808 /* procinfo.c in Sources */ = {isa = PBXBuildFile; fileRef = B2B9A26404BDD3850031A363 /* procinfo.c */; };
-		4B7C2EFF0E0A8AFE00220808 /* JackMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = B29F407604BDEFB100D20559 /* JackMenu.m */; };
 		4B7C2F000E0A8AFE00220808 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		4B7C2F010E0A8AFE00220808 /* DataSourceSend.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C0175A0508E1BD0042DB15 /* DataSourceSend.m */; };
 		4B7C2F020E0A8AFE00220808 /* JackCon1.3.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C017600508E2600042DB15 /* JackCon1.3.m */; };
@@ -180,7 +181,6 @@
 		4BA3BF040D2D4BB3005711D3 /* jackfun.c in Sources */ = {isa = PBXBuildFile; fileRef = B2B9A25F04BDC3000031A363 /* jackfun.c */; };
 		4BA3BF050D2D4BB3005711D3 /* bequite.c in Sources */ = {isa = PBXBuildFile; fileRef = B2B9A26304BDD3850031A363 /* bequite.c */; };
 		4BA3BF060D2D4BB3005711D3 /* procinfo.c in Sources */ = {isa = PBXBuildFile; fileRef = B2B9A26404BDD3850031A363 /* procinfo.c */; };
-		4BA3BF070D2D4BB3005711D3 /* JackMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = B29F407604BDEFB100D20559 /* JackMenu.m */; };
 		4BA3BF080D2D4BB3005711D3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		4BA3BF090D2D4BB3005711D3 /* DataSourceSend.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C0175A0508E1BD0042DB15 /* DataSourceSend.m */; };
 		4BA3BF0A0D2D4BB3005711D3 /* JackCon1.3.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C017600508E2600042DB15 /* JackCon1.3.m */; };
@@ -215,7 +215,6 @@
 		B2C0173C0508E0980042DB15 /* procinfo.c in Sources */ = {isa = PBXBuildFile; fileRef = B2B9A26404BDD3850031A363 /* procinfo.c */; };
 		B2C0173D0508E0990042DB15 /* procinfo.h in Headers */ = {isa = PBXBuildFile; fileRef = B2B9A26504BDD3850031A363 /* procinfo.h */; };
 		B2C0174D0508E0AB0042DB15 /* JackMenu.h in Headers */ = {isa = PBXBuildFile; fileRef = B29F407504BDEFB100D20559 /* JackMenu.h */; };
-		B2C0174E0508E0AC0042DB15 /* JackMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = B29F407604BDEFB100D20559 /* JackMenu.m */; };
 		B2C017530508E0B50042DB15 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		B2C017550508E0C40042DB15 /* JackPilot1.0_Prefix.h in Headers */ = {isa = PBXBuildFile; fileRef = 32CA4F630368D1EE00C91783 /* JackPilot1.0_Prefix.h */; };
 		B2C0175C0508E1BD0042DB15 /* DataSourceSend.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C0175A0508E1BD0042DB15 /* DataSourceSend.m */; };
@@ -301,6 +300,7 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* JackPilot1.0_Prefix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JackPilot1.0_Prefix.h; path = src/JackPilot1.0_Prefix.h; sourceTree = "<group>"; };
+		4B1B89F810986E5500C12170 /* JackMenu.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = JackMenu.mm; path = src/JackMenu.mm; sourceTree = SOURCE_ROOT; };
 		4B4F1BA50C5616A50096B3EE /* Info-JackPilot.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = "Info-JackPilot.plist"; sourceTree = SOURCE_ROOT; };
 		4B4F3D7009E2D5E000D2EC22 /* JackPilot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JackPilot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B7C2F180E0A8AFE00220808 /* JackPilot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JackPilot.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -315,7 +315,6 @@
 		B292F8F90510D90700D45475 /* DataSourceSend2.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = DataSourceSend2.m; path = src/DataSourceSend2.m; sourceTree = "<group>"; };
 		B29D062205C941DF0013F7E1 /* todo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = todo.txt; sourceTree = "<group>"; };
 		B29F407504BDEFB100D20559 /* JackMenu.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = JackMenu.h; path = src/JackMenu.h; sourceTree = "<group>"; };
-		B29F407604BDEFB100D20559 /* JackMenu.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = JackMenu.m; path = src/JackMenu.m; sourceTree = "<group>"; };
 		B2A591F9052093FA00D722DC /* jackpilot.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = jackpilot.icns; path = resources/jackpilot.icns; sourceTree = "<group>"; };
 		B2AA7CE0050F555C00FADF47 /* tableData.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = tableData.h; path = src/tableData.h; sourceTree = "<group>"; };
 		B2AA7CE1050F555C00FADF47 /* tableData.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = tableData.m; path = src/tableData.m; sourceTree = "<group>"; };
@@ -393,7 +392,6 @@
 				B2C0175E0508E24B0042DB15 /* JackCon1.3.h */,
 				B2C017600508E2600042DB15 /* JackCon1.3.m */,
 				B29F407504BDEFB100D20559 /* JackMenu.h */,
-				B29F407604BDEFB100D20559 /* JackMenu.m */,
 				B2C0175B0508E1BD0042DB15 /* DataSourceSend.h */,
 				B2C0175A0508E1BD0042DB15 /* DataSourceSend.m */,
 				B2EA0BA6050F44A200FED62D /* PortsData.h */,
@@ -405,6 +403,7 @@
 				B2292EC10559813D004A67B1 /* Utility.h */,
 				B2292EC20559813D004A67B1 /* Utility.m */,
 				B2EB270705C5284600724495 /* JPPlugin.h */,
+				4B1B89F810986E5500C12170 /* JackMenu.mm */,
 				B2EB270805C5284600724495 /* JPPlugin.m */,
 			);
 			name = Classes;
@@ -901,7 +900,6 @@
 				4B4F3D5309E2D5E000D2EC22 /* jackfun.c in Sources */,
 				4B4F3D5409E2D5E000D2EC22 /* bequite.c in Sources */,
 				4B4F3D5509E2D5E000D2EC22 /* procinfo.c in Sources */,
-				4B4F3D5609E2D5E000D2EC22 /* JackMenu.m in Sources */,
 				4B4F3D5709E2D5E000D2EC22 /* main.m in Sources */,
 				4B4F3D5809E2D5E000D2EC22 /* DataSourceSend.m in Sources */,
 				4B4F3D5909E2D5E000D2EC22 /* JackCon1.3.m in Sources */,
@@ -910,6 +908,7 @@
 				4B4F3D5C09E2D5E000D2EC22 /* DataSourceSend2.m in Sources */,
 				4B4F3D5D09E2D5E000D2EC22 /* Utility.m in Sources */,
 				4B4F3D5E09E2D5E000D2EC22 /* JPPlugin.m in Sources */,
+				4B1B89F910986E5500C12170 /* JackMenu.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -920,7 +919,6 @@
 				4B7C2EFC0E0A8AFE00220808 /* jackfun.c in Sources */,
 				4B7C2EFD0E0A8AFE00220808 /* bequite.c in Sources */,
 				4B7C2EFE0E0A8AFE00220808 /* procinfo.c in Sources */,
-				4B7C2EFF0E0A8AFE00220808 /* JackMenu.m in Sources */,
 				4B7C2F000E0A8AFE00220808 /* main.m in Sources */,
 				4B7C2F010E0A8AFE00220808 /* DataSourceSend.m in Sources */,
 				4B7C2F020E0A8AFE00220808 /* JackCon1.3.m in Sources */,
@@ -929,6 +927,7 @@
 				4B7C2F050E0A8AFE00220808 /* DataSourceSend2.m in Sources */,
 				4B7C2F060E0A8AFE00220808 /* Utility.m in Sources */,
 				4B7C2F070E0A8AFE00220808 /* JPPlugin.m in Sources */,
+				4B1B89FB10986E5500C12170 /* JackMenu.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -939,7 +938,6 @@
 				4BA3BF040D2D4BB3005711D3 /* jackfun.c in Sources */,
 				4BA3BF050D2D4BB3005711D3 /* bequite.c in Sources */,
 				4BA3BF060D2D4BB3005711D3 /* procinfo.c in Sources */,
-				4BA3BF070D2D4BB3005711D3 /* JackMenu.m in Sources */,
 				4BA3BF080D2D4BB3005711D3 /* main.m in Sources */,
 				4BA3BF090D2D4BB3005711D3 /* DataSourceSend.m in Sources */,
 				4BA3BF0A0D2D4BB3005711D3 /* JackCon1.3.m in Sources */,
@@ -948,6 +946,7 @@
 				4BA3BF0D0D2D4BB3005711D3 /* DataSourceSend2.m in Sources */,
 				4BA3BF0E0D2D4BB3005711D3 /* Utility.m in Sources */,
 				4BA3BF0F0D2D4BB3005711D3 /* JPPlugin.m in Sources */,
+				4B1B89FA10986E5500C12170 /* JackMenu.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -958,7 +957,6 @@
 				B2C017390508E0970042DB15 /* jackfun.c in Sources */,
 				B2C0173A0508E0970042DB15 /* bequite.c in Sources */,
 				B2C0173C0508E0980042DB15 /* procinfo.c in Sources */,
-				B2C0174E0508E0AC0042DB15 /* JackMenu.m in Sources */,
 				B2C017530508E0B50042DB15 /* main.m in Sources */,
 				B2C0175C0508E1BD0042DB15 /* DataSourceSend.m in Sources */,
 				B2C017610508E2600042DB15 /* JackCon1.3.m in Sources */,

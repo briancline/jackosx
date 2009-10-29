@@ -20,7 +20,7 @@
 "Preferences" = "Préférences";
 "Quit" = "Quitter";
 "Cannot initialize CoreAudio services, JackPilot will quit. " = "Les services CoreAudio ne peuvent pas être initialisés, JackPilot va quitter.";
-"Cannot initialize CoreAudio services, check preferences. " = "Les services CoreAudio ne peuvent pas être initialisés, verifiez les préférences.";
+"Cannot initialize CoreAudio services, check preferences. " = "Les services CoreAudio ne peuvent pas être initialisés, vérifiez les préférences.";
 "Cannot find last audio device, please check preferences. " = "Le dernier périphérique utilise est introuvable, verifiez les préférences.";
 "Use default" = "Utiliez le peripherique pas defaut";
 "Jack Audio Server CoreAudio driver is not installed or is corrupted. " = "Le driver CoreAudio JackRouter n'est pas installé ou est endommagé.";
