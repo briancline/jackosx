@@ -14,14 +14,11 @@
 
 @interface JackMenu : NSObject
 {
-    NSTask* jackTask;
     IBOutlet id bufferText; 
     IBOutlet id outputChannels;  
 	IBOutlet id inputChannels;
 	
-    id jackPilWin;
-    id jackdMode;
-	id verboseBox;
+  	id verboseBox;
     id hogBox;
     IBOutlet NSPopUpButton* driverBox;
     IBOutlet NSPopUpButton* interfaceInputBox;
@@ -40,7 +37,6 @@
     IBOutlet NSMenuItem* toggleDock;
     NSTimer* update_timer;
     int jackstat;
-    int interfaccia2;
     id prefWindow;
     NSString *jasVer,*jackVer,*jpVer,*jpCopyR,*jasCopyR,*jackCopyR;
     IBOutlet NSTextField *jasVerText;
@@ -50,14 +46,13 @@
     IBOutlet NSTextField *jasCopyRText;
     IBOutlet NSTextField *jackCopyRText;
     NSModalSession modalSex;
-    NSModalSession modalSex2;
     id aboutWin;
     NSString *jpPath;
     char  selectedInputDevice[256];
     char  selectedOutputDevice[256];
     AudioDeviceID selInputDevID;
     AudioDeviceID selOutputDevID;
-    id defInput,defOutput,sysDefOut;
+    id defInput, defOutput, sysDefOut;
 	id pluginsMenu;     //NSMenu
 	id pluginSubMenu;   //NSMenu
 	

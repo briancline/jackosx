@@ -431,7 +431,7 @@ static OSStatus getDeviceUIDFromID(AudioDeviceID id, char name[128])
     return res;
 }
 
-static bool IsAggregateDevice(AudioDeviceID device)
+static bool isAggregateDevice(AudioDeviceID device)
 {
     UInt32 deviceType, outSize = sizeof(UInt32);
     OSStatus err = AudioDeviceGetProperty(device, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyTransportType, &outSize, &deviceType);
@@ -610,7 +610,6 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         [interfaceOutputBox setEnabled:NO];
 		[samplerateText setEnabled:NO];
         [hogBox setEnabled:NO];
-		[jackdMode setEnabled:NO];
        
     } else {
 		[routingBut setEnabled:NO];
@@ -993,7 +992,6 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         [interfaceOutputBox setEnabled:NO];
         [samplerateText setEnabled:NO];
         [hogBox setEnabled:NO];
-        [jackdMode setEnabled:NO];
         [self sendJackStatusToPlugins:YES];
         [routingBut setEnabled:YES];
       
@@ -1352,11 +1350,11 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 }
 
 - (IBAction) openAboutWin:(id)sender {
-    modalSex2 = [NSApp beginModalSessionForWindow:aboutWin];
+    modalSex = [NSApp beginModalSessionForWindow:aboutWin];
 }
 
 -(IBAction) closeAboutWin:(id)sender {
-    [NSApp endModalSession:modalSex2];
+    [NSApp endModalSession:modalSex];
     [aboutWin orderOut:sender];
 }
 
@@ -1770,6 +1768,7 @@ Set the selDevID variable to the currently selected device of the system default
 
 - (BOOL)writeDevNames {
     OSStatus err;
+    OSStatus err1, err2;
     UInt32 size;
     Boolean isWritable;
     AudioDeviceID defaultInputDev, defaultOuputDev;
@@ -1828,16 +1827,23 @@ Set the selDevID variable to the currently selected device of the system default
             NSString *s_name = [NSString stringWithCString:name encoding:NSMacOSRomanStringEncoding];
             
             UInt32 inChannels = 0;
-            err = getTotalChannels(devices[i], &inChannels, true);
-            if (err == noErr && inChannels > 0) {
+            err1 = getTotalChannels(devices[i], &inChannels, true);
+            
+            UInt32 outChannels = 0;
+            err2 = getTotalChannels(devices[i], &outChannels, false);
+            
+            // Filters AD that are not duplex...
+            if (err1 == noErr && err2 == noErr && isAggregateDevice(devices[i]) && (inChannels == 0 || outChannels == 0)) {
+                continue;
+            }
+            
+            if (err1 == noErr && inChannels > 0) {
                 if (first_input_index < 0) 
                     first_input_index = i;
                 [interfaceInputBox addItemWithTitle:s_name];
             }
-                
-            UInt32 outChannels = 0;
-            err = getTotalChannels(devices[i], &outChannels, false);
-            if (err == noErr && outChannels > 0) {
+            
+            if (err2 == noErr && outChannels > 0) {
                 if (first_output_index < 0) 
                     first_output_index = i;
                 [interfaceOutputBox addItemWithTitle:s_name];
