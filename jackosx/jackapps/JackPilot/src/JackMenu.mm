@@ -591,7 +591,9 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
     int test = checkJack();
     if (test != 0) { 
 		gJackRunning = openJackClient();
-         
+        if (gJackRunning)
+            [self setPrefItem:NO];
+      
         //[[JackConnections getSelf] JackCallBacks]; // not used
         jack_on_info_shutdown(getClient(), JackInfoShutDown, self);
         jack_activate(getClient());
@@ -935,6 +937,16 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 	}
 }
 
+-(void)setPrefItem:(BOOL) state
+{
+    NSMenu *mainMenu = [NSApp mainMenu];
+    NSMenuItem *jpItem = [mainMenu itemAtIndex:0];
+    NSMenu *menu = [jpItem submenu];
+    [menu setAutoenablesItems:NO];
+    NSMenuItem *prefItem = [menu itemAtIndex:2];
+    [prefItem setEnabled:state];
+}
+
 - (IBAction)startJack:(id)sender
 {	
     id POOL = [[NSAutoreleasePool alloc] init];
@@ -971,6 +983,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
     }	
 	
     gJackRunning = openJackClient();
+    if (gJackRunning)
+        [self setPrefItem:NO];
     
     if (checkJack() != 0 && getClient() != NULL){
         jackstat = 1;
@@ -1293,10 +1307,6 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 
 - (IBAction)openPrefWin:(id)sender {
 
-    // Don't pen preferences when running...
-    if (gJackRunning)
-        return;
-        
     [self reloadPref:sender];
     
 	if (sender) {
@@ -1558,6 +1568,7 @@ end:
 	[routingBut setEnabled:NO];
     
     gJackRunning = false;
+    [self setPrefItem:YES];
     [POOL release];
 }
 
@@ -1591,6 +1602,7 @@ end:
 	[routingBut setEnabled:NO];
     
     gJackRunning = false;
+    [self setPrefItem:YES];
     [POOL release];
 }
 

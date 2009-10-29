@@ -73,6 +73,7 @@
 -(void)cpuMeasure;
 -(void)setupTimer;
 -(void)stopTimer;
+-(void)setPrefItem:(BOOL)state;
 -(void)warning:(id)sender;
 -(IBAction)jackALstore:(id)sender;
 - (int)writeHomePath;
