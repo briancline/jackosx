@@ -10,7 +10,6 @@
 #import "Utility.h"
 
 #define LOCSTR(s) NSLocalizedString(s,nil)
-#define NO_DEVICE  "no device"
 
 @interface JackMenu : NSObject
 {

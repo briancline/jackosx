@@ -1152,10 +1152,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         if (strcmp(driverInputname, driverOutputname) == 0) {
             fprintf(file, "-d %s \n", driverInputname); 
         } else {
-            if (strcmp(driverInputname, NO_DEVICE) != 0)
-                fprintf(file, "-C %s \n", driverInputname); 
-            if (strcmp(driverOutputname, NO_DEVICE) != 0)
-                fprintf(file, "-P %s \n", driverOutputname); 
+            fprintf(file, "-C %s \n", driverInputname); 
+            fprintf(file, "-P %s \n", driverOutputname); 
         }
         
         if (getHogMode()) {
@@ -1406,20 +1404,20 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         if (res == 0)
             goto end;
     }
-  		
+    
+    // Nothing to open..
 	if (strcmp(out_channels,"0") == 0 && strcmp(in_channels,"0") == 0) {
-		openJack("");
         goto end;
 	}
 	
     char stringa[512];
-	memset(stringa, 0x0, 512);
+	memset(stringa, 0, 512);
    
     char driverInputname[128];
-	getDeviceUIDFromID(selInputDevID, driverInputname);
-    
     char driverOutputname[128];
-	getDeviceUIDFromID(selOutputDevID, driverOutputname);
+    
+	getDeviceUIDFromID(selInputDevID, driverInputname);
+ 	getDeviceUIDFromID(selOutputDevID, driverOutputname);
 
     // Conditionnal start..
     SInt32 major;
@@ -1483,18 +1481,14 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         strcat(stringa, driverInputname);
         strcat(stringa, "\"");
     } else {
-        if (strcmp(driverInputname, NO_DEVICE) != 0) {
-            strcat(stringa, " -C ");
-            strcat(stringa, "\"");
-            strcat(stringa, driverInputname);
-            strcat(stringa, "\"");  
-        }
-        if (strcmp(driverOutputname, NO_DEVICE) != 0) {
-            strcat(stringa, " -P ");
-            strcat(stringa, "\"");
-            strcat(stringa, driverOutputname);
-            strcat(stringa, "\"");  
-        }
+        strcat(stringa, " -C ");
+        strcat(stringa, "\"");
+        strcat(stringa, driverInputname);
+        strcat(stringa, "\"");  
+        strcat(stringa, " -P ");
+        strcat(stringa, "\"");
+        strcat(stringa, driverOutputname);
+        strcat(stringa, "\"");  
     }
     
     if (getHogMode()) {
@@ -1883,22 +1877,7 @@ Set the selDevID variable to the currently selected device of the system default
 		CFRelease(nameRef);
     }
    
-   // Setup devices depending if they are dumplex or not....
-   /*
-    if (s_name_in) {
-        [interfaceInputBox selectItemWithTitle:s_name_in]; 
-    } else {
-        [interfaceInputBox selectItemAtIndex:0];
-        selInputDevID = devices[0];
-    }
-    if (s_name_out) {   
-        [interfaceOutputBox selectItemWithTitle:s_name_out];
-    } else {
-        [interfaceOutputBox selectItemAtIndex:0];
-        selOutputDevID = devices[0];
-    }
-    */
-        
+    // Setup devices depending if they are duplex or not....
     if (new_selected_in) {
          if (isDuplexDevice(selInputDevID)) {
             [interfaceInputBox selectItemWithTitle:s_name_in]; 
