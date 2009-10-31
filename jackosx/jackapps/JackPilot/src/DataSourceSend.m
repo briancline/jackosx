@@ -225,23 +225,23 @@
 {
     id theItem = [theOutline itemAtRow:[theOutline selectedRow]];
     if([theItem isKindOfClass:[DatiSend class]]) {
-    int quante = [theItem getNPorte];
-    int i;
-    for(i=0;i<quante;i++) {
-        portsArrData *data2;
-        data2 = [theItem getNomePorta:i];
-        porteSelected[i] = [data2 getID];
-#ifdef DEBUGGO
-        //char *tempBuf;
-        //tempBuf = (char*)alloca(256*sizeof(char*));
-        //tempBuf = [data2 getCPort];
-        //JPLog("Seleziono porte: %s\n",tempBuf);
-#endif
+        int quante = [theItem getNPorte];
+        int i;
+        for (i = 0; i < quante; i++) {
+            portsArrData *data2;
+            data2 = [theItem getNomePorta:i];
+            porteSelected[i] = [data2 getID];
+    #ifdef DEBUGGO
+            //char *tempBuf;
+            //tempBuf = (char*)alloca(256*sizeof(char*));
+            //tempBuf = [data2 getCPort];
+            //JPLog("Seleziono porte: %s\n",tempBuf);
+    #endif
+        }
+        *quanteXCli = quante;
+        *needsRelo = 2;
     }
-    *quanteXCli = quante;
-    *needsRelo=2;
-    }
-    if([theItem isKindOfClass:[portsArrData class]]) {
+    if ([theItem isKindOfClass:[portsArrData class]]) {
         porteSelected[0] = [theItem getID];
 #ifdef DEBUGGO
         //char *tempBuf;

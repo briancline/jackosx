@@ -68,6 +68,8 @@
 -(void)stopTimer;
 - (void)fillPortsArray;
 -(void) reloadTimer;
+-(void) reloadTimerPart1;
+-(void) reloadTimerPart2;
 +(JackConnections*)getSelf;
 
 @end
