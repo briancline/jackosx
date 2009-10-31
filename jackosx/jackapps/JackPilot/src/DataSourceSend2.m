@@ -7,12 +7,15 @@
 
 @implementation DatiSend2
 
--(int)getNPorte {
+-(int)getNPorte 
+{
     return nPorte;
 }
 
--(id)getNomePorta:(int)n {
-    if(n>(nPorte-1)) return @"NIL";
+-(id)getNomePorta:(int)n 
+{
+    if (n > (nPorte-1)) 
+        return @"NIL";
     NSString *name = [NSString init];
     name = [NSString stringWithCString:nomiPorte[n]];
 #ifdef DEBUGGO
@@ -20,8 +23,10 @@
 #endif
     NSArray *items = [name componentsSeparatedByString:@":"];
     NSString *fres = [NSString init];
-    if([items count]==3) fres = [items objectAtIndex:2];
-    else fres = [items objectAtIndex:1];
+    if ([items count] == 3) 
+        fres = [items objectAtIndex:2];
+    else 
+        fres = [items objectAtIndex:1];
     portsArrData *datares = [[portsArrData alloc] retain];
     [datares setNameCh:fres];
     [datares setID:[[idPorte objectAtIndex:n] intValue]];
@@ -400,6 +405,7 @@
     int i;
     int quantep = [data2 count];
     int written = 0;
+    
     NSArray *listaNC = [nome componentsSeparatedByString:@":"];
     NSString *cliente = [listaNC objectAtIndex:0];
     
@@ -443,7 +449,7 @@
     id item = [theOutline itemAtRow:[theOutline selectedRow]];
     if ([item isKindOfClass:[portsArrData class]]) { 
 		if ([item IsConn] == 1) 
-		return 666; 
+            return 666; 
 	} else 
 		return kindCliItem;
     return 333;

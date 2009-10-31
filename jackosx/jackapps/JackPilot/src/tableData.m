@@ -104,7 +104,7 @@
         }
     }
     
-    for(i = 0; i < [keys count]; i++) {
+    for (i = 0; i < [keys count]; i++) {
         id ports = [dict objectForKey:[keys objectAtIndex:i]]; 
         int a;
         if ([ports isKindOfClass:[NSMutableArray class]]) {

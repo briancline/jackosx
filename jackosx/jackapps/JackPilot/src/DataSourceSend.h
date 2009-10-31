@@ -29,7 +29,7 @@
 @interface tableDataB : NSObject {
     int quanteporte;
     char *porta;
-    id textField1,textField2;
+    id textField1, textField2;
     int stat;
     int whatKind;
     NSMutableArray *data;

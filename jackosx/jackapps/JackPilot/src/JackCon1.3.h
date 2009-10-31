@@ -13,24 +13,26 @@
 
 @interface JackConnections : NSObject
 {
-    IBOutlet NSTableColumn *colonnaDest;
-    IBOutlet NSTableColumn *colonnaSource;
-    IBOutlet NSTableColumn *colannaSend;
     IBOutlet NSProgressIndicator *cpuLoadBar;
+    
     IBOutlet NSTextField *loadText;
+    
     IBOutlet NSTableView *tabellaPorte;
     IBOutlet NSOutlineView *tabellaConnect;
     IBOutlet NSOutlineView *tabellaSend;
+    
     IBOutlet NSWindow *theWindow;
     IBOutlet NSButton *reloadbut;
+    
     tableData *datiTab;
     tableDataB *datiTab2;
     tableDataC *datiTab3;
-    IBOutlet NSTextField *daText,*aText,*nCon;
+    
+    IBOutlet NSTextField *src_port_text,*dst_port_text,*nCon;
     NSPanel *loadWarn;
     NSTextField *warnText;
-    char daCh[256];
-    char aCh[256];
+    char src_port[256];
+    char dst_port[256];
     int nConnections;
     NSMutableArray *portsArr;
     NSTimer *update_timer;
@@ -38,14 +40,13 @@
     int portSelected[256];
     int oldSelection;
     int oldSel2;
-    int kind1,kind2;
+    int kind1, kind2;
     int quantePConnCli;
     int chiSelected;
-    int oldChi;
     int needsReloadColor;
-    int tipoStringa1,tipoStringa2;
+    int tipoStringa1, tipoStringa2;
     id itemCorrente;
-    int oldRigo1,oldRigo2;
+    int oldRigo1, oldRigo2;
     BOOL doubleClick;
 }
 

@@ -64,16 +64,13 @@ int nConnections = 0;
 {
     if (getStatus() == 1) { 
     
-        [colonnaSource setEditable:NO];
-        [colonnaDest setEditable:NO];
-        
         [self fillPortsArray];
         
         if (datiTab != nil) 
 			[datiTab release];
         datiTab = [tableData alloc];
         [datiTab setWhatKind:0];
-        [datiTab writeData:sender text:&quantePConnCli text2:&portSelected[0] text3:&needsReload];
+        [datiTab writeData:sender text:&quantePConnCli text2:portSelected text3:&needsReload];
         [tabellaPorte setDataSource:datiTab];
         [tabellaPorte setDrawsGrid:NO];
         [tabellaPorte setDoubleAction:@selector(removCon:)];
@@ -83,7 +80,7 @@ int nConnections = 0;
 			[datiTab2 release];
         datiTab2 = [tableDataB alloc];
         [datiTab2 setWhatKind:1];
-        [datiTab2 writeData:sender text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected];
+        [datiTab2 writeData:sender text:portsArr text2:&needsReload text3:portSelected text4:&quantePConnCli text5:&chiSelected];
         [tabellaSend setDataSource:datiTab2];
         [tabellaSend setDrawsGrid:NO];
         [tabellaSend setDoubleAction:@selector(makeCon:)];
@@ -93,7 +90,7 @@ int nConnections = 0;
 			[datiTab3 release];
         datiTab3 = [tableDataC alloc];
         [datiTab3 setWhatKind:1];
-        [datiTab3 writeData:sender text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected];
+        [datiTab3 writeData:sender text:portsArr text2:&needsReload text3:portSelected text4:&quantePConnCli text5:&chiSelected];
         [tabellaConnect setDataSource:datiTab3];
         [tabellaConnect setDrawsGrid:NO];
 		[tabellaConnect setDoubleAction:@selector(makeCon:)];
@@ -110,6 +107,10 @@ int nConnections = 0;
     }
 }
 
+/*
+Manage connections
+*/
+
 - (IBAction)makeCon:(id)sender
 {
     doubleClick = YES;
@@ -121,13 +122,13 @@ int nConnections = 0;
     [self selectTo:sender];
 	
     if (kind1 != 1) {
-		[[daText stringValue] getCString:daCh];
+		[[src_port_text stringValue] getCString:src_port];
     } else {
         lista1 = [datiTab2 getPorteSelected];
     }
 	
     if (kind2 != 1) {
-		[[aText stringValue] getCString:aCh];
+		[[dst_port_text stringValue] getCString:dst_port];
     } else {
         lista2 = [datiTab3 getPorteSelected];
     } 
@@ -137,30 +138,30 @@ int nConnections = 0;
 		n = [lista1 count];
 		
 		for(i = 0; i < n; i++) {
-			[[lista1 objectAtIndex:i] getCString:daCh];
-			[[aText stringValue] getCString:aCh];
+			[[lista1 objectAtIndex:i] getCString:src_port];
+			[[dst_port_text stringValue] getCString:dst_port];
 			
-			int test = connectPorts(&daCh[0], &aCh[0]);
+			int test = connectPorts(src_port, dst_port);
 			if (test != 0) 
-                test = connectPorts(&aCh[0], &daCh[0]);
+                test = connectPorts(dst_port, src_port);
 			if (test != 0) 
-                test = disconnectPorts(&daCh[0], &aCh[0]);
+                test = disconnectPorts(src_port, dst_port);
 			if (test != 0) 
-                test = disconnectPorts(&aCh[0], &daCh[0]);
+                test = disconnectPorts(dst_port, src_port);
 		}
     }
     
     if (kind1 == 0 && kind2 == 0) {
-        [[daText stringValue] getCString:daCh];
-        [[aText stringValue] getCString:aCh];
+        [[src_port_text stringValue] getCString:src_port];
+        [[dst_port_text stringValue] getCString:dst_port];
 		       
-        int test = connectPorts(&daCh[0], &aCh[0]);
+        int test = connectPorts(src_port, dst_port);
         if (test != 0) 
-            test = connectPorts(&aCh[0], &daCh[0]);
+            test = connectPorts(dst_port, src_port);
         if (test != 0) 
-            test = disconnectPorts(&daCh[0], &aCh[0]);
+            test = disconnectPorts(src_port, dst_port);
         if (test != 0) 
-            test = disconnectPorts(&aCh[0], &daCh[0]);
+            test = disconnectPorts(dst_port, src_port);
     }
     
     if (kind1 == 1 && kind2 == 1) {
@@ -168,15 +169,15 @@ int nConnections = 0;
         n = [lista1 count];
 		
         for(i = 0; i < n; i++) {
-            [[lista1 objectAtIndex:i] getCString:daCh];
-            [[lista2 objectAtIndex:i] getCString:aCh];
-            int test = connectPorts(&daCh[0] ,&aCh[0]);
+            [[lista1 objectAtIndex:i] getCString:src_port];
+            [[lista2 objectAtIndex:i] getCString:dst_port];
+            int test = connectPorts(src_port, dst_port);
             if (test != 0) 
-                test = connectPorts(&aCh[0], &daCh[0]);
+                test = connectPorts(dst_port, src_port);
             if (test != 0) 
-                test = disconnectPorts(&daCh[0], &aCh[0]);
+                test = disconnectPorts(src_port, dst_port);
             if (test != 0) 
-                test = disconnectPorts(&aCh[0], &daCh[0]);
+                test = disconnectPorts(dst_port, src_port);
 		}
     }
     
@@ -184,15 +185,15 @@ int nConnections = 0;
         int n,i;
         n = [lista2 count];
         for (i = 0; i < n; i++) {
-            [[lista2 objectAtIndex:i] getCString:aCh];
-            [[daText stringValue] getCString:daCh];
-            int test = connectPorts(&daCh[0],&aCh[0]);
+            [[lista2 objectAtIndex:i] getCString:dst_port];
+            [[src_port_text stringValue] getCString:src_port];
+            int test = connectPorts(src_port,dst_port);
             if (test != 0) 
-                test = connectPorts(&aCh[0], &daCh[0]);
+                test = connectPorts(dst_port, src_port);
             if (test != 0) 
-                test = disconnectPorts(&daCh[0], &aCh[0]);
+                test = disconnectPorts(src_port, dst_port);
             if (test != 0) 
-                test = disconnectPorts(&aCh[0], &daCh[0]);
+                test = disconnectPorts(dst_port, src_port);
 		}
     }
 	
@@ -204,8 +205,8 @@ int nConnections = 0;
     [datiTab2 flush:sender];
     [datiTab3 flush:sender];
     [self fillPortsArray];
-    [datiTab2 writeData:sender text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected];
-    [datiTab3 writeData:sender text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected];
+    [datiTab2 writeData:sender text:portsArr text2:&needsReload text3:portSelected text4:&quantePConnCli text5:&chiSelected];
+    [datiTab3 writeData:sender text:portsArr text2:&needsReload text3:portSelected text4:&quantePConnCli text5:&chiSelected];
     [tabellaPorte reloadData];
     [tabellaSend reloadData];
     [tabellaConnect reloadData];
@@ -221,23 +222,23 @@ int nConnections = 0;
     
     if (sender == 22) {
         [datiTab2 flush:nil];
-        [datiTab2 writeData:self text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected]; 
+        [datiTab2 writeData:self text:portsArr text2:&needsReload text3:portSelected text4:&quantePConnCli text5:&chiSelected]; 
         [tabellaSend reloadData]; 
     }
     
     if (sender == 21) { 
         [datiTab3 flush:nil];
-        [datiTab3 writeData:self text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected]; 
+        [datiTab3 writeData:self text:portsArr text2:&needsReload text3:portSelected text4:&quantePConnCli text5:&chiSelected]; 
         [tabellaConnect reloadData]; 
     }
     
     if (sender == 50) {
         [datiTab2 flush:nil];
-        [datiTab2 writeData:self text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected]; 
+        [datiTab2 writeData:self text:portsArr text2:&needsReload text3:portSelected text4:&quantePConnCli text5:&chiSelected]; 
         [tabellaSend reloadData];
         
         [datiTab3 flush:nil];
-        [datiTab3 writeData:self text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected]; 
+        [datiTab3 writeData:self text:portsArr text2:&needsReload text3:portSelected text4:&quantePConnCli text5:&chiSelected]; 
         [tabellaConnect reloadData];
     }
     
@@ -273,7 +274,7 @@ int nConnections = 0;
                 for(ia = 0; ia < [listaPorte count]; ia++) {
                     NSString *chi;
                     chi = [datiTab getCHisono:[[listaPorte objectAtIndex:ia] intValue]];
-                    [chi getCString:daCh];
+                    [chi getCString:src_port];
                     
                     NSString *chi2;
                     chi2 = [lista1 objectAtIndex:i];
@@ -283,8 +284,8 @@ int nConnections = 0;
                     [chi2 getCString:buf];
                     
                     int test;
-                    test = disconnectPorts(buf,daCh);
-                    if (test != 0) test = disconnectPorts(daCh,buf);
+                    test = disconnectPorts(buf,src_port);
+                    if (test != 0) test = disconnectPorts(src_port,buf);
                 }
             }
         }
@@ -292,16 +293,16 @@ int nConnections = 0;
         if (kind2 == 0) {
             char *buf;
             buf = (char*)alloca(256 * sizeof(char));
-            [[aText stringValue] getCString:buf];
+            [[dst_port_text stringValue] getCString:buf];
             
             while (object = [rows nextObject]) {
                 NSString *chi;
                 chi = [datiTab getCHisono:[object intValue]];
-                [chi getCString:daCh];
+                [chi getCString:src_port];
                 int test;
-                test = disconnectPorts(buf,daCh);
+                test = disconnectPorts(buf,src_port);
                 if (test != 0) 
-                    test = disconnectPorts(daCh,buf);
+                    test = disconnectPorts(src_port,buf);
             } 
         }
     }
@@ -319,7 +320,7 @@ int nConnections = 0;
                 for (ia = 0; ia < [listaPorte count]; ia++) {
                     NSString *chi;
                     chi = [datiTab getCHisono:[[listaPorte objectAtIndex:ia] intValue]];
-                    [chi getCString:daCh];
+                    [chi getCString:src_port];
                     
                     NSString *chi2;
                     chi2 = [lista1 objectAtIndex:i];
@@ -329,9 +330,9 @@ int nConnections = 0;
                     [chi2 getCString:buf];
                     
                     int test;
-                    test = disconnectPorts(buf,daCh);
+                    test = disconnectPorts(buf,src_port);
                     if (test != 0) 
-                        test = disconnectPorts(daCh,buf);
+                        test = disconnectPorts(src_port,buf);
                 }
             }
         }
@@ -339,14 +340,14 @@ int nConnections = 0;
         if (kind1 == 0) {
             char *buf;
             buf = (char*)alloca(256 * sizeof(char));
-            [[daText stringValue] getCString:buf];
+            [[src_port_text stringValue] getCString:buf];
             while (object = [rows nextObject]) {
                 NSString *chi;
                 chi = [datiTab getCHisono:[object intValue]];
-                [chi getCString:daCh];
+                [chi getCString:src_port];
                 int test;
-                test = disconnectPorts(buf,daCh);
-                if (test != 0) test = disconnectPorts(daCh,buf);
+                test = disconnectPorts(buf,src_port);
+                if (test != 0) test = disconnectPorts(src_port,buf);
             } 
         }
     }
@@ -360,9 +361,12 @@ int nConnections = 0;
     NSString *chi;
     chi = [datiTab2 getCHisono:chisono];
     tipoStringa1 = [datiTab2 getTipoString];
-    if (chi == nil) { kind1=1; return; }
+    if (chi == nil) { 
+        kind1 = 1; 
+        return; 
+    }
     kind1 = 0;
-    [daText setStringValue:chi];
+    [src_port_text setStringValue:chi];
 }
 
 - (IBAction)selectTo: (id)sender
@@ -371,9 +375,12 @@ int nConnections = 0;
     NSString *chi;
     chi = [datiTab3 getCHisono:chisono];
     tipoStringa2 = [datiTab3 getTipoString];
-    if( chi == nil) { kind2=1; return; }
+    if (chi == nil) { 
+        kind2 = 1; 
+        return; 
+    }
     kind2 = 0;
-    [aText setStringValue:chi];
+    [dst_port_text setStringValue:chi];
 }
 
 - (IBAction)saveScheme: (id)sender
@@ -560,7 +567,7 @@ int nConnections = 0;
 				
 				NSString *chi2;
 				chi2 = [datiTab2 getCHisono2:i];
-				[chi2 getCString:aCh];
+				[chi2 getCString:dst_port];
 				
 				int quanteCc = connessionePerNumero2(i, NULL, 0);
 				
@@ -574,9 +581,9 @@ int nConnections = 0;
 				connessionePerNumero2(i, thebuf, quanteCc);
 				
 				for (aa = 0; aa < quanteCc; aa++) {
-					int test = disconnectPorts(aCh, thebuf[aa]);
+					int test = disconnectPorts(dst_port, thebuf[aa]);
 					if (test != 0) 
-						test = disconnectPorts(thebuf[aa], aCh);
+						test = disconnectPorts(thebuf[aa], dst_port);
 				}
 			}
 		}
@@ -901,11 +908,13 @@ int nConnections = 0;
         
         for (i = 0; i < nrows1; i++) {
             id item = [tabellaSend itemAtRow:i];
-            if ([tabellaSend isItemExpanded:item]) [lista1 addObject:[NSNumber numberWithInt:i]];
+            if ([tabellaSend isItemExpanded:item]) 
+                [lista1 addObject:[NSNumber numberWithInt:i]];
         }
         for (i = 0; i < nrows2; i++) {
             id item = [tabellaConnect itemAtRow:i];
-            if ([tabellaConnect isItemExpanded:item]) [lista2 addObject:[NSNumber numberWithInt:i]];
+            if ([tabellaConnect isItemExpanded:item])
+                [lista2 addObject:[NSNumber numberWithInt:i]];
         }
         [self reload:self];
         for (i = 0; i < [lista1 count]; i++) {
@@ -933,13 +942,16 @@ int nConnections = 0;
         
         for(i = 0; i < nrows1; i++) {
             id item = [tabellaSend itemAtRow:i];
-            if ([tabellaSend isItemExpanded:item]) [lista1 addObject:[NSNumber numberWithInt:i]];
+            if ([tabellaSend isItemExpanded:item]) 
+                [lista1 addObject:[NSNumber numberWithInt:i]];
         }
         
         for(i = 0; i < nrows2; i++) {
             id item = [tabellaConnect itemAtRow:i];
-            if ([tabellaConnect isItemExpanded:item]) [lista2 addObject:[NSNumber numberWithInt:i]];
+            if ([tabellaConnect isItemExpanded:item]) 
+                [lista2 addObject:[NSNumber numberWithInt:i]];
         }
+        
         
         if (chiSelected == 22 && !doubleClick) 
             [theWindow makeFirstResponder:tabellaSend];
@@ -956,6 +968,7 @@ int nConnections = 0;
             [theWindow makeFirstResponder:tabellaConnect]; 
             [datiTab3 selezionaPorte]; 
         }
+        
        
         [self reload3:50];
         
@@ -969,7 +982,6 @@ int nConnections = 0;
         [tabellaSend selectRow:rigo1 byExtendingSelection:NO];
         [tabellaConnect selectRow:rigo2 byExtendingSelection:NO];
         
-        oldChi = chiSelected;
         needsReloadColor = 0;
         doubleClick = NO;
 		return;

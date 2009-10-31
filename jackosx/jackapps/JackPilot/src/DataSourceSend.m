@@ -15,7 +15,8 @@
 
 -(id)getNomePorta:(int)n 
 {
-    if(n>(nPorte-1)) return @"NIL";
+    if (n > (nPorte-1)) 
+        return @"NIL";
     NSString *name = [NSString init];
     name = [NSString stringWithCString:nomiPorte[n]];
     NSArray *items = [name componentsSeparatedByString:@":"];
@@ -124,8 +125,10 @@
 }
 
 - (int)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item {
-    if(item==nil) return [ [self startPoint] count ];
-    if([item isKindOfClass:[portsArrData class]]) return 0;
+    if (item == nil) 
+        return [[self startPoint] count ];
+    if ([item isKindOfClass:[portsArrData class]]) 
+        return 0;
     return [item getNPorte];
 }
 
@@ -134,10 +137,19 @@
 		richiesta = 22; 
 		return YES; 
 	}
-    if ([item isKindOfClass:[portsArrData class]]) { richiesta=0; return NO; }
-    if ([item isKindOfClass:[DatiSend class]]) return YES;
-    if ([item getNPorte]!=0) { richiesta=22; return YES; }
-    else { richiesta=22; return NO; }
+    if ([item isKindOfClass:[portsArrData class]]) { 
+        richiesta = 0; 
+        return NO; 
+    }
+    if ([item isKindOfClass:[DatiSend class]]) 
+        return YES;
+    if ([item getNPorte]!=0) { 
+        richiesta = 22; 
+        return YES; 
+    } else { 
+        richiesta = 22; 
+        return NO; 
+    }
     return NO;
 }
 
@@ -415,8 +427,8 @@
     if ([item isKindOfClass:[portsArrData class]]) { 
         if ([item IsConn] == 1) 
             return 666; 
-    }
-    else return kindCliItem;
+    } else 
+        return kindCliItem;
     return 333;
 }
 
