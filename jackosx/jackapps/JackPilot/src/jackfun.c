@@ -221,8 +221,7 @@ void portaPerNumero(int n, char* nomeOut, unsigned long* tipo)
 
 int numeroPorte() 
 {
-    
-	const char** ports = getAllPorts();
+ 	const char** ports = getAllPorts();
 	int i = 0;
 	if (ports) {
 		for (i = 0; i < JACK_MAX_PORTS; i++) {
@@ -487,6 +486,7 @@ int nameOfClient(int n, char* name)
 		free(ports);
     return 1;
 }
+
 
 int quantiClienti(void) 
 {

@@ -12,14 +12,16 @@ typedef struct processo {
     int pid;
 } InfoProc;
 
-int quantiProc() {
+int quantiProc() 
+{
     kinfo_proc *pInfo;
     int quanti;
     pInfo = test(&quanti);
     return quanti;
 }
 
-InfoProc ottieniInfo(int n) {
+InfoProc ottieniInfo(int n) 
+{
     kinfo_proc *pInfo;
     int quanti;
     pInfo = test(&quanti);
@@ -29,32 +31,38 @@ InfoProc ottieniInfo(int n) {
     return result;
 }
 
-char* ottieniNome(int n) {
+char* ottieniNome(int n) 
+{
     kinfo_proc *pInfo;
     int quanti;
     pInfo = test(&quanti);
     char *result;
     result = pInfo[n].kp_proc.p_comm;
-    if(ottieniFlag(n)==1) strcat(result," #stopped#");
+    if (ottieniFlag(n) == 1) 
+        strcat(result," #stopped#");
     return result;
 }
 
-int ottieniPid(int n) {
+int ottieniPid(int n) 
+{
     kinfo_proc *pInfo;
     int quanti;
     pInfo = test(&quanti);
     return pInfo[n].kp_proc.p_pid;
 }
 
-void stop(int n) {
+void stop(int n) 
+{
     kill(ottieniPid(n),SIGSTOP);
 }
 
-void reStart(int n) {
+void reStart(int n) 
+{
     kill(ottieniPid(n),SIGCONT);
 }
 
-int ottieniFlag(int n) {
+int ottieniFlag(int n) 
+{
     kinfo_proc *pInfo;
     int quanti;
     pInfo = test(&quanti);

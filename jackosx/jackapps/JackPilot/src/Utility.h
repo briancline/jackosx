@@ -4,9 +4,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Utility : NSObject {
-    
+@interface Utility : NSObject {    
 }
+
 + (int) error:(int) err;
 + (BOOL) initPreference;
 + (BOOL) savePref:(id) array prefType:(int) prefType;
