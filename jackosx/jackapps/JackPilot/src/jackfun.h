@@ -62,7 +62,7 @@ int getFlagOfJack(void);
 jack_client_t* getClient(void);
 void getCurrentAudioDevice(char *outName);
 void setCurrentAudioDevice(char *inName);
-void JPLog(char *fmt,...);
+void JPLog(const char *fmt,...);
 
 // Globals
 extern int gPortNum;

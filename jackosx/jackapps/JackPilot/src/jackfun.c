@@ -557,7 +557,7 @@ void setCurrentAudioDevice(char* inName)
 		strcpy(&coreAudioDevice[0], inName);
 }
 
-void JPLog(char *fmt,...) 
+void JPLog(const char *fmt,...) 
 {
 	if (verboseLevel != 0) {
 		va_list ap;

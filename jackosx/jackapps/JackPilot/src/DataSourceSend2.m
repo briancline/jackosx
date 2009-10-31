@@ -311,7 +311,8 @@
 			if([[split0 objectAtIndex:0] isEqualToString:pre_name]) { JPLog("I've found an old client name, bypassing.\n"); bypass = YES; }
 		}
 		
-		if(bypass) continue;
+		if (bypass) 
+            continue;
 		
 		NSMutableArray *nomi = [self getPortsForClient:testclient withData:testo1];
 		if (nomi != nil) {
