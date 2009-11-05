@@ -1121,7 +1121,7 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 						client->fInputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
                     } else {
                         client->fInputList->mBuffers[i].mData = NULL;
-		             }
+                    }
                 }
       
 			#ifdef OPTIMIZE_PROCESS
@@ -1134,19 +1134,18 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 						client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
                     } else {
                         client->fOutputList->mBuffers[i].mData = NULL;
-	               }
+                    }
                 }
       			
 			#else
          		for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
                     if (proc->IsStreamEnabled(false, i)) {
-                        count++;
-						memset(client->fOuputListTemp[i], 0, nframes * sizeof(float));
+                        memset(client->fOuputListTemp[i], 0, nframes * sizeof(float));
 						client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
 						client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
                     } else {
                         client->fOutputList->mBuffers[i].mData = NULL;
-	                 }
+                    }
                 }
 			#endif
 
@@ -1157,7 +1156,7 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 				// Non Interleaved
                 for (int i = 0; i < JackRouterDevice::fInputChannels; i++) {
 					if (client->fInputPortList[i]) {
-       				client->fInputList->mBuffers[i].mData = (float*)jack_port_get_buffer(client->fInputPortList[i], nframes);
+                        client->fInputList->mBuffers[i].mData = (float*)jack_port_get_buffer(client->fInputPortList[i], nframes);
 						client->fInputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
 					} else {
 						//JARLog("JackRouterDevice::Process client->fInputPortList[i] %d is null\n",i);
@@ -1179,7 +1178,6 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 					}
                 }
 			#else
-				count = 0;
 				for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
 					if (client->fOutputPortList[i]) {
     					memset(client->fOuputListTemp[i], 0, nframes * sizeof(float));
