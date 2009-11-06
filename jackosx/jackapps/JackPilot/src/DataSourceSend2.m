@@ -176,9 +176,12 @@
     //JPLog("ASK3\n");
     //JPLog("Index: %d\n",index);
 #endif
-    if(item==nil) return [[self startPoint] objectAtIndex:index];
-    if([item isKindOfClass:[DatiSend2 class]]) return [item getNomePorta:index];
-    if([item isKindOfClass:[NSString class]]) return item;
+    if (item == nil) 
+        return [[self startPoint] objectAtIndex:index];
+    if ([item isKindOfClass:[DatiSend2 class]]) 
+        return [item getNomePorta:index];
+    if ([item isKindOfClass:[NSString class]])
+        return item;
     return nil;
 }
 
@@ -193,7 +196,7 @@
     if ([item isKindOfClass:[portsArrData class]]) {
         const char *buf;
         buf = [item getCPort];
-        if(buf!=NULL) {
+        if (buf != NULL) {
            NSString *res = [NSString stringWithCString:buf];
            selectedPort = [item getID];
            porteSelected[0] = [item getID];
@@ -201,7 +204,7 @@
 #ifdef DEBUGGO
            //JPLog("Selezionata: %d\n",selectedPort);
 #endif
-		if ([item IsConn] == 1) {
+            if ([item IsConn] == 1) {
 				id testo = [[NSAttributedString alloc] autorelease];
 				NSDictionary *style = [NSDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName];
 				[testo initWithString:res attributes:style];
@@ -273,7 +276,7 @@
         //JPLog("Seleziono porte: %s\n",tempBuf);
 #endif
         *quanteXCli = 1;
-        *needsRelo=2;
+        *needsRelo = 2;
     }
 }
 
@@ -289,7 +292,7 @@
 	quanteporte=n;
 	data = [[NSMutableArray array] retain];
 	itemsToRelease = [[NSMutableArray array] retain];
-	quantiItem=0;
+	quantiItem = 0;
 	
 	NSMutableArray *names_to_verify = [NSMutableArray array];
 	quantiCli = quantiClienti();

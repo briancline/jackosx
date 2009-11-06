@@ -271,7 +271,7 @@ Manage connections
             lista1 = [datiTab3 getPorteSelected];
             int quante = [lista1 count];
             NSArray *listaPorte = [rows allObjects];
-            int i,ia;
+            int i, ia;
             for (i = 0; i < quante; i++) {
                 for (ia = 0; ia < [listaPorte count]; ia++) {
                     NSString *chi;
@@ -317,7 +317,7 @@ Manage connections
             lista1 = [datiTab2 getPorteSelected];
             int quante = [lista1 count];
             NSArray *listaPorte = [rows allObjects];
-            int i,ia;
+            int i, ia;
             for (i = 0; i < quante; i++) {
                 for (ia = 0; ia < [listaPorte count]; ia++) {
                     NSString *chi;
@@ -456,7 +456,7 @@ Manage connections
 								buf1 = (char*)calloc(256, sizeof(char));
 								buf2 = (char*)calloc(256, sizeof(char));
 								
-								for(cici=0;cici<[lista1 count];cici++) {
+								for (cici = 0; cici < [lista1 count]; cici++) {
 									NSString *pre = [lista1 objectAtIndex:cici];
 									[pre getCString:buf1];
 									strcat(buf2,buf1);
@@ -486,7 +486,7 @@ Manage connections
 								buf3 = (char*)calloc(256, sizeof(char));
 								buf4 = (char*)calloc(256, sizeof(char));
 								
-								for(cici = 0; cici <[lista2 count]; cici++) {
+								for (cici = 0; cici < [lista2 count]; cici++) {
 									NSString *pre = [lista2 objectAtIndex:cici];
 									[pre getCString:buf3];
 									strcat(buf4, buf3);
@@ -626,8 +626,10 @@ Manage connections
 			}
 			strcat(strA, test2);
 			
-			if (nullo == 12341) break;
-			if (strcmp(strDA, "12341") == 0) break;
+			if (nullo == 12341) 
+                break;
+			if (strcmp(strDA, "12341") == 0) 
+                break;
 			
 			NSString *daStr = [NSString stringWithCString:strDA];
 			NSString *aStr = [NSString stringWithCString:strA];
@@ -793,7 +795,13 @@ Manage connections
 				a = NSRunCriticalAlertPanel(warnStr,LOCSTR(@"CANNOT BE RESTORED. If you need this connection you must open client application and retry"),LOCSTR(@"Retry"),LOCSTR(@"Abort"),LOCSTR(@"Skip"));
 				switch(a) {
 					case 0:
-						free(buf3); free(buf4); free(buf1); free(buf2); free(strA); free(strDA); free(test2);
+						free(buf3); 
+                        free(buf4); 
+                        free(buf1); 
+                        free(buf2); 
+                        free(strA); 
+                        free(strDA); 
+                        free(test2);
 						goto end2;
 					case -1:
 						goto end;
@@ -956,7 +964,7 @@ Manage connections
                 [lista2 addObject:[NSNumber numberWithInt:i]];
         }
         
-        
+         /*
         if (chiSelected == 22 && !doubleClick) 
             [theWindow makeFirstResponder:tabellaSend];
             
@@ -972,7 +980,7 @@ Manage connections
             [theWindow makeFirstResponder:tabellaConnect]; 
             [datiTab3 selezionaPorte]; 
         }
-        
+        */
         
         /*
         if (chiSelected == 22) {
@@ -1037,7 +1045,7 @@ Manage connections
             [lista2 addObject:[NSNumber numberWithInt:i]];
     }
     
-    /*
+    
     if (chiSelected == 22 && !doubleClick) 
         [theWindow makeFirstResponder:tabellaSend];
         
@@ -1053,7 +1061,7 @@ Manage connections
         [theWindow makeFirstResponder:tabellaConnect]; 
         [datiTab3 selezionaPorte]; 
     }
-    */
+    
     
     /*
     int selected = chiSelected;
