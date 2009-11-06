@@ -1291,7 +1291,7 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 
 -(IBAction)openAMS:(id)sender {
     char *command = (char*)calloc(256, sizeof(char));
-    //strcpy(command,"open \"/Applications/Utilities/Audio\ MIDI\ Setup.app\"");
+    strcpy(command,"open \"/Applications/Utilities/Audio\ MIDI\ Setup.app\"");
     my_system2(command);
     free(command);
 }
