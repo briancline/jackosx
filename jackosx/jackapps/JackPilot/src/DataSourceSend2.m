@@ -56,7 +56,8 @@
             id style;
             id testo = [[NSAttributedString alloc] autorelease];
             if ([items count] == 2) { 
-				fres = [items objectAtIndex:0]; style = [NSDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName];
+				fres = [items objectAtIndex:0]; 
+                style = [NSDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName];
 			} else { 
                 fres = [items objectAtIndex:1];
                 style = [NSMutableDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName]; 
@@ -75,14 +76,15 @@
                 NSMutableDictionary *style;
                 fres = [items objectAtIndex:1]; 
                 char deviceName[256];
-                [fres getCString:&deviceName[0]];
-                setCurrentAudioDevice(&deviceName[0]);
+                [fres getCString:deviceName];
+                setCurrentAudioDevice(deviceName);
                 style = [NSMutableDictionary dictionaryWithObject:[NSFont boldSystemFontOfSize:13.0f] forKey:NSFontAttributeName];
                 [testo initWithString:fres attributes:style];
                 //NSLog(@"Attributed CLientC Name:");
                 //NSLog(fres);
                 return testo;
-            } else fres = [items objectAtIndex:0];
+            } else 
+                fres = [items objectAtIndex:0];
             //NSLog(@"CLient Name:");
             //NSLog(fres);
             return fres;
@@ -288,8 +290,8 @@
 	porteSelected = portSelected;
 	int n;
 	stat = 1;
-	n=numeroPorte();
-	quanteporte=n;
+	n = numeroPorte();
+	quanteporte = n;
 	data = [[NSMutableArray array] retain];
 	itemsToRelease = [[NSMutableArray array] retain];
 	quantiItem = 0;
@@ -316,7 +318,10 @@
 		
 		while (anObject = [enumerator nextObject]) {
 			NSArray *split0 = [anObject componentsSeparatedByString:@":"];
-			if([[split0 objectAtIndex:0] isEqualToString:pre_name]) { JPLog("I've found an old client name, bypassing.\n"); bypass = YES; }
+			if ([[split0 objectAtIndex:0] isEqualToString:pre_name]) { 
+                JPLog("I've found an old client name, bypassing.\n"); 
+                bypass = YES; 
+            }
 		}
 		
 		if (bypass) 

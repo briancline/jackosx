@@ -964,7 +964,7 @@ Manage connections
                 [lista2 addObject:[NSNumber numberWithInt:i]];
         }
         
-         /*
+         
         if (chiSelected == 22 && !doubleClick) 
             [theWindow makeFirstResponder:tabellaSend];
             
@@ -980,7 +980,7 @@ Manage connections
             [theWindow makeFirstResponder:tabellaConnect]; 
             [datiTab3 selezionaPorte]; 
         }
-        */
+        
         
         /*
         if (chiSelected == 22) {
