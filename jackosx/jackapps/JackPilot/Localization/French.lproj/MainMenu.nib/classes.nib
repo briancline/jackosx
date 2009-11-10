@@ -21,6 +21,9 @@
             LANGUAGE = ObjC;
             OUTLETS =             {
                 aText = NSTextField;
+                colonnaDest = NSTableColumn;
+                colonnaSend = NSTableColumn;
+                colonnaSource = NSTableColumn;
                 cpuLoadBar = NSProgressIndicator;
                 daText = NSTextField;
                 loadText = NSTextField;

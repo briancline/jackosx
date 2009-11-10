@@ -19,7 +19,6 @@ static void JackPortConnection(jack_port_id_t a, jack_port_id_t b, int connect, 
 	JPLog("JackPortConnection\n");
 	JackConnections *c = (JackConnections*)arg;
     [c askreload];
-    return 0;
 }
 
 static int JackGraphOrder(void *arg) 
@@ -34,8 +33,7 @@ static int JackGraphOrder(void *arg)
 
 int nConnections = 0;
 
-+(JackConnections*)getSelf 
-{
++(JackConnections*)getSelf {
 	return static_conn;
 }
 
@@ -57,22 +55,21 @@ int nConnections = 0;
     jack_activate(getClient());
 }
 
--(void)awakeFromNib 
-{
+-(void)awakeFromNib {
 	static_conn = self;
 }
 
 - (IBAction)orderFront:(id)sender
 {
     if (getStatus() == 1) { 
-    
+          
         [self fillPortsArray];
         
         if (datiTab != nil) 
 			[datiTab release];
         datiTab = [tableData alloc];
         [datiTab setWhatKind:0];
-        [datiTab writeData:sender text:&quantePConnCli text2:portSelected text3:&needsReload];
+        [datiTab writeData:sender text:&quantePConnCli text2:&portSelected[0] text3:&needsReload];
         [tabellaPorte setDataSource:datiTab];
         [tabellaPorte setDrawsGrid:NO];
         [tabellaPorte setDoubleAction:@selector(removCon:)];
@@ -82,7 +79,7 @@ int nConnections = 0;
 			[datiTab2 release];
         datiTab2 = [tableDataB alloc];
         [datiTab2 setWhatKind:1];
-        [datiTab2 writeData:sender text:portsArr text2:&needsReload text3:portSelected text4:&quantePConnCli text5:&chiSelected];
+        [datiTab2 writeData:sender text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected];
         [tabellaSend setDataSource:datiTab2];
         [tabellaSend setDrawsGrid:NO];
         [tabellaSend setDoubleAction:@selector(makeCon:)];
@@ -92,7 +89,7 @@ int nConnections = 0;
 			[datiTab3 release];
         datiTab3 = [tableDataC alloc];
         [datiTab3 setWhatKind:1];
-        [datiTab3 writeData:sender text:portsArr text2:&needsReload text3:portSelected text4:&quantePConnCli text5:&chiSelected];
+        [datiTab3 writeData:sender text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected];
         [tabellaConnect setDataSource:datiTab3];
         [tabellaConnect setDrawsGrid:NO];
 		[tabellaConnect setDoubleAction:@selector(makeCon:)];
@@ -109,10 +106,6 @@ int nConnections = 0;
     }
 }
 
-/*
-Manage connections
-*/
-
 - (IBAction)makeCon:(id)sender
 {
     doubleClick = YES;
@@ -124,13 +117,13 @@ Manage connections
     [self selectTo:sender];
 	
     if (kind1 != 1) {
-		[[src_port_text stringValue] getCString:src_port];
+		[[daText stringValue] getCString:daCh];
     } else {
         lista1 = [datiTab2 getPorteSelected];
     }
 	
     if (kind2 != 1) {
-		[[dst_port_text stringValue] getCString:dst_port];
+		[[aText stringValue] getCString:aCh];
     } else {
         lista2 = [datiTab3 getPorteSelected];
     } 
@@ -140,30 +133,30 @@ Manage connections
 		n = [lista1 count];
 		
 		for(i = 0; i < n; i++) {
-			[[lista1 objectAtIndex:i] getCString:src_port];
-			[[dst_port_text stringValue] getCString:dst_port];
+			[[lista1 objectAtIndex:i] getCString:daCh];
+			[[aText stringValue] getCString:aCh];
 			
-			int test = connectPorts(src_port, dst_port);
+			int test = connectPorts(&daCh[0], &aCh[0]);
 			if (test != 0) 
-                test = connectPorts(dst_port, src_port);
+                test = connectPorts(&aCh[0], &daCh[0]);
 			if (test != 0) 
-                test = disconnectPorts(src_port, dst_port);
+                test = disconnectPorts(&daCh[0], &aCh[0]);
 			if (test != 0) 
-                test = disconnectPorts(dst_port, src_port);
+                test = disconnectPorts(&aCh[0], &daCh[0]);
 		}
     }
     
     if (kind1 == 0 && kind2 == 0) {
-        [[src_port_text stringValue] getCString:src_port];
-        [[dst_port_text stringValue] getCString:dst_port];
+        [[daText stringValue] getCString:daCh];
+        [[aText stringValue] getCString:aCh];
 		       
-        int test = connectPorts(src_port, dst_port);
+        int test = connectPorts(&daCh[0], &aCh[0]);
         if (test != 0) 
-            test = connectPorts(dst_port, src_port);
+            test = connectPorts(&aCh[0], &daCh[0]);
         if (test != 0) 
-            test = disconnectPorts(src_port, dst_port);
+            test = disconnectPorts(&daCh[0], &aCh[0]);
         if (test != 0) 
-            test = disconnectPorts(dst_port, src_port);
+            test = disconnectPorts(&aCh[0], &daCh[0]);
     }
     
     if (kind1 == 1 && kind2 == 1) {
@@ -171,15 +164,15 @@ Manage connections
         n = [lista1 count];
 		
         for(i = 0; i < n; i++) {
-            [[lista1 objectAtIndex:i] getCString:src_port];
-            [[lista2 objectAtIndex:i] getCString:dst_port];
-            int test = connectPorts(src_port, dst_port);
+            [[lista1 objectAtIndex:i] getCString:daCh];
+            [[lista2 objectAtIndex:i] getCString:aCh];
+            int test = connectPorts(&daCh[0] ,&aCh[0]);
             if (test != 0) 
-                test = connectPorts(dst_port, src_port);
+                test = connectPorts(&aCh[0], &daCh[0]);
             if (test != 0) 
-                test = disconnectPorts(src_port, dst_port);
+                test = disconnectPorts(&daCh[0], &aCh[0]);
             if (test != 0) 
-                test = disconnectPorts(dst_port, src_port);
+                test = disconnectPorts(&aCh[0], &daCh[0]);
 		}
     }
     
@@ -187,15 +180,15 @@ Manage connections
         int n,i;
         n = [lista2 count];
         for (i = 0; i < n; i++) {
-            [[lista2 objectAtIndex:i] getCString:dst_port];
-            [[src_port_text stringValue] getCString:src_port];
-            int test = connectPorts(src_port,dst_port);
+            [[lista2 objectAtIndex:i] getCString:aCh];
+            [[daText stringValue] getCString:daCh];
+            int test = connectPorts(&daCh[0],&aCh[0]);
             if (test != 0) 
-                test = connectPorts(dst_port, src_port);
+                test = connectPorts(&aCh[0], &daCh[0]);
             if (test != 0) 
-                test = disconnectPorts(src_port, dst_port);
+                test = disconnectPorts(&daCh[0], &aCh[0]);
             if (test != 0) 
-                test = disconnectPorts(dst_port, src_port);
+                test = disconnectPorts(&aCh[0], &daCh[0]);
 		}
     }
 	
@@ -207,11 +200,43 @@ Manage connections
     [datiTab2 flush:sender];
     [datiTab3 flush:sender];
     [self fillPortsArray];
-    [datiTab2 writeData:sender text:portsArr text2:&needsReload text3:portSelected text4:&quantePConnCli text5:&chiSelected];
-    [datiTab3 writeData:sender text:portsArr text2:&needsReload text3:portSelected text4:&quantePConnCli text5:&chiSelected];
+    [datiTab2 writeData:sender text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected];
+    [datiTab3 writeData:sender text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected];
     [tabellaPorte reloadData];
     [tabellaSend reloadData];
     [tabellaConnect reloadData];
+    [nCon setIntValue:getConnections()/2];
+}
+
+-(void)removeACon:(id)sender 
+{}
+
+-(IBAction) reload3:(int)sender {
+
+    [self fillPortsArray];
+    
+    if (sender == 22) {
+        [datiTab2 flush:nil];
+        [datiTab2 writeData:self text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected]; 
+        [tabellaSend reloadData]; 
+    }
+    
+    if (sender == 21) { 
+        [datiTab3 flush:nil];
+        [datiTab3 writeData:self text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected]; 
+        [tabellaConnect reloadData]; 
+    }
+    
+    if (sender == 50) {
+        [datiTab2 flush:nil];
+        [datiTab2 writeData:self text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected]; 
+        [tabellaSend reloadData];
+        
+        [datiTab3 flush:nil];
+        [datiTab3 writeData:self text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected]; 
+        [tabellaConnect reloadData];
+    }
+    
     [nCon setIntValue:getConnections()/2];
 }
 
@@ -220,38 +245,6 @@ Manage connections
     [tabellaPorte reloadData];
     [nCon setIntValue:getConnections()/2];
 }
-
--(IBAction) reload3:(int)sender {
-
-    [self fillPortsArray];
-    
-    if (sender == 22) {
-        [datiTab2 flush:nil];
-        [datiTab2 writeData:self text:portsArr text2:&needsReload text3:portSelected text4:&quantePConnCli text5:&chiSelected]; 
-        [tabellaSend reloadData]; 
-    }
-    
-    if (sender == 21) { 
-        [datiTab3 flush:nil];
-        [datiTab3 writeData:self text:portsArr text2:&needsReload text3:portSelected text4:&quantePConnCli text5:&chiSelected]; 
-        [tabellaConnect reloadData]; 
-    }
-    
-    if (sender == 50) {
-        [datiTab2 flush:nil];
-        [datiTab2 writeData:self text:portsArr text2:&needsReload text3:portSelected text4:&quantePConnCli text5:&chiSelected]; 
-        [tabellaSend reloadData];
-        
-        [datiTab3 flush:nil];
-        [datiTab3 writeData:self text:portsArr text2:&needsReload text3:portSelected text4:&quantePConnCli text5:&chiSelected]; 
-        [tabellaConnect reloadData];
-    }
-    
-    [nCon setIntValue:getConnections()/2];
-}
-
--(void)removeACon:(id)sender 
-{}
 
 - (void)askreload
 {
@@ -271,12 +264,12 @@ Manage connections
             lista1 = [datiTab3 getPorteSelected];
             int quante = [lista1 count];
             NSArray *listaPorte = [rows allObjects];
-            int i, ia;
+            int i,ia;
             for (i = 0; i < quante; i++) {
-                for (ia = 0; ia < [listaPorte count]; ia++) {
+                for(ia = 0; ia < [listaPorte count]; ia++) {
                     NSString *chi;
                     chi = [datiTab getCHisono:[[listaPorte objectAtIndex:ia] intValue]];
-                    [chi getCString:src_port];
+                    [chi getCString:daCh];
                     
                     NSString *chi2;
                     chi2 = [lista1 objectAtIndex:i];
@@ -286,8 +279,8 @@ Manage connections
                     [chi2 getCString:buf];
                     
                     int test;
-                    test = disconnectPorts(buf,src_port);
-                    if (test != 0) test = disconnectPorts(src_port,buf);
+                    test = disconnectPorts(buf,daCh);
+                    if (test != 0) test = disconnectPorts(daCh,buf);
                 }
             }
         }
@@ -295,16 +288,16 @@ Manage connections
         if (kind2 == 0) {
             char *buf;
             buf = (char*)alloca(256 * sizeof(char));
-            [[dst_port_text stringValue] getCString:buf];
+            [[aText stringValue] getCString:buf];
             
             while (object = [rows nextObject]) {
                 NSString *chi;
                 chi = [datiTab getCHisono:[object intValue]];
-                [chi getCString:src_port];
+                [chi getCString:daCh];
                 int test;
-                test = disconnectPorts(buf,src_port);
+                test = disconnectPorts(buf,daCh);
                 if (test != 0) 
-                    test = disconnectPorts(src_port,buf);
+                    test = disconnectPorts(daCh,buf);
             } 
         }
     }
@@ -317,12 +310,12 @@ Manage connections
             lista1 = [datiTab2 getPorteSelected];
             int quante = [lista1 count];
             NSArray *listaPorte = [rows allObjects];
-            int i, ia;
+            int i,ia;
             for (i = 0; i < quante; i++) {
                 for (ia = 0; ia < [listaPorte count]; ia++) {
                     NSString *chi;
                     chi = [datiTab getCHisono:[[listaPorte objectAtIndex:ia] intValue]];
-                    [chi getCString:src_port];
+                    [chi getCString:daCh];
                     
                     NSString *chi2;
                     chi2 = [lista1 objectAtIndex:i];
@@ -332,9 +325,9 @@ Manage connections
                     [chi2 getCString:buf];
                     
                     int test;
-                    test = disconnectPorts(buf,src_port);
+                    test = disconnectPorts(buf,daCh);
                     if (test != 0) 
-                        test = disconnectPorts(src_port,buf);
+                        test = disconnectPorts(daCh,buf);
                 }
             }
         }
@@ -342,14 +335,14 @@ Manage connections
         if (kind1 == 0) {
             char *buf;
             buf = (char*)alloca(256 * sizeof(char));
-            [[src_port_text stringValue] getCString:buf];
+            [[daText stringValue] getCString:buf];
             while (object = [rows nextObject]) {
                 NSString *chi;
                 chi = [datiTab getCHisono:[object intValue]];
-                [chi getCString:src_port];
+                [chi getCString:daCh];
                 int test;
-                test = disconnectPorts(buf,src_port);
-                if (test != 0) test = disconnectPorts(src_port,buf);
+                test = disconnectPorts(buf,daCh);
+                if (test != 0) test = disconnectPorts(daCh,buf);
             } 
         }
     }
@@ -363,12 +356,9 @@ Manage connections
     NSString *chi;
     chi = [datiTab2 getCHisono:chisono];
     tipoStringa1 = [datiTab2 getTipoString];
-    if (chi == nil) { 
-        kind1 = 1; 
-        return; 
-    }
+    if (chi == nil) { kind1=1; return; }
     kind1 = 0;
-    [src_port_text setStringValue:chi];
+    [daText setStringValue:chi];
 }
 
 - (IBAction)selectTo: (id)sender
@@ -377,12 +367,9 @@ Manage connections
     NSString *chi;
     chi = [datiTab3 getCHisono:chisono];
     tipoStringa2 = [datiTab3 getTipoString];
-    if (chi == nil) { 
-        kind2 = 1; 
-        return; 
-    }
+    if( chi == nil) { kind2=1; return; }
     kind2 = 0;
-    [dst_port_text setStringValue:chi];
+    [aText setStringValue:chi];
 }
 
 - (IBAction)saveScheme: (id)sender
@@ -398,7 +385,7 @@ Manage connections
 		runResult = [sp runModalForDirectory:NSHomeDirectory() file:@""];
 
 		if (runResult == NSOKButton) {
-			if (!(filename = [sp filename])) {
+			if(!(filename = [sp filename])) {
 				NSBeep();
 			}
 		} else 
@@ -423,10 +410,10 @@ Manage connections
 				str[rip] = (char*)calloc(256, sizeof(char));
 			}
 		   
-			fprintf(schemeFile, "\t%d", (chisono2/2)); 
+			fprintf(schemeFile,"\t%d",(chisono2/2)); 
 		   
-			for (i = 0; i < chisono; i++) {
-				char strDA[256], strA[256];
+			for(i = 0; i < chisono; i++) {
+				char strDA[256],strA[256];
 				
 				NSString *chi;
 				chi = [datiTab2 getCHisono2:i];
@@ -456,7 +443,7 @@ Manage connections
 								buf1 = (char*)calloc(256, sizeof(char));
 								buf2 = (char*)calloc(256, sizeof(char));
 								
-								for (cici = 0; cici < [lista1 count]; cici++) {
+								for(cici=0;cici<[lista1 count];cici++) {
 									NSString *pre = [lista1 objectAtIndex:cici];
 									[pre getCString:buf1];
 									strcat(buf2,buf1);
@@ -486,7 +473,7 @@ Manage connections
 								buf3 = (char*)calloc(256, sizeof(char));
 								buf4 = (char*)calloc(256, sizeof(char));
 								
-								for (cici = 0; cici < [lista2 count]; cici++) {
+								for(cici = 0; cici <[lista2 count]; cici++) {
 									NSString *pre = [lista2 objectAtIndex:cici];
 									[pre getCString:buf3];
 									strcat(buf4, buf3);
@@ -532,7 +519,7 @@ Manage connections
 			fclose(schemeFile);
 		}
 	} else 
-		NSRunAlertPanel(LOCSTR(@"Sorry..."), LOCSTR(@"You must have \"Connections Manager\" window opened, and JACK must be ON."), LOCSTR(@"Ok"), nil, nil);
+		NSRunAlertPanel(LOCSTR(@"Sorry..."),LOCSTR(@"You must have \"Connections Manager\" window opened, and JACK must be ON."),LOCSTR(@"Ok"),nil,nil);
 }
 
 - (IBAction)loadScheme: (id)sender
@@ -559,8 +546,9 @@ Manage connections
 	} else {
 		
 		int chisono = numeroPorte();
+		int i;
+		
 		int quanteConn = getConnections()/2;
-        int i;
 		
 		if (quanteConn != 0) {
 			
@@ -568,7 +556,7 @@ Manage connections
 				
 				NSString *chi2;
 				chi2 = [datiTab2 getCHisono2:i];
-				[chi2 getCString:dst_port];
+				[chi2 getCString:aCh];
 				
 				int quanteCc = connessionePerNumero2(i, NULL, 0);
 				
@@ -582,9 +570,9 @@ Manage connections
 				connessionePerNumero2(i, thebuf, quanteCc);
 				
 				for (aa = 0; aa < quanteCc; aa++) {
-					int test = disconnectPorts(dst_port, thebuf[aa]);
+					int test = disconnectPorts(aCh, thebuf[aa]);
 					if (test != 0) 
-						test = disconnectPorts(thebuf[aa], dst_port);
+						test = disconnectPorts(thebuf[aa], aCh);
 				}
 			}
 		}
@@ -626,10 +614,8 @@ Manage connections
 			}
 			strcat(strA, test2);
 			
-			if (nullo == 12341) 
-                break;
-			if (strcmp(strDA, "12341") == 0) 
-                break;
+			if (nullo == 12341) break;
+			if (strcmp(strDA, "12341") == 0) break;
 			
 			NSString *daStr = [NSString stringWithCString:strDA];
 			NSString *aStr = [NSString stringWithCString:strA];
@@ -640,12 +626,11 @@ Manage connections
 			buf1 = (char*)calloc(256, sizeof(char));
 			buf2 = (char*)calloc(256, sizeof(char));
 			int tick;
-			for (tick = 0; tick < [lista1 count]; tick++) {
+			for(tick=0;tick<[lista1 count];tick++) {
 				NSString *pre = [lista1 objectAtIndex:tick];
 				[pre getCString:buf1];
 				strcat(buf2,buf1);
-				if (tick + 1 != [lista1 count])
-                    strcat(buf2," ");
+				if(tick+1!=[lista1 count])strcat(buf2," ");
 			}
 			strcpy(strDA,buf2);
 			
@@ -669,18 +654,18 @@ Manage connections
 			char checkAudio[256];
 			char audioDeviceName[256];
 			
-			memset(checkAudio, 0, sizeof(char) * 256);
-			memset(audioDeviceName, 0, sizeof(char) * 256);
+			memset(&checkAudio, 0, sizeof(char) * 256);
+			memset(&audioDeviceName, 0, sizeof(char) * 256);
 			int aa;
 			for (aa = 0; aa < strlen(strA); aa++) { 
 				checkAudio[aa] = strA[aa];
 				if (strA[aa] == ':') {
 					if (strcmp(checkAudio,"portaudio:") == 0 || strcmp(checkAudio,"coreaudio:") == 0) {
 						char audioDevice[256];
-						getCurrentAudioDevice(audioDevice);
-						strcat(checkAudio, audioDevice);
+						getCurrentAudioDevice(&audioDevice[0]);
+						strcat(&checkAudio[0], audioDevice);
 						char port[256];
-						memset(port, 0, sizeof(char) * 256);
+						memset(&port, 0, sizeof(char) * 256);
 						int aaa;
 						aa++;
 						int count = 0;
@@ -691,7 +676,7 @@ Manage connections
 							}
 							if (strA[aaa] == ':') {
 								int aaaa;
-								int cc = 0;
+								int cc=0;
 								for (aaaa = aaa; aaaa < strlen(strA); aaaa++) {
 									port[cc] = strA[aaaa];
 									cc++;
@@ -700,26 +685,26 @@ Manage connections
 							}
 						}
 						char verify[256];
-						strcpy(verify,"portaudio:");
-						strcat(verify,audioDeviceName);
-						if (strcmp(verify,checkAudio) != 0) {
-							strcpy(verify,"coreaudio:");
-							strcat(verify,audioDeviceName); 
-							if (strcmp(verify,checkAudio) != 0) {
-								strcat(checkAudio,port);
+						strcpy(&verify[0],"portaudio:");
+						strcat(&verify[0],audioDeviceName);
+						if(strcmp(&verify[0],&checkAudio[0])!=0) {
+							strcpy(&verify[0],"coreaudio:");
+							strcat(&verify[0],audioDeviceName); 
+							if(strcmp(&verify[0],&checkAudio[0])!=0) {
+								strcat(&checkAudio[0],&port[0]);
 								int check2;
 								NSMutableString *message = [NSMutableString stringWithCapacity:4];
 								[message appendString:LOCSTR(@"The physical driver used with this setup was ")];
-								[message appendString:[NSString stringWithCString:audioDeviceName]];
+								[message appendString:[NSString stringWithCString:&audioDeviceName[0]]];
 								[message appendString:LOCSTR(@", now Jack is using ")];
-								[message appendString:[NSString stringWithCString:audioDevice]];
+								[message appendString:[NSString stringWithCString:&audioDevice[0]]];
 								[message appendString:LOCSTR(@", do you want to restore connections to the used with driver ")];
-								[message appendString:[NSString stringWithCString:audioDevice]];
+								[message appendString:[NSString stringWithCString:&audioDevice[0]]];
 								[message appendString:@"?"];
 								check2 = NSRunCriticalAlertPanel(LOCSTR(@"Warning:"),message,LOCSTR(@"Yes"),LOCSTR(@"No"),nil);
 								if (check2 == 0) 
                                     goto end;
-								strcpy(strA,checkAudio);
+								strcpy(strA,&checkAudio[0]);
 							}
 						}
 						break;
@@ -734,10 +719,10 @@ Manage connections
 				if (strDA[aa] == ':') {
 					if (strcmp(checkAudio,"portaudio:") == 0 || strcmp(checkAudio,"coreaudio:") == 0) {
 						char audioDevice[256];
-						getCurrentAudioDevice(audioDevice);
-						strcat(checkAudio,audioDevice);
+						getCurrentAudioDevice(&audioDevice[0]);
+						strcat(&checkAudio[0],&audioDevice[0]);
 						char port[256];
-						memset(port, 0, sizeof(char)*256);
+						memset(&port,0,sizeof(char)*256);
 						int aaa;
 						aa++;
 						int count = 0;
@@ -748,7 +733,7 @@ Manage connections
 							}
 							if (strDA[aaa] == ':') {
 								int aaaa;
-								int cc = 0;
+								int cc=0;
 								for(aaaa=aaa;aaaa<strlen(strDA);aaaa++) {
 									port[cc] = strDA[aaaa];
 									cc++;
@@ -757,26 +742,26 @@ Manage connections
 							}
 						}
 						char verify[256];
-						strcpy(verify, "portaudio:");
-						strcat(verify, audioDeviceName);
-						if (strcmp(verify, checkAudio) != 0) {
-							strcpy(verify, "coreaudio:");
-							strcat(verify, audioDeviceName); 
-							if (strcmp(verify, checkAudio) != 0) {
-								strcat(checkAudio, port);
+						strcpy(&verify[0], "portaudio:");
+						strcat(&verify[0], &audioDeviceName[0]);
+						if (strcmp(&verify[0], &checkAudio[0])!=0) {
+							strcpy(&verify[0], "coreaudio:");
+							strcat(&verify[0], audioDeviceName); 
+							if (strcmp(&verify[0], &checkAudio[0])!=0) {
+								strcat(&checkAudio[0], &port[0]);
 								int check2;
 								NSMutableString *message = [NSMutableString stringWithCapacity:4];
 								[message appendString:LOCSTR(@"The physical driver used with this setup was ")];
-								[message appendString:[NSString stringWithCString:audioDeviceName]];
+								[message appendString:[NSString stringWithCString:&audioDeviceName[0]]];
 								[message appendString:LOCSTR(@", now Jack is using ")];
-								[message appendString:[NSString stringWithCString:audioDevice]];
+								[message appendString:[NSString stringWithCString:&audioDevice[0]]];
 								[message appendString:LOCSTR(@", do you want to restore connections to the used with driver ")];
-								[message appendString:[NSString stringWithCString:audioDevice]];
+								[message appendString:[NSString stringWithCString:&audioDevice[0]]];
 								[message appendString:@"?"];
 								check2 = NSRunCriticalAlertPanel(LOCSTR(@"Warning:"), message, LOCSTR(@"Yes"),LOCSTR(@"No"),nil);
 								if (check2 == 0) 
 									goto end;
-								strcpy(strDA,checkAudio);
+								strcpy(strDA,&checkAudio[0]);
 							}
 						}
 						break;
@@ -795,13 +780,7 @@ Manage connections
 				a = NSRunCriticalAlertPanel(warnStr,LOCSTR(@"CANNOT BE RESTORED. If you need this connection you must open client application and retry"),LOCSTR(@"Retry"),LOCSTR(@"Abort"),LOCSTR(@"Skip"));
 				switch(a) {
 					case 0:
-						free(buf3); 
-                        free(buf4); 
-                        free(buf1); 
-                        free(buf2); 
-                        free(strA); 
-                        free(strDA); 
-                        free(test2);
+						free(buf3); free(buf4); free(buf1); free(buf2); free(strA); free(strDA); free(test2);
 						goto end2;
 					case -1:
 						goto end;
@@ -884,13 +863,11 @@ Manage connections
 
 -(void) setupTimer
 {
-
     if (update_timer != nil) 
 		[update_timer release];
     //update_timer = [[NSTimer scheduledTimerWithTimeInterval: 1.0 target: self selector: @selector(reloadTimer) userInfo:nil repeats:YES] retain];
     update_timer = [[NSTimer scheduledTimerWithTimeInterval: 0.5 target: self selector: @selector(reloadTimer) userInfo:nil repeats:YES] retain];
     [[NSRunLoop currentRunLoop] addTimer: update_timer forMode: NSDefaultRunLoopMode];
-    
 }
 
 -(void) stopTimer
@@ -920,13 +897,11 @@ Manage connections
         
         for (i = 0; i < nrows1; i++) {
             id item = [tabellaSend itemAtRow:i];
-            if ([tabellaSend isItemExpanded:item]) 
-                [lista1 addObject:[NSNumber numberWithInt:i]];
+            if ([tabellaSend isItemExpanded:item]) [lista1 addObject:[NSNumber numberWithInt:i]];
         }
         for (i = 0; i < nrows2; i++) {
             id item = [tabellaConnect itemAtRow:i];
-            if ([tabellaConnect isItemExpanded:item])
-                [lista2 addObject:[NSNumber numberWithInt:i]];
+            if ([tabellaConnect isItemExpanded:item]) [lista2 addObject:[NSNumber numberWithInt:i]];
         }
         [self reload:self];
         for (i = 0; i < [lista1 count]; i++) {
@@ -954,17 +929,14 @@ Manage connections
         
         for(i = 0; i < nrows1; i++) {
             id item = [tabellaSend itemAtRow:i];
-            if ([tabellaSend isItemExpanded:item]) 
-                [lista1 addObject:[NSNumber numberWithInt:i]];
+            if ([tabellaSend isItemExpanded:item]) [lista1 addObject:[NSNumber numberWithInt:i]];
         }
         
         for(i = 0; i < nrows2; i++) {
             id item = [tabellaConnect itemAtRow:i];
-            if ([tabellaConnect isItemExpanded:item]) 
-                [lista2 addObject:[NSNumber numberWithInt:i]];
+            if ([tabellaConnect isItemExpanded:item]) [lista2 addObject:[NSNumber numberWithInt:i]];
         }
         
-         
         if (chiSelected == 22 && !doubleClick) 
             [theWindow makeFirstResponder:tabellaSend];
             
@@ -980,130 +952,27 @@ Manage connections
             [theWindow makeFirstResponder:tabellaConnect]; 
             [datiTab3 selezionaPorte]; 
         }
-        
-        
-        /*
-        if (chiSelected == 22) {
-            if (doubleClick) {
-                [theWindow makeFirstResponder:tabellaConnect]; 
-                [datiTab3 selezionaPorte]; 
-            } else {
-                [theWindow makeFirstResponder:tabellaSend];
-            }
-        }
-         
-        if (chiSelected == 21) {
-            if (doubleClick) {
-                [theWindow makeFirstResponder:tabellaSend]; 
-                [datiTab2 selezionaPorte];
-            } else {
-                [theWindow makeFirstResponder:tabellaConnect];
-            }
-        }
-        */
        
         [self reload3:50];
         
-        for (i = 0; i < [lista1 count]; i++) {
+        for(i = 0;i < [lista1 count]; i++) {
             [tabellaSend expandItem:[tabellaSend itemAtRow:[[lista1 objectAtIndex:i] intValue]] expandChildren:YES];
         }
-        for (i = 0; i < [lista2 count]; i++) {
+        for(i = 0; i < [lista2 count]; i++) {
             [tabellaConnect expandItem:[tabellaConnect itemAtRow:[[lista2 objectAtIndex:i] intValue]] expandChildren:YES];
         }
         
         [tabellaSend selectRow:rigo1 byExtendingSelection:NO];
         [tabellaConnect selectRow:rigo2 byExtendingSelection:NO];
         
+        oldChi = chiSelected;
         needsReloadColor = 0;
         doubleClick = NO;
 		return;
     }
 }
 
--(void) reloadTimerPart2 
-{
-    [self reload2];
-        
-    int rigo1 = [tabellaSend selectedRow];
-    int rigo2 = [tabellaConnect selectedRow];
-    int nrows1 = [tabellaSend numberOfRows];
-    int nrows2 = [tabellaConnect numberOfRows];
-    int i;
-    
-    NSMutableArray *lista1 = [NSMutableArray array];
-    NSMutableArray *lista2 = [NSMutableArray array];
-    
-    for(i = 0; i < nrows1; i++) {
-        id item = [tabellaSend itemAtRow:i];
-        if ([tabellaSend isItemExpanded:item]) 
-            [lista1 addObject:[NSNumber numberWithInt:i]];
-    }
-    
-    for(i = 0; i < nrows2; i++) {
-        id item = [tabellaConnect itemAtRow:i];
-        if ([tabellaConnect isItemExpanded:item]) 
-            [lista2 addObject:[NSNumber numberWithInt:i]];
-    }
-    
-    
-    if (chiSelected == 22 && !doubleClick) 
-        [theWindow makeFirstResponder:tabellaSend];
-        
-    if (chiSelected == 21 && !doubleClick) 
-        [theWindow makeFirstResponder:tabellaConnect];
-        
-    if (chiSelected == 21 && doubleClick) { 
-        [theWindow makeFirstResponder:tabellaSend]; 
-        [datiTab2 selezionaPorte]; 
-    }    
-    
-    if (chiSelected == 22 && doubleClick) { 
-        [theWindow makeFirstResponder:tabellaConnect]; 
-        [datiTab3 selezionaPorte]; 
-    }
-    
-    
-    /*
-    int selected = chiSelected;
-    
-    
-    if (chiSelected == 22) {
-        if (doubleClick) {
-            [theWindow makeFirstResponder:tabellaConnect]; 
-            [datiTab3 selezionaPorte]; 
-        } else {
-            [theWindow makeFirstResponder:tabellaSend];
-        }
-    }
-     
-    if (chiSelected == 21) {
-        if (doubleClick) {
-            [theWindow makeFirstResponder:tabellaSend]; 
-            [datiTab2 selezionaPorte];
-        } else {
-            [theWindow makeFirstResponder:tabellaConnect];
-        }
-    }
-    */
-   
-    [self reload3:50];
-    
-    for (i = 0; i < [lista1 count]; i++) {
-        [tabellaSend expandItem:[tabellaSend itemAtRow:[[lista1 objectAtIndex:i] intValue]] expandChildren:YES];
-    }
-    for (i = 0; i < [lista2 count]; i++) {
-        [tabellaConnect expandItem:[tabellaConnect itemAtRow:[[lista2 objectAtIndex:i] intValue]] expandChildren:YES];
-    }
-    
-    [tabellaSend selectRow:rigo1 byExtendingSelection:NO];
-    [tabellaConnect selectRow:rigo2 byExtendingSelection:NO];
-    
-    needsReloadColor = 0;
-    doubleClick = NO;
-}
-
--(IBAction) reloadColor:(id)sender 
-{
+-(IBAction) reloadColor:(id)sender {
     needsReloadColor = 44;
 }
 

@@ -301,14 +301,14 @@ int getStatus(void)
     return status;
 } 
 
-int connectPorts(char* src, char* dst) 
+int connectPorts(char* da, char* a) 
 {
-    return jack_connect(client, src, dst);
+    return jack_connect(client, da, a);
 }
 
-int disconnectPorts(char* src, char* dst) 
+int disconnectPorts(char* da, char* a) 
 {
-    return jack_disconnect(client, src, dst);
+    return jack_disconnect(client, da, a);
 }
 
 int connessionePerNumero2(int n, char** nomeOut, int len) 

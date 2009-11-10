@@ -7,15 +7,12 @@
 
 @implementation DatiSend2
 
--(int)getNPorte 
-{
+-(int)getNPorte {
     return nPorte;
 }
 
--(id)getNomePorta:(int)n 
-{
-    if (n > (nPorte-1)) 
-        return @"NIL";
+-(id)getNomePorta:(int)n {
+    if(n>(nPorte-1)) return @"NIL";
     NSString *name = [NSString init];
     name = [NSString stringWithCString:nomiPorte[n]];
 #ifdef DEBUGGO
@@ -23,10 +20,8 @@
 #endif
     NSArray *items = [name componentsSeparatedByString:@":"];
     NSString *fres = [NSString init];
-    if ([items count] == 3) 
-        fres = [items objectAtIndex:2];
-    else 
-        fres = [items objectAtIndex:1];
+    if([items count]==3) fres = [items objectAtIndex:2];
+    else fres = [items objectAtIndex:1];
     portsArrData *datares = [[portsArrData alloc] retain];
     [datares setNameCh:fres];
     [datares setID:[[idPorte objectAtIndex:n] intValue]];
@@ -56,8 +51,7 @@
             id style;
             id testo = [[NSAttributedString alloc] autorelease];
             if ([items count] == 2) { 
-				fres = [items objectAtIndex:0]; 
-                style = [NSDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName];
+				fres = [items objectAtIndex:0]; style = [NSDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName];
 			} else { 
                 fres = [items objectAtIndex:1];
                 style = [NSMutableDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName]; 
@@ -76,15 +70,14 @@
                 NSMutableDictionary *style;
                 fres = [items objectAtIndex:1]; 
                 char deviceName[256];
-                [fres getCString:deviceName];
-                setCurrentAudioDevice(deviceName);
+                [fres getCString:&deviceName[0]];
+                setCurrentAudioDevice(&deviceName[0]);
                 style = [NSMutableDictionary dictionaryWithObject:[NSFont boldSystemFontOfSize:13.0f] forKey:NSFontAttributeName];
                 [testo initWithString:fres attributes:style];
                 //NSLog(@"Attributed CLientC Name:");
                 //NSLog(fres);
                 return testo;
-            } else 
-                fres = [items objectAtIndex:0];
+            } else fres = [items objectAtIndex:0];
             //NSLog(@"CLient Name:");
             //NSLog(fres);
             return fres;
@@ -178,12 +171,9 @@
     //JPLog("ASK3\n");
     //JPLog("Index: %d\n",index);
 #endif
-    if (item == nil) 
-        return [[self startPoint] objectAtIndex:index];
-    if ([item isKindOfClass:[DatiSend2 class]]) 
-        return [item getNomePorta:index];
-    if ([item isKindOfClass:[NSString class]])
-        return item;
+    if(item==nil) return [[self startPoint] objectAtIndex:index];
+    if([item isKindOfClass:[DatiSend2 class]]) return [item getNomePorta:index];
+    if([item isKindOfClass:[NSString class]]) return item;
     return nil;
 }
 
@@ -198,7 +188,7 @@
     if ([item isKindOfClass:[portsArrData class]]) {
         const char *buf;
         buf = [item getCPort];
-        if (buf != NULL) {
+        if(buf!=NULL) {
            NSString *res = [NSString stringWithCString:buf];
            selectedPort = [item getID];
            porteSelected[0] = [item getID];
@@ -206,7 +196,7 @@
 #ifdef DEBUGGO
            //JPLog("Selezionata: %d\n",selectedPort);
 #endif
-            if ([item IsConn] == 1) {
+		if ([item IsConn] == 1) {
 				id testo = [[NSAttributedString alloc] autorelease];
 				NSDictionary *style = [NSDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName];
 				[testo initWithString:res attributes:style];
@@ -252,22 +242,22 @@
 -(void) selezionaPorte
 {
     id theItem = [theOutline itemAtRow:[theOutline selectedRow]];
-    if ([theItem isKindOfClass:[DatiSend2 class]]) {
-        int quante = [theItem getNPorte];
-        int i;
-        for (i = 0; i < quante; i++) {
-            portsArrData *data2;
-            data2 = [theItem getNomePorta:i];
-            porteSelected[i] = [data2 getID];
-    #ifdef DEBUGGO
-            //char *tempBuf;
-            //tempBuf = (char*)alloca(256*sizeof(char*));
-            //tempBuf = [data2 getCPort];
-            //JPLog("Seleziono porte: %s\n",tempBuf);
-    #endif
-        }
-        *quanteXCli = quante;
-        *needsRelo=2;
+    if([theItem isKindOfClass:[DatiSend2 class]]) {
+    int quante = [theItem getNPorte];
+    int i;
+    for (i = 0; i < quante; i++) {
+        portsArrData *data2;
+        data2 = [theItem getNomePorta:i];
+        porteSelected[i] = [data2 getID];
+#ifdef DEBUGGO
+        //char *tempBuf;
+        //tempBuf = (char*)alloca(256*sizeof(char*));
+        //tempBuf = [data2 getCPort];
+        //JPLog("Seleziono porte: %s\n",tempBuf);
+#endif
+    }
+    *quanteXCli = quante;
+    *needsRelo=2;
     }
     if ([theItem isKindOfClass:[portsArrData class]]) {
         porteSelected[0] = [theItem getID];
@@ -278,7 +268,7 @@
         //JPLog("Seleziono porte: %s\n",tempBuf);
 #endif
         *quanteXCli = 1;
-        *needsRelo = 2;
+        *needsRelo=2;
     }
 }
 
@@ -290,11 +280,11 @@
 	porteSelected = portSelected;
 	int n;
 	stat = 1;
-	n = numeroPorte();
-	quanteporte = n;
+	n=numeroPorte();
+	quanteporte=n;
 	data = [[NSMutableArray array] retain];
 	itemsToRelease = [[NSMutableArray array] retain];
-	quantiItem = 0;
+	quantiItem=0;
 	
 	NSMutableArray *names_to_verify = [NSMutableArray array];
 	quantiCli = quantiClienti();
@@ -318,10 +308,7 @@
 		
 		while (anObject = [enumerator nextObject]) {
 			NSArray *split0 = [anObject componentsSeparatedByString:@":"];
-			if ([[split0 objectAtIndex:0] isEqualToString:pre_name]) { 
-                JPLog("I've found an old client name, bypassing.\n"); 
-                bypass = YES; 
-            }
+			if([[split0 objectAtIndex:0] isEqualToString:pre_name]) { JPLog("I've found an old client name, bypassing.\n"); bypass = YES; }
 		}
 		
 		if (bypass) 
@@ -413,7 +400,6 @@
     int i;
     int quantep = [data2 count];
     int written = 0;
-    
     NSArray *listaNC = [nome componentsSeparatedByString:@":"];
     NSString *cliente = [listaNC objectAtIndex:0];
     
@@ -457,7 +443,7 @@
     id item = [theOutline itemAtRow:[theOutline selectedRow]];
     if ([item isKindOfClass:[portsArrData class]]) { 
 		if ([item IsConn] == 1) 
-            return 666; 
+		return 666; 
 	} else 
 		return kindCliItem;
     return 333;

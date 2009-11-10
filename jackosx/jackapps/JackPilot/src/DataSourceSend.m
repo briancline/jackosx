@@ -15,8 +15,7 @@
 
 -(id)getNomePorta:(int)n 
 {
-    if (n > (nPorte-1)) 
-        return @"NIL";
+    if(n>(nPorte-1)) return @"NIL";
     NSString *name = [NSString init];
     name = [NSString stringWithCString:nomiPorte[n]];
     NSArray *items = [name componentsSeparatedByString:@":"];
@@ -51,7 +50,7 @@
             id testo = [[NSAttributedString alloc] autorelease];
             if ([items count] == 2) { 
 				fres = [items objectAtIndex:0];
-                style = [NSDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName]; 
+				 style = [NSDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName]; 
 			} else { 
                 fres = [items objectAtIndex:1];
                 style = [NSMutableDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName]; 
@@ -125,10 +124,8 @@
 }
 
 - (int)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item {
-    if (item == nil) 
-        return [[self startPoint] count];
-    if ([item isKindOfClass:[portsArrData class]]) 
-        return 0;
+    if(item==nil) return [ [self startPoint] count ];
+    if([item isKindOfClass:[portsArrData class]]) return 0;
     return [item getNPorte];
 }
 
@@ -137,19 +134,10 @@
 		richiesta = 22; 
 		return YES; 
 	}
-    if ([item isKindOfClass:[portsArrData class]]) { 
-        richiesta = 0; 
-        return NO; 
-    }
-    if ([item isKindOfClass:[DatiSend class]]) 
-        return YES;
-    if ([item getNPorte] != 0) { 
-        richiesta = 22; 
-        return YES; 
-    } else { 
-        richiesta = 22; 
-        return NO; 
-    }
+    if ([item isKindOfClass:[portsArrData class]]) { richiesta=0; return NO; }
+    if ([item isKindOfClass:[DatiSend class]]) return YES;
+    if ([item getNPorte]!=0) { richiesta=22; return YES; }
+    else { richiesta=22; return NO; }
     return NO;
 }
 
@@ -158,20 +146,16 @@
     //JPLog("ASK3\n");
     //JPLog("Index: %d\n",index);
 #endif
-    if (item == nil) 
-        return [[self startPoint] objectAtIndex:index];
-    if ([item isKindOfClass:[DatiSend class]]) 
-        return [item getNomePorta:index];
-    if ([item isKindOfClass:[NSString class]]) 
-        return item;
+    if(item==nil) return [[self startPoint] objectAtIndex:index];
+    if([item isKindOfClass:[DatiSend class]]) return [item getNomePorta:index];
+    if([item isKindOfClass:[NSString class]]) return item;
     return nil;
 }
 
 - (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item {
     theOutline = outlineView;
     *chi = 22;
-    if (item == nil) 
-        return @"NIL";
+    if(item==nil) return @"NIL";
 #ifdef DEBUGGO
     //JPLog("RICHIESTA : %d\n",richiesta);
 #endif
@@ -186,15 +170,15 @@
 #ifdef DEBUGGO
            //JPLog("Selezionata: %d\n",selectedPort);
 #endif		
-            if ([item IsConn] == 1) {
-                id testo = [[NSAttributedString alloc] autorelease];
-                NSDictionary *style = [NSDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName];
-                [testo initWithString:res attributes:style];
-                kindCliItem = 666;
-                [self needsReload];
-                [itemsToRelease addObject:item];
-                return testo;
-            }
+        if([item IsConn]==1) {
+            id testo = [[NSAttributedString alloc] autorelease];
+            NSDictionary *style = [NSDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName];
+            [testo initWithString:res attributes:style];
+            kindCliItem = 666;
+            [self needsReload];
+            [itemsToRelease addObject:item];
+            return testo;
+        }
             kindCliItem = 333;
             [self needsReload];
             [itemsToRelease addObject:item];
@@ -202,22 +186,19 @@
         }
         return @"NIL";
     }
-    if ([item isKindOfClass:[DatiSend class]]) { 
+    if([item isKindOfClass:[DatiSend class]]) { 
         //JPLog("CLIENTE SELEZIONATO");
         selectedPort = -10;
         selectedItem = item;
         [self selezionaPorte];
         [self needsReload];
         id result = [item getNomeCliente];
-        if ([item getIsConn] != 1)
-            kindCliItem = 333;
-        else 
-            kindCliItem = 666;
+        if([item getIsConn]!=1) kindCliItem = 333;
+        else kindCliItem = 666;
         [itemsToRelease addObject:item];
         return result;
     }
-    if (richiesta == 22) 
-        return [item getNomeCliente];
+    if(richiesta == 22) return [item getNomeCliente];
     return @"NIL";
 }
 
@@ -232,23 +213,23 @@
 {
     id theItem = [theOutline itemAtRow:[theOutline selectedRow]];
     if([theItem isKindOfClass:[DatiSend class]]) {
-        int quante = [theItem getNPorte];
-        int i;
-        for (i = 0; i < quante; i++) {
-            portsArrData *data2;
-            data2 = [theItem getNomePorta:i];
-            porteSelected[i] = [data2 getID];
-    #ifdef DEBUGGO
-            //char *tempBuf;
-            //tempBuf = (char*)alloca(256*sizeof(char*));
-            //tempBuf = [data2 getCPort];
-            //JPLog("Seleziono porte: %s\n",tempBuf);
-    #endif
-        }
-        *quanteXCli = quante;
-        *needsRelo = 2;
+    int quante = [theItem getNPorte];
+    int i;
+    for(i=0;i<quante;i++) {
+        portsArrData *data2;
+        data2 = [theItem getNomePorta:i];
+        porteSelected[i] = [data2 getID];
+#ifdef DEBUGGO
+        //char *tempBuf;
+        //tempBuf = (char*)alloca(256*sizeof(char*));
+        //tempBuf = [data2 getCPort];
+        //JPLog("Seleziono porte: %s\n",tempBuf);
+#endif
     }
-    if ([theItem isKindOfClass:[portsArrData class]]) {
+    *quanteXCli = quante;
+    *needsRelo=2;
+    }
+    if([theItem isKindOfClass:[portsArrData class]]) {
         porteSelected[0] = [theItem getID];
 #ifdef DEBUGGO
         //char *tempBuf;
@@ -257,7 +238,7 @@
         //JPLog("Seleziono porte: %s\n",tempBuf);
 #endif
         *quanteXCli = 1;
-        *needsRelo = 2;
+        *needsRelo=2;
     }
 }
 
@@ -297,10 +278,7 @@
 		
 		while (anObject = [enumerator nextObject]) {
 			NSArray *split0 = [anObject componentsSeparatedByString:@":"];
-			if ([[split0 objectAtIndex:0] isEqualToString:pre_name]) { 
-                JPLog("I've found an old client name, bypassing.\n"); 
-                bypass = YES; 
-            }
+			if([[split0 objectAtIndex:0] isEqualToString:pre_name]) { JPLog("I've found an old client name, bypassing.\n"); bypass = YES; }
 		}
 		
 		if (bypass) 
@@ -437,8 +415,8 @@
     if ([item isKindOfClass:[portsArrData class]]) { 
         if ([item IsConn] == 1) 
             return 666; 
-    } else 
-        return kindCliItem;
+    }
+    else return kindCliItem;
     return 333;
 }
 
