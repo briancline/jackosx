@@ -1399,7 +1399,7 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         NSString *mess2 = NSLocalizedString(@"Device is already used with another sample rate, that will be changed...", nil);
         NSString *mess3 = NSLocalizedString(@"Yes", nil);
         NSString *mess4 = NSLocalizedString(@"No", nil);
-        NSInteger res = NSRunCriticalAlertPanel(mess1, mess2, mess3, mess4, nil);
+        int res = NSRunCriticalAlertPanel(mess1, mess2, mess3, mess4, nil);
         
         if (res == 0)
             goto end;
