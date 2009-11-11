@@ -138,6 +138,8 @@ public:
 
 private:
 
+    UInt64 mAnchorHostTime;
+
 	jack_client_t* fClient;				// Jack client
   
     jack_port_t** fInputPortList;		// Jack input ports

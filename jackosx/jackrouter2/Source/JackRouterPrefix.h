@@ -39,7 +39,7 @@
 			POSSIBILITY OF SUCH DAMAGE.
 */
 /*=============================================================================
-	SampleHardwarePlugInPrefix.h
+	JackRouterPrefix.h
 
 =============================================================================*/
 #if !defined(__JackRouterPlugInPrefix_h__)

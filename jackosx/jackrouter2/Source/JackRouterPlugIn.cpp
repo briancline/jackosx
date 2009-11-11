@@ -454,7 +454,7 @@ void JackRouterPlugIn::GetPropertyData(const AudioObjectPropertyAddress& inAddre
 	{
 		case kAudioObjectPropertyName:
 			ThrowIf(ioDataSize != GetPropertyDataSize(inAddress, inQualifierDataSize, inQualifierData), CAException(kAudioHardwareBadPropertySizeError), "JackRouterPlugIn::GetPropertyData: wrong data size for kAudioObjectPropertyName");
-			*static_cast<CFStringRef*>(outData) = CFSTR("com.apple.audio.SampleHardwarePlugIn");
+			*static_cast<CFStringRef*>(outData) = CFSTR("com.apple.audio.JackRouter");
 			CFRetain(*static_cast<CFStringRef*>(outData));
 			break;
 			

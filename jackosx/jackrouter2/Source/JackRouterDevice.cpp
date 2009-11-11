@@ -132,6 +132,7 @@ JackRouterDevice::JackRouterDevice(AudioDeviceID inAudioDeviceID, JackRouterPlug
 :JackRouterDeviceInterface(inAudioDeviceID, kAudioDeviceClassID, inPlugIn, 1, false),
 	mSHPPlugIn(inPlugIn),
 	mIOGuard("IOGuard"),
+    mAnchorHostTime(0),
 	fClient(NULL),
 	fInputList(NULL),
 	fOutputList(NULL),
@@ -750,6 +751,84 @@ void JackRouterDevice::TranslateTime(const AudioTimeStamp& inTime, AudioTimeStam
 
 	// Simply copy inTime ==> outTime for now
 	memcpy(&outTime, &inTime, sizeof(AudioTimeStamp));
+    
+    // Copied from SampleHardwarePlugIn
+    /*
+    //	compute the host ticks pere frame
+	Float64 theActualHostTicksPerFrame = CAHostTimeBase::GetFrequency() / GetCurrentNominalSampleRate();
+
+	//	calculate the sample time
+	Float64 theOffset = 0.0;
+	if((outTime.mFlags & kAudioTimeStampSampleTimeValid) != 0)
+	{
+		if((inTime.mFlags & kAudioTimeStampSampleTimeValid) != 0)
+		{
+			//	no calculations necessary
+			outTime.mSampleTime = inTime.mSampleTime;
+		}
+		else if((inTime.mFlags & kAudioTimeStampHostTimeValid) != 0)
+		{
+			//	calculate how many host ticks away from the current 0 time stamp the input host time is
+			if(inTime.mHostTime >= mAnchorHostTime)
+			{
+				theOffset = inTime.mHostTime - mAnchorHostTime;
+			}
+			else
+			{
+				//	do it this way to avoid overflow problems with the unsigned numbers
+				theOffset = mAnchorHostTime - inTime.mHostTime;
+				theOffset *= -1.0;
+			}
+			
+			//	convert it to a number of samples
+			theOffset /= theActualHostTicksPerFrame;
+			
+			//	lop off the fractional sample
+			outTime.mSampleTime = floor(theOffset);
+		}
+		else
+		{
+			//	no basis for projection, so put in a 0
+			outTime.mSampleTime = 0;
+		}
+	}
+	
+	//	calculate the host time
+	if((outTime.mFlags & kAudioTimeStampHostTimeValid) != 0)
+	{
+		if((inTime.mFlags & kAudioTimeStampHostTimeValid) != 0)
+		{
+			//	no calculations necessary
+			outTime.mHostTime = inTime.mHostTime;
+		}
+		else if((inTime.mFlags & kAudioTimeStampSampleTimeValid) != 0)
+		{
+			//	calculate how many samples away from the current 0 time stamp the input sample time is
+			theOffset = inTime.mSampleTime;
+			
+			//	convert it to a number of host ticks
+			theOffset *= theActualHostTicksPerFrame;
+			
+			//	lop off the fractional host tick
+			theOffset = floor(theOffset);
+			
+			//	put in the host time as an offset from the 0 time stamp's host time
+			outTime.mHostTime = mAnchorHostTime + static_cast<UInt64>(theOffset);
+		}
+		else
+		{
+			//	no basis for projection, so put in a 0
+			outTime.mHostTime = 0;
+		}
+	}
+	
+	//	calculate the rate scalar
+	if(outTime.mFlags & kAudioTimeStampRateScalarValid)
+	{
+		//	the sample device has perfect timing
+		outTime.mRateScalar = 1.0;
+	}
+    */
 }
 
 UInt32 JackRouterDevice::GetMinimumIOBufferFrameSize() const
@@ -765,6 +844,112 @@ UInt32 JackRouterDevice::GetMaximumIOBufferFrameSize() const
 void JackRouterDevice::GetNearestStartTime(AudioTimeStamp& /*ioRequestedStartTime*/, UInt32 /*inFlags*/)
 {
 	JARLog("JackRouterDevice::GetNearestStartTime\n");
+
+    // Copied from SampleHardwarePlugIn
+    /* 
+    bool isConsultingHAL = (inFlags & kAudioDeviceStartTimeDontConsultHALFlag) == 0;
+	bool isConsultingDevice = (inFlags & kAudioDeviceStartTimeDontConsultDeviceFlag) == 0;
+
+	ThrowIf(!IsIOEngineRunning(), CAException(kAudioHardwareNotRunningError), "SHP_Device::GetNearestStartTime: can't because there isn't anything running yet");
+	ThrowIf(!isConsultingHAL && !isConsultingDevice, CAException(kAudioHardwareNotRunningError), "SHP_Device::GetNearestStartTime: can't because the start time flags are conflicting");
+
+	UInt32 theIOBufferFrameSize = GetIOBufferFrameSize();
+	bool isInput = (inFlags & kAudioDeviceStartTimeIsInputFlag) != 0;
+	UInt32 theSafetyOffset = GetSafetyOffset(isInput);
+	
+	//	fix up the requested time so we have everything we need
+	AudioTimeStamp theRequestedStartTime;
+	theRequestedStartTime.mFlags = ioRequestedStartTime.mFlags | kAudioTimeStampSampleTimeValid | kAudioTimeStampHostTimeValid;
+	TranslateTime(ioRequestedStartTime, theRequestedStartTime);
+	
+	//	figure out the requested position in terms of the IO thread position
+	AudioTimeStamp theTrueRequestedStartTime = theRequestedStartTime;
+
+	//  only do this math if we are supposed to consult the HAL
+	if(isConsultingHAL)
+	{
+		theTrueRequestedStartTime.mFlags = kAudioTimeStampSampleTimeValid;
+		if(isInput)
+		{
+			theTrueRequestedStartTime.mSampleTime += theIOBufferFrameSize;
+			theTrueRequestedStartTime.mSampleTime += theSafetyOffset;
+		}
+		else
+		{
+			theTrueRequestedStartTime.mSampleTime -= theIOBufferFrameSize;
+			theTrueRequestedStartTime.mSampleTime -= theSafetyOffset;
+		}
+			
+		AudioTimeStamp theMinimumStartSampleTime;
+		AudioTimeStamp theMinimumStartTime;
+		if(mIOProcList->IsOnlyNULLEnabled())
+		{
+			//	no IOProcs are enabled, so we can start whenever
+			
+			//	the minimum starting time is the current time
+			GetCurrentTime(theMinimumStartSampleTime);
+			
+			//	plus some slop
+			theMinimumStartSampleTime.mSampleTime += theSafetyOffset + (2 * theIOBufferFrameSize);
+			theMinimumStartTime.mFlags = kAudioTimeStampSampleTimeValid;
+			
+			if(theTrueRequestedStartTime.mSampleTime < theMinimumStartSampleTime.mSampleTime)
+			{
+				//	clamp it to the minimum
+				theTrueRequestedStartTime = theMinimumStartSampleTime;
+			}
+		}
+		else if(mIOProcList->IsAnythingEnabled())
+		{
+			//	an IOProc is already running, so the next start time is two buffers
+			//	from wherever the IO thread is currently
+			mIOThread->GetCurrentPosition(theMinimumStartSampleTime);
+			theMinimumStartSampleTime.mSampleTime += (2 * theIOBufferFrameSize);
+			theMinimumStartTime.mFlags = kAudioTimeStampSampleTimeValid;
+			
+			if(theTrueRequestedStartTime.mSampleTime < theMinimumStartSampleTime.mSampleTime)
+			{
+				//	clamp it to the minimum
+				theTrueRequestedStartTime = theMinimumStartSampleTime;
+			}
+			else if(theTrueRequestedStartTime.mSampleTime > theMinimumStartSampleTime.mSampleTime)
+			{
+				//	clamp it to an even IO cycle
+				UInt32 theNumberBuffers = static_cast<UInt32>(theTrueRequestedStartTime.mSampleTime - theMinimumStartSampleTime.mSampleTime);
+				theNumberBuffers /= theIOBufferFrameSize;
+				theNumberBuffers += 2;
+				
+				theTrueRequestedStartTime.mSampleTime = theMinimumStartSampleTime.mSampleTime + (theNumberBuffers * theIOBufferFrameSize);
+			}
+		}
+		
+		//	bump the sample time in the right direction
+		if(isInput)
+		{
+			theTrueRequestedStartTime.mSampleTime -= theIOBufferFrameSize;
+			theTrueRequestedStartTime.mSampleTime -= theSafetyOffset;
+		}
+		else
+		{
+			theTrueRequestedStartTime.mSampleTime += theIOBufferFrameSize;
+			theTrueRequestedStartTime.mSampleTime += theSafetyOffset;
+		}
+	}
+		
+	//	convert it back if neccessary
+	if(theTrueRequestedStartTime.mSampleTime != theRequestedStartTime.mSampleTime)
+	{
+		TranslateTime(theTrueRequestedStartTime, theRequestedStartTime);
+	}
+	
+	//	now filter it through the hardware, unless told not to
+	if(mIOProcList->IsOnlyNULLEnabled() && isConsultingDevice)
+	{
+	}
+	
+	//	assign the return value
+	ioRequestedStartTime = theRequestedStartTime;
+    */
 }
 
 void JackRouterDevice::CreateStreams()
@@ -1093,6 +1278,8 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 		JARLog("JackRouterDevice::Process LOCK ON\n"); 
 		return 0;
 	}
+    
+    client->mAnchorHostTime = 0;
 	
 	//JARLog("Process \n");
 	
