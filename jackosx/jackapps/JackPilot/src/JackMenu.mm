@@ -1739,7 +1739,7 @@ static bool checkBufferSizeRange(AudioValueRange& input,  AudioValueRange& outpu
       
     AudioValueRange outputRange;
     // Set default...
-    outputRange.mMinimum = 12;
+    outputRange.mMinimum = 16;
     outputRange.mMaximum = 8192;
     err = AudioDeviceGetProperty(selOutputDevID, 0, false, kAudioDevicePropertyBufferSizeRange, &size, &outputRange);
     if (err != noErr) {
