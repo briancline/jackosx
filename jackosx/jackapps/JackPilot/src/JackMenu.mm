@@ -131,7 +131,7 @@ static int numberOfItemsInNominalSampleRateComboBox(AudioDeviceID device)
 	      
         err = AudioDeviceGetPropertyInfo(device, 0, true, kAudioDevicePropertyAvailableNominalSampleRates, &size, &isWritable);
         if (err != noErr) {
-            NSLog(@"err in (info) kAudioDevicePropertyAvailableNominalSampleRates");
+            JPLog("err in (info) kAudioDevicePropertyAvailableNominalSampleRates \n");
         }
         
         count = size / sizeof(AudioValueRange);
@@ -140,12 +140,12 @@ static int numberOfItemsInNominalSampleRateComboBox(AudioDeviceID device)
         AudioValueRange valueTable[count];
         err = AudioDeviceGetProperty(device, 0, true, kAudioDevicePropertyAvailableNominalSampleRates, &size, valueTable);
         if (err != noErr) {
-            NSLog(@"err in (info) kAudioDevicePropertyAvailableNominalSampleRates");
+            JPLog("err in (info) kAudioDevicePropertyAvailableNominalSampleRates\n");
         }
         
         AudioDeviceGetProperty(device, 0, true, kAudioDevicePropertyAvailableNominalSampleRates, &size, &valueTable);
         if (err != noErr) {
-            NSLog(@"err in (info) kAudioDevicePropertyAvailableNominalSampleRates");
+            JPLog("err in (info) kAudioDevicePropertyAvailableNominalSampleRates\n");
         }
 		
 		//	iterate through the ranges and add the minimum, maximum, and common rates in between
@@ -191,7 +191,7 @@ static Float64 objectValueForItemAtIndex(AudioDeviceID device, int inItemIndex)
         
         err = AudioDeviceGetPropertyInfo(device, 0, true, kAudioDevicePropertyAvailableNominalSampleRates, &size, &isWritable);
         if (err != noErr) {
-            NSLog(@"err in (info) kAudioDevicePropertyAvailableNominalSampleRates");
+            JPLog("err in (info) kAudioDevicePropertyAvailableNominalSampleRates\n");
         }
         
         count = size / sizeof(AudioValueRange);
@@ -200,12 +200,12 @@ static Float64 objectValueForItemAtIndex(AudioDeviceID device, int inItemIndex)
         AudioValueRange valueTable[count];
         err = AudioDeviceGetProperty(device, 0, true, kAudioDevicePropertyAvailableNominalSampleRates, &size, valueTable);
         if (err != noErr) {
-            NSLog(@"err in (info) kAudioDevicePropertyAvailableNominalSampleRates");
+            JPLog("err in (info) kAudioDevicePropertyAvailableNominalSampleRates\n");
         }
         
         AudioDeviceGetProperty(device, 0, true, kAudioDevicePropertyAvailableNominalSampleRates, &size, &valueTable);
         if (err != noErr) {
-            NSLog(@"err in (info) kAudioDevicePropertyAvailableNominalSampleRates");
+            JPLog("err in (info) kAudioDevicePropertyAvailableNominalSampleRates\n");
         }
 	
 		//	start counting at zero
@@ -363,7 +363,7 @@ static bool checkDevice(AudioDeviceID device)
 	UInt32 inChannels = 0;
 	err = getTotalChannels(device, &inChannels, true);
     if (err != noErr) { 
-		JPLog("err in getTotalChannels \n");
+		JPLog("checkDevice : err in getTotalChannels\n");
 		return false;
 	} 
     
@@ -371,11 +371,11 @@ static bool checkDevice(AudioDeviceID device)
     UInt32 outChannels = 0;
     err = getTotalChannels(device, &outChannels, false);
     if (err != noErr) { 
-		JPLog("err in getTotalChannels \n");
+		JPLog("checkDevice : err in getTotalChannels\n");
 		return false;
 	} 
 	
-	JPLog("checkDevice input/output  device = %ld input = %ld ouput = %ld \n", device, inChannels, outChannels);
+	JPLog("checkDevice input/output  device = %ld input = %ld ouput = %ld\n", device, inChannels, outChannels);
 	return (outChannels == 0) && (inChannels == 0) ? false : true;
 }
 
@@ -460,9 +460,13 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
         if (err == noErr) {								
             for (i = 0; i < bufferList->mNumberBuffers; i++) 
                 *channelCount += bufferList->mBuffers[i].mNumberChannels;
+        } else {
+            JPLog("getTotalChannels : AudioDeviceGetProperty error\n");
         }
 		if (bufferList) 
 			free(bufferList);	
+    } else {
+        JPLog("getTotalChannels : AudioDeviceGetPropertyInfo error\n");
     }
 	return (err);
 }
@@ -798,7 +802,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 	[toPrefs addObject:[NSNumber numberWithFloat:mangerFrame.size.width]];
 	[toPrefs addObject:[NSNumber numberWithFloat:mangerFrame.size.height]];
 	
-	if(![Utility savePref:toPrefs prefType:'winP'])NSLog(@"Cannot save windows positions");
+	if (![Utility savePref:toPrefs prefType:'winP'])
+        JPLog("Cannot save windows positions\n");
 	
 	// Save plugins status
 	#ifdef PLUGIN
@@ -835,7 +840,7 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 		}
 	}	
 	if (![Utility savePref:openedPlugs prefType:'PlOp'])
-		NSLog(@"Cannot plugins instances");
+		JPLog("Cannot plugins instances\n");
 	#endif
     
     [POOL release];
@@ -1236,7 +1241,7 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
     
     NSBundle *bundle = [NSBundle bundleWithIdentifier:@"com.grame.JackRouter"];
     if (!bundle) {
-		NSLog(@"JAS not found");
+		JPLog("JAS not found\n");
 		[jasVerText setStringValue:LOCSTR(@"not installed.")];
 		[Utility error:'jasN'];
     } else {
@@ -1249,7 +1254,7 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
     
 	bundle = [NSBundle bundleWithIdentifier:@"com.grame.Jackmp"];
     if (!bundle) {
-        NSLog(@"JackFramework not found");
+        JPLog("JackFramework not found\n");
         [jackVerText setStringValue:LOCSTR(@"Maybe too old.")];
     } else {
         id dict = [bundle infoDictionary];
@@ -1261,7 +1266,7 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
     
     bundle = [NSBundle bundleForClass:[self class]];
     if (!bundle) {
-        NSLog(@"Bundle not found");
+        JPLog("Bundle not found\n");
         [jpVerText setStringValue:LOCSTR(@"corrupted")];
     } else {
         id dict = [bundle infoDictionary];
@@ -1644,8 +1649,8 @@ Scan current audio device properties : in/out channels, sampling rate, buffer si
 static bool checkBufferSizeRange(AudioValueRange& input,  AudioValueRange& output, Float64 buffer_size)
 {
     Float64 frame_size = buffer_size * sizeof(float);
-    return (frame_size >= input.mMinimum  && frame_size <= input.mMaximum 
-            && frame_size >= output.mMinimum  && frame_size <= output.mMaximum);
+    return (frame_size >= input.mMinimum && frame_size <= input.mMaximum 
+            && frame_size >= output.mMinimum && frame_size <= output.mMaximum);
 }
 
 - (BOOL) writeCAPref:(id)sender {
@@ -1661,7 +1666,7 @@ static bool checkBufferSizeRange(AudioValueRange& input,  AudioValueRange& outpu
  	UInt32 inChannels = 0;
 	err = getTotalChannels(selInputDevID, &inChannels, true);
     if (err != noErr) { 
-		NSLog(@"err in getTotalChannels");
+		JPLog("writeCAPref: err in getTotalChannels\n");
 		[inputChannels addItemWithTitle:[[NSNumber numberWithInt:0] stringValue]]; 
 		[inputChannels selectItemAtIndex:0];
 	} else {
@@ -1678,7 +1683,7 @@ static bool checkBufferSizeRange(AudioValueRange& input,  AudioValueRange& outpu
     UInt32 outChannels = 0;
     err = getTotalChannels(selOutputDevID, &outChannels, false);
 	if (err != noErr) { 
-		NSLog(@"err in getTotalChannels, set to 0");
+		JPLog("writeCAPref: err in getTotalChannels\n");
 		[outputChannels addItemWithTitle:[[NSNumber numberWithInt:0] stringValue]]; 
 		[outputChannels selectItemAtIndex:0];
 	} else {
@@ -1688,7 +1693,7 @@ static bool checkBufferSizeRange(AudioValueRange& input,  AudioValueRange& outpu
 			[outputChannels addItemWithTitle:[[NSNumber numberWithInt:i+1] stringValue]];
 			[outputChannels selectItemAtIndex:i+1];
 		}
-		JPLog("got output channels ok, %d channels\n",outChannels);
+		JPLog("got output channels ok, %d channels\n", outChannels);
 	}
    
     // Sampling rate for input
@@ -1721,17 +1726,25 @@ static bool checkBufferSizeRange(AudioValueRange& input,  AudioValueRange& outpu
             [samplerateText addItemWithTitle:[[NSNumber numberWithLong:(long)(*it)] stringValue]];
     }
  	
-    // Get buffer size rabge for input and output
+    // Get buffer size range for input and output
     size = sizeof(AudioValueRange);
     AudioValueRange inputRange;
+    // Set default...
+    inputRange.mMinimum = 16;
+    inputRange.mMaximum = 8192;
     err = AudioDeviceGetProperty(selInputDevID, 0, true, kAudioDevicePropertyBufferSizeRange, &size, &inputRange);
-    if (err != noErr) 
-        goto end;
+    if (err != noErr) {
+        JPLog("Cannot get buffer size range for input\n");
+    }
       
     AudioValueRange outputRange;
+    // Set default...
+    outputRange.mMinimum = 12;
+    outputRange.mMaximum = 8192;
     err = AudioDeviceGetProperty(selOutputDevID, 0, false, kAudioDevicePropertyBufferSizeRange, &size, &outputRange);
-    if (err != noErr) 
-        goto end;
+    if (err != noErr) {
+        JPLog("Cannot get buffer size range for output\n");
+    }
          
     if (checkBufferSizeRange(inputRange, outputRange, 32))
         [bufferText addItemWithTitle:@"32"];
@@ -1761,10 +1774,6 @@ static bool checkBufferSizeRange(AudioValueRange& input,  AudioValueRange& outpu
     
     [POOL release];
     return YES;
-    
-end:
-    [POOL release];
-    return NO;
 }
 
 /*
@@ -1928,7 +1937,7 @@ end:
 - (void)testPlugin:(id)sender {
 	JPPlugin *newPlugTest = [JPPlugin alloc];
 	if ([newPlugTest open:@"JPPlugTest"]) {
-		NSLog(@"Plugin opened, testing:");
+		JPLog("Plugin opened, testing: \n");
 		[newPlugTest openEditor];
 		[newPlugTest jackStatusHasChanged:kJackIsOff];
 		[newPlugTest jackStatusHasChanged:kJackIsOn];
