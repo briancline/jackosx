@@ -416,7 +416,7 @@ static bool checkDeviceName(const char* deviceName)
     return false;
 }
 
-static OSStatus getDeviceUIDFromID(AudioDeviceID id, char name[128])
+static OSStatus getDeviceUIDFromID(AudioDeviceID id, char* name)
 {
     UInt32 size = sizeof(CFStringRef);
 	CFStringRef UI;
@@ -426,6 +426,7 @@ static OSStatus getDeviceUIDFromID(AudioDeviceID id, char name[128])
 		JPLog("getDeviceUIDFromID: name = %s\n", name);
 		CFRelease(UI);
 	} else {	
+        name[0] = 0;
 		JPLog("getDeviceUIDFromID: error name = %s\n", name);
 	}
     return res;
@@ -960,10 +961,10 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         return;
     
 	char driverInputname[128];
-	getDeviceUIDFromID(selInputDevID, driverInputname);
-    
     char driverOutputname[128];
+    
 	getDeviceUIDFromID(selOutputDevID, driverOutputname);
+    getDeviceUIDFromID(selInputDevID, driverInputname);
     
     if ([JALauto state] == NSOnState) {
         jackALStore([JALin intValue],[JALout intValue],1,
@@ -1110,10 +1111,10 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
     id POOL = [[NSAutoreleasePool alloc] init];
     
 	char driverInputname[128];
-	getDeviceUIDFromID(selInputDevID, driverInputname);
-    
     char driverOutputname[128];
+    
 	getDeviceUIDFromID(selOutputDevID, driverOutputname);
+    getDeviceUIDFromID(selInputDevID, driverInputname);
  	
     if ([JALauto state] == NSOnState) {
         if (jackALStore([JALin intValue],[JALout intValue],1,
@@ -1786,7 +1787,8 @@ Set the selDevID variable to the currently selected device of the system default
     OSStatus err1, err2;
     UInt32 size;
     Boolean isWritable;
-    AudioDeviceID defaultInputDev, defaultOuputDev;
+    AudioDeviceID defaultInputDev = 0;
+    AudioDeviceID defaultOuputDev = 0;
     int i;
     int manyDevices;
     BOOL selectedIn = NO;
@@ -1800,6 +1802,9 @@ Set the selDevID variable to the currently selected device of the system default
         
     NSString *s_name_in = NULL; 
     NSString *s_name_out = NULL; 
+    
+    selInputDevID = 0;
+    selOutputDevID = 0;
      
     id POOL = [[NSAutoreleasePool alloc] init];
     
