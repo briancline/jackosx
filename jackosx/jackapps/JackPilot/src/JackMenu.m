@@ -371,7 +371,7 @@ static bool checkDevice(AudioDeviceID device)
 		return false;
 	} 
 	
-	JPLog("checkDevice input/output: input %ld ouput %ld \n", inChannels, outChannels);
+	JPLog("checkDevice input/output: input %ld output %ld \n", inChannels, outChannels);
 	return (outChannels == 0) && (inChannels == 0) ? false : true;
 }
 
@@ -412,7 +412,7 @@ static bool checkDeviceName(const char* deviceName)
     return false;
 }
 
-static OSStatus getDeviceUIDFromID(AudioDeviceID id, char name[128])
+static OSStatus getDeviceUIDFromID(AudioDeviceID id, char* name])
 {
     UInt32 size = sizeof(CFStringRef);
 	CFStringRef UI;
@@ -422,7 +422,7 @@ static OSStatus getDeviceUIDFromID(AudioDeviceID id, char name[128])
 		JPLog("getDeviceUIDFromID: name = %s\n", name);
 		CFRelease(UI);
 	} else {	
-		JPLog("getDeviceUIDFromID: error name = %s\n", name);
+		JPLog("getDeviceUIDFromID: error\n");
 	}
     return res;
 }
@@ -1652,7 +1652,6 @@ Scan current audio device properties : in/out channels, sampling rate, buffer si
 		}
 		JPLog("got output channels ok, %d channels\n",outChannels);
 	}
-    
     
     Float64 sampleRatesCombined[32];
 	
