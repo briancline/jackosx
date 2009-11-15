@@ -172,7 +172,8 @@ static int numberOfItemsInNominalSampleRateComboBox(AudioDeviceID device)
 	}
 	else
 	{
-		theAnswer = 1;
+		//theAnswer = 1; ??
+        theAnswer = 0;
 	}
     
 	return theAnswer;
@@ -662,10 +663,12 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
          	[[prefs objectAtIndex:2] getCString:deviceOutputName];
             
 			JPLog("Reading preferences ref file deviceInputName = %s deviceOutputName = %s\n", deviceInputName, deviceOutputName);
-			if (checkDeviceName(deviceInputName) && checkDeviceName(deviceOutputName)) { // Check is devices kept in preference are available
+			if (checkDeviceName(deviceInputName) || checkDeviceName(deviceOutputName)) { // Check if devices kept in preference are available
 				[driverBox selectItemWithTitle:[prefs objectAtIndex:0]];
-				[interfaceInputBox selectItemWithTitle:[prefs objectAtIndex:1]];
-                [interfaceOutputBox selectItemWithTitle:[prefs objectAtIndex:2]];
+                if (checkDeviceName(deviceInputName))
+                    [interfaceInputBox selectItemWithTitle:[prefs objectAtIndex:1]];
+                if (checkDeviceName(deviceOutputName))
+                    [interfaceOutputBox selectItemWithTitle:[prefs objectAtIndex:2]];
          		[samplerateText selectItemWithTitle:[prefs objectAtIndex:3]];
 				[bufferText selectItemWithTitle:[prefs objectAtIndex:4]];
 				[outputChannels selectItemWithTitle:[prefs objectAtIndex:5]];
