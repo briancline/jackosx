@@ -22,7 +22,7 @@ static bool gJackRunning = false;
 
 static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boolean isInput);
 
-static void JackInfoShutDown(int code, const char* reason, void *arg) 
+static void JackInfoShutDown(jack_status_t code, const char* reason, void *arg) 
 {
 	JPLog("JackInfoShutDown\n");
     
@@ -359,6 +359,8 @@ static void StopNotification()
 static bool checkDevice(AudioDeviceID device)
 {
     OSStatus err;
+    
+    JPLog("checkDevice\n");
 	
 	// Input channels
 	UInt32 inChannels = 0;
@@ -386,6 +388,8 @@ static bool checkDeviceName(const char* deviceName)
     UInt32 size;
     Boolean isWritable;
     int i;
+    
+    JPLog("checkDeviceName\n");
     
     err = AudioHardwareGetPropertyInfo(kAudioHardwarePropertyDevices, &size, &isWritable);
     if (err != noErr) 
@@ -419,6 +423,8 @@ static bool checkDeviceName(const char* deviceName)
 
 static OSStatus getDeviceUIDFromID(AudioDeviceID id, char* name)
 {
+    JPLog("getDeviceUIDFromID\n");
+     
     UInt32 size = sizeof(CFStringRef);
 	CFStringRef UI;
     OSStatus res = AudioDeviceGetProperty(id, 0, false, kAudioDevicePropertyDeviceUID, &size, &UI);
@@ -435,6 +441,8 @@ static OSStatus getDeviceUIDFromID(AudioDeviceID id, char* name)
 
 static bool isAggregateDevice(AudioDeviceID device)
 {
+    JPLog("isAggregateDevice\n");
+     
     UInt32 deviceType, outSize = sizeof(UInt32);
     OSStatus err = AudioDeviceGetProperty(device, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyTransportType, &outSize, &deviceType);
     
@@ -453,6 +461,8 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
     Boolean				outWritable;
     AudioBufferList*	bufferList = 0;
 	unsigned int i;
+    
+    JPLog("getTotalChannels\n");
 	
 	*channelCount = 0;
     err = AudioDeviceGetPropertyInfo(device, 0, isInput, kAudioDevicePropertyStreamConfiguration, &outSize, &outWritable);
@@ -475,6 +485,8 @@ static OSStatus getTotalChannels(AudioDeviceID device, UInt32* channelCount, Boo
 
 static bool isDuplexDevice(AudioDeviceID device)
 {
+    JPLog("isDuplexDevice\n");
+ 
     UInt32 inChannels = 0;
 	OSStatus err1 = getTotalChannels(device, &inChannels, true);
     
@@ -490,6 +502,8 @@ static bool availableOneSamplerate(AudioDeviceID device, Float64 wantedSampleRat
     UInt32 outSize;
     UInt32 used; 
     Float64 usedSampleRate;
+    
+    JPLog("availableOneSamplerate\n");
      
     // Get running rate
     outSize = sizeof(UInt32);
@@ -519,6 +533,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
     OSStatus err = noErr;
     int i;
     
+    JPLog("availableSamplerate\n");
+    
     AudioObjectID sub_device[32];
     UInt32 outSize = sizeof(sub_device);
     err = AudioDeviceGetProperty(device, 0, kAudioDeviceSectionGlobal, kAudioAggregateDevicePropertyActiveSubDeviceList, &outSize, sub_device);
@@ -541,6 +557,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 @implementation JackMenu
 
 - (void)awakeFromNib {
+
+    JPLog("awakeFromNib\n");
     
     id POOL = [[NSAutoreleasePool alloc] init];
 	
@@ -960,6 +978,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 {	
     id POOL = [[NSAutoreleasePool alloc] init];
     
+    JPLog("startJack\n");
+    
 	if (![self launchJackDeamon:sender])
         return;
     
@@ -1107,6 +1127,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 
 -(IBAction)jackALstore:(id)sender 
 {
+    JPLog("jackALstore\n");
+    
     // Do not save when running...
     if (gJackRunning)
         return;
@@ -1176,8 +1198,17 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
     
     toFile = [NSMutableArray array];
     [toFile addObject:[driverBox titleOfSelectedItem]];
-    [toFile addObject:[interfaceInputBox titleOfSelectedItem]];
-    [toFile addObject:[interfaceOutputBox titleOfSelectedItem]];
+    
+    if ([interfaceInputBox titleOfSelectedItem] != nil) {
+        [toFile addObject:[interfaceInputBox titleOfSelectedItem]];
+    } else {
+        [toFile addObject:@"Unknown"];
+    }
+    if ([interfaceOutputBox titleOfSelectedItem] != nil) {
+        [toFile addObject:[interfaceOutputBox titleOfSelectedItem]];
+    } else {
+        [toFile addObject:@"Unknown"];
+    }
     [toFile addObject:[samplerateText titleOfSelectedItem]];
     [toFile addObject:[bufferText titleOfSelectedItem]];
     [toFile addObject:[outputChannels titleOfSelectedItem]];
@@ -1314,6 +1345,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 
 - (IBAction)openPrefWin:(id)sender {
 
+    JPLog("openPrefWin\n");
+    
     [self reloadPref:sender];
     
 	if (sender) {
@@ -1610,6 +1643,8 @@ end:
 }
 
 - (IBAction) reloadPref:(id) sender {
+
+    JPLog("reloadPref\n");
     
     id POOL = [[NSAutoreleasePool alloc] init];
     
@@ -1663,8 +1698,11 @@ static bool checkBufferSizeRange(AudioValueRange& input,  AudioValueRange& outpu
     
     OSStatus err;
     UInt32 size;
-	UInt32  countSRin, countSRout;
+	UInt32 countSRin = 0;
+    UInt32 countSRout = 0;
     UInt32 i;
+    
+    JPLog("writeCAPref\n");
     
     // Input channels
  	UInt32 inChannels = 0;
@@ -1700,54 +1738,72 @@ static bool checkBufferSizeRange(AudioValueRange& input,  AudioValueRange& outpu
 		JPLog("got output channels ok, %d channels\n", outChannels);
 	}
    
-    // Sampling rate for input
     set<Float64> commonset;
     set<Float64> inputset;
+    set<Float64> outputset;
+    
+    // Sampling rate for input
     countSRin = numberOfItemsInNominalSampleRateComboBox(selInputDevID);
     JPLog("numberOfItemsInNominalSampleRateComboBox for input: %ld\n",countSRin);
     for (i = 0; i < countSRin; i++) {
         Float64 rate = objectValueForItemAtIndex(selInputDevID, i);
-        JPLog("Sample rate value for input = %ld \n", (long)rate);
+        JPLog("Sample rate value for input = %ld \n", (int)rate);
         inputset.insert(rate);
         commonset.insert(rate);
     }
     
     // Sampling rate for output
-    set<Float64> outputset;
     countSRout = numberOfItemsInNominalSampleRateComboBox(selOutputDevID);
     JPLog("numberOfItemsInNominalSampleRateComboBox for output: %ld\n",countSRout);
     for (i = 0; i < countSRout; i++) {
         Float64 rate = objectValueForItemAtIndex(selOutputDevID, i);
-        JPLog("Sample rate value for output = %ld \n", (long)rate);
+        JPLog("Sample rate value for output = %ld \n", (int)rate);
         outputset.insert(rate);
         commonset.insert(rate);
     }
     
-    // Only display common values
     set<Float64>::const_iterator it;
-    for (it = commonset.begin(); it != commonset.end(); it++) {
-        if (inputset.find(*it) != inputset.end() && outputset.find(*it) != outputset.end()) 
-            [samplerateText addItemWithTitle:[[NSNumber numberWithLong:(long)(*it)] stringValue]];
+    if (countSRin > 0 && countSRout > 0) {
+        // Only display common values
+        JPLog("input and output SR size all = %ld\n", commonset.size());
+        for (it = commonset.begin(); it != commonset.end(); it++) {
+            if (inputset.find(*it) != inputset.end() && outputset.find(*it) != outputset.end()) 
+                [samplerateText addItemWithTitle:[[NSNumber numberWithLong:(int)(*it)] stringValue]];
+        }
+    } else if (countSRin > 0) {
+        // Input only
+        JPLog("input SR size = %ld\n", inputset.size());
+        for (it = inputset.begin(); it != inputset.end(); it++) {
+            [samplerateText addItemWithTitle:[[NSNumber numberWithLong:(int)(*it)] stringValue]];
+        }
+        
+    } else if (countSRout > 0) {
+        // Output only
+        JPLog("output SR size = %ld\n", outputset.size());
+        for (it = outputset.begin(); it != outputset.end(); it++) {
+            [samplerateText addItemWithTitle:[[NSNumber numberWithLong:(int)(*it)] stringValue]];
+        }
     }
  	
     // Get buffer size range for input and output
     size = sizeof(AudioValueRange);
+    
     AudioValueRange inputRange;
-    // Set default...
-    inputRange.mMinimum = 16;
-    inputRange.mMaximum = 8192;
     err = AudioDeviceGetProperty(selInputDevID, 0, true, kAudioDevicePropertyBufferSizeRange, &size, &inputRange);
     if (err != noErr) {
         JPLog("Cannot get buffer size range for input\n");
+        // Set default...
+        inputRange.mMinimum = 32;
+        inputRange.mMaximum = 4096;
     }
       
     AudioValueRange outputRange;
-    // Set default...
-    outputRange.mMinimum = 16;
-    outputRange.mMaximum = 8192;
     err = AudioDeviceGetProperty(selOutputDevID, 0, false, kAudioDevicePropertyBufferSizeRange, &size, &outputRange);
     if (err != noErr) {
         JPLog("Cannot get buffer size range for output\n");
+        // Set default...
+        outputRange.mMinimum = 32;
+        outputRange.mMaximum = 4096;
     }
          
     if (checkBufferSizeRange(inputRange, outputRange, 32))
@@ -1806,8 +1862,7 @@ Set the selDevID variable to the currently selected device of the system default
     NSString *s_name_in = NULL; 
     NSString *s_name_out = NULL; 
     
-    selInputDevID = 0;
-    selOutputDevID = 0;
+    JPLog("writeDevNames\n");
      
     id POOL = [[NSAutoreleasePool alloc] init];
     

@@ -21,6 +21,8 @@
 				<string>OS</string>
 				<string>X</string>
 			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
