@@ -2001,17 +2001,13 @@ Set the selDevID variable to the currently selected device of the system default
             [interfaceInputBox selectItemWithTitle:s_name_in]; 
             [interfaceOutputBox selectItemWithTitle:s_name_in]; 
             selOutputDevID = selInputDevID;
-            [clockBox setState:NSOffState];
-            [clockBox setEnabled:NO];
          } else if (isDuplexDevice(selOutputDevID)) {
             [interfaceInputBox selectItemWithTitle:s_name_in]; 
             [interfaceOutputBox selectItemAtIndex:0];
             selOutputDevID = devices[first_output_index];
-            [clockBox setEnabled:YES];
          } else {
             [interfaceInputBox selectItemWithTitle:s_name_in];
             [interfaceOutputBox selectItemWithTitle:s_name_out]; 
-            [clockBox setEnabled:YES];
          }
     }
     
@@ -2020,19 +2016,23 @@ Set the selDevID variable to the currently selected device of the system default
             [interfaceInputBox selectItemWithTitle:s_name_out]; 
             [interfaceOutputBox selectItemWithTitle:s_name_out]; 
             selInputDevID = selOutputDevID;
-            [clockBox setState:NSOffState];
-            [clockBox setEnabled:NO];
         } else if (isDuplexDevice(selInputDevID)) {
             [interfaceInputBox selectItemAtIndex:0]; 
             [interfaceOutputBox selectItemWithTitle:s_name_out]; 
             selInputDevID = devices[first_input_index];
-            [clockBox setEnabled:YES];
         } else {
             [interfaceInputBox selectItemWithTitle:s_name_in];
             [interfaceOutputBox selectItemWithTitle:s_name_out]; 
-            [clockBox setEnabled:YES];
         }
     } 
+    
+    // Clock drift compensation checkbox state...
+    if (isDuplexDevice(selOutputDevID) || isDuplexDevice(selInputDevID)) {
+        [clockBox setState:NSOffState];
+        [clockBox setEnabled:NO];
+    } else {
+        [clockBox setEnabled:YES];
+    }
           
     if (!selectedIn) {
 		selInputDevID = defaultInputDev; 
