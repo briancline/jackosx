@@ -439,6 +439,31 @@ static OSStatus getDeviceUIDFromID(AudioDeviceID id, char* name)
     return res;
 }
 
+static bool isSameClockDomain(AudioDeviceID input, AudioDeviceID output)
+{
+    UInt32 input_clockdomain = 0;
+    UInt32 output_clockdomain = 0;
+    UInt32  outSize = sizeof(UInt32);
+    OSStatus osErr;
+    
+    osErr = AudioDeviceGetProperty(input, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyClockDomain, &outSize, &input_clockdomain); 
+    if (osErr != noErr) {
+        JPLog("Cannot get clock domain for input");
+        return false;
+    }
+    osErr = AudioDeviceGetProperty(output, 0, kAudioDeviceSectionGlobal, kAudioDevicePropertyClockDomain, &outSize, &output_clockdomain); 
+    if (osErr != noErr) {
+        JPLog("Cannot get clock domain for output");
+        return false;
+    }
+    
+    if (input_clockdomain == output_clockdomain && input_clockdomain != 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 static bool isAggregateDevice(AudioDeviceID device)
 {
     JPLog("isAggregateDevice\n");
@@ -610,6 +635,11 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 			[hogBox setState:NSOnState];
 		else 
 			[hogBox setState:NSOffState];
+            
+         if (getClockMode() > 0)
+			[clockBox setState:NSOnState];
+		else 
+			[clockBox setState:NSOffState];
     } 
     
     int test = checkJack();
@@ -636,6 +666,7 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         [interfaceOutputBox setEnabled:NO];
 		[samplerateText setEnabled:NO];
         [hogBox setEnabled:NO];
+        [clockBox setEnabled:NO];
        
     } else {
 		[routingBut setEnabled:NO];
@@ -997,7 +1028,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 					[verboseBox state] == NSOnState ? 1 : 0,
 					driverInputname,
                     driverOutputname,
-                    [hogBox state] == NSOnState ? 1 : 0);
+                    [hogBox state] == NSOnState ? 1 : 0,
+                    [clockBox state] == NSOnState ? 1 : 0);
     }
 	
     if ([JALauto state] == NSOffState) {
@@ -1008,7 +1040,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 					[verboseBox state] == NSOnState ? 1 : 0,
 					driverInputname,
                     driverOutputname,
-                    [hogBox state] == NSOnState ? 1 : 0);
+                    [hogBox state] == NSOnState ? 1 : 0,
+                    [clockBox state] == NSOnState ? 1 : 0);
     }	
 	
     gJackRunning = openJackClient();
@@ -1035,6 +1068,7 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         [interfaceOutputBox setEnabled:NO];
         [samplerateText setEnabled:NO];
         [hogBox setEnabled:NO];
+        [clockBox setEnabled:NO];
         [self sendJackStatusToPlugins:YES];
         [routingBut setEnabled:YES];
       
@@ -1149,7 +1183,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 						[verboseBox state] == NSOnState ? 1 : 0,
 						driverInputname,
                         driverOutputname,
-                        [hogBox state] == NSOnState ? 1 : 0) == 0) 
+                        [hogBox state] == NSOnState ? 1 : 0,
+                        [clockBox state] == NSOnState ? 1 : 0) == 0) 
             [self error:@"Cannot save JAS preferences."];
     }
 	
@@ -1161,7 +1196,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 						[verboseBox state] == NSOnState ? 1 : 0,
 						driverInputname,
                         driverOutputname,
-                        [hogBox state] == NSOnState ? 1 : 0) == 0)  
+                        [hogBox state] == NSOnState ? 1 : 0,
+                        [clockBox state] == NSOnState ? 1 : 0) == 0)  
             [self error:@"Cannot save JAS preferences."];
     }
 	
@@ -1189,6 +1225,10 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         
         if (getHogMode()) {
             fprintf(file, "-H \n"); 
+        }
+        
+        if (getClockMode()) {
+            fprintf(file, "-s \n"); 
         }
         
         fclose(file);
@@ -1536,6 +1576,10 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
     if (getHogMode()) {
         strcat(stringa, " -H ");
     }
+    
+    if (getClockMode()) {
+        strcat(stringa, " -s ");
+    }
         
     pannelloDiAlert = NSGetAlertPanel(LOCSTR(@"Please Wait..."), LOCSTR(@"Jack server is starting..."), nil, nil, nil);
     modalSession = [NSApp beginModalSessionForWindow:pannelloDiAlert];
@@ -1601,6 +1645,7 @@ end:
     [interfaceOutputBox setEnabled:YES];
 	[samplerateText setEnabled:YES];
     [hogBox setEnabled:YES];
+    [clockBox setEnabled:YES];
 	[routingBut setEnabled:NO];
     
     gJackRunning = false;
@@ -1635,6 +1680,7 @@ end:
     [interfaceOutputBox setEnabled:YES];
 	[samplerateText setEnabled:YES];
     [hogBox setEnabled:YES];
+    [clockBox setEnabled:YES];
 	[routingBut setEnabled:NO];
     
     gJackRunning = false;
@@ -1955,13 +2001,17 @@ Set the selDevID variable to the currently selected device of the system default
             [interfaceInputBox selectItemWithTitle:s_name_in]; 
             [interfaceOutputBox selectItemWithTitle:s_name_in]; 
             selOutputDevID = selInputDevID;
+            [clockBox setState:NSOffState];
+            [clockBox setEnabled:NO];
          } else if (isDuplexDevice(selOutputDevID)) {
             [interfaceInputBox selectItemWithTitle:s_name_in]; 
             [interfaceOutputBox selectItemAtIndex:0];
             selOutputDevID = devices[first_output_index];
+            [clockBox setEnabled:YES];
          } else {
             [interfaceInputBox selectItemWithTitle:s_name_in];
             [interfaceOutputBox selectItemWithTitle:s_name_out]; 
+            [clockBox setEnabled:YES];
          }
     }
     
@@ -1970,13 +2020,17 @@ Set the selDevID variable to the currently selected device of the system default
             [interfaceInputBox selectItemWithTitle:s_name_out]; 
             [interfaceOutputBox selectItemWithTitle:s_name_out]; 
             selInputDevID = selOutputDevID;
+            [clockBox setState:NSOffState];
+            [clockBox setEnabled:NO];
         } else if (isDuplexDevice(selInputDevID)) {
             [interfaceInputBox selectItemAtIndex:0]; 
             [interfaceOutputBox selectItemWithTitle:s_name_out]; 
             selInputDevID = devices[first_input_index];
+            [clockBox setEnabled:YES];
         } else {
             [interfaceInputBox selectItemWithTitle:s_name_in];
             [interfaceOutputBox selectItemWithTitle:s_name_out]; 
+            [clockBox setEnabled:YES];
         }
     } 
           

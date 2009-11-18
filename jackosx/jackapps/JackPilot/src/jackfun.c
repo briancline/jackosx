@@ -18,6 +18,7 @@ char coreAudioDevice[256];
 int defInput,defOutput,defSystem;
 int verboseLevel = 0;
 int hogmode = 0;
+int clockmode = 0;
 
 #define JACK_MAX_PORTS  2048
 
@@ -377,7 +378,7 @@ int getInterface(void)
     return interface;
 }
 
-int jackALStore(int inCH, int outCH, int AUTOC, int DEFinput, int DEFoutput, int DEFsystem, int LOGSLevel, char* driverIn, char* driverOut, int HOG) 
+int jackALStore(int inCH, int outCH, int AUTOC, int DEFinput, int DEFoutput, int DEFsystem, int LOGSLevel, char* driverIn, char* driverOut, int HOG, int CLOCK) 
 {
     FILE *prefFile;
     char *path;
@@ -388,8 +389,9 @@ int jackALStore(int inCH, int outCH, int AUTOC, int DEFinput, int DEFoutput, int
     } else {	
 		verboseLevel = LOGSLevel;
         hogmode = HOG;
-		fprintf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s\t%d\t%s\t%d\t%d"
-				,inCH, -1, outCH, -1, AUTOC, -1, DEFinput, -1, DEFoutput, -1, DEFsystem, -1, verboseLevel, -1, driverIn, -1, driverOut, -1, HOG
+        clockmode = CLOCK;
+		fprintf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%d\t%d"
+				,inCH, -1, outCH, -1, AUTOC, -1, DEFinput, -1, DEFoutput, -1, DEFsystem, -1, verboseLevel, -1, driverIn, -1, driverOut, -1, HOG, -1, CLOCK
 				); 
 		fclose(prefFile);
     }
@@ -413,11 +415,12 @@ int jackALLoad(void)
         defSystem = FALSE;
 		verboseLevel = 0;
         hogmode = 0;
+        clockmode = 0;
         return 1;
     } else {
 		int nullo;
-		fscanf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s\t%d\t%s\t%d\t%d",
-            &inch,&nullo,&outch,&nullo,&autoc,&nullo,&defInput,&nullo,&defOutput,&nullo,&defSystem,&nullo,&verboseLevel,&nullo,driverIn, &nullo, driverOut, &nullo, &hogmode); 
+		fscanf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%d\t%d",
+            &inch,&nullo,&outch,&nullo,&autoc,&nullo,&defInput,&nullo,&defOutput,&nullo,&defSystem,&nullo,&verboseLevel,&nullo,driverIn, &nullo, driverOut, &nullo, &hogmode, &nullo, &clockmode); 
  		fclose(prefFile);
     }
     return 1;
@@ -461,6 +464,11 @@ int getVerboseLevel(void)
 int getHogMode(void) 
 {
 	return hogmode;
+}
+
+int getClockMode(void) 
+{
+	return clockmode;
 }
 
 int nameOfClient(int n, char* name) 

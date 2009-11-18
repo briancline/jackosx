@@ -19,6 +19,7 @@
 	
   	id verboseBox;
     id hogBox;
+    id clockBox;
     IBOutlet NSPopUpButton* driverBox;
     IBOutlet NSPopUpButton* interfaceInputBox;
     IBOutlet NSPopUpButton* interfaceOutputBox;

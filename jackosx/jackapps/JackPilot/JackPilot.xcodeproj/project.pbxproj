@@ -1108,6 +1108,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = src/JackPilot1.0_Prefix.h;
 				GCC_PREPROCESSOR_DEFINITIONS = "PLUGIN=1";
+				GCC_VERSION = 4.0;
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				INFOPLIST_FILE = "Info-JackPilot.plist";
 				OTHER_CFLAGS = "";

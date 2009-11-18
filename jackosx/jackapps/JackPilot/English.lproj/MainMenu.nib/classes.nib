@@ -74,6 +74,7 @@
                 JALout = NSTextField;
                 aboutWin = id;
                 bufferText = id;
+                clockBox = id;
                 connectionsNumb = NSTextField;
                 cpuLoadBar = NSProgressIndicator;
                 defInput = id;
