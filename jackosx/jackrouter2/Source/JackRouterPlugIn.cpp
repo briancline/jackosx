@@ -515,6 +515,8 @@ bool JackRouterPlugIn::ReadPref()
                     &nullo,
  					JackRouterDevice::fCoreAudioDriverUID
                 );
+                
+                printf("fCoreAudioDriverUID %s\n", JackRouterDevice::fCoreAudioDriverUID);
 
                 fclose(prefFile);
 				JackRouterDevice::fInputChannels = input;

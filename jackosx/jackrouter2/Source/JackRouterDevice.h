@@ -139,6 +139,8 @@ public:
 private:
 
     UInt64 mAnchorHostTime;
+    
+    AudioDeviceID  fJACKServerDevice;
 
 	jack_client_t* fClient;				// Jack client
   
