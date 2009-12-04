@@ -101,7 +101,7 @@ bool JackVST::getProductString (char* text)
 //------------------------------------------------------------------------
 bool JackVST::getVendorString (char* text)
 {
-	strcpy(text, "(c) 2003-2007, Johnny Petrantoni.");
+	strcpy(text, "(c) 2003-2009, J.Petrantoni, Grame");
 	return true;
 }
 

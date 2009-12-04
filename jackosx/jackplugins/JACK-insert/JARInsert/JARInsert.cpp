@@ -380,6 +380,7 @@ void JARInsert::Flush()
     JARILog("Running flush\n");
 	UInt32 outSize;
     Boolean isWritable;
+    OSStatus err;
 	
     if (c_client != NULL) {
 	
@@ -399,8 +400,23 @@ void JARInsert::Flush()
             JARILog("Needs Deactivate client\n");
             jack_deactivate(c_client);
         }
-#endif
 
+#endif
+        
+        // Check if client is still opened
+        JARILog("Get Jack client\n");
+        outSize = sizeof(UInt32); 
+        err = AudioDeviceGetProperty(c_jackDevID, 0, true, kAudioDevicePropertyGetJackClient, &outSize, &c_client);
+        if (err != noErr) {
+            JARILog("Get Jack client error = %d\n", err);
+            return;
+        }
+        
+        if (!c_client) {
+            JARILog("Jack client already desallocated...\n", err);
+            return;
+        }
+            
         for (int i = 0; i < c_nInPorts; i++) {
             jack_port_unregister(c_client, c_inPorts[i]);
         }
