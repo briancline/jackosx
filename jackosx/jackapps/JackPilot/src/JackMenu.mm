@@ -712,7 +712,7 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
          	[[prefs objectAtIndex:2] getCString:deviceOutputName];
             
 			JPLog("Reading preferences ref file deviceInputName = %s deviceOutputName = %s\n", deviceInputName, deviceOutputName);
-			if (checkDeviceName(deviceInputName) || checkDeviceName(deviceOutputName)) { // Check if devices kept in preference are available
+			if ((checkDeviceName(deviceInputName) || checkDeviceName(deviceOutputName)) && ([prefs count] == 7)) { // Check if devices kept in preference are available
 				[driverBox selectItemWithTitle:[prefs objectAtIndex:0]];
                 if (checkDeviceName(deviceInputName))
                     [interfaceInputBox selectItemWithTitle:[prefs objectAtIndex:1]];
@@ -792,7 +792,7 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 	[self reloadPref:nil]; 
 		
     NSArray *prefs = [Utility getPref:'audi'];
-    if (prefs) {
+    if (prefs && ([prefs count] == 7)) {
     
 		BOOL needsRel = NO;
         
@@ -1389,47 +1389,49 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
     
     [self reloadPref:sender];
     
-	if (sender) {
-		NSArray *prefs = [Utility getPref:'audi'];
-		if (prefs) {
-			BOOL needsReload = NO;
-			
-			[driverBox selectItemWithTitle:[prefs objectAtIndex:0]];
-			if (![[driverBox title] isEqualToString:[prefs objectAtIndex:0]]) 
-				[driverBox selectItemAtIndex:0];
-			
-			[interfaceInputBox selectItemWithTitle:[prefs objectAtIndex:1]];
-			if (![[interfaceInputBox title] isEqualToString:[prefs objectAtIndex:1]]) 
-				[interfaceInputBox selectItemAtIndex:0];
+    if (sender) {
+        NSArray *prefs = [Utility getPref:'audi'];
+        if (prefs && ([prefs count] == 7)) {
+            BOOL needsReload = NO;
+            
+            [driverBox selectItemWithTitle:[prefs objectAtIndex:0]];
+            if (![[driverBox title] isEqualToString:[prefs objectAtIndex:0]]) 
+                [driverBox selectItemAtIndex:0];
+            
+            [interfaceInputBox selectItemWithTitle:[prefs objectAtIndex:1]];
+            if (![[interfaceInputBox title] isEqualToString:[prefs objectAtIndex:1]]) 
+                [interfaceInputBox selectItemAtIndex:0];
                 
             [interfaceOutputBox selectItemWithTitle:[prefs objectAtIndex:2]];
-			if (![[interfaceOutputBox title] isEqualToString:[prefs objectAtIndex:2]]) 
-				[interfaceOutputBox selectItemAtIndex:0];
-			
-			[samplerateText selectItemWithTitle:[prefs objectAtIndex:3]];
-			if (![[samplerateText title] isEqualToString:[prefs objectAtIndex:3]]) 
-				[samplerateText selectItemAtIndex:0];
-			
-			[bufferText selectItemWithTitle:[prefs objectAtIndex:4]];
-			if (![[bufferText title] isEqualToString:[prefs objectAtIndex:4]]) 
-				[bufferText selectItemAtIndex:0];
-			
-			[outputChannels selectItemWithTitle:[prefs objectAtIndex:5]];
-			if (![[outputChannels title] isEqualToString:[prefs objectAtIndex:5]]) { 
-				needsReload = YES; 
-				[outputChannels selectItemAtIndex:0]; 
-			}
-			
-			[inputChannels selectItemWithTitle:[prefs objectAtIndex:6]];
-			if (![[inputChannels title] isEqualToString:[prefs objectAtIndex:6]]) { 
-				needsReload = YES; 
-				[inputChannels selectItemAtIndex:0]; 
-			}
-			
-			if (needsReload) 
-				[self reloadPref:nil];
-		}
-	}
+            if (![[interfaceOutputBox title] isEqualToString:[prefs objectAtIndex:2]]) 
+                [interfaceOutputBox selectItemAtIndex:0];
+            
+            [samplerateText selectItemWithTitle:[prefs objectAtIndex:3]];
+            if (![[samplerateText title] isEqualToString:[prefs objectAtIndex:3]]) 
+                [samplerateText selectItemAtIndex:0];
+            
+            [bufferText selectItemWithTitle:[prefs objectAtIndex:4]];
+            if (![[bufferText title] isEqualToString:[prefs objectAtIndex:4]]) 
+                [bufferText selectItemAtIndex:0];
+            
+            [outputChannels selectItemWithTitle:[prefs objectAtIndex:5]];
+            if (![[outputChannels title] isEqualToString:[prefs objectAtIndex:5]]) { 
+                needsReload = YES; 
+                [outputChannels selectItemAtIndex:0]; 
+            }
+            
+            [inputChannels selectItemWithTitle:[prefs objectAtIndex:6]];
+            if (![[inputChannels title] isEqualToString:[prefs objectAtIndex:6]]) { 
+                needsReload = YES; 
+                [inputChannels selectItemAtIndex:0]; 
+            }
+            
+            if (needsReload) 
+                [self reloadPref:nil];
+           
+        }
+    }
+   
     
     [prefWindow center];
     [prefWindow makeKeyAndOrderFront:sender];
