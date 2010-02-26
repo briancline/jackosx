@@ -254,7 +254,7 @@
 		4B4F3D6609E2D5E000D2EC22 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = English.lproj;
+			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
 				4B4F3D6709E2D5E000D2EC22 /* Localizable.strings in CopyFiles */,

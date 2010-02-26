@@ -14,7 +14,7 @@
 
 using namespace std;
 
-typedef	UInt8	CAAudioHardwareDeviceSectionID;
+typedef	UInt8 CAAudioHardwareDeviceSectionID;
 
 #define	kAudioDeviceSectionGlobal	((CAAudioHardwareDeviceSectionID)0x00)
 
@@ -636,10 +636,15 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 		else 
 			[hogBox setState:NSOffState];
             
-         if (getClockMode() > 0)
+        if (getClockMode() > 0)
 			[clockBox setState:NSOnState];
 		else 
 			[clockBox setState:NSOffState];
+            
+        if (getMonitorMode() > 0)
+			[monitorBox setState:NSOnState];
+		else 
+			[monitorBox setState:NSOffState];
     } 
     
     int test = checkJack();
@@ -667,6 +672,7 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 		[samplerateText setEnabled:NO];
         [hogBox setEnabled:NO];
         [clockBox setEnabled:NO];
+        [monitorBox setEnabled:NO];
        
     } else {
 		[routingBut setEnabled:NO];
@@ -1029,7 +1035,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 					driverInputname,
                     driverOutputname,
                     [hogBox state] == NSOnState ? 1 : 0,
-                    [clockBox state] == NSOnState ? 1 : 0);
+                    [clockBox state] == NSOnState ? 1 : 0,
+                    [monitorBox state] == NSOnState ? 1 : 0);
     }
 	
     if ([JALauto state] == NSOffState) {
@@ -1041,7 +1048,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 					driverInputname,
                     driverOutputname,
                     [hogBox state] == NSOnState ? 1 : 0,
-                    [clockBox state] == NSOnState ? 1 : 0);
+                    [clockBox state] == NSOnState ? 1 : 0,
+                    [monitorBox state] == NSOnState ? 1 : 0);
     }	
 	
     gJackRunning = openJackClient();
@@ -1069,6 +1077,7 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         [samplerateText setEnabled:NO];
         [hogBox setEnabled:NO];
         [clockBox setEnabled:NO];
+        [monitorBox setEnabled:NO];
         [self sendJackStatusToPlugins:YES];
         [routingBut setEnabled:YES];
       
@@ -1184,7 +1193,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 						driverInputname,
                         driverOutputname,
                         [hogBox state] == NSOnState ? 1 : 0,
-                        [clockBox state] == NSOnState ? 1 : 0) == 0) 
+                        [clockBox state] == NSOnState ? 1 : 0,
+                        [monitorBox state] == NSOnState ? 1 : 0) == 0) 
             [self error:@"Cannot save JAS preferences."];
     }
 	
@@ -1197,7 +1207,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 						driverInputname,
                         driverOutputname,
                         [hogBox state] == NSOnState ? 1 : 0,
-                        [clockBox state] == NSOnState ? 1 : 0) == 0)  
+                        [clockBox state] == NSOnState ? 1 : 0,
+                        [monitorBox state] == NSOnState ? 1 : 0) == 0)  
             [self error:@"Cannot save JAS preferences."];
     }
 	
@@ -1229,6 +1240,10 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         
         if (getClockMode()) {
             fprintf(file, "-s \n"); 
+        }
+        
+        if (getMonitorMode()) {
+            fprintf(file, "-m \n"); 
         }
         
         fclose(file);
@@ -1582,6 +1597,10 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
     if (getClockMode()) {
         strcat(stringa, " -s ");
     }
+    
+    if (getMonitorMode()) {
+        strcat(stringa, " -m ");
+    }
         
     pannelloDiAlert = NSGetAlertPanel(LOCSTR(@"Please Wait..."), LOCSTR(@"Jack server is starting..."), nil, nil, nil);
     modalSession = [NSApp beginModalSessionForWindow:pannelloDiAlert];
@@ -1648,6 +1667,7 @@ end:
 	[samplerateText setEnabled:YES];
     [hogBox setEnabled:YES];
     [clockBox setEnabled:YES];
+    [monitorBox setEnabled:YES];
 	[routingBut setEnabled:NO];
     
     gJackRunning = false;
@@ -1683,6 +1703,7 @@ end:
 	[samplerateText setEnabled:YES];
     [hogBox setEnabled:YES];
     [clockBox setEnabled:YES];
+    [monitorBox setEnabled:YES];
 	[routingBut setEnabled:NO];
     
     gJackRunning = false;

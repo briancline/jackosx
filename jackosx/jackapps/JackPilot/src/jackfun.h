@@ -25,6 +25,7 @@ int getSysOut(void);
 int getVerboseLevel(void);
 int getHogMode(void);
 int getClockMode(void);
+int getMonitorMode(void);
 
 int openJack(const char *stringa);
 int closeJack(void);
@@ -48,7 +49,7 @@ int getSR(void);
 int getBUF(void);
 int getDRIVER(void);
 int getCHAN(void);
-int jackALStore(int inCH, int outCH, int AUTOC, int DEFinput, int DEFoutput, int DEFsystem, int LOGSLevel, char* driverIn, char* driverOut, int HOG, int CLOCK) ;
+int jackALStore(int inCH, int outCH, int AUTOC, int DEFinput, int DEFoutput, int DEFsystem, int LOGSLevel, char* driverIn, char* driverOut, int HOG, int CLOCK, int MONITOR);
 int jackALLoad(void);
 int getInCH(void);
 int getOutCH(void);

@@ -96,6 +96,7 @@
                 jpWinController = id;
                 loadText = NSTextField;
                 managerWin = NSWindow;
+                monitorBox = id;
                 outputChannels = id;
                 pluginSubMenu = id;
                 pluginsMenu = id;

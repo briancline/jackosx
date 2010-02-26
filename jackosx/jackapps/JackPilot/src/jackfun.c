@@ -19,6 +19,7 @@ int defInput,defOutput,defSystem;
 int verboseLevel = 0;
 int hogmode = 0;
 int clockmode = 0;
+int monitormode = 0;
 
 #define JACK_MAX_PORTS  2048
 
@@ -378,7 +379,7 @@ int getInterface(void)
     return interface;
 }
 
-int jackALStore(int inCH, int outCH, int AUTOC, int DEFinput, int DEFoutput, int DEFsystem, int LOGSLevel, char* driverIn, char* driverOut, int HOG, int CLOCK) 
+int jackALStore(int inCH, int outCH, int AUTOC, int DEFinput, int DEFoutput, int DEFsystem, int LOGSLevel, char* driverIn, char* driverOut, int HOG, int CLOCK, int MONITOR) 
 {
     FILE *prefFile;
     char *path;
@@ -390,8 +391,9 @@ int jackALStore(int inCH, int outCH, int AUTOC, int DEFinput, int DEFoutput, int
 		verboseLevel = LOGSLevel;
         hogmode = HOG;
         clockmode = CLOCK;
-		fprintf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%d\t%d"
-				,inCH, -1, outCH, -1, AUTOC, -1, DEFinput, -1, DEFoutput, -1, DEFsystem, -1, verboseLevel, -1, driverIn, -1, driverOut, -1, HOG, -1, CLOCK
+        monitormode = MONITOR;
+		fprintf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%d\t%d\t%d\t%d"
+				,inCH, -1, outCH, -1, AUTOC, -1, DEFinput, -1, DEFoutput, -1, DEFsystem, -1, verboseLevel, -1, driverIn, -1, driverOut, -1, HOG, -1, CLOCK, -1, MONITOR
 				); 
 		fclose(prefFile);
     }
@@ -416,11 +418,12 @@ int jackALLoad(void)
 		verboseLevel = 0;
         hogmode = 0;
         clockmode = 0;
+        monitormode = 0;
         return 1;
     } else {
 		int nullo;
-		fscanf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%d\t%d",
-            &inch,&nullo,&outch,&nullo,&autoc,&nullo,&defInput,&nullo,&defOutput,&nullo,&defSystem,&nullo,&verboseLevel,&nullo,driverIn, &nullo, driverOut, &nullo, &hogmode, &nullo, &clockmode); 
+		fscanf(prefFile,"\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%d\t%d\t%d\t%d",
+            &inch,&nullo,&outch,&nullo,&autoc,&nullo,&defInput,&nullo,&defOutput,&nullo,&defSystem,&nullo,&verboseLevel,&nullo,driverIn, &nullo, driverOut, &nullo, &hogmode, &nullo, &clockmode, &nullo, &monitormode); 
  		fclose(prefFile);
     }
     return 1;
@@ -469,6 +472,11 @@ int getHogMode(void)
 int getClockMode(void) 
 {
 	return clockmode;
+}
+
+int getMonitorMode(void) 
+{
+	return monitormode;
 }
 
 int nameOfClient(int n, char* name) 
