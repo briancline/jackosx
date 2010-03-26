@@ -75,6 +75,9 @@
 		4B193B100CE3573000C1F56E /* JackRouterStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B193B0E0CE3573000C1F56E /* JackRouterStream.cpp */; };
 		4B193B110CE3573000C1F56E /* JackRouterStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B193B0F0CE3573000C1F56E /* JackRouterStream.h */; };
 		4B193B410CE3586F00C1F56E /* JackRouterPrefix.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B193B400CE3586F00C1F56E /* JackRouterPrefix.h */; };
+		4B2B402E1159FC590093450D /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B2B402D1159FC590093450D /* Accelerate.framework */; };
+		4B2B402F1159FC590093450D /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B2B402D1159FC590093450D /* Accelerate.framework */; };
+		4B2B40301159FC590093450D /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B2B402D1159FC590093450D /* Accelerate.framework */; };
 		4B45E3020CE31F53001FB4D8 /* JackRouter.exp in Sources */ = {isa = PBXBuildFile; fileRef = 4B45E3010CE31F53001FB4D8 /* JackRouter.exp */; };
 		4B7C2E500E0A8A2D00220808 /* CAAudioBufferList.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCAA08DA584F00EE5510 /* CAAudioBufferList.h */; };
 		4B7C2E510E0A8A2D00220808 /* CAAudioChannelLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DF7BCAC08DA584F00EE5510 /* CAAudioChannelLayout.h */; };
@@ -477,6 +480,7 @@
 		4B193B0E0CE3573000C1F56E /* JackRouterStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = JackRouterStream.cpp; path = Source/JackRouterStream.cpp; sourceTree = SOURCE_ROOT; };
 		4B193B0F0CE3573000C1F56E /* JackRouterStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JackRouterStream.h; path = Source/JackRouterStream.h; sourceTree = SOURCE_ROOT; };
 		4B193B400CE3586F00C1F56E /* JackRouterPrefix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JackRouterPrefix.h; path = Source/JackRouterPrefix.h; sourceTree = SOURCE_ROOT; };
+		4B2B402D1159FC590093450D /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = /System/Library/Frameworks/Accelerate.framework; sourceTree = "<absolute>"; };
 		4B45E3010CE31F53001FB4D8 /* JackRouter.exp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.exports; path = JackRouter.exp; sourceTree = "<group>"; };
 		4B7C2ECE0E0A8A2D00220808 /* JackRouter.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JackRouter.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B84929E0CE34E7A00B43385 /* bequite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bequite.c; path = Source/procinfo/bequite.c; sourceTree = SOURCE_ROOT; };
@@ -543,6 +547,7 @@
 				4B7C2EC60E0A8A2D00220808 /* CoreFoundation.framework in Frameworks */,
 				4B7C2EC70E0A8A2D00220808 /* CoreAudio.framework in Frameworks */,
 				4B7C2EC80E0A8A2D00220808 /* Carbon.framework in Frameworks */,
+				4B2B40301159FC590093450D /* Accelerate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -553,6 +558,7 @@
 				4B9E2C940DAA27DD00F5F690 /* CoreFoundation.framework in Frameworks */,
 				4B9E2C950DAA27DD00F5F690 /* CoreAudio.framework in Frameworks */,
 				4B9E2C960DAA27DD00F5F690 /* Carbon.framework in Frameworks */,
+				4B2B402F1159FC590093450D /* Accelerate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -563,6 +569,7 @@
 				8D576314048677EA00EA77CD /* CoreFoundation.framework in Frameworks */,
 				2DF7BC5408DA4CCA00EE5510 /* CoreAudio.framework in Frameworks */,
 				4B8492B80CE34F1600B43385 /* Carbon.framework in Frameworks */,
+				4B2B402E1159FC590093450D /* Accelerate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -585,6 +592,7 @@
 		089C1671FE841209C02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4B2B402D1159FC590093450D /* Accelerate.framework */,
 				4B8492B70CE34F1600B43385 /* Carbon.framework */,
 				2DF7BC5308DA4CCA00EE5510 /* CoreAudio.framework */,
 				0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */,

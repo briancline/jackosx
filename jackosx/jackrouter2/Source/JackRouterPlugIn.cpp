@@ -62,6 +62,7 @@ History
 28-10-08 : Version 0.89 : S Letz: correct JackRouterDevice::Process for cases when kAudioDevicePropertyIOProcStreamUsage is not used.
 07-01-09 : Version 0.90 : S Letz: JackFakeRouterDevice device to be used by "coreaudiod" process (do not need to access JACK server).
 22-01-09 : Version 0.91 : S Letz: Fix "dirty buffer issue" with Max/MSP: in JackRouterDevice::Process, output buffers are cleared if GetNumberIOProcs > 0 but GetNumberEnabledIOProcs == 0
+24-03-10 : Version 0.93 : S Letz: Use of vDSP_vsma for mixing.
 
 */
 

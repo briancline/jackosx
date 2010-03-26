@@ -74,6 +74,8 @@
 #include "CALogMacros.h"
 #include "CAMutex.h"
 
+#include <Accelerate/Accelerate.h>
+
 #define OPTIMIZE_PROCESS 1
 
 using namespace std;
@@ -1539,9 +1541,14 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
                                     firstproc[i] = false;
                                 } else {			// other proc : mix
                                     //JARLog("Process GetStreamUsage YES other proc : mix = %ld\n", proc->GetIOProc());
+                                    float gain = 1.0f;
+                                    vDSP_vsma((float*)client->fOutputList->mBuffers[i].mData, 1, &gain, output, 1, output, 1, nframes);
+                                     
+                                    /*
                                     for (UInt32 j = 0; j < nframes; j++) {
                                         output[j] += ((float*)client->fOutputList->mBuffers[i].mData)[j];
                                     }
+                                    */
                                 }
                             } else {
                                 if (client->fOutputPortList[i] && firstproc[i]) {
@@ -1565,9 +1572,13 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
                                     firstproc[i] = false;
                                 } else {			// other proc : mix
                                     //JARLog("Process GetStreamUsage NO other proc : mix = %ld\n", proc->GetIOProc());
+                                    float gain = 1.0f;
+                                    vDSP_vsma((float*)client->fOutputList->mBuffers[i].mData, 1, &gain, output, 1, output, 1, nframes);
+                                    /*
                                     for (UInt32 j = 0; j < nframes; j++) {
                                         output[j] += ((float*)client->fOutputList->mBuffers[i].mData)[j];
                                     }
+                                    */
                                 }
                             } else {
                                 //JARLog("JackRouterDevice::Process client->fOutputPortList[i] %d is null\n",i); 
