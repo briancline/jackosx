@@ -98,13 +98,14 @@ public:
 
 //	SHP_SingleDevice Support
 private:
-	JackRouterDeviceInterface*		mDevice;
+	JackRouterDeviceInterface*	mDevice;
 	
 	// JACK
 	static std::set<std::string>* fBlackList;
 	
 	bool ReadPref();
 	jack_client_t* CheckServer(AudioObjectID inSelf);
+    bool GetServerParameters(AudioObjectID inSelf);
 
 };
 

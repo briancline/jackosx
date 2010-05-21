@@ -121,7 +121,7 @@ public:
 	virtual void				Teardown();
 	virtual void				Finalize();
 	
-	virtual void				CreateForHAL(AudioDeviceID theNewDeviceID);
+	//virtual void				CreateForHAL(AudioDeviceID theNewDeviceID);
 	virtual void				ReleaseFromHAL();
 
 protected:

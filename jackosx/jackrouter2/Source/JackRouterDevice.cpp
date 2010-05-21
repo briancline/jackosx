@@ -1030,12 +1030,14 @@ void JackRouterDevice::CreateStreams()
 	}
 }
 
+/*
 void JackRouterDevice::CreateForHAL(AudioDeviceID theNewDeviceID)
 {
 	JARLog("CreateForHAL\n");
 	SetObjectID(theNewDeviceID);  // setup the new deviceID
 	CreateStreams();
 }
+ */
 
 void JackRouterDevice::ReleaseStreams()
 {
@@ -1079,14 +1081,15 @@ void JackRouterDevice::ReleaseStreams()
 
 void JackRouterDevice::ReleaseFromHAL()
 {
-		AudioObjectID theObjectID = GetObjectID();
+    JARLog("JackRouterDevice::ReleaseFromHAL\n");
+    AudioObjectID theObjectID = GetObjectID();
 #if	(MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_4)
-		OSStatus theError = AudioHardwareDevicesDied(mSHPPlugIn->GetInterface(), 1, &theObjectID);
+    OSStatus theError = AudioHardwareDevicesDied(mSHPPlugIn->GetInterface(), 1, &theObjectID);
 #else
-		OSStatus theError = AudioObjectsPublishedAndDied(mSHPPlugIn->GetInterface(), kAudioObjectSystemObject, 0, NULL, 1, &theObjectID);
+    OSStatus theError = AudioObjectsPublishedAndDied(mSHPPlugIn->GetInterface(), kAudioObjectSystemObject, 0, NULL, 1, &theObjectID);
 #endif
-		AssertNoError(theError, "JackRouterPlugIn::Teardown: got an error telling the HAL a device died");
-		Destroy();
+    AssertNoError(theError, "JackRouterPlugIn::Teardown: got an error telling the HAL a device died");
+    Destroy();
 }
 
 // JACK
@@ -1663,7 +1666,7 @@ bool JackRouterDevice::Open()
 
 void JackRouterDevice::Close()
 {
-    JARLog("Close\n");
+    JARLog("JackRouterDevice::Close\n");
 
     if (fClient) {
         if (jack_client_close(fClient) != 0) {
@@ -1676,7 +1679,10 @@ void JackRouterDevice::Close()
 
 void JackRouterDevice::Destroy()
 {
-    JARLog("Close\n");
+    JARLog("JackRouterDevice::Destroy\n");
+    
+    CAPropertyAddress theIsAliveAddress(kAudioDevicePropertyDeviceIsAlive);
+	PropertiesChanged(1, &theIsAliveAddress);
 
     if (fClient) {
         if (jack_client_close(fClient) != 0) {

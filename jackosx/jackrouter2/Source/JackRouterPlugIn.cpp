@@ -62,7 +62,7 @@ History
 28-10-08 : Version 0.89 : S Letz: correct JackRouterDevice::Process for cases when kAudioDevicePropertyIOProcStreamUsage is not used.
 07-01-09 : Version 0.90 : S Letz: JackFakeRouterDevice device to be used by "coreaudiod" process (do not need to access JACK server).
 22-01-09 : Version 0.91 : S Letz: Fix "dirty buffer issue" with Max/MSP: in JackRouterDevice::Process, output buffers are cleared if GetNumberIOProcs > 0 but GetNumberEnabledIOProcs == 0
-24-03-10 : Version 0.93 : S Letz: Use of vDSP_vsma for mixing.
+24-03-10 : Version 0.93 : S Letz: Use of vDSP_vsma for mixing. Emit kAudioDevicePropertyDeviceIsAlive in JackRouterDevice::Destroy(). 
 
 */
 
@@ -93,7 +93,7 @@ History
 
 using namespace std;
 
-// JACk
+// JACK
 
 set<string>*		JackRouterPlugIn::fBlackList = NULL;
 AudioObjectID		JackRouterPlugIn::fPlugInRef = 0;
@@ -103,9 +103,9 @@ JackRouterPlugIn*   JackRouterPlugIn::fInstance = NULL;
 //	JackRouterPlugIn
 //=============================================================================
 
-static char* DefaultServerName()
+static const char* DefaultServerName()
 {
-    char* server_name;
+    const char* server_name;
     if ((server_name = getenv("JACK_DEFAULT_SERVER")) == NULL)
         server_name = "default";
     return server_name;
@@ -179,57 +179,65 @@ JackRouterPlugIn::~JackRouterPlugIn()
 	StopNotification();
 }
 
-void JackRouterPlugIn::InitializeWithObjectID(AudioObjectID inObjectID)
+bool JackRouterPlugIn::GetServerParameters(AudioObjectID inObjectID)
 {
-	//printf("JackRouterPlugIn::InitializeWithObjectID1\n");
-	JackRouterPlugIn::fPlugInRef = inObjectID;
-	
-	//	initialize the super class
-	HP_HardwarePlugIn::InitializeWithObjectID(inObjectID);
-	bool prefOK = ReadPref();
-
-	char* id_name = bequite_getNameFromPid((int)getpid());
-  	//printf("Initialize inSelf = %ld name = %s\n", inObjectID, id_name);
-   
+    jack_client_t* client;
+    const char** ports;
+    int i;
+    
+    bool prefOK = ReadPref();
+    char* id_name = bequite_getNameFromPid((int)getpid());
+    
 	// Reject "blacklisted" clients
     if (fBlackList->find(id_name) != fBlackList->end()) {
         JARLog("Rejected client = %s\n", id_name);
-        throw CAException(kAudioHardwareIllegalOperationError);
+        return false;
+    }
+
+    if ((client = CheckServer(inObjectID))) {
+        
+        if (!prefOK) {
+            
+            // Input ports
+            i = 0;
+            if ((ports = jack_get_ports(client, NULL, NULL, JackPortIsPhysical | JackPortIsOutput)) != NULL) {
+                while (ports[i]) i++;
+            }
+            JackRouterDevice::fInputChannels = max(2, i); // At least 2 ports
+            
+            // Output ports
+            i = 0;
+            if ((ports = jack_get_ports(client, NULL, NULL, JackPortIsPhysical | JackPortIsInput)) != NULL) {
+                while (ports[i]) i++;
+            }
+            JackRouterDevice::fOutputChannels = max(2, i); // At least 2 ports
+        }
+        
+        JARLog("fInputChannels = %ld \n", JackRouterDevice::fInputChannels);
+        JARLog("fOutputChannels = %ld \n", JackRouterDevice::fOutputChannels);
+        jack_client_close(client);
+        return true;
+        
+    } else {
+        return false;
+    }
+}
+
+#define DEFAULT_ID 100
+
+void JackRouterPlugIn::InitializeWithObjectID(AudioObjectID inObjectID)
+{
+	JackRouterPlugIn::fPlugInRef = inObjectID;
+	
+	// initialize the super class
+	HP_HardwarePlugIn::InitializeWithObjectID(inObjectID);
+    
+    if (!GetServerParameters(inObjectID)) {
+        JARLog("jack server not running or rejected client\n");
+		throw CAException(kAudioHardwareIllegalOperationError);
     }
 	
-   	jack_client_t* client;
-	const char** ports;
-	int i;
-	
-	if ((client = CheckServer(inObjectID))) {
-
-		if (!prefOK) {
-		
-			// Input ports
-			i = 0;
-			if ((ports = jack_get_ports(client, NULL, NULL, JackPortIsPhysical | JackPortIsOutput)) != NULL) {
-				while (ports[i]) i++;
-			}
-			JackRouterDevice::fInputChannels = max(2, i); // At least 2 channels
-
-			// Output ports
-			i = 0;
-			if ((ports = jack_get_ports(client, NULL, NULL, JackPortIsPhysical | JackPortIsInput)) != NULL) {
-				while (ports[i]) i++;
-			}
-			JackRouterDevice::fOutputChannels = max(2, i); // At least 2 channels
-		}
-		
-    	JARLog("fInputChannels = %ld \n", JackRouterDevice::fInputChannels);
-		JARLog("fOutputChannels = %ld \n", JackRouterDevice::fOutputChannels);
-		jack_client_close(client);
-
-	} else {
-		JARLog("jack server not running?\n");
-		throw CAException(kAudioHardwareIllegalOperationError);
-	}
-	
-	//	instantiate a new AudioDevice object in the HAL
+	// instantiate a new AudioDevice object in the HAL
 	AudioDeviceID theNewDeviceID = 0;
 #if	(MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_4)
 	OSStatus theError = AudioHardwareClaimAudioDeviceID(GetInterface(), &theNewDeviceID);
@@ -242,11 +250,11 @@ void JackRouterPlugIn::InitializeWithObjectID(AudioObjectID inObjectID)
 	
 	ThrowIfError(theError, CAException(theError), "JackRouterPlugIn::InitializeWithObjectID: couldn't instantiate the AudioDevice object");
 	
-	//	make a device object
+	// make a device object
 	mDevice = new JackRouterDevice(theNewDeviceID, this);
 	mDevice->Initialize();
 
-	//	restore it's settings if necessary
+	// restore it's settings if necessary
 	UInt32 isMaster = 0;
 	UInt32 theSize = sizeof(UInt32);
 	AudioHardwareGetProperty(kAudioHardwarePropertyProcessIsMaster, &theSize, &isMaster);
@@ -254,10 +262,10 @@ void JackRouterPlugIn::InitializeWithObjectID(AudioObjectID inObjectID)
 		HP_DeviceSettings::RestoreFromPrefs(*mDevice, HP_DeviceSettings::sStandardControlsToSave, HP_DeviceSettings::kStandardNumberControlsToSave);
 	}
 
-	//	set the object state mutex
+	// set the object state mutex
 	HP_Object::SetObjectStateMutexForID(theNewDeviceID, mDevice->GetObjectStateMutex());
 
-	//	tell the HAL about the device
+	// tell the HAL about the device
 #if	(MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_4)
 	theError = AudioHardwareDevicesCreated(GetInterface(), 1, &theNewDeviceID);
 #else
@@ -268,6 +276,8 @@ void JackRouterPlugIn::InitializeWithObjectID(AudioObjectID inObjectID)
 
 void JackRouterPlugIn::Teardown()
 {
+   JARLog("JackRouterPlugIn::Teardown \n");
+    
 	//  first figure out if this is being done as part of the process being torn down
 	UInt32 isInitingOrExiting = 0;
 	UInt32 theSize = sizeof(UInt32);
@@ -290,6 +300,8 @@ void JackRouterPlugIn::Teardown()
 		//	send the necessary IsAlive notifications
 		CAPropertyAddress theIsAliveAddress(kAudioDevicePropertyDeviceIsAlive);
 		mDevice->PropertiesChanged(1, &theIsAliveAddress);
+        
+        JARLog("JackRouterPlugIn::Teardown kAudioDevicePropertyDeviceIsAlive \n");
 		
 		//	save it's settings if necessary
 		if (isMaster != 0) {
@@ -338,6 +350,15 @@ void JackRouterPlugIn::AddForHAL()
         JARLog("Rejected client = %s\n", id_name);
         return;
     }
+    
+    /*
+    JARLog("JackRouterPlugIn::AddForHAL\n");
+    
+    if (!GetServerParameters(DEFAULT_ID)) {
+        JARLog("jack server not running or rejected client\n");
+        return;
+    }
+    */
 	
 	// instantiate a new AudioDevice object in the HAL
 	AudioDeviceID theNewDeviceID = 0;
@@ -355,6 +376,7 @@ void JackRouterPlugIn::AddForHAL()
     }
     
     // check loading process...
+    //char* id_name = bequite_getNameFromPid((int)getpid());
     if (strcmp("coreaudiod", id_name) == 0) {
         mDevice = new JackFakeRouterDevice(theNewDeviceID, this);
     } else {
@@ -386,6 +408,7 @@ void JackRouterPlugIn::AddForHAL()
 
 void JackRouterPlugIn::ReleaseFromHAL()
 {
+    JARLog("JackRouterPlugIn::ReleaseFromHAL\n");
 	if (mDevice) 
 		mDevice->ReleaseFromHAL();
 }
@@ -498,24 +521,22 @@ bool JackRouterPlugIn::ReadPref()
             if ((prefFile = fopen(path, "rt"))) {
                 int nullo;
 				int input, output, autoconnect, debug, default_input, default_output, default_system;
-				fscanf(
-					prefFile, "\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s",
-				    &input,
-                    &nullo,
-                    &output,
-                    &nullo,
-                    &autoconnect,
-                    &nullo,
-					&default_input, 
-					&nullo,
-					&default_output, 
-					&nullo,
-					&default_system,
-					&nullo,
-            		&debug,
-                    &nullo,
- 					JackRouterDevice::fCoreAudioDriverUID
-                );
+                fscanf(prefFile, "\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s",
+                        &input,
+                        &nullo,
+                        &output,
+                        &nullo,
+                        &autoconnect,
+                        &nullo,
+                        &default_input, 
+                        &nullo,
+                        &default_output, 
+                        &nullo,
+                        &default_system,
+                        &nullo,
+                        &debug,
+                        &nullo,
+                        JackRouterDevice::fCoreAudioDriverUID);
                 
                 printf("fCoreAudioDriverUID %s\n", JackRouterDevice::fCoreAudioDriverUID);
 
