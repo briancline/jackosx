@@ -378,7 +378,7 @@ static bool checkDevice(AudioDeviceID device)
 		return false;
 	} 
 	
-	JPLog("checkDevice input/output  device = %ld input = %ld ouput = %ld\n", device, inChannels, outChannels);
+	JPLog("checkDevice input/output  device = %ld input = %ld output = %ld\n", device, inChannels, outChannels);
 	return (outChannels == 0) && (inChannels == 0) ? false : true;
 }
 
@@ -661,8 +661,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 		writeStatus(1);
 		[isonBut setStringValue:LOCSTR(@"Jack is On")];
 		[self setupTimer]; 
-		[startBut setTitle:LOCSTR(@"Stop Jack")];
-		[toggleDock setTitle:LOCSTR(@"Stop Jack")];
+		[startBut setTitle:LOCSTR(@"Stop")];
+		[toggleDock setTitle:LOCSTR(@"Stop")];
 		[bufferText setEnabled:NO];
 		[outputChannels setEnabled:NO];
 		[inputChannels setEnabled:NO];
@@ -1065,8 +1065,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         jack_activate(getClient());
         
         [isonBut setStringValue:LOCSTR(@"Jack is On")];
-        [startBut setTitle:LOCSTR(@"Stop Jack")]; 
-        [toggleDock setTitle:LOCSTR(@"Stop Jack")];
+        [startBut setTitle:LOCSTR(@"Stop")]; 
+        [toggleDock setTitle:LOCSTR(@"Stop")];
         [self setupTimer];
         [bufferText setEnabled:NO];
         [outputChannels setEnabled:NO];
@@ -1655,8 +1655,8 @@ end:
 	[isonBut setStringValue:LOCSTR(@"Jack is Off")];
 	[loadText setFloatValue:0.0f];
 	[cpuLoadBar setDoubleValue:0.0];
-	[startBut setTitle:LOCSTR(@"Start Jack")];
-	[toggleDock setTitle:LOCSTR(@"Start Jack")];
+	[startBut setTitle:LOCSTR(@"Start")];
+	[toggleDock setTitle:LOCSTR(@"Start")];
 	[connectionsNumb setIntValue:0];
 	[bufferText setEnabled:YES];
 	[outputChannels setEnabled:YES];
@@ -1691,8 +1691,8 @@ end:
 	[isonBut setStringValue:LOCSTR(@"Jack is Off")];
 	[loadText setFloatValue:0.0f];
 	[cpuLoadBar setDoubleValue:0.0];
-	[startBut setTitle:LOCSTR(@"Start Jack")];
-	[toggleDock setTitle:LOCSTR(@"Start Jack")];
+	[startBut setTitle:LOCSTR(@"Jack")];
+	[toggleDock setTitle:LOCSTR(@"Jack")];
 	[connectionsNumb setIntValue:0];
 	[bufferText setEnabled:YES];
 	[outputChannels setEnabled:YES];
@@ -1756,7 +1756,7 @@ Scan current audio device properties : in/out channels, sampling rate, buffer si
 
 static bool checkBufferSizeRange(AudioValueRange& input,  AudioValueRange& output, Float64 buffer_size)
 {
-    Float64 frame_size = buffer_size * sizeof(float);
+    Float64 frame_size = buffer_size;
     return (frame_size >= input.mMinimum && frame_size <= input.mMaximum 
             && frame_size >= output.mMinimum && frame_size <= output.mMaximum);
 }
@@ -1858,21 +1858,25 @@ static bool checkBufferSizeRange(AudioValueRange& input,  AudioValueRange& outpu
     size = sizeof(AudioValueRange);
     
     AudioValueRange inputRange;
-    err = AudioDeviceGetProperty(selInputDevID, 0, true, kAudioDevicePropertyBufferSizeRange, &size, &inputRange);
+    err = AudioDeviceGetProperty(selInputDevID, 0, true, kAudioDevicePropertyBufferFrameSizeRange, &size, &inputRange);
     if (err != noErr) {
         JPLog("Cannot get buffer size range for input\n");
         // Set default...
         inputRange.mMinimum = 32;
         inputRange.mMaximum = 4096;
+    } else {
+        JPLog("Get buffer size range for input min = %d max = %d\n", (int)(inputRange.mMinimum), (int)(inputRange.mMaximum));
     }
       
     AudioValueRange outputRange;
-    err = AudioDeviceGetProperty(selOutputDevID, 0, false, kAudioDevicePropertyBufferSizeRange, &size, &outputRange);
+    err = AudioDeviceGetProperty(selOutputDevID, 0, false, kAudioDevicePropertyBufferFrameSizeRange, &size, &outputRange);
     if (err != noErr) {
         JPLog("Cannot get buffer size range for output\n");
         // Set default...
         outputRange.mMinimum = 32;
         outputRange.mMaximum = 4096;
+    } else {
+        JPLog("Get buffer size range for output min = %d max = %d\n", (int)(outputRange.mMinimum), (int)(outputRange.mMaximum));
     }
          
     if (checkBufferSizeRange(inputRange, outputRange, 32))
