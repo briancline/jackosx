@@ -1691,8 +1691,8 @@ end:
 	[isonBut setStringValue:LOCSTR(@"Jack is Off")];
 	[loadText setFloatValue:0.0f];
 	[cpuLoadBar setDoubleValue:0.0];
-	[startBut setTitle:LOCSTR(@"Jack")];
-	[toggleDock setTitle:LOCSTR(@"Jack")];
+	[startBut setTitle:LOCSTR(@"Start")];
+	[toggleDock setTitle:LOCSTR(@"Start")];
 	[connectionsNumb setIntValue:0];
 	[bufferText setEnabled:YES];
 	[outputChannels setEnabled:YES];
