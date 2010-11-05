@@ -975,7 +975,7 @@ void JackRouterDevice::CreateStreams()
 		if(theError == 0)
 		{
 			//  create the stream
-			theStream = new JackRouterStream(theNewStreamID, mSHPPlugIn, this, true, 1, fSampleRate);
+			theStream = new JackRouterStream(theNewStreamID, mSHPPlugIn, this, true, i+1, fSampleRate);
 			theStream->Initialize();
 			
 			//	add to the list of streams in this device
@@ -997,7 +997,7 @@ void JackRouterDevice::CreateStreams()
 		if(theError == 0)
 		{
 			//  create the stream
-			theStream = new JackRouterStream(theNewStreamID, mSHPPlugIn, this, false, 1, fSampleRate);
+			theStream = new JackRouterStream(theNewStreamID, mSHPPlugIn, this, false, i+1, fSampleRate);
 			theStream->Initialize();
 			
 			//	add to the list of streams in this device
