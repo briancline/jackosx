@@ -388,8 +388,9 @@ int nConnections = 0;
 			if(!(filename = [sp filename])) {
 				NSBeep();
 			}
-		} else 
+		} else {
 			return;
+        }
 		
 		char namefile[256];
 		[filename getCString:namefile];
@@ -403,29 +404,27 @@ int nConnections = 0;
 			int chisono2 = getConnections();
 			int i;
 			
-			char **str;
-			str = (char**)calloc(128, sizeof(char*));
+			char **str = (char**)calloc(128, sizeof(char*));
 			int rip;
 			for (rip = 0; rip < 128; rip++) {
 				str[rip] = (char*)calloc(256, sizeof(char));
 			}
 		   
 			fprintf(schemeFile,"\t%d",(chisono2/2)); 
-		   
-			for(i = 0; i < chisono; i++) {
+         
+			for (i = 0; i < chisono; i++) {
 				char strDA[256],strA[256];
 				
-				NSString *chi;
-				chi = [datiTab2 getCHisono2:i];
-				NSString *chi2;
-				chi2 = [datiTab3 getCHisono2:i];
+				NSString *chi = [datiTab2 getCHisono2:i];
+				NSString *chi2  = [datiTab3 getCHisono2:i];
 				[chi getCString:strDA];
 				[chi2 getCString:strA];
-				int test;
-				test = getTipoByName(&strDA[0]);
-				if (test == 22 || test == 2) {
-					int res;
-					res = connessionePerNumero2(i, str, 128);
+				int test = getTipoByName(&strDA[0]);
+                    
+				//if (test == 22 || test == 2) {  // Was actually testing Output ports...
+                
+                if (test & JackPortIsOutput) {
+					int res = connessionePerNumero2(i, str, 128);
 					if (res != 0) {
 						int a;
 						for (a = 0; a < res; a++) {
@@ -434,8 +433,8 @@ int nConnections = 0;
 							NSArray *lista1 = [daStr componentsSeparatedByString:@" "];
 							NSArray *lista2 = [aStr componentsSeparatedByString:@" "];
 							if ([lista1 count] == 1 && [lista2 count] == 1) {
-								JPLog("JackPilot is saving: %s -> %s\n",strA,str[a]);
-								fprintf(schemeFile,"\t%s\t%d\t%s\t%d",strA, -1,str[a],-1);
+								JPLog("JackPilot is saving: %s -> %s\n", strA, str[a]);
+								fprintf(schemeFile,"\t%s\t%d\t%s\t%d", strA, -1, str[a], -1);
 							} 
 							if ([lista1 count] != 1 && [lista2 count] == 1) {
 								int cici;
@@ -449,10 +448,11 @@ int nConnections = 0;
 									strcat(buf2,buf1);
 									if(cici+1!=[lista1 count])strcat(buf2,"%%%");
 								}
-								strcpy(strA,buf2);
-								free(buf1); free(buf2);
-								JPLog("JackPilot is saving: %s -> %s\n",strA,str[a]);
-								fprintf(schemeFile,"\t%s\t%d\t%s\t%d",strA, -1,str[a],-1);
+								strcpy(strA, buf2);
+								free(buf1); 
+                                free(buf2);
+								JPLog("JackPilot is saving: %s -> %s\n", strA, str[a]);
+								fprintf(schemeFile,"\t%s\t%d\t%s\t%d", strA, -1, str[a], -1);
 							}
 							if ([lista1 count] != 1 && [lista2 count] != 1) {
 								int cici;
@@ -467,13 +467,14 @@ int nConnections = 0;
 									if(cici+1!=[lista1 count])strcat(buf2,"%%%");
 								}
 								strcpy(strA,buf2);
-								free(buf1); free(buf2);
+								free(buf1); 
+                                free(buf2);
 								
 								char *buf3,*buf4;
 								buf3 = (char*)calloc(256, sizeof(char));
 								buf4 = (char*)calloc(256, sizeof(char));
 								
-								for(cici = 0; cici <[lista2 count]; cici++) {
+								for (cici = 0; cici <[lista2 count]; cici++) {
 									NSString *pre = [lista2 objectAtIndex:cici];
 									[pre getCString:buf3];
 									strcat(buf4, buf3);
@@ -484,7 +485,7 @@ int nConnections = 0;
 								free(buf3); 
 								free(buf4);
 								JPLog("JackPilot is saving: %s -> %s\n", strA, str[a]);
-								fprintf(schemeFile,"\t%s\t%d\t%s\t%d",strA, -1, str[a], -1);
+								fprintf(schemeFile,"\t%s\t%d\t%s\t%d", strA, -1, str[a], -1);
 							}
 							
 							if ([lista1 count] == 1 && [lista2 count] != 1) {
@@ -503,8 +504,8 @@ int nConnections = 0;
 								strcpy(str[a], buf2);
 								free(buf1); 
 								free(buf2);
-								JPLog("JackPilot is saving: %s -> %s\n",strA,str[a]);
-								fprintf(schemeFile,"\t%s\t%d\t%s\t%d",strA, -1,str[a],-1);
+								JPLog("JackPilot is saving: %s -> %s\n",strA, str[a]);
+								fprintf(schemeFile,"\t%s\t%d\t%s\t%d", strA, -1, str[a], -1);
 							}
 						}
 					}
@@ -515,11 +516,12 @@ int nConnections = 0;
 			}
 			free(str);
 			int stopInt = 12341;
-			fprintf(schemeFile,"\t%d",stopInt);
+			fprintf(schemeFile,"\t%d", stopInt);
 			fclose(schemeFile);
 		}
-	} else 
-		NSRunAlertPanel(LOCSTR(@"Sorry..."),LOCSTR(@"You must have \"Connections Manager\" window opened, and JACK must be ON."),LOCSTR(@"Ok"),nil,nil);
+	} else {
+		NSRunAlertPanel(LOCSTR(@"Sorry..."),LOCSTR(@"You must have \"Connections Manager\" window opened, and JACK must be ON."), LOCSTR(@"Ok"), nil, nil);
+    }
 }
 
 - (IBAction)loadScheme: (id)sender
@@ -592,18 +594,18 @@ int nConnections = 0;
 			int nullo;
 			
 			scan2:
-			if ((fscanf(schemeFile, "\t%s\t%d", test2, &nullo))!=2) {
+			if ((fscanf(schemeFile, "\t%s\t%d", test2, &nullo)) != 2) {
 				strcat(strDA,test2);
 				strcat(strDA," ");
 				int c;
 				do c = getc (schemeFile);
-				while (isspace (c));
+				while (isspace(c));
 				ungetc(c, schemeFile);
 				goto scan2;
 			}
 			strcat(strDA,test2);
 			scan3:
-			if ((fscanf(schemeFile,"\t%s\t%d",test2,&nullo))!=2) {
+			if ((fscanf(schemeFile,"\t%s\t%d", test2, &nullo)) != 2) {
 				strcat(strA, test2);
 				strcat(strA, " ");
 				int c;

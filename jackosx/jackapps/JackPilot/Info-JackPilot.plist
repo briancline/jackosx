@@ -28,7 +28,7 @@
 	<key>CFBundleExecutable</key>
 	<string>JackPilot</string>
 	<key>CFBundleGetInfoString</key>
-	<string>JackPilot 1.6.9, @03-10 J.Petrantoni - Grame</string>
+	<string>JackPilot 1.7.1, @03-11 J.Petrantoni - Grame</string>
 	<key>CFBundleIconFile</key>
 	<string>jackpilot.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -44,7 +44,7 @@
 	<key>CFBundleSignature</key>
 	<string>ElCa</string>
 	<key>CFBundleVersion</key>
-	<string>1.6.9</string>
+	<string>1.7.1</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>

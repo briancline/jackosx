@@ -21,6 +21,7 @@
     id hogBox;
     id clockBox;
     id monitorBox;
+    id MIDIBox;
     IBOutlet NSPopUpButton* driverBox;
     IBOutlet NSPopUpButton* interfaceInputBox;
     IBOutlet NSPopUpButton* interfaceOutputBox;

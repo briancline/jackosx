@@ -66,6 +66,7 @@
                 JALauto = NSButton;
                 JALin = NSTextField;
                 JALout = NSTextField;
+                MIDIBox = id;
                 aboutWin = id;
                 bufferText = id;
                 clockBox = id;

@@ -645,6 +645,11 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
 			[monitorBox setState:NSOnState];
 		else 
 			[monitorBox setState:NSOffState];
+            
+        if (getMIDIMode() > 0)
+			[MIDIBox setState:NSOnState];
+		else 
+			[MIDIBox setState:NSOffState];    
     } 
     
     int test = checkJack();
@@ -673,6 +678,7 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         [hogBox setEnabled:NO];
         [clockBox setEnabled:NO];
         [monitorBox setEnabled:NO];
+        [MIDIBox setEnabled:NO];
        
     } else {
 		[routingBut setEnabled:NO];
@@ -1036,7 +1042,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
                     driverOutputname,
                     [hogBox state] == NSOnState ? 1 : 0,
                     [clockBox state] == NSOnState ? 1 : 0,
-                    [monitorBox state] == NSOnState ? 1 : 0);
+                    [monitorBox state] == NSOnState ? 1 : 0,
+                    [MIDIBox state] == NSOnState ? 1 : 0);
     }
 	
     if ([JALauto state] == NSOffState) {
@@ -1049,7 +1056,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
                     driverOutputname,
                     [hogBox state] == NSOnState ? 1 : 0,
                     [clockBox state] == NSOnState ? 1 : 0,
-                    [monitorBox state] == NSOnState ? 1 : 0);
+                    [monitorBox state] == NSOnState ? 1 : 0,
+                    [MIDIBox state] == NSOnState ? 1 : 0);
     }	
 	
     gJackRunning = openJackClient();
@@ -1078,6 +1086,7 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         [hogBox setEnabled:NO];
         [clockBox setEnabled:NO];
         [monitorBox setEnabled:NO];
+        [MIDIBox setEnabled:NO];
         [self sendJackStatusToPlugins:YES];
         [routingBut setEnabled:YES];
       
@@ -1103,9 +1112,10 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         
     int a;
     
-	if (nClients > 0) {
-		NSString *youhave = LOCSTR(@"You have ");
+	if (nClients > 1 || (nClients == 1 && !getMIDIMode())) {
+     	NSString *youhave = LOCSTR(@"You have ");
 		NSString *mess = LOCSTR(@" clients running, they will stop working or maybe crash!!");
+        if (getMIDIMode()) nClients--;
 		NSString *manyClien = [[NSNumber numberWithInt:nClients] stringValue];
 		NSMutableString *message = [NSMutableString stringWithCapacity:2];
 		[message appendString:youhave];
@@ -1194,7 +1204,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
                         driverOutputname,
                         [hogBox state] == NSOnState ? 1 : 0,
                         [clockBox state] == NSOnState ? 1 : 0,
-                        [monitorBox state] == NSOnState ? 1 : 0) == 0) 
+                        [monitorBox state] == NSOnState ? 1 : 0,
+                        [MIDIBox state] == NSOnState ? 1 : 0) == 0) 
             [self error:@"Cannot save JAS preferences."];
     }
 	
@@ -1208,7 +1219,8 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
                         driverOutputname,
                         [hogBox state] == NSOnState ? 1 : 0,
                         [clockBox state] == NSOnState ? 1 : 0,
-                        [monitorBox state] == NSOnState ? 1 : 0) == 0)  
+                        [monitorBox state] == NSOnState ? 1 : 0,
+                        [MIDIBox state] == NSOnState ? 1 : 0) == 0)  
             [self error:@"Cannot save JAS preferences."];
     }
 	
@@ -1220,6 +1232,9 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
     if (file) {
     
         fprintf(file,"/usr/local/bin/jackd \n");
+        if (getMIDIMode()) {
+            fprintf(file, "-X coremidi \n"); 
+        }
         fprintf(file,"-R \n");
         fprintf(file, "-d %s \n",[[driverBox titleOfSelectedItem]cString]);
         fprintf(file, "-p %s \n",[[bufferText titleOfSelectedItem]cString]);
@@ -1245,7 +1260,7 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         if (getMonitorMode()) {
             fprintf(file, "-m \n"); 
         }
-        
+         
         fclose(file);
 	}
    
@@ -1531,18 +1546,24 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
                     
         #if defined(__i386__)
             //strcpy(stringa, "arch -i386 /usr/local/bin/./jackdmp -R -d ");
-            strcpy(stringa,"/usr/local/bin/./jackdmp -R -v -d ");
+            strcpy(stringa,"/usr/local/bin/./jackdmp -R -v");
         #elif defined(__x86_64__)
-            strcpy(stringa,"/usr/local/bin/./jackdmp -R  -v -d ");
+            strcpy(stringa,"/usr/local/bin/./jackdmp -R  -v");
         #elif defined(__ppc__)
-            strcpy(stringa, "arch -ppc /usr/local/bin/./jackdmp -R  -v -d ");
+            strcpy(stringa, "arch -ppc /usr/local/bin/./jackdmp -R  -v");
         #elif defined(__ppc64__)
-            strcpy(stringa,"/usr/local/bin/./jackdmp -R  -v -d ");
+            strcpy(stringa,"/usr/local/bin/./jackdmp -R  -v");
         #endif
             
         } else {
-            strcpy(stringa,"/usr/local/bin/./jackdmp -R  -v -d ");
+            strcpy(stringa,"/usr/local/bin/./jackdmp -R  -v");
         }
+        
+        if (getMIDIMode()) {
+            strcat(stringa, " -X coremidi ");
+        }
+        
+        strcat(stringa, " -d ");
         
     } else {
         
@@ -1550,18 +1571,25 @@ static bool availableSamplerate(AudioDeviceID device, Float64 wantedSampleRate)
         
         #if defined(__i386__)
             //strcpy(stringa, "arch -i386 /usr/local/bin/./jackdmp -R -d ");
-            strcpy(stringa,"/usr/local/bin/./jackdmp -R -d ");
+            strcpy(stringa,"/usr/local/bin/./jackdmp -R");
         #elif defined(__x86_64__)
-            strcpy(stringa,"/usr/local/bin/./jackdmp -R -d ");
+            strcpy(stringa,"/usr/local/bin/./jackdmp -R");
         #elif defined(__ppc__)
-            strcpy(stringa, "arch -ppc /usr/local/bin/./jackdmp -R -d ");
+            strcpy(stringa, "arch -ppc /usr/local/bin/./jackdmp -R");
         #elif defined(__ppc64__)
-            strcpy(stringa,"/usr/local/bin/./jackdmp -R -d ");
+            strcpy(stringa,"/usr/local/bin/./jackdmp -R");
         #endif
         
         } else {
-            strcpy(stringa,"/usr/local/bin/./jackdmp -R -d ");
+            strcpy(stringa,"/usr/local/bin/./jackdmp -R");
         }
+        
+        if (getMIDIMode()) {
+            strcat(stringa, " -X coremidi ");
+        }
+        
+        strcat(stringa, " -d ");
+
     }
        
     strcat(stringa, driver);
@@ -1668,6 +1696,7 @@ end:
     [hogBox setEnabled:YES];
     [clockBox setEnabled:YES];
     [monitorBox setEnabled:YES];
+    [MIDIBox setEnabled:YES];
 	[routingBut setEnabled:NO];
     
     gJackRunning = false;
@@ -1704,6 +1733,7 @@ end:
     [hogBox setEnabled:YES];
     [clockBox setEnabled:YES];
     [monitorBox setEnabled:YES];
+    [MIDIBox setEnabled:YES];
 	[routingBut setEnabled:NO];
     
     gJackRunning = false;
