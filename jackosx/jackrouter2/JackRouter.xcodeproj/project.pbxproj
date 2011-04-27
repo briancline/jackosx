@@ -1053,6 +1053,12 @@
 			buildConfigurationList = 2D926CFB08DA3A5A00AB1DB7 /* Build configuration list for PBXProject "JackRouter" */;
 			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 089C166AFE841209C02AAC07 /* SampleHardwarePlugIn */;
 			projectDirPath = "";
 			projectRoot = "";

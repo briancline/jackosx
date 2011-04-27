@@ -2030,7 +2030,7 @@ Set the selDevID variable to the currently selected device of the system default
                 [interfaceOutputBox addItemWithTitle:s_name];
             }
             
-            if (strcmp(selectedInputDevice, name) == 0) { 
+            if ((strcmp(selectedInputDevice, name) == 0) && (inChannels > 0)) { 
 				selectedIn = YES; 
 				[interfaceInputBox selectItemWithTitle:s_name]; 
                 s_name_in = [NSString stringWithCString:name encoding:NSMacOSRomanStringEncoding];
@@ -2039,7 +2039,7 @@ Set the selDevID variable to the currently selected device of the system default
        			JPLog("Selected input device = %s\n", name);
 			}
             
-            if (strcmp(selectedOutputDevice, name) == 0) { 
+            if ((strcmp(selectedOutputDevice, name) == 0) && (outChannels > 0)) { 
 				selectedOut = YES; 
 				[interfaceOutputBox selectItemWithTitle:s_name]; 
                 s_name_out = [NSString stringWithCString:name encoding:NSMacOSRomanStringEncoding];
