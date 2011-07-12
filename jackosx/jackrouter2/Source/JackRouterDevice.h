@@ -152,7 +152,7 @@ private:
 
 	AudioBufferList* fInputList;										// CoreAudio input buffers
 	AudioBufferList* fOutputList;										// CoreAudio output buffers
-	float** fOuputListTemp;												// Intermediate output buffers
+	float** fOutputListTemp;												// Intermediate output buffers
 	
 	std::list<std::pair<std::string, std::string> > fConnections;		// Connections list
 	
@@ -235,7 +235,7 @@ public:
 	virtual void				SafeGetCurrentTime(AudioTimeStamp& outTime);
 	virtual void				TranslateTime(const AudioTimeStamp& inTime, AudioTimeStamp& outTime);
 	virtual void				GetNearestStartTime(AudioTimeStamp& ioRequestedStartTime, UInt32 inFlags);
-
+ 
 private:
 		
 //  Stream Management

@@ -138,7 +138,7 @@ JackRouterDevice::JackRouterDevice(AudioDeviceID inAudioDeviceID, JackRouterPlug
 	fClient(NULL),
 	fInputList(NULL),
 	fOutputList(NULL),
-	fOuputListTemp(NULL),
+	fOutputListTemp(NULL),
 	fFirstActivate(true),
    	mLogFile(NULL)
 {}
@@ -165,13 +165,13 @@ void JackRouterDevice::Initialize()
     fInputList->mNumberBuffers = JackRouterDevice::fInputChannels;
     fOutputList->mNumberBuffers = JackRouterDevice::fOutputChannels;
 
-    fOuputListTemp = (float**)malloc(sizeof(float*) * JackRouterDevice::fOutputChannels);
-    assert(fOuputListTemp);
+    fOutputListTemp = (float**)malloc(sizeof(float*) * JackRouterDevice::fOutputChannels);
+    assert(fOutputListTemp);
 
     for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
-        fOuputListTemp[i] = (float*)malloc(sizeof(float) * JackRouterDevice::fBufferSize);
-		assert(fOuputListTemp[i]);
-        memset(fOuputListTemp[i], 0, JackRouterDevice::fBufferSize * sizeof(float));
+        fOutputListTemp[i] = (float*)malloc(sizeof(float) * JackRouterDevice::fBufferSize);
+		assert(fOutputListTemp[i]);
+        memset(fOutputListTemp[i], 0, JackRouterDevice::fBufferSize * sizeof(float));
     }
 
     fInputPortList = (jack_port_t**)malloc(JackRouterDevice::fInputChannels * sizeof(jack_port_t*));
@@ -211,8 +211,8 @@ void JackRouterDevice::Teardown()
     free(fOutputPortList);
 
     for (int i = 0; i < JackRouterDevice::fOutputChannels; i++)
-        free(fOuputListTemp[i]);
-    free(fOuputListTemp);
+        free(fOutputListTemp[i]);
+    free(fOutputListTemp);
 	
 	delete mCommandThread;
 	HP_Device::Teardown();
@@ -1332,8 +1332,8 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 			#else
          		for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
                     if (proc->IsStreamEnabled(false, i)) {
-                        memset(client->fOuputListTemp[i], 0, nframes * sizeof(float));
-						client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
+                        memset(client->fOutputListTemp[i], 0, nframes * sizeof(float));
+						client->fOutputList->mBuffers[i].mData = client->fOutputListTemp[i];
 						client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
                     } else {
                         client->fOutputList->mBuffers[i].mData = NULL;
@@ -1372,8 +1372,8 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 			#else
 				for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
 					if (client->fOutputPortList[i]) {
-    					memset(client->fOuputListTemp[i], 0, nframes * sizeof(float));
-						client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
+    					memset(client->fOutputListTemp[i], 0, nframes * sizeof(float));
+						client->fOutputList->mBuffers[i].mData = client->fOutputListTemp[i];
 						client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
 					} else {
 						client->fOutputList->mBuffers[i].mData = NULL;
@@ -1404,7 +1404,7 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
             for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
 				if (client->fOutputPortList[i]) {
 					float* output = (float*)jack_port_get_buffer(client->fOutputPortList[i], nframes);
-					memcpy(output, client->fOuputListTemp[i], nframes * sizeof(float));
+					memcpy(output, client->fOutputListTemp[i], nframes * sizeof(float));
 				}
             }
 			
@@ -1467,8 +1467,8 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
                         for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
                             // Use an intermediate mixing buffer
                             if (proc->IsStreamEnabled(false, i)) {
-                                memset(client->fOuputListTemp[i], 0, nframes * sizeof(float));
-                                client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
+                                memset(client->fOutputListTemp[i], 0, nframes * sizeof(float));
+                                client->fOutputList->mBuffers[i].mData = client->fOutputListTemp[i];
                                 client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
                             } else {
                                 client->fOutputList->mBuffers[i].mData = NULL;
@@ -1493,8 +1493,8 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
                         for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
                             // Use an intermediate mixing buffer
                             if (client->fOutputPortList[i]) {
-                                memset(client->fOuputListTemp[i], 0, nframes * sizeof(float));
-                                client->fOutputList->mBuffers[i].mData = client->fOuputListTemp[i];
+                                memset(client->fOutputListTemp[i], 0, nframes * sizeof(float));
+                                client->fOutputList->mBuffers[i].mData = client->fOutputListTemp[i];
                                 client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
                             } else {
                                 client->fOutputList->mBuffers[i].mData = NULL;
@@ -1714,9 +1714,9 @@ int JackRouterDevice::BufferSize(jack_nframes_t nframes, void* arg)
 		for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
 			client->fOutputList->mBuffers[i].mNumberChannels = 1;
 			client->fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
-			if (client->fOuputListTemp[i])
-				free(client->fOuputListTemp[i]);
-			client->fOuputListTemp[i] = (float*)malloc(sizeof(float) * JackRouterDevice::fBufferSize);
+			if (client->fOutputListTemp[i])
+				free(client->fOutputListTemp[i]);
+			client->fOutputListTemp[i] = (float*)malloc(sizeof(float) * JackRouterDevice::fBufferSize);
 		}
 		
 		CAPropertyAddress thePropertyBufferFrameSize(kAudioDevicePropertyBufferFrameSize);
@@ -1747,9 +1747,9 @@ int JackRouterDevice::GetBufferSize()
 			for (int i = 0; i < JackRouterDevice::fOutputChannels; i++) {
 				fOutputList->mBuffers[i].mNumberChannels = 1;
 				fOutputList->mBuffers[i].mDataByteSize = JackRouterDevice::fBufferSize * sizeof(float);
-				if (fOuputListTemp[i])
-					free(fOuputListTemp[i]);
-				fOuputListTemp[i] = (float*)malloc(sizeof(float) * JackRouterDevice::fBufferSize);
+				if (fOutputListTemp[i])
+					free(fOutputListTemp[i]);
+				fOutputListTemp[i] = (float*)malloc(sizeof(float) * JackRouterDevice::fBufferSize);
 			}
 		}
 	}
