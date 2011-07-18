@@ -138,10 +138,9 @@ public:
 
 private:
 
-    UInt64 mAnchorHostTime;
-    
-    AudioDeviceID  fJACKServerDevice;
-
+    UInt64 mAnchorHostTime;  // From SHP example
+    Float64 mAnchorSampleTime;
+ 
 	jack_client_t* fClient;				// Jack client
   
     jack_port_t** fInputPortList;		// Jack input ports
@@ -235,6 +234,9 @@ public:
 	virtual void				SafeGetCurrentTime(AudioTimeStamp& outTime);
 	virtual void				TranslateTime(const AudioTimeStamp& inTime, AudioTimeStamp& outTime);
 	virtual void				GetNearestStartTime(AudioTimeStamp& ioRequestedStartTime, UInt32 inFlags);
+    void                        StartIOCycleTimingServices();
+    void                        StopIOCycleTimingServices();
+
  
 private:
 		
@@ -269,11 +271,11 @@ private:
 	int							GetBufferSize();
   	
 	// JACK callbacks
+    static void					Init(void* arg);
 	static int					Process(jack_nframes_t nframes, void* arg);
 	static int					BufferSize(jack_nframes_t nframes, void* arg);
 	static void					Shutdown(void* arg);
 	static int					XRun(void* arg);
-	
 };
 
 #endif

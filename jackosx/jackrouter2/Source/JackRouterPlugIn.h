@@ -67,6 +67,7 @@ class   JackRouterDevice;
 //=============================================================================
 
 #define JACK_CLIENT_NAME_LEN 256
+#define DEFAULT_ID 100
 
 class JackRouterPlugIn
 :
@@ -84,9 +85,7 @@ public:
 	virtual void	AddForHAL();
 	virtual void	ReleaseFromHAL();
 	
-	static AudioObjectID fPlugInRef;
 	static JackRouterPlugIn*    fInstance;
-	
 
 //	Property Access
 public:

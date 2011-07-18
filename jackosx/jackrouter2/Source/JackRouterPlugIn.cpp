@@ -64,6 +64,7 @@ History
 22-01-09 : Version 0.91 : S Letz: Fix "dirty buffer issue" with Max/MSP: in JackRouterDevice::Process, output buffers are cleared if GetNumberIOProcs > 0 but GetNumberEnabledIOProcs == 0
 24-03-10 : Version 0.93 : S Letz: Use of vDSP_vsma for mixing. Emit kAudioDevicePropertyDeviceIsAlive in JackRouterDevice::Destroy(). 
 05-11-10 : Version 0.94 : S Letz: Correct channel numbering in JackRouterDevice::CreateStreams. 
+15-07-11 : Version 0.95 : S Letz: Correct timing given to IO: solves Flash en ProTools 9.0 incompatibility.
 
 */
 
@@ -95,9 +96,7 @@ History
 using namespace std;
 
 // JACK
-
 set<string>*		JackRouterPlugIn::fBlackList = NULL;
-AudioObjectID		JackRouterPlugIn::fPlugInRef = 0;
 JackRouterPlugIn*   JackRouterPlugIn::fInstance = NULL;
 
 //=============================================================================
@@ -224,12 +223,8 @@ bool JackRouterPlugIn::GetServerParameters(AudioObjectID inObjectID)
     }
 }
 
-#define DEFAULT_ID 100
-
 void JackRouterPlugIn::InitializeWithObjectID(AudioObjectID inObjectID)
 {
-	JackRouterPlugIn::fPlugInRef = inObjectID;
-	
 	// initialize the super class
 	HP_HardwarePlugIn::InitializeWithObjectID(inObjectID);
     

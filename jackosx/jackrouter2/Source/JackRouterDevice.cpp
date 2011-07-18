@@ -84,7 +84,7 @@ using namespace std;
 //	JackRouterDevice
 //=============================================================================
 
-#define kAudioTimeFlags kAudioTimeStampSampleTimeValid|kAudioTimeStampHostTimeValid|kAudioTimeStampRateScalarValid
+#define kAudioTimeFlags kAudioTimeStampSampleTimeValid | kAudioTimeStampHostTimeValid | kAudioTimeStampRateScalarValid
 
 int JackRouterDevice::fInputChannels = 0;
 int JackRouterDevice::fOutputChannels = 0;
@@ -135,6 +135,7 @@ JackRouterDevice::JackRouterDevice(AudioDeviceID inAudioDeviceID, JackRouterPlug
 	mSHPPlugIn(inPlugIn),
 	mIOGuard("IOGuard"),
     mAnchorHostTime(0),
+    mAnchorSampleTime(0),
 	fClient(NULL),
 	fInputList(NULL),
 	fOutputList(NULL),
@@ -652,12 +653,39 @@ void JackRouterDevice::StartIOEngine()
 	}
 }
 
-void JackRouterDevice::StartIOEngineAtTime(const AudioTimeStamp&  /*inStartTime*/, UInt32 /*inStartTimeFlags*/)
+void JackRouterDevice::StartIOEngineAtTime(const AudioTimeStamp&  inStartTime, UInt32 inStartTimeFlags)
 {
 	JARLog("JackRouterDevice::StartIOEngineAtTime\n");
 	if (!IsIOEngineRunning()) {
 		StartHardware();
-	}
+	} else {
+        // Copied from SampleHardwarePlugIn
+        
+		//	the engine is already running, so we have to resynch the IO thread to the new start time
+		AudioTimeStamp theStartSampleTime = inStartTime;
+		theStartSampleTime.mFlags = kAudioTimeStampSampleTimeValid;
+		
+		//	factor out the input/output-ness of the start time to get the sample time of the anchor point
+		if((inStartTimeFlags & kAudioDeviceStartTimeIsInputFlag) != 0)
+		{
+			theStartSampleTime.mSampleTime += GetIOBufferFrameSize();
+			theStartSampleTime.mSampleTime += GetSafetyOffset(true);
+		}
+		else
+		{
+			theStartSampleTime.mSampleTime -= GetIOBufferFrameSize();
+			theStartSampleTime.mSampleTime -= GetSafetyOffset(false);
+		}
+		
+		//	need an extra cycle to ensure correctness
+		theStartSampleTime.mSampleTime -= GetIOBufferFrameSize();
+		
+		//	calculate the host time of the anchor point
+		AudioTimeStamp theStartTime;
+		theStartTime.mFlags = kAudioTimeStampSampleTimeValid | kAudioTimeStampHostTimeValid;
+		TranslateTime(theStartSampleTime, theStartTime);
+    }
+
 }
 
 void JackRouterDevice::StopIOEngine()
@@ -721,14 +749,82 @@ void JackRouterDevice::FinishCommandExecution(void* inSavedCommandState)
 	}
 }
 
+void JackRouterDevice::StartIOCycleTimingServices()
+{
+	//	Note that the IOGuard is _not_ held during this call!
+	
+	//	This method is called when an IO thread is in it's initialization phase
+	//	prior to it requiring any timing services. The device's timing services
+	//	should be initialized when this method returns.
+	
+	//	in this sample driver, we base our timing on the CPU clock and assume a perfect sample rate
+	mAnchorHostTime = CAHostTimeBase::GetCurrentTime();
+    mAnchorSampleTime = float(jack_frame_time(fClient));
+    
+    //printf("JackRouterDevice::StartIOCycleTimingServices %lld %ld %f\n", mAnchorHostTime, jack_frame_time(fClient), mAnchorSampleTime);
+}
+
+void JackRouterDevice::StopIOCycleTimingServices()
+{
+	//	This method is called when an IO cycle has completed it's run and is tearing down.
+	mAnchorHostTime = 0;
+    mAnchorSampleTime = 0;
+}
+
 void JackRouterDevice::GetCurrentTime(AudioTimeStamp& outTime)
 {
-	ThrowIf(!IsIOEngineRunning(), CAException(kAudioHardwareNotRunningError), "JackRouterDevice::GetCurrentTime: can't because the engine isn't running");
-	
-	outTime.mSampleTime = jack_frame_time(fClient);
+    /*
+    outTime.mSampleTime = float(jack_frame_time(fClient));
     outTime.mHostTime = CAHostTimeBase::GetTheCurrentTime();
-	outTime.mRateScalar = 1.0;
+    //printf("outTime.mHostTime %lld mAnchorHostTime %lld outTime.mSampleTime %f mAnchorSampleTime %f\n", outTime.mHostTime, mAnchorHostTime, outTime.mSampleTime, mAnchorSampleTime);
+	//outTime.mRateScalar = float(outTime.mHostTime - mAnchorHostTime) / float(outTime.mSampleTime - mAnchorSampleTime);
+    outTime.mRateScalar =  1.0;
 	outTime.mFlags = kAudioTimeFlags;
+    */
+    
+    outTime.mSampleTime = float(jack_frame_time(fClient)) - mAnchorSampleTime;
+    outTime.mHostTime = CAHostTimeBase::GetTheCurrentTime();
+    outTime.mRateScalar = (outTime.mSampleTime /(float(CAHostTimeBase::ConvertToNanos(outTime.mHostTime - mAnchorHostTime)) / 1000000000)) / fSampleRate;
+ 	outTime.mFlags = kAudioTimeFlags;
+  
+    /*
+ 	//	compute the host ticks pere frame
+    Float64 theActualHostTicksPerFrame = CAHostTimeBase::GetFrequency() / fSampleRate;
+	
+	//	clear the output time stamp
+	outTime = CAAudioTimeStamp::kZero;
+	
+	//	put in the current host time
+	outTime.mHostTime = CAHostTimeBase::GetTheCurrentTime();
+	
+	//	calculate how many host ticks away from the anchor time stamp the current host time is
+	Float64 theSampleOffset = 0.0;
+	if(outTime.mHostTime >= mAnchorHostTime)
+	{
+		theSampleOffset = outTime.mHostTime - mAnchorHostTime;
+	}
+	else
+	{
+		//	do it this way to avoid overflow problems with the unsigned numbers
+		theSampleOffset = mAnchorHostTime - outTime.mHostTime;
+		theSampleOffset *= -1.0;
+	}
+	
+	//	convert it to a number of samples
+	theSampleOffset /= theActualHostTicksPerFrame;
+	
+	//	lop off the fractional sample
+	theSampleOffset = floor(theSampleOffset);
+	
+	//	put in the sample time
+	outTime.mSampleTime = theSampleOffset;
+	
+	//	put in the rate scalar
+	outTime.mRateScalar = 1.0;
+	
+	//	set the flags
+	outTime.mFlags = kAudioTimeFlags;
+    */
 }
 
 void JackRouterDevice::SafeGetCurrentTime(AudioTimeStamp& outTime)
@@ -747,17 +843,11 @@ void JackRouterDevice::SafeGetCurrentTime(AudioTimeStamp& outTime)
 
 void JackRouterDevice::TranslateTime(const AudioTimeStamp& inTime, AudioTimeStamp& outTime)
 {
-	//	the input time stamp has to have at least one of the sample or host time valid
-	ThrowIf((inTime.mFlags & kAudioTimeStampSampleHostTimeValid) == 0, CAException(kAudioHardwareIllegalOperationError), "JackRouterDevice::TranslateTime: have to have either sample time or host time valid on the input");
-	ThrowIf(!IsIOEngineRunning(), CAException(kAudioHardwareNotRunningError), "JackRouterDevice::TranslateTime: can't because the engine isn't running");
+     //	the input time stamp has to have at least one of the sample or host time valid
+	ThrowIf((inTime.mFlags & kAudioTimeStampSampleHostTimeValid) == 0, CAException(kAudioHardwareIllegalOperationError), "SHP_Device::TranslateTime: have to have either sample time or host time valid on the input");
 
-	// Simply copy inTime ==> outTime for now
-	memcpy(&outTime, &inTime, sizeof(AudioTimeStamp));
-    
-    // Copied from SampleHardwarePlugIn
-    /*
-    //	compute the host ticks pere frame
-	Float64 theActualHostTicksPerFrame = CAHostTimeBase::GetFrequency() / GetCurrentNominalSampleRate();
+	//	compute the host ticks pere frame
+    Float64 theActualHostTicksPerFrame = CAHostTimeBase::GetFrequency() / fSampleRate;
 
 	//	calculate the sample time
 	Float64 theOffset = 0.0;
@@ -829,8 +919,8 @@ void JackRouterDevice::TranslateTime(const AudioTimeStamp& inTime, AudioTimeStam
 	{
 		//	the sample device has perfect timing
 		outTime.mRateScalar = 1.0;
+        //outTime.mRateScalar = (outTime.mSampleTime /(float(CAHostTimeBase::ConvertToNanos(outTime.mHostTime - mAnchorHostTime)) / 1000000000)) / fSampleRate;
 	}
-    */
 }
 
 UInt32 JackRouterDevice::GetMinimumIOBufferFrameSize() const
@@ -843,17 +933,16 @@ UInt32 JackRouterDevice::GetMaximumIOBufferFrameSize() const
 	return fBufferSize;
 }
 
-void JackRouterDevice::GetNearestStartTime(AudioTimeStamp& /*ioRequestedStartTime*/, UInt32 /*inFlags*/)
+void JackRouterDevice::GetNearestStartTime(AudioTimeStamp& ioRequestedStartTime, UInt32 inFlags)
 {
 	JARLog("JackRouterDevice::GetNearestStartTime\n");
 
     // Copied from SampleHardwarePlugIn
-    /* 
     bool isConsultingHAL = (inFlags & kAudioDeviceStartTimeDontConsultHALFlag) == 0;
 	bool isConsultingDevice = (inFlags & kAudioDeviceStartTimeDontConsultDeviceFlag) == 0;
 
-	ThrowIf(!IsIOEngineRunning(), CAException(kAudioHardwareNotRunningError), "SHP_Device::GetNearestStartTime: can't because there isn't anything running yet");
-	ThrowIf(!isConsultingHAL && !isConsultingDevice, CAException(kAudioHardwareNotRunningError), "SHP_Device::GetNearestStartTime: can't because the start time flags are conflicting");
+	//ThrowIf(!IsIOEngineRunning(), CAException(kAudioHardwareNotRunningError), "JackRouterDevice::GetNearestStartTime: can't because there isn't anything running yet");
+	ThrowIf(!isConsultingHAL && !isConsultingDevice, CAException(kAudioHardwareNotRunningError), "JackRouterDevice::GetNearestStartTime: can't because the start time flags are conflicting");
 
 	UInt32 theIOBufferFrameSize = GetIOBufferFrameSize();
 	bool isInput = (inFlags & kAudioDeviceStartTimeIsInputFlag) != 0;
@@ -905,10 +994,10 @@ void JackRouterDevice::GetNearestStartTime(AudioTimeStamp& /*ioRequestedStartTim
 		{
 			//	an IOProc is already running, so the next start time is two buffers
 			//	from wherever the IO thread is currently
-			mIOThread->GetCurrentPosition(theMinimumStartSampleTime);
-			theMinimumStartSampleTime.mSampleTime += (2 * theIOBufferFrameSize);
-			theMinimumStartTime.mFlags = kAudioTimeStampSampleTimeValid;
-			
+            
+            GetCurrentTime(theMinimumStartSampleTime);
+            theMinimumStartSampleTime.mSampleTime += (2 * theIOBufferFrameSize);
+   			
 			if(theTrueRequestedStartTime.mSampleTime < theMinimumStartSampleTime.mSampleTime)
 			{
 				//	clamp it to the minimum
@@ -951,7 +1040,6 @@ void JackRouterDevice::GetNearestStartTime(AudioTimeStamp& /*ioRequestedStartTim
 	
 	//	assign the return value
 	ioRequestedStartTime = theRequestedStartTime;
-    */
 }
 
 void JackRouterDevice::CreateStreams()
@@ -1207,14 +1295,6 @@ bool JackRouterDevice::AutoConnect()
     return true;
 }
 
-static void SetTime(AudioTimeStamp* timeVal, long curTime, UInt64 time)
-{
-    timeVal->mSampleTime = curTime;
-    timeVal->mHostTime = time;
-    timeVal->mRateScalar = 1.0;
-    timeVal->mFlags = kAudioTimeFlags;
-}
-
 bool JackRouterDevice::AllocatePorts()
 {
     char in_port_name[JACK_PORT_NAME_LEN];
@@ -1269,11 +1349,18 @@ void JackRouterDevice::DisposePorts()
     }
 }
 
+static void PrintTime(const char* name, const AudioTimeStamp& time)
+{
+     printf("%s Time mSampleTime = %f mHostTime = %lld mRateScalar = %f mWordClockTime = %lld SMPTE %d mFlags = %ld\n", name, 
+        time.mSampleTime,  time.mHostTime,  time.mRateScalar, time.mWordClockTime, time.mSMPTETime.mSeconds, time.mFlags);
+}
+
+
 int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 {
-    AudioTimeStamp inNow;
-    AudioTimeStamp inInputTime;
-    AudioTimeStamp inOutputTime;
+    AudioTimeStamp inNow = CAAudioTimeStamp::kZero;
+    AudioTimeStamp inInputTime = CAAudioTimeStamp::kZero;
+    AudioTimeStamp inOutputTime = CAAudioTimeStamp::kZero;
 	bool wasLocked;
 	OSStatus err;
 	JackRouterDevice* client = (JackRouterDevice*)arg;
@@ -1284,16 +1371,38 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 		return 0;
 	}
     
-    client->mAnchorHostTime = 0;
-	
-	//JARLog("Process \n");
-	
-    UInt64 time = CAHostTimeBase::GetTheCurrentTime();
+   	//JARLog("Process \n");
+
     fSampleCount += JackRouterDevice::fBufferSize;
-  	SetTime(&inNow, fSampleCount, time);
-	SetTime(&inInputTime, fSampleCount - JackRouterDevice::fBufferSize, time);
-    SetTime(&inOutputTime, fSampleCount + JackRouterDevice::fBufferSize, time);
+    client->GetCurrentTime(inNow);
     
+    AudioTimeStamp theInputFrameTime;
+    theInputFrameTime = inNow;
+    theInputFrameTime.mFlags = kAudioTimeStampSampleTimeValid;
+    theInputFrameTime.mSampleTime -= JackRouterDevice::fBufferSize;
+    
+    //	use that to figure the corresponding host time
+    inInputTime.mFlags = kAudioTimeFlags;
+    client->TranslateTime(theInputFrameTime, inInputTime);
+    
+    //	calculate the head position in frames
+    AudioTimeStamp theOutputFrameTime;
+    theOutputFrameTime = inNow;
+    theOutputFrameTime.mFlags = kAudioTimeStampSampleTimeValid;
+    theOutputFrameTime.mSampleTime += JackRouterDevice::fBufferSize;
+    
+    //	use that to figure the corresponding host time
+    inOutputTime.mFlags = kAudioTimeFlags;
+    client->TranslateTime(theOutputFrameTime, inOutputTime);
+    
+    /*
+    printf("(-------------\n");
+    PrintTime("now", inNow);
+    PrintTime("in", inInputTime);
+    PrintTime("out", inOutputTime);
+    */
+        
+     
    	// One IOProc
   	if (client->mIOProcList->GetNumberIOProcs() == 1) {
 		//JARLog("GetNumberIOProcs == 1 \n");
@@ -1650,6 +1759,7 @@ bool JackRouterDevice::Open()
         JARLog("JackRouterDevice::Open jack server not running?\n");
         return false;
     } else {
+        jack_set_thread_init_callback(fClient, Init, this);
 		jack_set_process_callback(fClient, Process, this);
 		jack_on_shutdown(fClient, Shutdown, this);
 		jack_set_buffer_size_callback(fClient, BufferSize, this);
@@ -1697,12 +1807,19 @@ void JackRouterDevice::Destroy()
 	StopHardware();
 }
 
+ void JackRouterDevice::Init(void* arg)
+ {
+    JackRouterDevice* client = (JackRouterDevice*)arg;
+    client->StartIOCycleTimingServices();
+ }
+
 int JackRouterDevice::BufferSize(jack_nframes_t nframes, void* arg)
 {
     JackRouterDevice* client = (JackRouterDevice*)arg;
-    JARLog("New BufferSize %ld\n", nframes);
-	
+ 	
 	if (nframes != JackRouterDevice::fBufferSize) {
+    
+        JARLog("New BufferSize %ld\n", nframes);
 		JackRouterDevice::fBufferSize = nframes;
 		client->mIOBufferFrameSize = nframes;
 
@@ -1764,6 +1881,7 @@ int JackRouterDevice::XRun(void* arg)
 {
     JARLog("XRun\n");
 	JackRouterDevice* client = (JackRouterDevice*)arg;
+    client->StartIOCycleTimingServices();
 	//client->mLogFile->Capture(AudioGetCurrentHostTime() - AudioConvertNanosToHostTime(LOG_SAMPLE_DURATION * 1000000), AudioGetCurrentHostTime(), true, "Captured Latency Log for I/O Cycle Overload\n");
 	CAPropertyAddress theProcessorOverloadAddress(kAudioDeviceProcessorOverload);
 	client->PropertiesChanged(1, &theProcessorOverloadAddress);
@@ -1786,6 +1904,7 @@ bool JackRouterDevice::Activate()
         } else {
             RestoreConnections();
         }
+        //StartIOCycleTimingServices();
         return true;
     }
 }
@@ -1799,6 +1918,7 @@ bool JackRouterDevice::Desactivate()
         JARLog("cannot deactivate client\n");
         return false;
     }
+    StopIOCycleTimingServices();
     return true;
 }
 
