@@ -759,7 +759,7 @@ void JackRouterDevice::StartIOCycleTimingServices()
 	
 	//	in this sample driver, we base our timing on the CPU clock and assume a perfect sample rate
 	mAnchorHostTime = CAHostTimeBase::GetCurrentTime();
-    mAnchorSampleTime = float(jack_frame_time(fClient));
+    mAnchorSampleTime = float(jack_frame_time(fClient)) - fBufferSize;  // To avoid negative time
     
     //printf("JackRouterDevice::StartIOCycleTimingServices %lld %ld %f\n", mAnchorHostTime, jack_frame_time(fClient), mAnchorSampleTime);
 }
@@ -784,7 +784,7 @@ void JackRouterDevice::GetCurrentTime(AudioTimeStamp& outTime)
     
     outTime.mSampleTime = float(jack_frame_time(fClient)) - mAnchorSampleTime;
     outTime.mHostTime = CAHostTimeBase::GetTheCurrentTime();
-    outTime.mRateScalar = (outTime.mSampleTime /(float(CAHostTimeBase::ConvertToNanos(outTime.mHostTime - mAnchorHostTime)) / 1000000000)) / fSampleRate;
+    outTime.mRateScalar = (outTime.mSampleTime / (float(CAHostTimeBase::ConvertToNanos(outTime.mHostTime - mAnchorHostTime)) / 1000000000)) / fSampleRate;
  	outTime.mFlags = kAudioTimeFlags;
   
     /*
@@ -918,8 +918,8 @@ void JackRouterDevice::TranslateTime(const AudioTimeStamp& inTime, AudioTimeStam
 	if(outTime.mFlags & kAudioTimeStampRateScalarValid)
 	{
 		//	the sample device has perfect timing
-		outTime.mRateScalar = 1.0;
-        //outTime.mRateScalar = (outTime.mSampleTime /(float(CAHostTimeBase::ConvertToNanos(outTime.mHostTime - mAnchorHostTime)) / 1000000000)) / fSampleRate;
+		//outTime.mRateScalar = 1.0;
+        outTime.mRateScalar = (outTime.mSampleTime /(float(CAHostTimeBase::ConvertToNanos(outTime.mHostTime - mAnchorHostTime)) / 1000000000)) / fSampleRate;
 	}
 }
 
@@ -1396,13 +1396,12 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
     client->TranslateTime(theOutputFrameTime, inOutputTime);
     
     /*
-    printf("(-------------\n");
+    printf("-------------\n");
     PrintTime("now", inNow);
     PrintTime("in", inInputTime);
     PrintTime("out", inOutputTime);
     */
-        
-     
+      
    	// One IOProc
   	if (client->mIOProcList->GetNumberIOProcs() == 1) {
 		//JARLog("GetNumberIOProcs == 1 \n");
@@ -1880,6 +1879,7 @@ void JackRouterDevice::Shutdown(void* /*arg */)
 int JackRouterDevice::XRun(void* arg)
 {
     JARLog("XRun\n");
+    printf("XRun\n");
 	JackRouterDevice* client = (JackRouterDevice*)arg;
     client->StartIOCycleTimingServices();
 	//client->mLogFile->Capture(AudioGetCurrentHostTime() - AudioConvertNanosToHostTime(LOG_SAMPLE_DURATION * 1000000), AudioGetCurrentHostTime(), true, "Captured Latency Log for I/O Cycle Overload\n");
