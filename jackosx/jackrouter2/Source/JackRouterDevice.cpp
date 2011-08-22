@@ -293,7 +293,11 @@ bool JackRouterDevice::HasProperty(const AudioObjectPropertyAddress& inAddress) 
         case kAudioDevicePropertyReleaseJackPortAU:
         case kAudioDevicePropertyDeactivateJack:
         case kAudioDevicePropertyActivateJack:
-			JARLog("JackRouterDevice::HasProperty JACK special\n");
+     		JARLog("JackRouterDevice::HasProperty JACK special\n");
+			theAnswer = true;
+			break;
+            
+        case kAudioDevicePropertyLatency:
 			theAnswer = true;
 			break;
 		
@@ -406,6 +410,28 @@ void JackRouterDevice::GetPropertyData(const AudioObjectPropertyAddress& inAddre
 	
 	switch(inAddress.mSelector)
 	{
+    
+        case kAudioDevicePropertyLatency:
+        
+            if (inAddress.mScope == kAudioDevicePropertyScopeInput && fClient) {
+                const char** ports = jack_get_ports(fClient, NULL, NULL, JackPortIsPhysical | JackPortIsOutput);
+                if (ports != NULL && ports[0]) {
+                    jack_port_t* port = jack_port_by_name(fClient, ports[0]);
+                    jack_latency_range_t range;
+                    jack_port_get_latency_range(port, JackCaptureLatency, &range);
+                     *static_cast<UInt32*>(outData) = range.min - fBufferSize;
+                }
+            
+            } else if (inAddress.mScope == kAudioDevicePropertyScopeOutput && fClient) {
+                const char** ports = jack_get_ports(fClient, NULL, NULL, JackPortIsPhysical | JackPortIsInput);
+                if (ports != NULL && ports[0]) {
+                    jack_port_t* port = jack_port_by_name(fClient, ports[0]);
+                    jack_latency_range_t range;
+                    jack_port_get_latency_range(port, JackPlaybackLatency, &range);
+                    *static_cast<UInt32*>(outData) = range.min - fBufferSize;
+                }
+            }
+            break;
 		
 		case kAudioDevicePropertyBufferFrameSize:
 			ThrowIf(ioDataSize != GetPropertyDataSize(inAddress, inQualifierDataSize, inQualifierData), CAException(kAudioHardwareBadPropertySizeError), "JackRouterDevice::GetPropertyData: wrong data size for kAudioDevicePropertyLatency");
@@ -415,10 +441,11 @@ void JackRouterDevice::GetPropertyData(const AudioObjectPropertyAddress& inAddre
 		case kAudioDevicePropertyGetJackClient: 
 			JARLog("JackRouterDevice::GetPropertyData kAudioDevicePropertyGetJackClient\n");
 			ThrowIf(ioDataSize != GetPropertyDataSize(inAddress, inQualifierDataSize, inQualifierData), CAException(kAudioHardwareBadPropertySizeError), "JackRouterDevice::GetPropertyData: wrong data size for kAudioDevicePropertyDeviceUID");
-			if (fClient)
+			if (fClient) {
 				*static_cast<jack_client_t**>(outData) = fClient;
-			else
-				 throw CAException(kAudioHardwareIllegalOperationError);
+			} else {
+                throw CAException(kAudioHardwareIllegalOperationError);
+            }
 			break;
 			
 		case kAudioDevicePropertyReleaseJackClient:
