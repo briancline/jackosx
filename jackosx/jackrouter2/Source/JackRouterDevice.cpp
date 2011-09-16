@@ -786,7 +786,8 @@ void JackRouterDevice::StartIOCycleTimingServices()
 	
 	//	in this sample driver, we base our timing on the CPU clock and assume a perfect sample rate
 	mAnchorHostTime = CAHostTimeBase::GetCurrentTime();
-    mAnchorSampleTime = float(jack_frame_time(fClient)) - fBufferSize;  // To avoid negative time
+    
+    mAnchorSampleTime = fSampleCount = float(jack_frame_time(fClient)) - fBufferSize;  // To avoid negative time
     
     //printf("JackRouterDevice::StartIOCycleTimingServices %lld %ld %f\n", mAnchorHostTime, jack_frame_time(fClient), mAnchorSampleTime);
 }
@@ -798,6 +799,24 @@ void JackRouterDevice::StopIOCycleTimingServices()
     mAnchorSampleTime = 0;
 }
 
+Float64	JackRouterDevice::GetCurrentActualSampleRate() const
+{
+	UInt64 cur_host_time = CAHostTimeBase::GetTheCurrentTime();
+    jack_nframes_t cur_sample_time = jack_frame_time(fClient);
+    
+    Float64 cur_sample_rate = (1000000000 * (Float64(cur_sample_time) - mAnchorSampleTime)) / (Float64(CAHostTimeBase::ConvertToNanos(cur_host_time - mAnchorHostTime)));
+    //printf("GetCurrentActualSampleRate %f\n", cur_sample_rate);
+	return cur_sample_rate;
+}
+
+void JackRouterDevice::GetCallbackCurrentTime(AudioTimeStamp& outTime, Float64 callback_sample_time)
+{
+    outTime.mSampleTime = callback_sample_time - mAnchorSampleTime;
+    outTime.mHostTime = CAHostTimeBase::GetTheCurrentTime();
+    outTime.mRateScalar = (outTime.mSampleTime / (Float64(CAHostTimeBase::ConvertToNanos(outTime.mHostTime - mAnchorHostTime)) / 1000000000)) / fSampleRate;
+  	outTime.mFlags = kAudioTimeFlags;
+}
+
 void JackRouterDevice::GetCurrentTime(AudioTimeStamp& outTime)
 {
     /*
@@ -805,15 +824,15 @@ void JackRouterDevice::GetCurrentTime(AudioTimeStamp& outTime)
     outTime.mHostTime = CAHostTimeBase::GetTheCurrentTime();
     //printf("outTime.mHostTime %lld mAnchorHostTime %lld outTime.mSampleTime %f mAnchorSampleTime %f\n", outTime.mHostTime, mAnchorHostTime, outTime.mSampleTime, mAnchorSampleTime);
 	//outTime.mRateScalar = float(outTime.mHostTime - mAnchorHostTime) / float(outTime.mSampleTime - mAnchorSampleTime);
-    outTime.mRateScalar =  1.0;
+    outTime.mRateScalar = 1.0;
 	outTime.mFlags = kAudioTimeFlags;
     */
     
-    outTime.mSampleTime = float(jack_frame_time(fClient)) - mAnchorSampleTime;
+    outTime.mSampleTime = Float64(jack_frame_time(fClient)) - mAnchorSampleTime;
     outTime.mHostTime = CAHostTimeBase::GetTheCurrentTime();
-    outTime.mRateScalar = (outTime.mSampleTime / (float(CAHostTimeBase::ConvertToNanos(outTime.mHostTime - mAnchorHostTime)) / 1000000000)) / fSampleRate;
+    outTime.mRateScalar = (outTime.mSampleTime / (Float64(CAHostTimeBase::ConvertToNanos(outTime.mHostTime - mAnchorHostTime)) / 1000000000)) / fSampleRate;
  	outTime.mFlags = kAudioTimeFlags;
-  
+
     /*
  	//	compute the host ticks pere frame
     Float64 theActualHostTicksPerFrame = CAHostTimeBase::GetFrequency() / fSampleRate;
@@ -930,6 +949,8 @@ void JackRouterDevice::TranslateTime(const AudioTimeStamp& inTime, AudioTimeStam
 			
 			//	lop off the fractional host tick
 			theOffset = floor(theOffset);
+            
+            // printf("kAudioTimeStampHostTimeValid theOffset %f\n", theOffset);
 			
 			//	put in the host time as an offset from the 0 time stamp's host time
 			outTime.mHostTime = mAnchorHostTime + static_cast<UInt64>(theOffset);
@@ -946,7 +967,8 @@ void JackRouterDevice::TranslateTime(const AudioTimeStamp& inTime, AudioTimeStam
 	{
 		//	the sample device has perfect timing
 		//outTime.mRateScalar = 1.0;
-        outTime.mRateScalar = (outTime.mSampleTime /(float(CAHostTimeBase::ConvertToNanos(outTime.mHostTime - mAnchorHostTime)) / 1000000000)) / fSampleRate;
+        //outTime.mRateScalar = (outTime.mSampleTime /(float(CAHostTimeBase::ConvertToNanos(outTime.mHostTime - mAnchorHostTime)) / 1000000000)) / fSampleRate;
+        outTime.mRateScalar = inTime.mRateScalar;
 	}
 }
 
@@ -1382,6 +1404,13 @@ static void PrintTime(const char* name, const AudioTimeStamp& time)
         time.mSampleTime,  time.mHostTime,  time.mRateScalar, time.mWordClockTime, time.mSMPTETime.mSeconds, time.mFlags);
 }
 
+static void SetTime(AudioTimeStamp* timeVal, long curTime, UInt64 time)
+{
+    timeVal->mSampleTime = curTime;
+    timeVal->mHostTime = time;
+    timeVal->mRateScalar = 1.0;
+    timeVal->mFlags = kAudioTimeFlags;
+}
 
 int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 {
@@ -1399,9 +1428,11 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
 	}
     
    	//JARLog("Process \n");
-
+    
     fSampleCount += JackRouterDevice::fBufferSize;
-    client->GetCurrentTime(inNow);
+    // Move sample time buffer by buffer (otherwise QuickTime player fails...)
+    client->GetCallbackCurrentTime(inNow, Float64(fSampleCount));
+    //client->GetCurrentTime(inNow);
     
     AudioTimeStamp theInputFrameTime;
     theInputFrameTime = inNow;
@@ -1421,9 +1452,26 @@ int JackRouterDevice::Process(jack_nframes_t nframes, void* arg)
     //	use that to figure the corresponding host time
     inOutputTime.mFlags = kAudioTimeFlags;
     client->TranslateTime(theOutputFrameTime, inOutputTime);
+   
+     
+    if (getenv("JACK_ROUTER_DEBUG") && strcmp(getenv("JACK_ROUTER_DEBUG"), "on") == 0) {
+        printf("-------------\n");
+        PrintTime("now", inNow);
+        PrintTime("in", inInputTime);
+        PrintTime("out", inOutputTime);
+    }
+
     
     /*
-    printf("-------------\n");
+    UInt64 time = CAHostTimeBase::GetTheCurrentTime();
+    //fSampleCount += JackRouterDevice::fBufferSize;
+  	SetTime(&inNow, fSampleCount, time);
+	SetTime(&inInputTime, fSampleCount - JackRouterDevice::fBufferSize, time);
+    SetTime(&inOutputTime, fSampleCount + JackRouterDevice::fBufferSize, time);
+    */
+    
+    /*
+    printf("------------- 2\n");
     PrintTime("now", inNow);
     PrintTime("in", inInputTime);
     PrintTime("out", inOutputTime);

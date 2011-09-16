@@ -231,12 +231,14 @@ protected:
 //	Time Management
 public:
 	virtual void				GetCurrentTime(AudioTimeStamp& outTime);
+    virtual void				GetCallbackCurrentTime(AudioTimeStamp& outTime, Float64 callback_sample_time);
+    
 	virtual void				SafeGetCurrentTime(AudioTimeStamp& outTime);
 	virtual void				TranslateTime(const AudioTimeStamp& inTime, AudioTimeStamp& outTime);
 	virtual void				GetNearestStartTime(AudioTimeStamp& ioRequestedStartTime, UInt32 inFlags);
     void                        StartIOCycleTimingServices();
     void                        StopIOCycleTimingServices();
-
+    virtual Float64             GetCurrentActualSampleRate() const;
  
 private:
 		
