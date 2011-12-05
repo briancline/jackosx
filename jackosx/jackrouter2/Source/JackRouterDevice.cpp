@@ -513,54 +513,7 @@ void JackRouterDevice::SetPropertyData(const AudioObjectPropertyAddress& inAddre
             
 			AudioHardwareIOProcStreamUsage* inData1 = (AudioHardwareIOProcStreamUsage*)inData;
 			JARLog("DeviceSetProperty inAddress.mScope %ld : mNumberStreams %d\n", inAddress.mScope, inData1->mNumberStreams);
-            
-            int new_input = 0;
-            int new_output = 0;
-			
-			if (inAddress.mScope == kAudioDevicePropertyScopeInput && fClient) {
-				JARLog("DeviceSetProperty input : mNumberStreams %d\n", inData1->mNumberStreams);
-				for (UInt32 i = 0; i < inData1->mNumberStreams; i++) {
-					if (inData1->mStreamIsOn[i]) {
-                        new_input++;
-						if (fInputPortList[i] == 0) {
-							char in_port_name [JACK_PORT_NAME_LEN];
-							sprintf(in_port_name, "in%lu", i + 1);
-							fInputPortList[i] = jack_port_register(fClient, in_port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
-							JARLog("DeviceSetProperty : input kAudioDevicePropertyIOProcStreamUsage jack_port_register %ld \n", i);
-						}
-					} else {
-						if (fInputPortList[i]) {
-							jack_port_unregister(fClient, fInputPortList[i]);
-							fInputPortList[i] = 0;
-							JARLog("DeviceSetProperty : input kAudioDevicePropertyIOProcStreamUsage jack_port_unregister %ld \n", i);
-						}
-					}
-					JARLog("DeviceSetProperty : input kAudioDevicePropertyIOProcStreamUsage input inData->mStreamIsOn %ld \n", inData1->mStreamIsOn[i]);
-				}
-			}
-			
-			if (inAddress.mScope == kAudioDevicePropertyScopeOutput && fClient) {
-				JARLog("DeviceSetProperty output : mNumberStreams %d\n", inData1->mNumberStreams);
-				for (UInt32 i = 0; i < inData1->mNumberStreams; i++) {
-					if (inData1->mStreamIsOn[i]) {
-                        new_output++;
-						if (fOutputPortList[i] == 0) {
-							char out_port_name [JACK_PORT_NAME_LEN];
-							sprintf(out_port_name, "out%lu", i + 1);
-							fOutputPortList[i] = jack_port_register(fClient, out_port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
-							JARLog("DeviceSetProperty : input kAudioDevicePropertyIOProcStreamUsage jack_port_register %ld \n", i);
-						}
-					} else {
-						if (fOutputPortList[i]) {
-							jack_port_unregister(fClient, fOutputPortList[i]);
-							fOutputPortList[i] = 0;
-							JARLog("DeviceSetProperty : input kAudioDevicePropertyIOProcStreamUsage jack_port_unregister %ld \n", i);
-						}
-					}
-					JARLog("DeviceSetProperty : input kAudioDevicePropertyIOProcStreamUsage input inData->mStreamIsOn %ld \n", inData1->mStreamIsOn[i]);
-				}
-			}
-            
+
             // Autoconnect is only done for the first activation
 			if (fFirstActivate) {
 				AutoConnect();
@@ -570,6 +523,67 @@ void JackRouterDevice::SetPropertyData(const AudioObjectPropertyAddress& inAddre
 			}
 			
 			HP_Device::SetPropertyData(inAddress, inQualifierDataSize, inQualifierData, inDataSize, inData, inWhen);
+            
+            if (inAddress.mScope == kAudioDevicePropertyScopeInput && fClient) {
+                JARLog("DeviceSetProperty input : mNumberStreams %d\n", inData1->mNumberStreams);
+				for (UInt32 i = 0; i < inData1->mNumberStreams; i++) {
+                    bool activated = false;
+                    
+                    // Look for at least one activated stream
+                    for (UInt32 j = 0; j < mIOProcList->GetNumberIOProcs(); j++) {
+                        if (mIOProcList->GetIOProcByIndex(j)->IsStreamEnabled(true, i)) {
+                            activated = true;
+                            break;
+                        }
+                    }
+                    
+                    // If at least one stream activated...
+                    if (activated && fInputPortList[i] == 0) {
+                        char in_port_name [JACK_PORT_NAME_LEN];
+                        sprintf(in_port_name, "in%lu", i + 1);
+                        fInputPortList[i] = jack_port_register(fClient, in_port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
+                        JARLog("DeviceSetProperty : input kAudioDevicePropertyIOProcStreamUsage jack_port_register %ld \n", i);
+                    }
+                
+                    // Otherwise desactivate it
+                    if (!activated && fInputPortList[i]) {
+                        jack_port_unregister(fClient, fInputPortList[i]);
+                        fInputPortList[i] = 0;
+                        JARLog("DeviceSetProperty : input kAudioDevicePropertyIOProcStreamUsage jack_port_unregister %ld \n", i);
+                    }
+                }
+            }
+            
+            if (inAddress.mScope == kAudioDevicePropertyScopeOutput && fClient) {
+                JARLog("DeviceSetProperty output : mNumberStreams %d\n", inData1->mNumberStreams);
+				for (UInt32 i = 0; i < inData1->mNumberStreams; i++) {
+                    bool activated = false;
+                    
+                    // Look for at least one activated stream
+                    for (UInt32 j = 0; j < mIOProcList->GetNumberIOProcs(); j++) {
+                        if (mIOProcList->GetIOProcByIndex(j)->IsStreamEnabled(false, i)) {
+                            activated = true;
+                            break;
+                        }
+                    }
+                    
+                    // If at least one stream activated...
+                    if (activated && fOutputPortList[i] == 0) {
+                        char out_port_name [JACK_PORT_NAME_LEN];
+                        sprintf(out_port_name, "out%lu", i + 1);
+                        fOutputPortList[i] = jack_port_register(fClient, out_port_name, JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
+                        JARLog("DeviceSetProperty : input kAudioDevicePropertyIOProcStreamUsage jack_port_register %ld \n", i);
+                    }
+                    
+                    // Otherwise desactivate it
+                    if (!activated && fOutputPortList[i]) {
+                        jack_port_unregister(fClient, fOutputPortList[i]);
+                        fOutputPortList[i] = 0;
+                        JARLog("DeviceSetProperty : input kAudioDevicePropertyIOProcStreamUsage jack_port_unregister %ld \n", i);
+                    }
+                }
+            }
+            
 			break;
 		}
 				

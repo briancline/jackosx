@@ -1052,7 +1052,6 @@
 			isa = PBXProject;
 			buildConfigurationList = 2D926CFB08DA3A5A00AB1DB7 /* Build configuration list for PBXProject "JackRouter" */;
 			compatibilityVersion = "Xcode 2.4";
-			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
