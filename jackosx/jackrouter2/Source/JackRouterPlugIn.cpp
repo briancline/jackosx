@@ -64,7 +64,8 @@ History
 22-01-09 : Version 0.91 : S Letz: Fix "dirty buffer issue" with Max/MSP: in JackRouterDevice::Process, output buffers are cleared if GetNumberIOProcs > 0 but GetNumberEnabledIOProcs == 0
 24-03-10 : Version 0.93 : S Letz: Use of vDSP_vsma for mixing. Emit kAudioDevicePropertyDeviceIsAlive in JackRouterDevice::Destroy(). 
 05-11-10 : Version 0.94 : S Letz: Correct channel numbering in JackRouterDevice::CreateStreams. 
-15-07-11 : Version 0.95 : S Letz: Correct timing given to IO: solves Flash en ProTools 9.0 incompatibility. Correct SetPropertyData for kAudioDevicePropertyIOProcStreamUsage.
+15-07-11 : Version 0.95 : S Letz: Correct timing given to IO: solves Flash en ProTools 9.0 incompatibility. Correct SetPropertyData for kAudioDevicePropertyIOProcStreamUsage. 
+           Device notification from the server only on pre Lion systems.
 
 */
 
@@ -136,26 +137,38 @@ static void stopCallback(CFNotificationCenterRef /*center*/,
 
 static void StartNotification()
 {
-	//printf("StartNotification name = %s \n", DefaultServerName());
-	CFStringRef ref = CFStringCreateWithCString(NULL, DefaultServerName(), kCFStringEncodingMacRoman);
-	CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(),
-									NULL, startCallback, CFSTR("com.grame.jackserver.start"),
-									ref, CFNotificationSuspensionBehaviorDeliverImmediately);
-	CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(),
-									NULL, stopCallback, CFSTR("com.grame.jackserver.stop"),
-									ref, CFNotificationSuspensionBehaviorDeliverImmediately);
-	CFRelease(ref);
- }
+    SInt32 system;
+    Gestalt(gestaltSystemVersion, &system);
+    
+    // Notify only on pre Lion...
+    if (system < 0x00001070) { 
+        printf("StartNotification name = %s \n", DefaultServerName());
+        CFStringRef ref = CFStringCreateWithCString(NULL, DefaultServerName(), kCFStringEncodingMacRoman);
+        CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(),
+                                        NULL, startCallback, CFSTR("com.grame.jackserver.start"),
+                                        ref, CFNotificationSuspensionBehaviorDeliverImmediately);
+        CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(),
+                                        NULL, stopCallback, CFSTR("com.grame.jackserver.stop"),
+                                        ref, CFNotificationSuspensionBehaviorDeliverImmediately);
+        CFRelease(ref);
+    }
+}
 
 static void StopNotification()
 {
-	//printf("StopNotification name = %s \n", DefaultServerName());
-	CFStringRef ref = CFStringCreateWithCString(NULL, DefaultServerName(), kCFStringEncodingMacRoman);
-	CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(), NULL,
-										CFSTR("com.grame.jackserver.start"), ref);
-	CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(), NULL,
-										CFSTR("com.grame.jackserver.stop"), ref);
-	CFRelease(ref);
+    SInt32 system;
+    Gestalt(gestaltSystemVersion, &system);
+    
+    // Notify only on pre Lion...
+    if (system < 0x00001070) { 
+        printf("StopNotification name = %s \n", DefaultServerName());
+        CFStringRef ref = CFStringCreateWithCString(NULL, DefaultServerName(), kCFStringEncodingMacRoman);
+        CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(), NULL,
+                                            CFSTR("com.grame.jackserver.start"), ref);
+        CFNotificationCenterRemoveObserver(CFNotificationCenterGetDistributedCenter(), NULL,
+                                            CFSTR("com.grame.jackserver.stop"), ref);
+        CFRelease(ref);
+    }
 }
 
 JackRouterPlugIn::JackRouterPlugIn(CFUUIDRef inFactoryUUID)

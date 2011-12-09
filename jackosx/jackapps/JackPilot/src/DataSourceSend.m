@@ -50,7 +50,7 @@
             id testo = [[NSAttributedString alloc] autorelease];
             if ([items count] == 2) { 
 				fres = [items objectAtIndex:0];
-				 style = [NSDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName]; 
+                style = [NSDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName]; 
 			} else { 
                 fres = [items objectAtIndex:1];
                 style = [NSMutableDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName]; 
