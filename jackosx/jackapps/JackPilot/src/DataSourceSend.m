@@ -146,9 +146,9 @@
     //JPLog("ASK3\n");
     //JPLog("Index: %d\n",index);
 #endif
-    if(item==nil) return [[self startPoint] objectAtIndex:index];
-    if([item isKindOfClass:[DatiSend class]]) return [item getNomePorta:index];
-    if([item isKindOfClass:[NSString class]]) return item;
+    if (item == nil) return [[self startPoint] objectAtIndex:index];
+    if ([item isKindOfClass:[DatiSend class]]) return [item getNomePorta:index];
+    if ([item isKindOfClass:[NSString class]]) return item;
     return nil;
 }
 
@@ -159,10 +159,10 @@
 #ifdef DEBUGGO
     //JPLog("RICHIESTA : %d\n",richiesta);
 #endif
-    if([item isKindOfClass:[portsArrData class]]) {
+    if ([item isKindOfClass:[portsArrData class]]) {
         const char *buf;
         buf = [item getCPort];
-        if(buf!=NULL) {
+        if (buf != NULL) {
            NSString *res = [NSString stringWithCString:buf];
            selectedPort = [item getID];
            porteSelected[0] = [item getID];
@@ -170,15 +170,15 @@
 #ifdef DEBUGGO
            //JPLog("Selezionata: %d\n",selectedPort);
 #endif		
-        if([item IsConn]==1) {
-            id testo = [[NSAttributedString alloc] autorelease];
-            NSDictionary *style = [NSDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName];
-            [testo initWithString:res attributes:style];
-            kindCliItem = 666;
-            [self needsReload];
-            [itemsToRelease addObject:item];
-            return testo;
-        }
+            if ([item IsConn] == 1) {
+                id testo = [[NSAttributedString alloc] autorelease];
+                NSDictionary *style = [NSDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName];
+                [testo initWithString:res attributes:style];
+                kindCliItem = 666;
+                [self needsReload];
+                [itemsToRelease addObject:item];
+                return testo;
+            }
             kindCliItem = 333;
             [self needsReload];
             [itemsToRelease addObject:item];
@@ -186,19 +186,22 @@
         }
         return @"NIL";
     }
-    if([item isKindOfClass:[DatiSend class]]) { 
+    if ([item isKindOfClass:[DatiSend class]]) { 
         //JPLog("CLIENTE SELEZIONATO");
         selectedPort = -10;
         selectedItem = item;
         [self selezionaPorte];
         [self needsReload];
         id result = [item getNomeCliente];
-        if([item getIsConn]!=1) kindCliItem = 333;
-        else kindCliItem = 666;
+        if ([item getIsConn] != 1) 
+            kindCliItem = 333;
+        else 
+            kindCliItem = 666;
         [itemsToRelease addObject:item];
         return result;
     }
-    if(richiesta == 22) return [item getNomeCliente];
+    if (richiesta == 22) 
+        return [item getNomeCliente];
     return @"NIL";
 }
 

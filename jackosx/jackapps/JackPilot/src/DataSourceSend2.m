@@ -51,10 +51,13 @@
             id style;
             id testo = [[NSAttributedString alloc] autorelease];
             if ([items count] == 2) { 
-				fres = [items objectAtIndex:0]; style = [NSDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName];
+				fres = [items objectAtIndex:0]; 
+                style = [NSDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName];
+                //style = [NSDictionary dictionaryWithObject:[NSColor greenColor] forKey:NSForegroundColorAttributeName];
 			} else { 
                 fres = [items objectAtIndex:1];
                 style = [NSMutableDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName]; 
+                //style = [NSMutableDictionary dictionaryWithObject:[NSColor blueColor] forKey:NSForegroundColorAttributeName]; 
                 [style setObject:[NSFont boldSystemFontOfSize:13.0f] forKey:NSFontAttributeName];  
             }
             [testo initWithString:fres attributes:style];
@@ -171,14 +174,14 @@
     //JPLog("ASK3\n");
     //JPLog("Index: %d\n",index);
 #endif
-    if(item==nil) return [[self startPoint] objectAtIndex:index];
-    if([item isKindOfClass:[DatiSend2 class]]) return [item getNomePorta:index];
-    if([item isKindOfClass:[NSString class]]) return item;
+    if (item == nil) return [[self startPoint] objectAtIndex:index];
+    if ([item isKindOfClass:[DatiSend2 class]]) return [item getNomePorta:index];
+    if ([item isKindOfClass:[NSString class]]) return item;
     return nil;
 }
 
 - (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item {
-    theOutline=outlineView;
+    theOutline = outlineView;
     *chi = 21;
     if (item == nil) 
 		return @"NIL";
@@ -188,7 +191,7 @@
     if ([item isKindOfClass:[portsArrData class]]) {
         const char *buf;
         buf = [item getCPort];
-        if(buf!=NULL) {
+        if (buf != NULL) {
            NSString *res = [NSString stringWithCString:buf];
            selectedPort = [item getID];
            porteSelected[0] = [item getID];
@@ -196,9 +199,10 @@
 #ifdef DEBUGGO
            //JPLog("Selezionata: %d\n",selectedPort);
 #endif
-		if ([item IsConn] == 1) {
+            if ([item IsConn] == 1) {
 				id testo = [[NSAttributedString alloc] autorelease];
 				NSDictionary *style = [NSDictionary dictionaryWithObject:[NSColor redColor] forKey:NSForegroundColorAttributeName];
+                //NSDictionary *style = [NSDictionary dictionaryWithObject:[NSColor yellowColor] forKey:NSForegroundColorAttributeName];
 				[testo initWithString:res attributes:style];
 				kindCliItem = 666;
 				[self needsReload];

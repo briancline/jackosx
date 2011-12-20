@@ -34,8 +34,7 @@
 }
 
 -(void)getChars:(char*)IN {
-    char *buf;
-    buf = (char*)alloca(256 * sizeof(char));
+    char *buf = (char*)alloca(256 * sizeof(char));
     [nomePorta getCString:buf];
     strcpy(IN,buf);
 }

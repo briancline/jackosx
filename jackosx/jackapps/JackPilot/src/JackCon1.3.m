@@ -71,7 +71,8 @@ int nConnections = 0;
         [datiTab setWhatKind:0];
         [datiTab writeData:sender text:&quantePConnCli text2:&portSelected[0] text3:&needsReload];
         [tabellaPorte setDataSource:datiTab];
-        [tabellaPorte setDrawsGrid:NO];
+        //[tabellaPorte setDrawsGrid:NO];
+        [tabellaPorte setGridStyleMask:NSTableViewSolidHorizontalGridLineMask];
         [tabellaPorte setDoubleAction:@selector(removCon:)];
         [tabellaPorte setTarget:self];
 		
@@ -81,7 +82,8 @@ int nConnections = 0;
         [datiTab2 setWhatKind:1];
         [datiTab2 writeData:sender text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected];
         [tabellaSend setDataSource:datiTab2];
-        [tabellaSend setDrawsGrid:NO];
+        //[tabellaSend setDrawsGrid:NO];
+        [tabellaPorte setGridStyleMask:NSTableViewSolidHorizontalGridLineMask];
         [tabellaSend setDoubleAction:@selector(makeCon:)];
         [tabellaSend setTarget:self];
 			
@@ -91,7 +93,8 @@ int nConnections = 0;
         [datiTab3 setWhatKind:1];
         [datiTab3 writeData:sender text:portsArr text2:&needsReload text3:&portSelected[0] text4:&quantePConnCli text5:&chiSelected];
         [tabellaConnect setDataSource:datiTab3];
-        [tabellaConnect setDrawsGrid:NO];
+        //[tabellaConnect setDrawsGrid:NO];
+        [tabellaPorte setGridStyleMask:NSTableViewSolidHorizontalGridLineMask];
 		[tabellaConnect setDoubleAction:@selector(makeCon:)];
         [tabellaConnect setTarget:self];
 		        
@@ -887,6 +890,10 @@ int nConnections = 0;
         int i;
         int rigo1 = [tabellaSend selectedRow];
         int rigo2 = [tabellaConnect selectedRow];
+        
+        NSIndexSet * rigo2_set = [tabellaConnect selectedRowIndexes];
+        NSIndexSet * rigo1_set = [tabellaSend selectedRowIndexes];
+        
         int nrows1 = [tabellaSend numberOfRows];
         int nrows2 = [tabellaConnect numberOfRows];
         NSMutableArray *lista1 = [NSMutableArray array];
@@ -912,8 +919,13 @@ int nConnections = 0;
         for ( i = 0; i < [lista2 count]; i++) {
             [tabellaConnect expandItem:[tabellaConnect itemAtRow:[[lista2 objectAtIndex:i] intValue]] expandChildren:YES];
         }
-        [tabellaSend selectRow:rigo1 byExtendingSelection:NO];
-        [tabellaConnect selectRow:rigo2 byExtendingSelection:NO];
+        
+        //[tabellaSend selectRow:rigo1 byExtendingSelection:NO];
+        //[tabellaConnect selectRow:rigo2 byExtendingSelection:NO];
+        
+        [tabellaSend selectRowIndexes:rigo1_set byExtendingSelection:NO];
+        [tabellaConnect selectRowIndexes:rigo2_set byExtendingSelection:NO];
+         
         return;
     }
     
@@ -922,6 +934,10 @@ int nConnections = 0;
         
         int rigo1 = [tabellaSend selectedRow];
         int rigo2 = [tabellaConnect selectedRow];
+        
+        NSIndexSet * rigo2_set = [tabellaConnect selectedRowIndexes];
+        NSIndexSet * rigo1_set = [tabellaSend selectedRowIndexes];
+        
         int nrows1 = [tabellaSend numberOfRows];
         int nrows2 = [tabellaConnect numberOfRows];
 		int i;
@@ -964,8 +980,11 @@ int nConnections = 0;
             [tabellaConnect expandItem:[tabellaConnect itemAtRow:[[lista2 objectAtIndex:i] intValue]] expandChildren:YES];
         }
         
-        [tabellaSend selectRow:rigo1 byExtendingSelection:NO];
-        [tabellaConnect selectRow:rigo2 byExtendingSelection:NO];
+        //[tabellaSend selectRow:rigo1 byExtendingSelection:NO];
+        //[tabellaConnect selectRow:rigo2 byExtendingSelection:NO];
+        
+        [tabellaSend selectRowIndexes:rigo1_set byExtendingSelection:NO];
+        [tabellaConnect selectRowIndexes:rigo2_set byExtendingSelection:NO];
         
         oldChi = chiSelected;
         needsReloadColor = 0;
